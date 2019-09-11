@@ -51,6 +51,20 @@
 			remoteGlobalIDString = 1BBB10DC1D5542A200C22439;
 			remoteInfo = "Synopsis-macOS";
 		};
+		1A95E8C123296B640088404A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BBB10DC1D5542A200C22439;
+			remoteInfo = "Synopsis-macOS";
+		};
+		1A95E8C923296B6E0088404A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 1A97F5AA1A38ABBF00E0DC74;
+			remoteInfo = HapInAVFoundation;
+		};
 		1AC1ED3D2318144500AAD380 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */;
@@ -131,7 +145,7 @@
 		1A626144231476D000DC2B06 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1A626146231476D000DC2B06 /* SynopsisCleanRoom.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SynopsisCleanRoom.entitlements; sourceTree = "<group>"; };
 		1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Synopsis-Framework.xcodeproj"; path = "./Synopsis-Framework/Synopsis/Synopsis-Framework.xcodeproj"; sourceTree = "<group>"; };
-		1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HapInAVFoundation.xcodeproj; path = "./HapInAVFoundation/HapInAVFoundation.xcodeproj"; sourceTree = "<group>"; };
+		1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HapInAVFoundation.xcodeproj; path = ./HapInAVFoundation/HapInAVFoundation.xcodeproj; sourceTree = "<group>"; };
 		1AFDD45D2316F3C400D7862F /* SynopsisJobObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynopsisJobObject.h; sourceTree = "<group>"; };
 		1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SynopsisJobObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -246,6 +260,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				1A95E8CA23296B6E0088404A /* PBXTargetDependency */,
+				1A95E8C223296B640088404A /* PBXTargetDependency */,
 			);
 			name = synopsis_cli;
 			productName = synopsis_cli;
@@ -421,6 +437,16 @@
 			isa = PBXTargetDependency;
 			name = "Synopsis-macOS";
 			targetProxy = 1A626158231476EA00DC2B06 /* PBXContainerItemProxy */;
+		};
+		1A95E8C223296B640088404A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Synopsis-macOS";
+			targetProxy = 1A95E8C123296B640088404A /* PBXContainerItemProxy */;
+		};
+		1A95E8CA23296B6E0088404A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = HapInAVFoundation;
+			targetProxy = 1A95E8C923296B6E0088404A /* PBXContainerItemProxy */;
 		};
 		1AC1ED4C2318145A00AAD380 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
