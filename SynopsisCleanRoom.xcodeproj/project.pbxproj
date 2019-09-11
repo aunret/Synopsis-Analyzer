@@ -1,0 +1,652 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1A34044223283C25004A434D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34044123283C25004A434D /* main.m */; };
+		1A34044C23283EFA004A434D /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
+		1A34044D23283EFA004A434D /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
+		1A34044E23283F0C004A434D /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
+		1A62613D231476CF00DC2B06 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A62613C231476CF00DC2B06 /* AppDelegate.m */; };
+		1A62613F231476D000DC2B06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A62613E231476D000DC2B06 /* Assets.xcassets */; };
+		1A626142231476D000DC2B06 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A626140231476D000DC2B06 /* MainMenu.xib */; };
+		1A626145231476D000DC2B06 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A626144231476D000DC2B06 /* main.m */; };
+		1A62615B231476F000DC2B06 /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
+		1A62615D2314770100DC2B06 /* Synopsis.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1AC1ED4D2318145E00AAD380 /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
+		1AC1ED4E2318146400AAD380 /* HapInAVFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1AFDD45F2316F3C400D7862F /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1A626152231476DD00DC2B06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1BBB10DD1D5542A200C22439;
+			remoteInfo = "Synopsis-macOS";
+		};
+		1A626154231476DD00DC2B06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1BFB13381F2135BF002C4651;
+			remoteInfo = "Synopsis-Decoder-macOS";
+		};
+		1A626156231476DD00DC2B06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1B4446B81EE1FE4A0075575D;
+			remoteInfo = "Synopsis-iOS";
+		};
+		1A626158231476EA00DC2B06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BBB10DC1D5542A200C22439;
+			remoteInfo = "Synopsis-macOS";
+		};
+		1AC1ED3D2318144500AAD380 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1A97F5AB1A38ABBF00E0DC74;
+			remoteInfo = HapInAVFoundation;
+		};
+		1AC1ED3F2318144500AAD380 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1A4D2CCE207E47CD003FE56B;
+			remoteInfo = "HapInAVFoundation-static";
+		};
+		1AC1ED412318144500AAD380 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1A3230141A3BA14000DDB2E0;
+			remoteInfo = "HapInAVF Test App";
+		};
+		1AC1ED432318144500AAD380 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1A3BABFD1A65239C0065403A;
+			remoteInfo = "AVF Batch Converter";
+		};
+		1AC1ED452318144500AAD380 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1AABDE8A207E544000D8F504;
+			remoteInfo = AVFtoHap;
+		};
+		1AC1ED4B2318145A00AAD380 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 1A97F5AA1A38ABBF00E0DC74;
+			remoteInfo = HapInAVFoundation;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1A34043D23283C25004A434D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		1A62615C231476F500DC2B06 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1AC1ED4E2318146400AAD380 /* HapInAVFoundation.framework in Embed Frameworks */,
+				1A62615D2314770100DC2B06 /* Synopsis.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1A34043F23283C25004A434D /* synopsis_cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = synopsis_cli; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A34044123283C25004A434D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1A626138231476CF00DC2B06 /* SynopsisCleanRoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SynopsisCleanRoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A62613B231476CF00DC2B06 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		1A62613C231476CF00DC2B06 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		1A62613E231476D000DC2B06 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1A626141231476D000DC2B06 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		1A626143231476D000DC2B06 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1A626144231476D000DC2B06 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1A626146231476D000DC2B06 /* SynopsisCleanRoom.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SynopsisCleanRoom.entitlements; sourceTree = "<group>"; };
+		1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Synopsis-Framework.xcodeproj"; path = "./Synopsis-Framework/Synopsis/Synopsis-Framework.xcodeproj"; sourceTree = "<group>"; };
+		1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HapInAVFoundation.xcodeproj; path = "./HapInAVFoundation/HapInAVFoundation.xcodeproj"; sourceTree = "<group>"; };
+		1AFDD45D2316F3C400D7862F /* SynopsisJobObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynopsisJobObject.h; sourceTree = "<group>"; };
+		1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SynopsisJobObject.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1A34043C23283C25004A434D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A34044C23283EFA004A434D /* HapInAVFoundation.framework in Frameworks */,
+				1A34044D23283EFA004A434D /* Synopsis.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A626135231476CF00DC2B06 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AC1ED4D2318145E00AAD380 /* HapInAVFoundation.framework in Frameworks */,
+				1A62615B231476F000DC2B06 /* Synopsis.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1A34044023283C25004A434D /* synopsis_cli */ = {
+			isa = PBXGroup;
+			children = (
+				1A34044123283C25004A434D /* main.m */,
+			);
+			path = synopsis_cli;
+			sourceTree = "<group>";
+		};
+		1A62612F231476CF00DC2B06 = {
+			isa = PBXGroup;
+			children = (
+				1A62613A231476CF00DC2B06 /* SynopsisCleanRoom */,
+				1A34044023283C25004A434D /* synopsis_cli */,
+				1A626139231476CF00DC2B06 /* Products */,
+				1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */,
+				1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */,
+				1A62615A231476F000DC2B06 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		1A626139231476CF00DC2B06 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1A626138231476CF00DC2B06 /* SynopsisCleanRoom.app */,
+				1A34043F23283C25004A434D /* synopsis_cli */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1A62613A231476CF00DC2B06 /* SynopsisCleanRoom */ = {
+			isa = PBXGroup;
+			children = (
+				1A62613B231476CF00DC2B06 /* AppDelegate.h */,
+				1A62613C231476CF00DC2B06 /* AppDelegate.m */,
+				1A62613E231476D000DC2B06 /* Assets.xcassets */,
+				1A626140231476D000DC2B06 /* MainMenu.xib */,
+				1A626143231476D000DC2B06 /* Info.plist */,
+				1A626144231476D000DC2B06 /* main.m */,
+				1A626146231476D000DC2B06 /* SynopsisCleanRoom.entitlements */,
+				1AFDD45D2316F3C400D7862F /* SynopsisJobObject.h */,
+				1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */,
+			);
+			path = SynopsisCleanRoom;
+			sourceTree = "<group>";
+		};
+		1A62614D231476DC00DC2B06 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1A626153231476DD00DC2B06 /* Synopsis.framework */,
+				1A626155231476DD00DC2B06 /* Synopsis.framework */,
+				1A626157231476DD00DC2B06 /* Synopsis.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1A62615A231476F000DC2B06 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1AC1ED342318144500AAD380 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */,
+				1AC1ED402318144500AAD380 /* libHapInAVFoundation.a */,
+				1AC1ED422318144500AAD380 /* HapInAVF Test App.app */,
+				1AC1ED442318144500AAD380 /* AVF Batch Converter.app */,
+				1AC1ED462318144500AAD380 /* AVFtoHap */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1A34043E23283C25004A434D /* synopsis_cli */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A34044B23283C25004A434D /* Build configuration list for PBXNativeTarget "synopsis_cli" */;
+			buildPhases = (
+				1A34043B23283C25004A434D /* Sources */,
+				1A34043C23283C25004A434D /* Frameworks */,
+				1A34043D23283C25004A434D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = synopsis_cli;
+			productName = synopsis_cli;
+			productReference = 1A34043F23283C25004A434D /* synopsis_cli */;
+			productType = "com.apple.product-type.tool";
+		};
+		1A626137231476CF00DC2B06 /* SynopsisCleanRoom */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A626149231476D000DC2B06 /* Build configuration list for PBXNativeTarget "SynopsisCleanRoom" */;
+			buildPhases = (
+				1A626134231476CF00DC2B06 /* Sources */,
+				1A626135231476CF00DC2B06 /* Frameworks */,
+				1A626136231476CF00DC2B06 /* Resources */,
+				1A62615C231476F500DC2B06 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1AC1ED4C2318145A00AAD380 /* PBXTargetDependency */,
+				1A626159231476EA00DC2B06 /* PBXTargetDependency */,
+			);
+			name = SynopsisCleanRoom;
+			productName = SynopsisCleanRoom;
+			productReference = 1A626138231476CF00DC2B06 /* SynopsisCleanRoom.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1A626130231476CF00DC2B06 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1030;
+				ORGANIZATIONNAME = yourcompany;
+				TargetAttributes = {
+					1A34043E23283C25004A434D = {
+						CreatedOnToolsVersion = 10.3;
+					};
+					1A626137231476CF00DC2B06 = {
+						CreatedOnToolsVersion = 10.3;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 1A626133231476CF00DC2B06 /* Build configuration list for PBXProject "SynopsisCleanRoom" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1A62612F231476CF00DC2B06;
+			productRefGroup = 1A626139231476CF00DC2B06 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 1AC1ED342318144500AAD380 /* Products */;
+					ProjectRef = 1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */;
+				},
+				{
+					ProductGroup = 1A62614D231476DC00DC2B06 /* Products */;
+					ProjectRef = 1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				1A626137231476CF00DC2B06 /* SynopsisCleanRoom */,
+				1A34043E23283C25004A434D /* synopsis_cli */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		1A626153231476DD00DC2B06 /* Synopsis.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Synopsis.framework;
+			remoteRef = 1A626152231476DD00DC2B06 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1A626155231476DD00DC2B06 /* Synopsis.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Synopsis.framework;
+			remoteRef = 1A626154231476DD00DC2B06 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1A626157231476DD00DC2B06 /* Synopsis.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Synopsis.framework;
+			remoteRef = 1A626156231476DD00DC2B06 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = HapInAVFoundation.framework;
+			remoteRef = 1AC1ED3D2318144500AAD380 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1AC1ED402318144500AAD380 /* libHapInAVFoundation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libHapInAVFoundation.a;
+			remoteRef = 1AC1ED3F2318144500AAD380 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1AC1ED422318144500AAD380 /* HapInAVF Test App.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "HapInAVF Test App.app";
+			remoteRef = 1AC1ED412318144500AAD380 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1AC1ED442318144500AAD380 /* AVF Batch Converter.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "AVF Batch Converter.app";
+			remoteRef = 1AC1ED432318144500AAD380 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1AC1ED462318144500AAD380 /* AVFtoHap */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = AVFtoHap;
+			remoteRef = 1AC1ED452318144500AAD380 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1A626136231476CF00DC2B06 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A62613F231476D000DC2B06 /* Assets.xcassets in Resources */,
+				1A626142231476D000DC2B06 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1A34043B23283C25004A434D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A34044223283C25004A434D /* main.m in Sources */,
+				1A34044E23283F0C004A434D /* SynopsisJobObject.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A626134231476CF00DC2B06 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A626145231476D000DC2B06 /* main.m in Sources */,
+				1AFDD45F2316F3C400D7862F /* SynopsisJobObject.m in Sources */,
+				1A62613D231476CF00DC2B06 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1A626159231476EA00DC2B06 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Synopsis-macOS";
+			targetProxy = 1A626158231476EA00DC2B06 /* PBXContainerItemProxy */;
+		};
+		1AC1ED4C2318145A00AAD380 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = HapInAVFoundation;
+			targetProxy = 1AC1ED4B2318145A00AAD380 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1A626140231476D000DC2B06 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1A626141231476D000DC2B06 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1A34044323283C25004A434D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Developer ID Application: Vidvox, LLC (KH97KZU7A7)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = KH97KZU7A7;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@loader_path",
+					"@executable_path",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1A34044423283C25004A434D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Developer ID Application: Vidvox, LLC (KH97KZU7A7)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = KH97KZU7A7;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@loader_path",
+					"@executable_path",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		1A626147231476D000DC2B06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		1A626148231476D000DC2B06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		1A62614A231476D000DC2B06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Developer ID Application: Vidvox, LLC (KH97KZU7A7)";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = KH97KZU7A7;
+				INFOPLIST_FILE = SynopsisCleanRoom/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = yourcompany.SynopsisCleanRoom;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+			};
+			name = Debug;
+		};
+		1A62614B231476D000DC2B06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Developer ID Application: Vidvox, LLC (KH97KZU7A7)";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = KH97KZU7A7;
+				INFOPLIST_FILE = SynopsisCleanRoom/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = yourcompany.SynopsisCleanRoom;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1A34044B23283C25004A434D /* Build configuration list for PBXNativeTarget "synopsis_cli" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A34044323283C25004A434D /* Debug */,
+				1A34044423283C25004A434D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1A626133231476CF00DC2B06 /* Build configuration list for PBXProject "SynopsisCleanRoom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A626147231476D000DC2B06 /* Debug */,
+				1A626148231476D000DC2B06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1A626149231476D000DC2B06 /* Build configuration list for PBXNativeTarget "SynopsisCleanRoom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A62614A231476D000DC2B06 /* Debug */,
+				1A62614B231476D000DC2B06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1A626130231476CF00DC2B06 /* Project object */;
+}
