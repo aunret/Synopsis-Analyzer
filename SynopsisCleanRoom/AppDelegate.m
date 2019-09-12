@@ -45,7 +45,7 @@
 		AVVideoCompressionPropertiesKey: @{
 			@"ProfileLevel": @"H264_High_AutoLevel"
 		},
-		VVAVVideoMultiPassEncodeKey: @YES,
+		//VVAVVideoMultiPassEncodeKey: @YES,
 		//AVVideoCodecKey: @"jpeg",
 		//AVVideoCompressionPropertiesKey: @{
 		//	@"Quality": [NSNumber numberWithDouble:0.0]

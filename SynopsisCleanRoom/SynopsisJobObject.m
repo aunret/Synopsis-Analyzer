@@ -3,7 +3,7 @@
 //  SynopsisCleanRoom
 //
 //  Created by testAdmin on 8/26/19.
-//  Copyright © 2019 yourcompany. All rights reserved.
+//  Copyright Â© 2019 yourcompany. All rights reserved.
 //
 
 #import "SynopsisJobObject.h"
@@ -104,9 +104,6 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	NSMutableArray				*writerMiscInputs;	//	will rx from a reader misc passthru output
 	NSMutableArray				*writerMetadataInputs;	//	will rx from analysis, which gets data from a reader video analysis output
 	NSMutableArray				*writerMetadataInputAdapters;
-	
-	//	these vars are used within the various blocks that encode stuff, and as such need to be externally retained
-	NSUInteger					_inputPassIndex;
 }
 @property (atomic, strong) NSURL * srcFile;
 @property (atomic, strong) NSURL * dstFile;
@@ -917,11 +914,11 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		}
 		
 		//	configure the input to respond to pass descriptions (this supports multi-pass encoding)
-		bss->_inputPassIndex = 0;
 		[localInput respondToEachPassDescriptionOnQueue:localQueue usingBlock:^{
 			//NSLog(@"respondToEachPassDescriptionOnQueue:, AVAssetMediaType is %@",[localInput mediaType]);
 			__block NSUInteger			skippedBufferCount = 0;
 			__block NSUInteger			renderedVideoFrameCount = 0;
+			__block NSUInteger			inputPassIndex = 0;
 			AVAssetWriterInputPassDescription		*tmpDesc = [localInput currentPassDescription];
 			//NSLog(@"\t\tcurrentPassDescription is %@",tmpDesc);
 			//	if there's no pass description, mark the input as being finished and remove them
@@ -970,9 +967,9 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			//	else there's a pass description, which means i need to do reading/writing/probably encoding
 			else	{
 				
-				//NSLog(@"\t\tthere's a pass description, _inputPassIndex is %lu",(unsigned long)bss._inputPassIndex);
+				//NSLog(@"\t\tthere's a pass description, inputPassIndex is %lu",(unsigned long)inputPassIndex);
 				//	if this isn't the first pass, before proceeding we need to reset the reader output to the time range of the pass description
-				if (bss->_inputPassIndex > 0)	{
+				if (inputPassIndex > 0)	{
 					//	you can't resetForReadingTimeRanges until all the samples have been read from 
 					//	the output (until copyNextSampleBuffer returns NULL), so make sure this has 
 					//	happened...note that we may have to advance more than one output (if there's 
@@ -1115,7 +1112,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 									double			tmpProgress = 0.0;
 									if (CMTIME_IS_VALID(tmpTime))
 										tmpProgress = (CMTimeGetSeconds(tmpTime)/durationInSeconds);
-									//bss.jobProgress = (bss._inputPassIndex==1) ? tmpProgress : 0.5+tmpProgress;
+									//bss.jobProgress = (inputPassIndex==1) ? tmpProgress : 0.5+tmpProgress;
 									//if (bss.jobProgress >= 1.0)
 									//	bss.jobProgress = 0.99;
 									bss.jobProgress = tmpProgress;
@@ -1191,7 +1188,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			}
 			
 			//	increment the input pass index (tracked so i know when to reset the reading ranges and whether or not i need to perform analysis)
-			++bss->_inputPassIndex;
+			++inputPassIndex;
 			//	update the track index, so we can more easily retrieve corresponding reader outputs/writer inputs
 			//++trackIndex;
 		}];
