@@ -8,8 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 #import "PresetObject.h"
+#import "PrefsPathAbstraction.h"
 
-@interface PreferencesGeneralViewController : NSViewController
+
+
+
+@interface PreferencesGeneralViewController : NSViewController	{
+	IBOutlet PrefsPathAbstraction		*scriptAbs;
+}
+
 @property (weak) IBOutlet NSPopUpButton* defaultPresetPopupButton;
 @property (copy) PresetObject* defaultPreset;
 

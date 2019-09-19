@@ -7,16 +7,24 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "PrefsPathAbstraction.h"
 
-@interface PreferencesFileViewController : NSViewController
 
-- (BOOL) usingOutputFolder;
+
+
+@interface PreferencesFileViewController : NSViewController	{
+	IBOutlet PrefsPathAbstraction		*outputFolderAbs;
+	IBOutlet PrefsPathAbstraction		*watchFolderAbs;
+	IBOutlet PrefsPathAbstraction		*tempFolderAbs;
+}
+
+//- (BOOL) usingOutputFolder;
 - (NSURL*) outputFolderURL;
 
-- (BOOL) usingWatchFolder;
+//- (BOOL) usingWatchFolder;
 - (NSURL*) watchFolderURL;
 
-- (BOOL) usingTempFolder;
+//- (BOOL) usingTempFolder;
 - (NSURL*) tempFolderURL;
 
 - (BOOL) usingMirroredFolders;

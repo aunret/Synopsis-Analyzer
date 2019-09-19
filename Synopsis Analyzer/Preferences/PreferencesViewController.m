@@ -44,6 +44,12 @@ static NSInteger currentTag = 0;
 
 	[self buildPresetMenu];
 	
+	//	make sure my child views get loaded
+	self.preferencesGeneralViewController.view;
+	self.preferencesFileViewController.view;
+	self.preferencesPresetViewController.view;
+	self.preferencesAdvancedViewController.view;
+	
  //	   for(NSObject* object in [self.preferencesPresetViewController allPresets])
 //	  {
 //		  if([object isKindOfClass:[PresetObject class]])

@@ -8,6 +8,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="PreferencesGeneralViewController">
             <connections>
                 <outlet property="defaultPresetPopupButton" destination="918-v1-aGz" id="NeX-te-bYq"/>
+                <outlet property="scriptAbs" destination="sN0-66-umG" id="FwG-zD-ZTf"/>
                 <outlet property="selectedDefaultPresetDescription" destination="TaS-Nl-Eef" id="QH5-6f-9zy"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
@@ -52,9 +53,89 @@
                         </subviews>
                     </view>
                 </box>
+                <box autoresizesSubviews="NO" borderType="line" title="Default Script" id="n92-Bb-2zs">
+                    <rect key="frame" x="17" y="135" width="446" height="142"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <view key="contentView" id="IUI-CI-NpH">
+                        <rect key="frame" x="3" y="3" width="440" height="124"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="hOF-nH-wqj">
+                                <rect key="frame" x="34" y="41" width="367" height="11"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Script Location" id="U5e-Ze-DQ9">
+                                    <font key="font" metaFont="miniSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="RwF-Mj-AVB">
+                                <rect key="frame" x="11" y="60" width="412" height="28"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="If enabled this script will be executed after each file has been analyzed/transcoded." id="YTf-p3-Mgp">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button id="NX5-j1-GAc">
+                                <rect key="frame" x="10" y="39" width="16" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStatusAvailable" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="XHY-PT-1W4">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button id="erm-PR-CVS">
+                                <rect key="frame" x="407" y="40" width="14" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="idI-O4-9hg">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="revealButtonUsed:" target="sN0-66-umG" id="LEa-3D-e1t"/>
+                                </connections>
+                            </button>
+                            <button id="gKQ-NM-VMs">
+                                <rect key="frame" x="9" y="94" width="119" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Use script" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Hrs-lh-Scz">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="enableToggleUsed:" target="sN0-66-umG" id="pgW-Ww-dIE"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" id="H9L-vP-EDV">
+                                <rect key="frame" x="134" y="95" width="125" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="roundTextured" title="Select script" bezelStyle="texturedRounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ws2-Cr-dQA">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="selectButtonUsed:" target="sN0-66-umG" id="TDz-ae-zzy"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                    </view>
+                </box>
             </subviews>
             <point key="canvasLocation" x="247" y="455.5"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="qNL-dS-myo"/>
+        <customObject id="sN0-66-umG" customClass="PrefsPathAbstraction">
+            <connections>
+                <outlet property="enableToggle" destination="gKQ-NM-VMs" id="4e4-hX-hY4"/>
+                <outlet property="statusButton" destination="NX5-j1-GAc" id="bQu-RX-3Za"/>
+                <outlet property="statusTextField" destination="hOF-nH-wqj" id="atc-yT-axj"/>
+            </connections>
+        </customObject>
     </objects>
+    <resources>
+        <image name="NSFollowLinkFreestandingTemplate" width="14" height="14"/>
+        <image name="NSStatusAvailable" width="16" height="16"/>
+    </resources>
 </document>

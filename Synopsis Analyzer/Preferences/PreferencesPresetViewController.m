@@ -1227,7 +1227,7 @@ const NSString* value = @"Value";
 
 - (IBAction)selectAudioFormat:(id)sender
 {
-	NSLog(@"selected Audio Format: %@", [sender representedObject]);
+	//NSLog(@"selected Audio Format: %@", [sender representedObject]);
 	
 	// If we are on passthrough encoder, then we disable all our options
 	if(self.prefsAudioFormat.selectedItem.representedObject == [NSNull null])

@@ -12,13 +12,36 @@
 #import "Constants.h"
 #import "AppDelegate.h"
 
+
+
+
 @interface PreferencesGeneralViewController ()
 @property (weak) IBOutlet NSTextField* selectedDefaultPresetDescription;
-
 @end
+
+
+
 
 @implementation PreferencesGeneralViewController
 
+- (void) awakeFromNib	{
+	[scriptAbs setUserDefaultsKey:kSynopsisAnalyzerScriptKey];
+	[scriptAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
+		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+		openPanel.canChooseDirectories = NO;
+		openPanel.canCreateDirectories = NO;
+		openPanel.canChooseFiles = YES;
+		openPanel.allowedFileTypes = @[ @"py" ];
+		openPanel.message = @"Select Python script to use";
+	
+		[openPanel beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse result) {
+			if(result == NSModalResponseOK)	{
+				NSURL* outputFolderURL = [openPanel URL];
+				[inAbs setPath:[outputFolderURL path]];
+			}
+		}];
+	}];
+}
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	// Do view setup here.
