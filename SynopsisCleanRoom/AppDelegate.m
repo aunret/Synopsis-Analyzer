@@ -93,8 +93,8 @@
 	NSDictionary		*jobDict = @{
 		kSynopsisSrcFileKey: [srcURL path],
 		kSynopsisDstFileKey: [dstURL path],
-		kSynopsisTranscodeVideoSettingsKey: videoSettings,
-		kSynopsisTranscodeAudioSettingsKey: audioSettings,
+		//kSynopsisTranscodeVideoSettingsKey: videoSettings,
+		//kSynopsisTranscodeAudioSettingsKey: audioSettings,
 		kSynopsisAnalysisSettingsKey: synopsisSettings
 	};
 	NSError				*nsErr = nil;

@@ -7,6 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A1093382330011C00791BDA /* SessionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A1093372330011C00791BDA /* SessionController.m */; };
+		1A1093442330012900791BDA /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A1093432330012900791BDA /* LogController.m */; };
+		1A1093472330016D00791BDA /* DropFilesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A1093462330016D00791BDA /* DropFilesView.m */; };
+		1A10934A233001A300791BDA /* CustomVisualEffectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A109349233001A300791BDA /* CustomVisualEffectView.m */; };
+		1A10934D233001AE00791BDA /* CustomBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A10934C233001AE00791BDA /* CustomBackgroundView.m */; };
+		1A1093502330023200791BDA /* PreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A10934F2330023200791BDA /* PreferencesViewController.m */; };
+		1A1093542330024A00791BDA /* PreferencesGeneralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A1093522330024A00791BDA /* PreferencesGeneralViewController.m */; };
+		1A1093552330024A00791BDA /* PreferencesGeneralViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A1093532330024A00791BDA /* PreferencesGeneralViewController.xib */; };
+		1A1093592330025500791BDA /* PreferencesFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A1093572330025500791BDA /* PreferencesFileViewController.m */; };
+		1A10935A2330025500791BDA /* PreferencesFileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A1093582330025500791BDA /* PreferencesFileViewController.xib */; };
+		1A10935E2330025E00791BDA /* PreferencesPresetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A10935C2330025E00791BDA /* PreferencesPresetViewController.m */; };
+		1A10935F2330025E00791BDA /* PreferencesPresetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A10935D2330025E00791BDA /* PreferencesPresetViewController.xib */; };
+		1A1093632330026800791BDA /* PreferencesAdvancedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A1093612330026800791BDA /* PreferencesAdvancedViewController.m */; };
+		1A1093642330026800791BDA /* PreferencesAdvancedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A1093622330026800791BDA /* PreferencesAdvancedViewController.xib */; };
+		1A1093672330027600791BDA /* PresetObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A1093662330027600791BDA /* PresetObject.m */; };
+		1A10936A2330027C00791BDA /* PresetGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A1093692330027C00791BDA /* PresetGroup.m */; };
+		1A10936E233002D800791BDA /* SynOp.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A10936D233002D800791BDA /* SynOp.m */; };
+		1A1093772330205100791BDA /* SessionRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A1093752330205100791BDA /* SessionRowView.m */; };
+		1A1093782330205100791BDA /* SessionRowView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A1093762330205100791BDA /* SessionRowView.xib */; };
+		1A10937C2330205800791BDA /* OpRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A10937A2330205800791BDA /* OpRowView.m */; };
+		1A10937D2330205800791BDA /* OpRowView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A10937B2330205800791BDA /* OpRowView.xib */; };
 		1A34044223283C25004A434D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34044123283C25004A434D /* main.m */; };
 		1A34044C23283EFA004A434D /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
 		1A34044D23283EFA004A434D /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
@@ -17,8 +38,22 @@
 		1A626145231476D000DC2B06 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A626144231476D000DC2B06 /* main.m */; };
 		1A62615B231476F000DC2B06 /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
 		1A62615D2314770100DC2B06 /* Synopsis.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1A9B1EBE23314B73007D414A /* PrefsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A9B1EBC23314B72007D414A /* PrefsController.m */; };
+		1A9B1EBF23314B73007D414A /* PrefsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A9B1EBD23314B73007D414A /* PrefsController.xib */; };
+		1A9B1EC423314C1C007D414A /* LogController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A9B1EC223314C1C007D414A /* LogController.xib */; };
+		1A9B1ECB23315051007D414A /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
+		1A9B1ECC23315051007D414A /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
+		1A9B1ED123315076007D414A /* Synopsis.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626155231476DD00DC2B06 /* Synopsis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1A9B1ED223315076007D414A /* HapInAVFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1AA3EF632332ADA6008C14C7 /* FilePreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AA3EF622332ADA6008C14C7 /* FilePreviewController.m */; };
+		1AC1029423328DB300510548 /* SynSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AC1029323328DB300510548 /* SynSession.m */; };
 		1AC1ED4D2318145E00AAD380 /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
 		1AC1ED4E2318146400AAD380 /* HapInAVFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1AD8459E232C1E3900416F5C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AD8459D232C1E3900416F5C /* AppDelegate.m */; };
+		1AD845A0232C1E3900416F5C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AD8459F232C1E3900416F5C /* Images.xcassets */; };
+		1AD845A3232C1E3900416F5C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AD845A1232C1E3900416F5C /* MainMenu.xib */; };
+		1AD845A6232C1E3900416F5C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AD845A5232C1E3900416F5C /* main.m */; };
+		1AEE2F792333C917009193CD /* PresetSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F782333C917009193CD /* PresetSettings.m */; };
 		1AFDD45F2316F3C400D7862F /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +94,20 @@
 			remoteInfo = "Synopsis-macOS";
 		};
 		1A95E8C923296B6E0088404A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 1A97F5AA1A38ABBF00E0DC74;
+			remoteInfo = HapInAVFoundation;
+		};
+		1A9B1EC72331504B007D414A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BBB10DC1D5542A200C22439;
+			remoteInfo = "Synopsis-macOS";
+		};
+		1A9B1EC92331504B007D414A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */;
 			proxyType = 1;
@@ -131,9 +180,57 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1A9B1ECD23315055007D414A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1A9B1ED123315076007D414A /* Synopsis.framework in Embed Frameworks */,
+				1A9B1ED223315076007D414A /* HapInAVFoundation.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1A1093362330011C00791BDA /* SessionController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SessionController.h; sourceTree = "<group>"; };
+		1A1093372330011C00791BDA /* SessionController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SessionController.m; sourceTree = "<group>"; };
+		1A1093422330012900791BDA /* LogController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogController.h; sourceTree = "<group>"; };
+		1A1093432330012900791BDA /* LogController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogController.m; sourceTree = "<group>"; };
+		1A1093452330016D00791BDA /* DropFilesView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DropFilesView.h; sourceTree = "<group>"; };
+		1A1093462330016D00791BDA /* DropFilesView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DropFilesView.m; sourceTree = "<group>"; };
+		1A109348233001A300791BDA /* CustomVisualEffectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomVisualEffectView.h; sourceTree = "<group>"; };
+		1A109349233001A300791BDA /* CustomVisualEffectView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomVisualEffectView.m; sourceTree = "<group>"; };
+		1A10934B233001AE00791BDA /* CustomBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomBackgroundView.h; sourceTree = "<group>"; };
+		1A10934C233001AE00791BDA /* CustomBackgroundView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomBackgroundView.m; sourceTree = "<group>"; };
+		1A10934E2330023200791BDA /* PreferencesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreferencesViewController.h; sourceTree = "<group>"; };
+		1A10934F2330023200791BDA /* PreferencesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreferencesViewController.m; sourceTree = "<group>"; };
+		1A1093512330024A00791BDA /* PreferencesGeneralViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreferencesGeneralViewController.h; sourceTree = "<group>"; };
+		1A1093522330024A00791BDA /* PreferencesGeneralViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreferencesGeneralViewController.m; sourceTree = "<group>"; };
+		1A1093532330024A00791BDA /* PreferencesGeneralViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreferencesGeneralViewController.xib; sourceTree = "<group>"; };
+		1A1093562330025500791BDA /* PreferencesFileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreferencesFileViewController.h; sourceTree = "<group>"; };
+		1A1093572330025500791BDA /* PreferencesFileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreferencesFileViewController.m; sourceTree = "<group>"; };
+		1A1093582330025500791BDA /* PreferencesFileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreferencesFileViewController.xib; sourceTree = "<group>"; };
+		1A10935B2330025E00791BDA /* PreferencesPresetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreferencesPresetViewController.h; sourceTree = "<group>"; };
+		1A10935C2330025E00791BDA /* PreferencesPresetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreferencesPresetViewController.m; sourceTree = "<group>"; };
+		1A10935D2330025E00791BDA /* PreferencesPresetViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreferencesPresetViewController.xib; sourceTree = "<group>"; };
+		1A1093602330026800791BDA /* PreferencesAdvancedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreferencesAdvancedViewController.h; sourceTree = "<group>"; };
+		1A1093612330026800791BDA /* PreferencesAdvancedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreferencesAdvancedViewController.m; sourceTree = "<group>"; };
+		1A1093622330026800791BDA /* PreferencesAdvancedViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreferencesAdvancedViewController.xib; sourceTree = "<group>"; };
+		1A1093652330027600791BDA /* PresetObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetObject.h; sourceTree = "<group>"; };
+		1A1093662330027600791BDA /* PresetObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetObject.m; sourceTree = "<group>"; };
+		1A1093682330027C00791BDA /* PresetGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetGroup.h; sourceTree = "<group>"; };
+		1A1093692330027C00791BDA /* PresetGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetGroup.m; sourceTree = "<group>"; };
+		1A10936C233002D800791BDA /* SynOp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynOp.h; sourceTree = "<group>"; };
+		1A10936D233002D800791BDA /* SynOp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SynOp.m; sourceTree = "<group>"; };
+		1A1093742330205100791BDA /* SessionRowView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SessionRowView.h; sourceTree = "<group>"; };
+		1A1093752330205100791BDA /* SessionRowView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SessionRowView.m; sourceTree = "<group>"; };
+		1A1093762330205100791BDA /* SessionRowView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SessionRowView.xib; sourceTree = "<group>"; };
+		1A1093792330205800791BDA /* OpRowView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpRowView.h; sourceTree = "<group>"; };
+		1A10937A2330205800791BDA /* OpRowView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpRowView.m; sourceTree = "<group>"; };
+		1A10937B2330205800791BDA /* OpRowView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpRowView.xib; sourceTree = "<group>"; };
 		1A34043F23283C25004A434D /* synopsis_cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = synopsis_cli; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A34044123283C25004A434D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1A626138231476CF00DC2B06 /* SynopsisCleanRoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SynopsisCleanRoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,7 +242,26 @@
 		1A626144231476D000DC2B06 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1A626146231476D000DC2B06 /* SynopsisCleanRoom.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SynopsisCleanRoom.entitlements; sourceTree = "<group>"; };
 		1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Synopsis-Framework.xcodeproj"; path = "./Synopsis-Framework/Synopsis/Synopsis-Framework.xcodeproj"; sourceTree = "<group>"; };
+		1A9B1EBB23314B72007D414A /* PrefsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefsController.h; sourceTree = "<group>"; };
+		1A9B1EBC23314B72007D414A /* PrefsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrefsController.m; sourceTree = "<group>"; };
+		1A9B1EBD23314B73007D414A /* PrefsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsController.xib; sourceTree = "<group>"; };
+		1A9B1EC223314C1C007D414A /* LogController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogController.xib; sourceTree = "<group>"; };
+		1A9B1ED3233155B9007D414A /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = "Synopsis Analyzer/Constants.h"; sourceTree = SOURCE_ROOT; };
+		1AA3EF612332ADA6008C14C7 /* FilePreviewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilePreviewController.h; sourceTree = "<group>"; };
+		1AA3EF622332ADA6008C14C7 /* FilePreviewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilePreviewController.m; sourceTree = "<group>"; };
+		1AC1029223328DB300510548 /* SynSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynSession.h; sourceTree = "<group>"; };
+		1AC1029323328DB300510548 /* SynSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SynSession.m; sourceTree = "<group>"; };
 		1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HapInAVFoundation.xcodeproj; path = ./HapInAVFoundation/HapInAVFoundation.xcodeproj; sourceTree = "<group>"; };
+		1AD8459A232C1E3900416F5C /* Synopsis Analyzer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Synopsis Analyzer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AD8459C232C1E3900416F5C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		1AD8459D232C1E3900416F5C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		1AD8459F232C1E3900416F5C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		1AD845A2232C1E3900416F5C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		1AD845A4232C1E3900416F5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1AD845A5232C1E3900416F5C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1AD845A7232C1E3900416F5C /* Synopsis_Analyzer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Synopsis_Analyzer.entitlements; sourceTree = "<group>"; };
+		1AEE2F772333C917009193CD /* PresetSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetSettings.h; sourceTree = "<group>"; };
+		1AEE2F782333C917009193CD /* PresetSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetSettings.m; sourceTree = "<group>"; };
 		1AFDD45D2316F3C400D7862F /* SynopsisJobObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynopsisJobObject.h; sourceTree = "<group>"; };
 		1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SynopsisJobObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -169,9 +285,76 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1AD84597232C1E3900416F5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A9B1ECB23315051007D414A /* HapInAVFoundation.framework in Frameworks */,
+				1A9B1ECC23315051007D414A /* Synopsis.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A10936B2330028A00791BDA /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				1A10934E2330023200791BDA /* PreferencesViewController.h */,
+				1A10934F2330023200791BDA /* PreferencesViewController.m */,
+				1A1093512330024A00791BDA /* PreferencesGeneralViewController.h */,
+				1A1093522330024A00791BDA /* PreferencesGeneralViewController.m */,
+				1A1093532330024A00791BDA /* PreferencesGeneralViewController.xib */,
+				1A1093562330025500791BDA /* PreferencesFileViewController.h */,
+				1A1093572330025500791BDA /* PreferencesFileViewController.m */,
+				1A1093582330025500791BDA /* PreferencesFileViewController.xib */,
+				1A10935B2330025E00791BDA /* PreferencesPresetViewController.h */,
+				1A10935C2330025E00791BDA /* PreferencesPresetViewController.m */,
+				1A10935D2330025E00791BDA /* PreferencesPresetViewController.xib */,
+				1A1093602330026800791BDA /* PreferencesAdvancedViewController.h */,
+				1A1093612330026800791BDA /* PreferencesAdvancedViewController.m */,
+				1A1093622330026800791BDA /* PreferencesAdvancedViewController.xib */,
+				1A1093652330027600791BDA /* PresetObject.h */,
+				1A1093662330027600791BDA /* PresetObject.m */,
+				1A1093682330027C00791BDA /* PresetGroup.h */,
+				1A1093692330027C00791BDA /* PresetGroup.m */,
+				1AEE2F772333C917009193CD /* PresetSettings.h */,
+				1AEE2F782333C917009193CD /* PresetSettings.m */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
+		1A10936F233002E200791BDA /* Session-related */ = {
+			isa = PBXGroup;
+			children = (
+				1AC1029223328DB300510548 /* SynSession.h */,
+				1AC1029323328DB300510548 /* SynSession.m */,
+				1A10936C233002D800791BDA /* SynOp.h */,
+				1A10936D233002D800791BDA /* SynOp.m */,
+				1A1093742330205100791BDA /* SessionRowView.h */,
+				1A1093752330205100791BDA /* SessionRowView.m */,
+				1A1093762330205100791BDA /* SessionRowView.xib */,
+				1A1093792330205800791BDA /* OpRowView.h */,
+				1A10937A2330205800791BDA /* OpRowView.m */,
+				1A10937B2330205800791BDA /* OpRowView.xib */,
+			);
+			path = "Session-related";
+			sourceTree = "<group>";
+		};
+		1A109370233002FD00791BDA /* misc */ = {
+			isa = PBXGroup;
+			children = (
+				1A9B1ED3233155B9007D414A /* Constants.h */,
+				1A1093452330016D00791BDA /* DropFilesView.h */,
+				1A1093462330016D00791BDA /* DropFilesView.m */,
+				1A109348233001A300791BDA /* CustomVisualEffectView.h */,
+				1A109349233001A300791BDA /* CustomVisualEffectView.m */,
+				1A10934B233001AE00791BDA /* CustomBackgroundView.h */,
+				1A10934C233001AE00791BDA /* CustomBackgroundView.m */,
+			);
+			path = misc;
+			sourceTree = "<group>";
+		};
 		1A34044023283C25004A434D /* synopsis_cli */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,6 +368,7 @@
 			children = (
 				1A62613A231476CF00DC2B06 /* SynopsisCleanRoom */,
 				1A34044023283C25004A434D /* synopsis_cli */,
+				1AD8459B232C1E3900416F5C /* Synopsis Analyzer */,
 				1A626139231476CF00DC2B06 /* Products */,
 				1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */,
 				1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */,
@@ -197,6 +381,7 @@
 			children = (
 				1A626138231476CF00DC2B06 /* SynopsisCleanRoom.app */,
 				1A34043F23283C25004A434D /* synopsis_cli */,
+				1AD8459A232C1E3900416F5C /* Synopsis Analyzer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -246,6 +431,33 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		1AD8459B232C1E3900416F5C /* Synopsis Analyzer */ = {
+			isa = PBXGroup;
+			children = (
+				1AD8459C232C1E3900416F5C /* AppDelegate.h */,
+				1AD8459D232C1E3900416F5C /* AppDelegate.m */,
+				1AD8459F232C1E3900416F5C /* Images.xcassets */,
+				1AD845A1232C1E3900416F5C /* MainMenu.xib */,
+				1AD845A4232C1E3900416F5C /* Info.plist */,
+				1AD845A5232C1E3900416F5C /* main.m */,
+				1AD845A7232C1E3900416F5C /* Synopsis_Analyzer.entitlements */,
+				1A1093362330011C00791BDA /* SessionController.h */,
+				1A1093372330011C00791BDA /* SessionController.m */,
+				1AA3EF612332ADA6008C14C7 /* FilePreviewController.h */,
+				1AA3EF622332ADA6008C14C7 /* FilePreviewController.m */,
+				1A10936F233002E200791BDA /* Session-related */,
+				1A9B1EBB23314B72007D414A /* PrefsController.h */,
+				1A9B1EBC23314B72007D414A /* PrefsController.m */,
+				1A9B1EBD23314B73007D414A /* PrefsController.xib */,
+				1A10936B2330028A00791BDA /* Preferences */,
+				1A1093422330012900791BDA /* LogController.h */,
+				1A1093432330012900791BDA /* LogController.m */,
+				1A9B1EC223314C1C007D414A /* LogController.xib */,
+				1A109370233002FD00791BDA /* misc */,
+			);
+			path = "Synopsis Analyzer";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -288,6 +500,26 @@
 			productReference = 1A626138231476CF00DC2B06 /* SynopsisCleanRoom.app */;
 			productType = "com.apple.product-type.application";
 		};
+		1AD84599232C1E3900416F5C /* Synopsis Analyzer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1AD845B0232C1E3900416F5C /* Build configuration list for PBXNativeTarget "Synopsis Analyzer" */;
+			buildPhases = (
+				1AD84596232C1E3900416F5C /* Sources */,
+				1AD84597232C1E3900416F5C /* Frameworks */,
+				1AD84598232C1E3900416F5C /* Resources */,
+				1A9B1ECD23315055007D414A /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1A9B1EC82331504B007D414A /* PBXTargetDependency */,
+				1A9B1ECA2331504B007D414A /* PBXTargetDependency */,
+			);
+			name = "Synopsis Analyzer";
+			productName = "Synopsis Analyzer";
+			productReference = 1AD8459A232C1E3900416F5C /* Synopsis Analyzer.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -301,6 +533,14 @@
 						CreatedOnToolsVersion = 10.3;
 					};
 					1A626137231476CF00DC2B06 = {
+						CreatedOnToolsVersion = 10.3;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
+					};
+					1AD84599232C1E3900416F5C = {
 						CreatedOnToolsVersion = 10.3;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
@@ -335,6 +575,7 @@
 			targets = (
 				1A626137231476CF00DC2B06 /* SynopsisCleanRoom */,
 				1A34043E23283C25004A434D /* synopsis_cli */,
+				1AD84599232C1E3900416F5C /* Synopsis Analyzer */,
 			);
 		};
 /* End PBXProject section */
@@ -408,6 +649,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1AD84598232C1E3900416F5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A9B1EC423314C1C007D414A /* LogController.xib in Resources */,
+				1AD845A0232C1E3900416F5C /* Images.xcassets in Resources */,
+				1A9B1EBF23314B73007D414A /* PrefsController.xib in Resources */,
+				1A1093782330205100791BDA /* SessionRowView.xib in Resources */,
+				1A10935A2330025500791BDA /* PreferencesFileViewController.xib in Resources */,
+				1A10937D2330205800791BDA /* OpRowView.xib in Resources */,
+				1A1093552330024A00791BDA /* PreferencesGeneralViewController.xib in Resources */,
+				1AD845A3232C1E3900416F5C /* MainMenu.xib in Resources */,
+				1A10935F2330025E00791BDA /* PreferencesPresetViewController.xib in Resources */,
+				1A1093642330026800791BDA /* PreferencesAdvancedViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -430,6 +688,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1AD84596232C1E3900416F5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AEE2F792333C917009193CD /* PresetSettings.m in Sources */,
+				1A10935E2330025E00791BDA /* PreferencesPresetViewController.m in Sources */,
+				1A10937C2330205800791BDA /* OpRowView.m in Sources */,
+				1A10934A233001A300791BDA /* CustomVisualEffectView.m in Sources */,
+				1A1093542330024A00791BDA /* PreferencesGeneralViewController.m in Sources */,
+				1AA3EF632332ADA6008C14C7 /* FilePreviewController.m in Sources */,
+				1A1093592330025500791BDA /* PreferencesFileViewController.m in Sources */,
+				1A1093672330027600791BDA /* PresetObject.m in Sources */,
+				1A1093472330016D00791BDA /* DropFilesView.m in Sources */,
+				1A1093772330205100791BDA /* SessionRowView.m in Sources */,
+				1A9B1EBE23314B73007D414A /* PrefsController.m in Sources */,
+				1AD845A6232C1E3900416F5C /* main.m in Sources */,
+				1A1093382330011C00791BDA /* SessionController.m in Sources */,
+				1A1093442330012900791BDA /* LogController.m in Sources */,
+				1A10936A2330027C00791BDA /* PresetGroup.m in Sources */,
+				1A10936E233002D800791BDA /* SynOp.m in Sources */,
+				1A1093632330026800791BDA /* PreferencesAdvancedViewController.m in Sources */,
+				1AC1029423328DB300510548 /* SynSession.m in Sources */,
+				1A1093502330023200791BDA /* PreferencesViewController.m in Sources */,
+				1AD8459E232C1E3900416F5C /* AppDelegate.m in Sources */,
+				1A10934D233001AE00791BDA /* CustomBackgroundView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -448,6 +734,16 @@
 			name = HapInAVFoundation;
 			targetProxy = 1A95E8C923296B6E0088404A /* PBXContainerItemProxy */;
 		};
+		1A9B1EC82331504B007D414A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Synopsis-macOS";
+			targetProxy = 1A9B1EC72331504B007D414A /* PBXContainerItemProxy */;
+		};
+		1A9B1ECA2331504B007D414A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = HapInAVFoundation;
+			targetProxy = 1A9B1EC92331504B007D414A /* PBXContainerItemProxy */;
+		};
 		1AC1ED4C2318145A00AAD380 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = HapInAVFoundation;
@@ -460,6 +756,14 @@
 			isa = PBXVariantGroup;
 			children = (
 				1A626141231476D000DC2B06 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		1AD845A1232C1E3900416F5C /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1AD845A2232C1E3900416F5C /* Base */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -642,6 +946,40 @@
 			};
 			name = Release;
 		};
+		1AD845A8232C1E3900416F5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Synopsis Analyzer/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "yourcompany.Synopsis-Analyzer";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1AD845A9232C1E3900416F5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Synopsis Analyzer/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "yourcompany.Synopsis-Analyzer";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -668,6 +1006,15 @@
 			buildConfigurations = (
 				1A62614A231476D000DC2B06 /* Debug */,
 				1A62614B231476D000DC2B06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1AD845B0232C1E3900416F5C /* Build configuration list for PBXNativeTarget "Synopsis Analyzer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1AD845A8232C1E3900416F5C /* Debug */,
+				1AD845A9232C1E3900416F5C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -376,10 +376,10 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		id<AnalyzerPluginProtocol>		pluginInstance = [[pluginClass alloc] init];
 		
 		if ([[pluginInstance pluginMediaType] isEqualToString:AVMediaTypeVideo])	{
-			//pluginInstance.successLog = ^void(NSString* log){[[LogController sharedLogController] appendSuccessLog:log];};
-			//pluginInstance.warningLog = ^void(NSString* log){[[LogController sharedLogController] appendWarningLog:log];};
-			//pluginInstance.verboseLog = ^void(NSString* log){[[LogController sharedLogController] appendVerboseLog:log];};
-			//pluginInstance.errorLog = ^void(NSString* log){[[LogController sharedLogController] appendErrorLog:log];};
+			//pluginInstance.successLog = ^void(NSString* log){[[LogController global] appendSuccessLog:log];};
+			//pluginInstance.warningLog = ^void(NSString* log){[[LogController global] appendWarningLog:log];};
+			//pluginInstance.verboseLog = ^void(NSString* log){[[LogController global] appendVerboseLog:log];};
+			//pluginInstance.errorLog = ^void(NSString* log){[[LogController global] appendErrorLog:log];};
 			
 			[self.availableAnalyzers addObject:pluginInstance];
 		}
@@ -1078,7 +1078,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 																	bss.jobErr = JOErr_Analysis;
 																	bss.jobErrString = [analyzerError localizedDescription];
 																	[bss _cancelAndCleanUp];	//	should we cancel, or just proceed?
-																	//[[LogController sharedLogController] appendErrorLog:[analyzerError description]];	//	from analyzer code
+																	//[[LogController global] appendErrorLog:[analyzerError description]];	//	from analyzer code
 																}
 													
 																if (metadataValue != nil)	{
