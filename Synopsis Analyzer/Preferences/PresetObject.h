@@ -25,6 +25,8 @@
 - (instancetype) init NS_UNAVAILABLE;
 - (NSData *)copyPresetDataWithError:(NSError **)outError;
 
+- (BOOL) isEqual:(id)n;
+
 @property (readwrite) NSString* title;
 @property (readwrite) PresetAudioSettings* audioSettings;
 @property (readwrite) PresetVideoSettings* videoSettings;
@@ -36,6 +38,8 @@
 @property (readwrite) SynopsisMetadataEncoderExportOption metadataExportOption;
 @property (readonly) BOOL editable;
 @property (readonly) NSUUID* uuid;
+
+- (NSString *) lengthyDescription;
 
 @end
 

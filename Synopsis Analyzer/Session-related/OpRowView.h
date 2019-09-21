@@ -8,11 +8,24 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class SynOp;
+
 
 
 
 @interface OpRowView : NSTableCellView	{
+	IBOutlet NSButton		*enableToggle;
+	IBOutlet NSImageView	*preview;
+	IBOutlet NSTextField	*nameField;
+	IBOutlet NSTextField	*statusField;
 }
+
+- (void) refreshWithOp:(SynOp *)n;
+- (void) refreshUI;
+
+- (IBAction) enableToggleUsed:(id)sender;
+
+@property (atomic,weak) SynOp * op;
 
 @end
 

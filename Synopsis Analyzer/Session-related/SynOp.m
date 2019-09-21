@@ -7,6 +7,7 @@
 //
 
 #import "SynOp.h"
+#import "SynSession.h"
 
 
 

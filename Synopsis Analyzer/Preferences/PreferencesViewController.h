@@ -20,8 +20,8 @@
 @property (readonly, nonatomic, strong) PreferencesPresetViewController* preferencesPresetViewController;
 @property (readonly, nonatomic, strong) PreferencesAdvancedViewController* preferencesAdvancedViewController;
 
-- (PresetObject*) defaultPreset;
-- (NSArray*) availablePresets;
-- (void) buildPresetMenu;
+//- (PresetObject*) defaultPreset;
+//- (NSArray*) availablePresets;
+//- (void) buildPresetMenu;
 
 @end

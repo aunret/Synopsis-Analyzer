@@ -43,8 +43,6 @@
 		//	set opScriptURL from prefs
 		//	set sessionScriptURL from prefs
 		//	set preset from prefs
-		
-		self.status = SessionStatus_Pending;
 	}
 	return self;
 }
@@ -62,8 +60,6 @@
 		//	set opScriptURL from prefs
 		//	set sessionScriptURL from prefs
 		//	set preset from prefs
-		
-		self.status = SessionStatus_Pending;
 	}
 	return self;
 }

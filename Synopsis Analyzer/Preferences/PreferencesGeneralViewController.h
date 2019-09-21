@@ -20,6 +20,9 @@
 @property (weak) IBOutlet NSPopUpButton* defaultPresetPopupButton;
 @property (copy) PresetObject* defaultPreset;
 
-- (IBAction)setDefaultPresetAction:(NSMenuItem*)sender;
+- (IBAction) defaultPresetPUBItemSelected:(id)sender;
+
+//	populates my preset PUB
+- (void) populateDefaultPresetPopupButton;
 
 @end

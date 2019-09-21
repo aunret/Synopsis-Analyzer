@@ -13,12 +13,12 @@
 
 
 
-
+/*
 typedef NS_ENUM(NSUInteger, SessionStatus)	{
 	SessionStatus_Pending,	//	session hasn't been started yet
 	SessionStatus_Complete	//	all ops in session have been attempted, session is complete
 };
-
+*/
 
 
 
@@ -34,7 +34,7 @@ typedef NS_ENUM(NSUInteger, SessionStatus)	{
 @property (strong) NSURL * sessionScripURL;
 @property (strong) PresetObject * preset;
 
-@property (atomic,readwrite) SessionStatus status;
+//@property (atomic,readwrite) SessionStatus status;
 
 @end
 

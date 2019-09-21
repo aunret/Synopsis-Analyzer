@@ -53,8 +53,11 @@
 		1AD845A0232C1E3900416F5C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AD8459F232C1E3900416F5C /* Images.xcassets */; };
 		1AD845A3232C1E3900416F5C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AD845A1232C1E3900416F5C /* MainMenu.xib */; };
 		1AD845A6232C1E3900416F5C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AD845A5232C1E3900416F5C /* main.m */; };
+		1AEC50FE233553840053C1B0 /* NSPopUpButtonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */; };
+		1AEC510F2335556C0053C1B0 /* NSMenuAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC510E2335556C0053C1B0 /* NSMenuAdditions.m */; };
 		1AEE2F792333C917009193CD /* PresetSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F782333C917009193CD /* PresetSettings.m */; };
 		1AEE2F822334032E009193CD /* PrefsPathAbstraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F812334032E009193CD /* PrefsPathAbstraction.m */; };
+		1AEE2F85233448E0009193CD /* PathAbstraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F84233448E0009193CD /* PathAbstraction.m */; };
 		1AFDD45F2316F3C400D7862F /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
 /* End PBXBuildFile section */
 
@@ -261,10 +264,16 @@
 		1AD845A4232C1E3900416F5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AD845A5232C1E3900416F5C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1AD845A7232C1E3900416F5C /* Synopsis_Analyzer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Synopsis_Analyzer.entitlements; sourceTree = "<group>"; };
+		1AEC50FC233553840053C1B0 /* NSPopUpButtonAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSPopUpButtonAdditions.h; sourceTree = "<group>"; };
+		1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSPopUpButtonAdditions.m; sourceTree = "<group>"; };
+		1AEC510D2335556C0053C1B0 /* NSMenuAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSMenuAdditions.h; sourceTree = "<group>"; };
+		1AEC510E2335556C0053C1B0 /* NSMenuAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSMenuAdditions.m; sourceTree = "<group>"; };
 		1AEE2F772333C917009193CD /* PresetSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetSettings.h; sourceTree = "<group>"; };
 		1AEE2F782333C917009193CD /* PresetSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetSettings.m; sourceTree = "<group>"; };
 		1AEE2F802334032E009193CD /* PrefsPathAbstraction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefsPathAbstraction.h; sourceTree = "<group>"; };
 		1AEE2F812334032E009193CD /* PrefsPathAbstraction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrefsPathAbstraction.m; sourceTree = "<group>"; };
+		1AEE2F83233448E0009193CD /* PathAbstraction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PathAbstraction.h; sourceTree = "<group>"; };
+		1AEE2F84233448E0009193CD /* PathAbstraction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PathAbstraction.m; sourceTree = "<group>"; };
 		1AFDD45D2316F3C400D7862F /* SynopsisJobObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynopsisJobObject.h; sourceTree = "<group>"; };
 		1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SynopsisJobObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -356,6 +365,12 @@
 				1A10934C233001AE00791BDA /* CustomBackgroundView.m */,
 				1AEE2F802334032E009193CD /* PrefsPathAbstraction.h */,
 				1AEE2F812334032E009193CD /* PrefsPathAbstraction.m */,
+				1AEE2F83233448E0009193CD /* PathAbstraction.h */,
+				1AEE2F84233448E0009193CD /* PathAbstraction.m */,
+				1AEC50FC233553840053C1B0 /* NSPopUpButtonAdditions.h */,
+				1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */,
+				1AEC510D2335556C0053C1B0 /* NSMenuAdditions.h */,
+				1AEC510E2335556C0053C1B0 /* NSMenuAdditions.m */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -700,6 +715,8 @@
 				1AEE2F792333C917009193CD /* PresetSettings.m in Sources */,
 				1A10935E2330025E00791BDA /* PreferencesPresetViewController.m in Sources */,
 				1A10937C2330205800791BDA /* OpRowView.m in Sources */,
+				1AEC50FE233553840053C1B0 /* NSPopUpButtonAdditions.m in Sources */,
+				1AEC510F2335556C0053C1B0 /* NSMenuAdditions.m in Sources */,
 				1A10934A233001A300791BDA /* CustomVisualEffectView.m in Sources */,
 				1A1093542330024A00791BDA /* PreferencesGeneralViewController.m in Sources */,
 				1AA3EF632332ADA6008C14C7 /* FilePreviewController.m in Sources */,
@@ -712,6 +729,7 @@
 				1AEE2F822334032E009193CD /* PrefsPathAbstraction.m in Sources */,
 				1A1093382330011C00791BDA /* SessionController.m in Sources */,
 				1A1093442330012900791BDA /* LogController.m in Sources */,
+				1AEE2F85233448E0009193CD /* PathAbstraction.m in Sources */,
 				1A10936A2330027C00791BDA /* PresetGroup.m in Sources */,
 				1A10936E233002D800791BDA /* SynOp.m in Sources */,
 				1A1093632330026800791BDA /* PreferencesAdvancedViewController.m in Sources */,

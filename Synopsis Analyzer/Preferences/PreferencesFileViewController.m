@@ -39,7 +39,7 @@
 
 - (void) awakeFromNib
 {
-	
+	__block PreferencesFileViewController		*bss = self;
 	[outputFolderAbs setUserDefaultsKey:kSynopsisAnalyzerOutputFolderURLKey];
 	[outputFolderAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
@@ -48,7 +48,7 @@
 		openPanel.canChooseFiles = NO;
 		openPanel.message = @"Select Output Folder";
 	
-		[openPanel beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse result) {
+		[openPanel beginSheetModalForWindow:bss.view.window completionHandler:^(NSModalResponse result) {
 			if(result == NSModalResponseOK)	{
 				NSURL* outputFolderURL = [openPanel URL];
 				[inAbs setPath:[outputFolderURL path]];
@@ -67,12 +67,12 @@
 		openPanel.canChooseFiles = NO;
 		openPanel.message = @"Select Watch Folder";
 	
-		[openPanel beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse result) {
+		[openPanel beginSheetModalForWindow:bss.view.window completionHandler:^(NSModalResponse result) {
 			if(result == NSModalResponseOK)
 			{
 				NSURL* outputFolderURL = [openPanel URL];
 				[inAbs setPath:[outputFolderURL path]];
-				[self initDirectoryWatcherIfNeeded];
+				[bss initDirectoryWatcherIfNeeded];
 				//dispatch_async(dispatch_get_main_queue(), ^{
 				//	[self updateWatchFolder:outputFolderURL];
 				//});
@@ -80,7 +80,7 @@
 		}];
 	}];
 	[watchFolderAbs setEnableToggleBlock:^()	{
-		[self initDirectoryWatcherIfNeeded];
+		[bss initDirectoryWatcherIfNeeded];
 	}];
 	
 	[tempFolderAbs setUserDefaultsKey:kSynopsisAnalyzerTempFolderURLKey];
@@ -91,7 +91,7 @@
 		openPanel.canChooseFiles = NO;
 		openPanel.message = @"Select Temporary Items Folder";
 	
-		[openPanel beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse result) {
+		[openPanel beginSheetModalForWindow:bss.view.window completionHandler:^(NSModalResponse result) {
 			if(result == NSModalResponseOK)
 			{
 				NSURL* outputFolderURL = [openPanel URL];
@@ -208,12 +208,12 @@
 {
 	BOOL using = [self usingMirroredFolders];
 	
-	self.usingMirroredFoldersButton.state = (using) ? NSOnState : NSOffState;
+	self.usingMirroredFoldersButton.state = (using) ? NSControlStateValueOn : NSControlStateValueOff;
 }
 
 - (IBAction)useMirroredFolders:(id)sender
 {
-	BOOL use = ([sender state] == NSOnState);
+	BOOL use = ([sender state] == NSControlStateValueOn);
 	
 	[[NSUserDefaults standardUserDefaults] setValue:@(use) forKey:kSynopsisAnalyzerMirrorFolderStructureToOutputKey];
 	

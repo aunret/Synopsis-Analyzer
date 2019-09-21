@@ -42,7 +42,7 @@ static NSInteger currentTag = 0;
 	self.currentViewController = self.preferencesGeneralViewController;
 
 
-	[self buildPresetMenu];
+	//[self buildPresetMenu];
 	
 	//	make sure my child views get loaded
 	self.preferencesGeneralViewController.view;
@@ -69,6 +69,7 @@ static NSInteger currentTag = 0;
 //	  [[self.preferencesGeneralViewController.defaultPresetPopupButton menu] performActionForItemAtIndex:0];
 }
 
+/*
 - (void) buildPresetMenu
 {
 	// populate our general prefs default preset button with all available presets
@@ -76,6 +77,8 @@ static NSInteger currentTag = 0;
 
 	// Fix for #76
 	[self.preferencesGeneralViewController.defaultPresetPopupButton.menu addItemWithTitle:@"Placeholder" action:NULL keyEquivalent:@""];
+	
+	
 	
 	NSMenuItem* defaultPresetMenuItem = nil;
 	
@@ -85,9 +88,9 @@ static NSInteger currentTag = 0;
 	
 	
 	[self.preferencesGeneralViewController setDefaultPresetAction:defaultPresetMenuItem];
-
 }
-
+*/
+/*
 - (void) recursiveBuildMenu:(NSMenu*)menu forObjects:(NSArray*)arrayOfPresetOrGroup selectedMenuItem:(NSMenuItem **)selectedMenuItem
 {
 	NSString* defaultPresetUUIDString = [[NSUserDefaults standardUserDefaults] objectForKey:kSynopsisAnalyzerDefaultPresetPreferencesKey];
@@ -128,9 +131,11 @@ static NSInteger currentTag = 0;
 	}
 	
 }
+*/
 
 #pragma mark -
 
+/*
 - (PresetObject*) defaultPreset
 {
 	return self.preferencesGeneralViewController.defaultPreset;
@@ -140,6 +145,7 @@ static NSInteger currentTag = 0;
 {
 	return self.preferencesPresetViewController.allPresets;
 }
+*/
 
 #pragma mark -
 

@@ -16,6 +16,8 @@
 //#import "AVAssetWriterHapInput.h"
 #import <HapInAVFoundation/HapInAVFoundation.h>
 
+#import "PrefsController.h"
+
 
 
 
@@ -1704,16 +1706,19 @@ const NSString* value = @"Value";
 	
 	self.presetChanged = NO;
 	
+	/*
 	PreferencesViewController* parent = (PreferencesViewController*) self.parentViewController;
 	[parent buildPresetMenu];
-
+	*/
+	PrefsController			*pc = [PrefsController global];
+	[pc.prefsViewController.preferencesGeneralViewController populateDefaultPresetPopupButton];
 }
 
 - (void) configureOverviewContainerViewFromPreset:(PresetObject*)preset
 {
 	self.selectedPreset = preset;
 	
-	self.overviewDescriptionTextField.stringValue = self.selectedPreset.description;
+	self.overviewDescriptionTextField.stringValue = self.selectedPreset.lengthyDescription;
 	
 	[self configureAudioSettingsFromPreset:self.selectedPreset];
 	[self configureVideoSettingsFromPreset:self.selectedPreset];

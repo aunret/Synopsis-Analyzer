@@ -49,6 +49,9 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <connections>
+                                    <action selector="defaultPresetPUBItemSelected:" target="-2" id="3se-wW-zGg"/>
+                                </connections>
                             </popUpButton>
                         </subviews>
                     </view>

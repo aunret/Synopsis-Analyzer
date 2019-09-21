@@ -12,6 +12,9 @@
 #import "Constants.h"
 #import "AppDelegate.h"
 
+#import "PrefsController.h"
+#import "NSPopUpButtonAdditions.h"
+
 
 
 
@@ -25,6 +28,9 @@
 @implementation PreferencesGeneralViewController
 
 - (void) awakeFromNib	{
+	NSLog(@"%s",__func__);
+	__block PreferencesGeneralViewController		*bss = self;
+	
 	[scriptAbs setUserDefaultsKey:kSynopsisAnalyzerScriptKey];
 	[scriptAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
@@ -34,32 +40,50 @@
 		openPanel.allowedFileTypes = @[ @"py" ];
 		openPanel.message = @"Select Python script to use";
 	
-		[openPanel beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse result) {
+		[openPanel beginSheetModalForWindow:bss.view.window completionHandler:^(NSModalResponse result) {
 			if(result == NSModalResponseOK)	{
 				NSURL* outputFolderURL = [openPanel URL];
 				[inAbs setPath:[outputFolderURL path]];
 			}
 		}];
 	}];
+	
+	[self populateDefaultPresetPopupButton];
 }
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	// Do view setup here.
 }
 
-
-- (IBAction)setDefaultPresetAction:(NSMenuItem*)sender
-{
-	PresetObject* selectedPreset = [sender representedObject];
-	
-	self.selectedDefaultPresetDescription.stringValue = selectedPreset.description;
+- (IBAction) defaultPresetPUBItemSelected:(id)sender	{
+	NSLog(@"%s ... %@",__func__,sender);
+	if (sender == nil)
+		return;
+	NSLog(@"\t\tselectedItem = %@",sender);
+	PresetObject		*selectedPreset = [sender representedObject];
+	NSLog(@"\t\tselectedPreset = %@",selectedPreset);
+	self.selectedDefaultPresetDescription.stringValue = selectedPreset.lengthyDescription;
 	
 	self.defaultPreset = selectedPreset;
 	
-	[self.defaultPresetPopupButton setTitle:sender.title];
+	//[self.defaultPresetPopupButton setTitle:selectedPreset.title];
 	
 	[[NSUserDefaults standardUserDefaults] setObject:self.defaultPreset.uuid.UUIDString forKey:kSynopsisAnalyzerDefaultPresetPreferencesKey];
 	[[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+
+- (void) populateDefaultPresetPopupButton	{
+	NSLog(@"%s",__func__);
+	
+	[self.defaultPresetPopupButton setAutoenablesItems:NO];
+	
+	PrefsController		*pc = [PrefsController global];
+	PresetObject		*defaultPreset = [pc defaultPreset];
+	
+	[pc populatePopUpButtonWithPresets:self.defaultPresetPopupButton];
+	
+	[self.defaultPresetPopupButton selectItemWithRepresentedObject:defaultPreset andOutput:YES];
 }
 
 

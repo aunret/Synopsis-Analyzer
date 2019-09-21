@@ -172,18 +172,34 @@
 	return data;
 }
 
-- (NSString*) description
+
+- (BOOL) isEqual:(id)n	{
+	if (![n isKindOfClass:[self class]])
+		return NO;
+	PresetObject		*recast = (PresetObject *)n;
+	if (recast == self)
+		return YES;
+	if (self.uuid == nil || recast.uuid == nil)
+		return NO;
+	return ([self.uuid.UUIDString isEqualToString:recast.uuid.UUIDString]);
+}
+
+
+- (NSString *) description	{
+	return [NSString stringWithFormat:@"<PresetObject: %@>",self.title];
+}
+- (NSString*) lengthyDescription
 {
-	NSString* description = @"";
+	NSString* lengthyDescription = @"";
 	
 	NSString* videoSettingsString = [@"Video : " stringByAppendingString:[self videoFormatString]];
 	NSString* audioSettingsString = [@"Audio : " stringByAppendingString:[self audioFormatString]];
 
-	description = [description stringByAppendingString:videoSettingsString];
-	description = [description stringByAppendingString:@"\n\r"];
-	description = [description stringByAppendingString:audioSettingsString];
+	lengthyDescription = [lengthyDescription stringByAppendingString:videoSettingsString];
+	lengthyDescription = [lengthyDescription stringByAppendingString:@"\n\r"];
+	lengthyDescription = [lengthyDescription stringByAppendingString:audioSettingsString];
 
-	return description;
+	return lengthyDescription;
 }
 
 - (NSString*) audioFormatString	{

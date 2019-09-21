@@ -8,10 +8,46 @@
 
 #import "OpRowView.h"
 
-@interface OpRowView ()
+#import "SynOp.h"
 
+
+
+
+@interface OpRowView ()
+- (void) generalInit;
 @end
 
+
+
+
 @implementation OpRowView
+
+
+- (instancetype) initWithFrame:(NSRect)n	{
+	self = [super initWithFrame:n];
+	if (self != nil)	{
+		[self generalInit];
+	}
+	return self;
+}
+- (instancetype) initWithCoder:(NSCoder *)n	{
+	self = [super initWithCoder:n];
+	if (self != nil)	{
+		[self generalInit];
+	}
+	return self;
+}
+- (void) generalInit	{
+}
+
+
+- (void) refreshWithOp:(SynOp *)n	{
+}
+- (void) refreshUI	{
+}
+
+- (IBAction) enableToggleUsed:(id)sender	{
+}
+
 
 @end
