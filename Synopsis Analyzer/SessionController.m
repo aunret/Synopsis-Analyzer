@@ -111,10 +111,10 @@ static SessionController			*globalSessionController = nil;
 	}
 	[self reloadData];
 }
-- (void) newSessionWithDir:(NSURL *)n	{
+- (void) newSessionWithDir:(NSURL *)n recursively:(BOOL)isRecursive	{
 	if (n == nil)
 		return;
-	SynSession			*newSession = [SynSession createWithDir:n];
+	SynSession			*newSession = [SynSession createWithDir:n recursively:isRecursive];
 	if (newSession == nil)
 		return;
 	@synchronized (self)	{

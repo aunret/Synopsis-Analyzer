@@ -15,12 +15,16 @@
 
 @interface PreferencesGeneralViewController : NSViewController	{
 	IBOutlet PrefsPathAbstraction		*scriptAbs;
+	IBOutlet PrefsPathAbstraction		*sessionScriptAbs;
 }
 
 @property (weak) IBOutlet NSPopUpButton* defaultPresetPopupButton;
 @property (copy) PresetObject* defaultPreset;
 
 - (IBAction) defaultPresetPUBItemSelected:(id)sender;
+
+- (NSURL *) opScriptURL;
+- (NSURL *) sessionScriptURL;
 
 //	populates my preset PUB
 - (void) populateDefaultPresetPopupButton;

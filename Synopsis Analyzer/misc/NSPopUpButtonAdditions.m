@@ -19,7 +19,7 @@
 	return [self selectItemWithRepresentedObject:n andOutput:YES];
 }
 - (NSMenuItem *) selectItemWithRepresentedObject:(id)n andOutput:(BOOL)o	{
-	NSLog(@"%s ... %@- %@",__func__,n,self);
+	//NSLog(@"%s ... %@- %@",__func__,n,self);
 	NSMenuItem		*returnMe = [self.menu itemWithRepresentedObject:n];
 	
 	//	you can't call 'selectItem' if the item is in a submenu.  great, right?

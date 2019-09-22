@@ -963,7 +963,7 @@
             <connections>
                 <outlet property="delegate" destination="Voe-Tx-rLC" id="o1J-VR-G16"/>
             </connections>
-            <point key="canvasLocation" x="148.5" y="242"/>
+            <point key="canvasLocation" x="-46" y="278"/>
         </window>
         <customObject id="zNf-jZ-W26" customClass="SessionController">
             <connections>

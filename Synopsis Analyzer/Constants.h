@@ -94,7 +94,8 @@ typedef enum : NSUInteger {
 #define kSynopsisAnalyzerOutputFolderURLKey @"OutputFolder" // NSString
 #define kSynopsisAnalyzerTempFolderURLKey @"TempFolder" // NSString
 
-#define kSynopsisAnalyzerScriptKey @"kSynopsisAnalyzerScriptKey"	//	NSString
+#define kSynopsisAnalyzerOperationScriptKey @"kSynopsisAnalyzerOperationScriptKey"	//	NSString
+#define kSynopsisAnalyzerSessionScriptKey @"kSynopsisAnalyzerSessionScriptKey"	//	NSString
 
 // TODO: Is this necessary or should this just be implicit if we have an output folder selected?
 #define kSynopsisAnalyzerMirrorFolderStructureToOutputKey @"MirrorFolderStructureToOutput" // BOOL

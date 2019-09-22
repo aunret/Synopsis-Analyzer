@@ -75,11 +75,14 @@ PrefsController			*globalPrefsController = nil;
 	NSUUID			*defaultPresetUUID = [[NSUUID alloc] initWithUUIDString:defaultPresetUUIDString];
 	return defaultPresetUUID;
 }
+- (PresetObject *) presetForUUID:(NSUUID *)n	{
+	return [self recursiveCheckArray:[self allPresets] forPresetWithUUID:n];
+}
 - (PresetObject *) defaultPreset	{
 	//	get the default preset's NSUUID
 	NSUUID			*defaultPresetUUID = [self defaultPresetUUID];
 	//	run through the presets, find the preset with that NSUUID
-	PresetObject	*returnMe = [self recursiveCheckArray:[self allPresets] forPresetWithUUID:defaultPresetUUID];
+	PresetObject	*returnMe = [self presetForUUID:defaultPresetUUID];
 	//	if we couldn't find the default preset, default to the passthru preset
 	if (returnMe == nil)
 		returnMe = [self recursiveCheckArray:[self allPresets] forPresetWithUUID:[[NSUUID alloc] initWithUUIDString:@"DDCEA125-B93D-464B-B369-FB78A5E890B4"]];
@@ -88,6 +91,21 @@ PrefsController			*globalPrefsController = nil;
 }
 - (NSArray *) allPresets	{
 	return [self.prefsViewController.preferencesPresetViewController allPresets];
+}
+- (NSURL*) outputFolderURL	{
+	return [self.prefsViewController.preferencesFileViewController outputFolderURL];
+}
+- (NSURL*) watchFolderURL	{
+	return [self.prefsViewController.preferencesFileViewController watchFolderURL];
+}
+- (NSURL*) tempFolderURL	{
+	return [self.prefsViewController.preferencesFileViewController tempFolderURL];
+}
+- (NSURL *) opScriptURL	{
+	return [self.prefsViewController.preferencesGeneralViewController opScriptURL];
+}
+- (NSURL *) sessionScriptURL	{
+	return [self.prefsViewController.preferencesGeneralViewController sessionScriptURL];
 }
 
 

@@ -26,8 +26,15 @@
 - (void) populatePopUpButtonWithPresets:(NSPopUpButton *)inPUB;
 //	returns the NSUUID of the default preset (or nil).  this corresponds to the representedObject of any populated menus
 - (NSUUID *) defaultPresetUUID;
+- (PresetObject *) presetForUUID:(NSUUID *)n;
 - (PresetObject *) defaultPreset;
 - (NSArray *) allPresets;
+//	convenience methods that return the vals in the prefs
+- (NSURL*) outputFolderURL;
+- (NSURL*) watchFolderURL;
+- (NSURL*) tempFolderURL;
+- (NSURL *) opScriptURL;
+- (NSURL *) sessionScriptURL;
 
 @end
 

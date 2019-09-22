@@ -30,7 +30,7 @@
 - (IBAction) revealPreferences:(id)sender;
 
 - (void) newSessionWithFiles:(NSArray<NSURL*> *)n;
-- (void) newSessionWithDir:(NSURL *)n;
+- (void) newSessionWithDir:(NSURL *)n recursively:(BOOL)isRecursive;
 
 - (void) reloadData;
 

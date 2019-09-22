@@ -31,8 +31,25 @@
 	NSLog(@"%s",__func__);
 	__block PreferencesGeneralViewController		*bss = self;
 	
-	[scriptAbs setUserDefaultsKey:kSynopsisAnalyzerScriptKey];
+	[scriptAbs setUserDefaultsKey:kSynopsisAnalyzerOperationScriptKey];
 	[scriptAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
+		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+		openPanel.canChooseDirectories = NO;
+		openPanel.canCreateDirectories = NO;
+		openPanel.canChooseFiles = YES;
+		openPanel.allowedFileTypes = @[ @"py" ];
+		openPanel.message = @"Select Python script to use";
+	
+		[openPanel beginSheetModalForWindow:bss.view.window completionHandler:^(NSModalResponse result) {
+			if(result == NSModalResponseOK)	{
+				NSURL* outputFolderURL = [openPanel URL];
+				[inAbs setPath:[outputFolderURL path]];
+			}
+		}];
+	}];
+	
+	[sessionScriptAbs setUserDefaultsKey:kSynopsisAnalyzerSessionScriptKey];
+	[sessionScriptAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = NO;
 		openPanel.canCreateDirectories = NO;
@@ -56,12 +73,12 @@
 }
 
 - (IBAction) defaultPresetPUBItemSelected:(id)sender	{
-	NSLog(@"%s ... %@",__func__,sender);
+	//NSLog(@"%s ... %@",__func__,sender);
 	if (sender == nil)
 		return;
-	NSLog(@"\t\tselectedItem = %@",sender);
+	//NSLog(@"\t\tselectedItem = %@",sender);
 	PresetObject		*selectedPreset = [sender representedObject];
-	NSLog(@"\t\tselectedPreset = %@",selectedPreset);
+	//NSLog(@"\t\tselectedPreset = %@",selectedPreset);
 	self.selectedDefaultPresetDescription.stringValue = selectedPreset.lengthyDescription;
 	
 	self.defaultPreset = selectedPreset;
@@ -73,8 +90,34 @@
 }
 
 
+- (NSURL *) opScriptURL	{
+	NSString		*scriptPath = [scriptAbs path];
+	if (scriptPath != nil)	{
+		NSURL			*outputURL = [NSURL fileURLWithPath:scriptPath];
+		BOOL			isDirectory = NO;
+		if([[NSFileManager defaultManager] fileExistsAtPath:scriptPath isDirectory:&isDirectory] && !isDirectory)	{
+			return outputURL;
+		}
+	}
+	
+	return nil;
+}
+- (NSURL *) sessionScriptURL	{
+	NSString		*scriptPath = [sessionScriptAbs path];
+	if (scriptPath != nil)	{
+		NSURL			*outputURL = [NSURL fileURLWithPath:scriptPath];
+		BOOL			isDirectory = NO;
+		if([[NSFileManager defaultManager] fileExistsAtPath:scriptPath isDirectory:&isDirectory] && !isDirectory)	{
+			return outputURL;
+		}
+	}
+	
+	return nil;
+}
+
+
 - (void) populateDefaultPresetPopupButton	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	
 	[self.defaultPresetPopupButton setAutoenablesItems:NO];
 	
