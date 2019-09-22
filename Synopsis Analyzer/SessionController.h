@@ -18,6 +18,7 @@
 @interface SessionController : NSObject <DropFileHelper>	{
 	IBOutlet NSWindow			*window;
 	IBOutlet NSOutlineView		*outlineView;
+	IBOutlet NSTableColumn		*theColumn;
 	IBOutlet DropFilesView		*dropView;
 	
 }
@@ -33,6 +34,10 @@
 - (void) newSessionWithDir:(NSURL *)n recursively:(BOOL)isRecursive;
 
 - (void) reloadData;
+
+- (void) start;
+- (void) stop;
+- (BOOL) processing;
 
 @end
 

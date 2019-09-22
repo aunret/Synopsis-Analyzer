@@ -14,6 +14,9 @@
 #import "SynOp.h"
 #import "SynSession.h"
 
+#import "OpRowView.h"
+#import "SessionRowView.h"
+
 
 
 
@@ -25,6 +28,7 @@ static SessionController			*globalSessionController = nil;
 @interface SessionController ()
 - (void) generalInit;
 @property (strong) NSMutableArray<SynSession*> * sessions;
+@property (atomic,readwrite) BOOL running;
 @end
 
 
@@ -47,12 +51,14 @@ static SessionController			*globalSessionController = nil;
 	return self;
 }
 - (void) generalInit	{
+	self.sessions = [[NSMutableArray alloc] init];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 	//[self window];
 }
 - (void) awakeFromNib	{
 	[dropView setDragDelegate:self];
+	outlineView.outlineTableColumn = theColumn;
 }
 
 
@@ -103,24 +109,34 @@ static SessionController			*globalSessionController = nil;
 - (void) newSessionWithFiles:(NSArray<NSURL*> *)n	{
 	if (n == nil || [n count] < 1)
 		return;
+	//	make a session
 	SynSession			*newSession = [SynSession createWithFiles:n];
 	if (newSession == nil)
 		return;
+	//	add the session to our list of sessions
 	@synchronized (self)	{
 		[self.sessions addObject:newSession];
 	}
+	//	reload the table view
 	[self reloadData];
+	//	expand the item for the session we just created
+	[outlineView expandItem:newSession expandChildren:YES];
 }
 - (void) newSessionWithDir:(NSURL *)n recursively:(BOOL)isRecursive	{
 	if (n == nil)
 		return;
+	//	make a session
 	SynSession			*newSession = [SynSession createWithDir:n recursively:isRecursive];
 	if (newSession == nil)
 		return;
+	//	add the session to our list of sessions
 	@synchronized (self)	{
 		[self.sessions addObject:newSession];
 	}
+	//	reload the table view
 	[self reloadData];
+	//	expand the item for the session we just created
+	[outlineView expandItem:newSession expandChildren:YES];
 }
 
 
@@ -134,6 +150,8 @@ static SessionController			*globalSessionController = nil;
 
 - (void) analysisSessionForFiles:(NSArray *)fileURLArray sessionCompletionBlock:(void (^)(void))completionBlock {
 	NSLog(@"%s ... %@",__func__,fileURLArray);
+	[self newSessionWithFiles:fileURLArray];
+	completionBlock();
 }
 
 
@@ -148,7 +166,6 @@ static SessionController			*globalSessionController = nil;
 }
 */
 - (NSInteger) outlineView:(NSOutlineView *)ov numberOfChildrenOfItem:(id)item	{
-	//NSLog(@"%s ... %@",__func__,item);
 	if (item == nil)	{
 		return self.sessions.count;
 	}
@@ -162,11 +179,13 @@ static SessionController			*globalSessionController = nil;
 - (id) outlineView:(NSOutlineView *)ov child:(NSInteger)index ofItem:(id)item	{
 	//NSLog(@"%s ... %d, %@",__func__,index,item);
 	if (item == nil)	{
-		return self.sessions[index];
+		if (index>=0 && index<[self.sessions count])
+			return self.sessions[index];
 	}
 	
 	if ([item isKindOfClass:[SynSession class]])	{
-		return [[(SynSession*)item ops] objectAtIndex:index];
+		if (index>=0 && index<[[(SynSession*)item ops] count])
+			return [[(SynSession*)item ops] objectAtIndex:index];
 	}
 	
 	return nil;
@@ -175,7 +194,7 @@ static SessionController			*globalSessionController = nil;
 - (BOOL) outlineView:(NSOutlineView *)ov isItemExpandable:(id)item	{
 	if (item == nil)
 		return YES;
-	if ([item isKindOfClass:[SynOp class]])
+	if ([item isKindOfClass:[SynSession class]])
 		return YES;
 	return NO;
 }
@@ -183,21 +202,18 @@ static SessionController			*globalSessionController = nil;
 - (NSView *) outlineView:(NSOutlineView *)ov viewForTableColumn:(NSTableColumn *)tc item:(id)item	{
 	if (item==nil)
 		return nil;
-	return nil;
-	/*
-	VVAjaFrameStoreCellView		*returnMe = nil;
-	if ([item isKindOfClass:[VVAjaDevice class]])	{
-		returnMe = [ov makeViewWithIdentifier:@"DefaultView" owner:self];
+	NSTableCellView			*returnMe = nil;
+	if ([item isKindOfClass:[SynOp class]])	{
+		returnMe = [ov makeViewWithIdentifier:@"OpRowView" owner:self];
 		if (returnMe != nil)
-			[[returnMe textField] setStringValue:[item deviceName]];
+			[(OpRowView*)returnMe refreshWithOp:item];
 	}
-	else if ([item isKindOfClass:[VVAjaFrameStore class]])	{
-		returnMe = [ov makeViewWithIdentifier:@"FrameStoreView" owner:self];
+	else if ([item isKindOfClass:[SynSession class]])	{
+		returnMe = [ov makeViewWithIdentifier:@"SessionRowView" owner:self];
 		if (returnMe != nil)
-			[returnMe refreshWithFrameStore:(VVAjaFrameStore *)item inOutlineView:ov];
+			[(SessionRowView*)returnMe refreshWithSession:item];
 	}
 	return returnMe;
-	*/
 }
 /*
 - (CGFloat) outlineView:(NSOutlineView *)ov heightOfRowByItem:(id)item	{
@@ -205,6 +221,28 @@ static SessionController			*globalSessionController = nil;
 */
 - (void) outlineViewSelectionDidChange:(NSNotification *)note	{
 	//NSLog(@"%s",__func__);
+}
+
+
+#pragma mark - backend
+
+
+- (void) start	{
+	@synchronized (self)	{
+	
+	}
+}
+- (void) stop	{
+	@synchronized (self)	{
+	
+	}
+}
+- (BOOL) processing	{
+	BOOL			returnMe = NO;
+	@synchronized (self)	{
+		returnMe = self.running;
+	}
+	return returnMe;
 }
 
 

@@ -29,6 +29,8 @@ typedef NS_ENUM(NSUInteger, SessionStatus)	{
 + (instancetype) createWithFiles:(NSArray<NSURL*> *)n;
 + (instancetype) createWithDir:(NSURL *)n recursively:(BOOL)isRecursive;
 
+@property (assign,readwrite) BOOL enabled;
+
 @property (strong) NSMutableArray<SynOp*> * ops;
 @property (strong) NSURL * outputDir;
 @property (strong) NSURL * tmpDir;
@@ -39,6 +41,7 @@ typedef NS_ENUM(NSUInteger, SessionStatus)	{
 @property (atomic,readwrite) SessionStatus status;
 
 - (SynOp *) createOpForSrcURL:(NSURL *)n;
+- (NSString *) createDescriptionString;
 
 @end
 

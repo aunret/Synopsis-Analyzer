@@ -44,11 +44,14 @@ typedef NS_ENUM(NSUInteger, OpStatus)	{
 
 @property (atomic,readwrite,strong,nullable) NSURL * src;
 @property (atomic,readwrite,strong,nullable) NSURL * dst;
+@property (atomic,readwrite,strong,nullable) NSImage * thumb;
 
 @property (atomic,readwrite) OpType type;
 @property (atomic,readwrite) OpStatus status;
 
 @property (atomic,weak) SynSession *parent;
+
+- (NSString *) createStatusString;
 
 @end
 

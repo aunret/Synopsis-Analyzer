@@ -8,7 +8,10 @@
 
 #import "SessionRowView.h"
 
+#import "PrefsController.h"
 #import "SynSession.h"
+
+#import "NSPopUpButtonAdditions.h"
 
 
 
@@ -39,16 +42,45 @@
 }
 - (void) generalInit	{
 }
+- (void) awakeFromNib	{
+	PrefsController		*pc = [PrefsController global];
+	[pc populatePopUpButtonWithPresets:presetPUB];
+}
 
 
 - (void) refreshWithSession:(SynSession *)n	{
+	self.session = n;
+	[self refreshUI];
 }
 - (void) refreshUI	{
+	if (self.session == nil)	{
+		[enableToggle setIntValue:NSControlStateValueOff];
+		[nameField setStringValue:@""];
+		[presetPUB selectItemWithRepresentedObject:nil andOutput:NO];
+		[descriptionField setStringValue:@"XXX"];
+		return;
+	}
+	
+	[enableToggle setIntValue:(self.session.enabled) ? NSControlStateValueOn : NSControlStateValueOff];
+	[nameField setStringValue:@"Session"];
+	[presetPUB selectItemWithRepresentedObject:self.session.preset andOutput:NO];
+	[descriptionField setStringValue:[self.session createDescriptionString]];
 }
 
+
 - (IBAction) enableToggleUsed:(id)sender	{
+	if (self.session == nil)	{
+		[self refreshUI];
+		return;
+	}
+	self.session.enabled = ([sender intValue]==NSOnState) ? YES : NO;
 }
-- (IBAction) presetPUBUsed:(id)sender	{
+- (IBAction) presetPUBItemSelected:(id)sender	{
+	//NSLog(@"%s ... %@",__func__,[(NSMenuItem *)sender representedObject]);
+	PresetObject		*newPreset = (sender==nil || ![sender isKindOfClass:[NSMenuItem class]]) ? nil : [(NSMenuItem*)sender representedObject];
+	if (newPreset != nil && ![newPreset isKindOfClass:[PresetObject class]])
+		newPreset = nil;
+	self.session.preset = newPreset;
 }
 - (IBAction) nameFieldUsed:(id)sender	{
 }

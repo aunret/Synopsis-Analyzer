@@ -24,7 +24,7 @@
 - (void) refreshUI;
 
 - (IBAction) enableToggleUsed:(id)sender;
-- (IBAction) presetPUBUsed:(id)sender;
+- (IBAction) presetPUBItemSelected:(id)sender;
 - (IBAction) nameFieldUsed:(id)sender;
 
 @property (atomic,weak) SynSession * session;

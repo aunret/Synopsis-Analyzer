@@ -19,7 +19,7 @@
 	return [self selectItemWithRepresentedObject:n andOutput:YES];
 }
 - (NSMenuItem *) selectItemWithRepresentedObject:(id)n andOutput:(BOOL)o	{
-	//NSLog(@"%s ... %@- %@",__func__,n,self);
+	//lNSLog(@"%s ... %@- %@",__func__,n,self);
 	NSMenuItem		*returnMe = [self.menu itemWithRepresentedObject:n];
 	
 	//	you can't call 'selectItem' if the item is in a submenu.  great, right?
@@ -30,7 +30,10 @@
 	if (returnMe != nil && !o)	{
 		//	only call setTitle: if it's a pull-down (if you do this on a pop-up it adds an item to the top-level menu)
 		if (self.pullsDown)	{
-			[self setTitle:[returnMe title]];
+			if (returnMe == nil)
+				[self setTitle:@""];
+			else
+				[self setTitle:[returnMe title]];
 		}
 	}
 	

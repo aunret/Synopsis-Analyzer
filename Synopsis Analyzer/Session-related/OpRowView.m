@@ -42,8 +42,22 @@
 
 
 - (void) refreshWithOp:(SynOp *)n	{
+	self.op = n;
+	[self refreshUI];
 }
 - (void) refreshUI	{
+	if (self.op == nil)	{
+		[enableToggle setIntValue:NSOffState];
+		[preview setImage:nil];
+		[nameField setStringValue:@""];
+		[statusField setStringValue:@"XXX"];
+		return;
+	}
+	
+	//[enableToggle setIntValue:NSOnState];
+	[preview setImage:self.op.thumb];
+	[nameField setStringValue:self.op.src.lastPathComponent.stringByDeletingPathExtension];
+	[statusField setStringValue:[self.op createStatusString]];
 }
 
 - (IBAction) enableToggleUsed:(id)sender	{

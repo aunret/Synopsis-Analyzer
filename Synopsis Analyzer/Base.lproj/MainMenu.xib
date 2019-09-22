@@ -726,70 +726,8 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                                                             <prototypeCellViews>
-                                                                                <tableCellView identifier="SessionRowView" id="0bb-iR-1XD" customClass="SessionRowView">
-                                                                                    <rect key="frame" x="1" y="1" width="463" height="30"/>
-                                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                                    <subviews>
-                                                                                        <button verticalHuggingPriority="750" id="Xyu-kO-gWb">
-                                                                                            <rect key="frame" x="6" y="5" width="22" height="18"/>
-                                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
-                                                                                            <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="quL-4Y-i1f">
-                                                                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                                                <font key="font" metaFont="system"/>
-                                                                                            </buttonCell>
-                                                                                            <connections>
-                                                                                                <action selector="enableToggleUsed:" target="0bb-iR-1XD" id="nKd-WI-AtU"/>
-                                                                                            </connections>
-                                                                                        </button>
-                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="TBQ-Fg-kXe">
-                                                                                            <rect key="frame" x="32" y="6" width="105" height="17"/>
-                                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES"/>
-                                                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Session name" id="mhF-bJ-Kg8">
-                                                                                                <font key="font" metaFont="system"/>
-                                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                                            </textFieldCell>
-                                                                                            <connections>
-                                                                                                <action selector="nameFieldUsed:" target="0bb-iR-1XD" id="v77-RA-AAR"/>
-                                                                                            </connections>
-                                                                                        </textField>
-                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Fd7-9k-jTf">
-                                                                                            <rect key="frame" x="276" y="6" width="180" height="14"/>
-                                                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                                                                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="(XXX files, XXX files to analyze)" id="fMn-zQ-juH">
-                                                                                                <font key="font" metaFont="smallSystem"/>
-                                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                                            </textFieldCell>
-                                                                                        </textField>
-                                                                                        <popUpButton verticalHuggingPriority="750" id="WKX-MZ-wDm">
-                                                                                            <rect key="frame" x="140" y="3" width="133" height="22"/>
-                                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                                            <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="F3P-1Z-qte" id="78f-my-UoK">
-                                                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                                                <font key="font" metaFont="smallSystem"/>
-                                                                                                <menu key="menu" id="yZy-lp-smf">
-                                                                                                    <items>
-                                                                                                        <menuItem state="on" hidden="YES" id="F3P-1Z-qte"/>
-                                                                                                        <menuItem title="Item 2" id="wZU-Gh-8XY"/>
-                                                                                                        <menuItem title="Item 3" id="zVQ-Fh-IgR"/>
-                                                                                                    </items>
-                                                                                                </menu>
-                                                                                            </popUpButtonCell>
-                                                                                            <connections>
-                                                                                                <action selector="presetPUBUsed:" target="0bb-iR-1XD" id="rhI-NN-b1L"/>
-                                                                                            </connections>
-                                                                                        </popUpButton>
-                                                                                    </subviews>
-                                                                                    <connections>
-                                                                                        <outlet property="descriptionField" destination="Fd7-9k-jTf" id="g7b-8X-Ahm"/>
-                                                                                        <outlet property="enableToggle" destination="Xyu-kO-gWb" id="6b9-0v-PzC"/>
-                                                                                        <outlet property="nameField" destination="TBQ-Fg-kXe" id="qNo-g6-CLE"/>
-                                                                                        <outlet property="presetPUB" destination="WKX-MZ-wDm" id="iSp-hk-n5O"/>
-                                                                                    </connections>
-                                                                                </tableCellView>
                                                                                 <tableCellView identifier="OpRowView" id="xgH-1O-rYN" customClass="OpRowView">
-                                                                                    <rect key="frame" x="1" y="33" width="463" height="30"/>
+                                                                                    <rect key="frame" x="1" y="1" width="463" height="30"/>
                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                     <subviews>
                                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="gwW-5o-ex4">
@@ -806,7 +744,7 @@
                                                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ic_local_movies_white" id="G7a-Zl-oLz"/>
                                                                                         </imageView>
-                                                                                        <button verticalHuggingPriority="750" id="wM6-b8-mFP">
+                                                                                        <button hidden="YES" verticalHuggingPriority="750" id="wM6-b8-mFP">
                                                                                             <rect key="frame" x="6" y="6" width="22" height="18"/>
                                                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                                                             <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="nHT-al-2iC">
@@ -850,6 +788,68 @@
                                                                                         <outlet property="nameField" destination="gwW-5o-ex4" id="ZcH-aU-qte"/>
                                                                                         <outlet property="preview" destination="5nX-V4-6qI" id="33j-sh-E7Q"/>
                                                                                         <outlet property="statusField" destination="ULr-3N-L42" id="a0j-vh-RrY"/>
+                                                                                    </connections>
+                                                                                </tableCellView>
+                                                                                <tableCellView identifier="SessionRowView" id="omP-Y0-DVG" customClass="SessionRowView">
+                                                                                    <rect key="frame" x="1" y="33" width="463" height="30"/>
+                                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                    <subviews>
+                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="HRS-Ro-HLj">
+                                                                                            <rect key="frame" x="276" y="6" width="180" height="14"/>
+                                                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                                                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="(XXX files, XXX files to analyze)" id="b4u-Wz-6se">
+                                                                                                <font key="font" metaFont="smallSystem"/>
+                                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                            </textFieldCell>
+                                                                                        </textField>
+                                                                                        <button verticalHuggingPriority="750" id="qWQ-dT-7SV">
+                                                                                            <rect key="frame" x="6" y="5" width="22" height="18"/>
+                                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                                                                            <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="uoD-1e-zDk">
+                                                                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                                                <font key="font" metaFont="system"/>
+                                                                                            </buttonCell>
+                                                                                            <connections>
+                                                                                                <action selector="enableToggleUsed:" target="omP-Y0-DVG" id="yQD-uE-NAm"/>
+                                                                                            </connections>
+                                                                                        </button>
+                                                                                        <popUpButton verticalHuggingPriority="750" id="LQA-BG-CMa">
+                                                                                            <rect key="frame" x="140" y="3" width="133" height="22"/>
+                                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                                            <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="8Lv-Dy-W6U" id="PyS-zZ-0ph">
+                                                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                                                <font key="font" metaFont="smallSystem"/>
+                                                                                                <menu key="menu" id="tKz-br-uu2">
+                                                                                                    <items>
+                                                                                                        <menuItem state="on" hidden="YES" id="8Lv-Dy-W6U"/>
+                                                                                                        <menuItem title="Item 2" id="ufP-A0-v0w"/>
+                                                                                                        <menuItem title="Item 3" id="Sb4-Ze-zps"/>
+                                                                                                    </items>
+                                                                                                </menu>
+                                                                                            </popUpButtonCell>
+                                                                                            <connections>
+                                                                                                <action selector="presetPUBItemSelected:" target="omP-Y0-DVG" id="FiO-OH-aKk"/>
+                                                                                            </connections>
+                                                                                        </popUpButton>
+                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="5gA-Th-7OF">
+                                                                                            <rect key="frame" x="32" y="6" width="105" height="17"/>
+                                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES"/>
+                                                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Session name" id="NYd-f3-tx8">
+                                                                                                <font key="font" metaFont="system"/>
+                                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                            </textFieldCell>
+                                                                                            <connections>
+                                                                                                <action selector="nameFieldUsed:" target="omP-Y0-DVG" id="Ocw-J2-1LT"/>
+                                                                                            </connections>
+                                                                                        </textField>
+                                                                                    </subviews>
+                                                                                    <connections>
+                                                                                        <outlet property="descriptionField" destination="HRS-Ro-HLj" id="3Fy-KL-Ii5"/>
+                                                                                        <outlet property="enableToggle" destination="qWQ-dT-7SV" id="xeu-CV-nLs"/>
+                                                                                        <outlet property="nameField" destination="5gA-Th-7OF" id="O5w-zh-16h"/>
+                                                                                        <outlet property="presetPUB" destination="LQA-BG-CMa" id="Xga-3a-0cu"/>
                                                                                     </connections>
                                                                                 </tableCellView>
                                                                             </prototypeCellViews>
@@ -969,6 +969,7 @@
             <connections>
                 <outlet property="dropView" destination="iTB-3N-mmD" id="vrJ-nn-JXm"/>
                 <outlet property="outlineView" destination="1Z6-MB-YhT" id="MIb-Nz-9R3"/>
+                <outlet property="theColumn" destination="LJK-3l-D3k" id="GqY-yd-2yc"/>
                 <outlet property="window" destination="1a9-wX-TUg" id="7hz-kC-pjj"/>
             </connections>
         </customObject>
