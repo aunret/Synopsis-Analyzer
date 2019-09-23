@@ -61,7 +61,7 @@
 				[self.ops addObject:newOp];
 		}
 		
-		self.status = SessionStatus_Pending;
+		//self.status = SessionStatus_Pending;
 	}
 	return self;
 }
@@ -115,7 +115,7 @@
 			}
 		}
 		
-		self.status = SessionStatus_Pending;
+		//self.status = SessionStatus_Pending;
 	}
 	return self;
 }
@@ -190,9 +190,12 @@
 		if (self.preset.uuid != nil)
 			[coder encodeObject:self.preset.uuid forKey:@"preset"];
 		
-		[coder encodeInt:(NSInteger)self.status forKey:@"status"];
+		//[coder encodeInt:(NSInteger)self.status forKey:@"status"];
 	}
 }
+
+
+#pragma mark - misc
 
 
 - (NSString *) description	{
@@ -200,11 +203,16 @@
 }
 
 
+#pragma mark - backend
+
+
 - (SynOp *) createOpForSrcURL:(NSURL *)n	{
 	//NSLog(@"%s ... %@",__func__,n);
 	if (n == nil)
 		return nil;
 	SynOp			*returnMe = [[SynOp alloc] initWithSrcURL:n];
+	//returnMe.delegate = [SessionController global];
+	returnMe.session = self;
 	//NSLog(@"\t\tnew op is %@",returnMe);
 	
 	//	get the path extension & orig filename
@@ -258,6 +266,101 @@
 			return [NSString stringWithFormat:@"(%d files, %d files to analyze)",totalCount,analyzeCount];
 	}
 }
+
+
+#pragma mark - control
+
+
+- (void) stopAllOps	{
+}
+- (SynOp *) startAnOp	{
+	if (!self.enabled)
+		return nil;
+	SynOp		*returnMe = nil;
+	@synchronized (self.ops)	{
+		//	run through the array of ops until we find one we can start
+		for (SynOp * op in self.ops)	{
+			switch (op.status)	{
+			case OpStatus_Pending:
+				returnMe = op;
+				break;
+			case OpStatus_PreflightErr:
+			case OpStatus_Analyze:
+			case OpStatus_Cleanup:
+			case OpStatus_Complete:
+			case OpStatus_Err:
+				break;
+			}
+			if (returnMe != nil)
+				break;
+		}
+	}
+	
+	//	start the op
+	if (returnMe != nil)
+		[returnMe start];
+	
+	return returnMe;
+}
+- (double) calculateProgress	{
+	double		returnMe = -1.0;
+	@synchronized (self.ops)	{
+		double		totalOpCount = self.ops.count;
+		double		inProgressOpCount = 0.0;
+		double		finishedOpCount = 0.0;
+		for (SynOp *op in self.ops)	{
+			switch (op.status)	{
+			case OpStatus_Pending:
+				break;
+			case OpStatus_Analyze:
+			case OpStatus_Cleanup:
+				++inProgressOpCount;
+				break;
+			case OpStatus_PreflightErr:
+			case OpStatus_Complete:
+			case OpStatus_Err:
+				++finishedOpCount;
+				break;
+			}
+		}
+		//	if no ops have been started, or all the ops have been finished (in any state), return -1
+		if ((inProgressOpCount+finishedOpCount==0.0) ||
+		(inProgressOpCount+finishedOpCount==totalOpCount))	{
+			returnMe = -1.0;
+		}
+		//	else some ops in this session are being processed...
+		else	{
+			returnMe = (inProgressOpCount/2.0 + finishedOpCount) / totalOpCount;
+		}
+	}
+	return returnMe;
+}
+
+
+/*
+#pragma mark - SynOpDelegate protocol
+
+
+- (void) synOpStatusChanged:(SynOp *)n	{
+	NSLog(@"%s ... %@",__func__,n);
+	
+	switch (n.status)	{
+	case OpStatus_Pending:
+	case OpStatus_PreflightErr:
+	case OpStatus_Cleanup:
+		break;
+	case OpStatus_Complete:
+	case OpStatus_Err:
+		//	
+		break;
+	case OpStatus_Analyze:
+		break;
+	}
+	
+	//if (self.delegate != nil)
+	//	[self.delegate synOpStatusChanged:n];
+}
+*/
 
 
 @end

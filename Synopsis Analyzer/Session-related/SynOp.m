@@ -7,6 +7,7 @@
 //
 
 #import "SynOp.h"
+#import "SessionController.h"
 #import "SynSession.h"
 
 #import <AVFoundation/AVFoundation.h>
@@ -16,6 +17,7 @@
 
 
 @interface SynOp()
+@property (atomic,weak,nullable) NSObject<SynOpDelegate> * delegate;
 - (void) _populateTypePropertyAndThumb;
 @end
 
@@ -28,7 +30,7 @@
 #pragma mark - NSCoding protocol
 
 
-- (id) initWithSrcURL:(NSURL *)inSrc	{
+- (instancetype) initWithSrcURL:(NSURL *)inSrc	{
 	self = [super init];
 	if (self != nil)	{
 		self.src = inSrc;
@@ -37,6 +39,7 @@
 		//self.type = OpType_Other;
 		[self _populateTypePropertyAndThumb];
 		self.status = OpStatus_Pending;
+		self.delegate = [SessionController global];
 	}
 	return self;
 }
@@ -54,6 +57,7 @@
 			//	self.type = (OpType)[coder decodeIntForKey:@"type"];
 			[self _populateTypePropertyAndThumb];
 			self.status = (![coder containsValueForKey:@"status"]) ? OpStatus_Pending : (OpStatus)[coder decodeIntForKey:@"status"];
+			self.delegate = [SessionController global];
 		}
 	}
 	return self;
@@ -70,9 +74,15 @@
 }
 
 
+#pragma mark - misc
+
+
 - (NSString *) description	{
 	return [NSString stringWithFormat:@"<SynOp: %@>",self.src.lastPathComponent];
 }
+
+
+#pragma mark - backend
 
 
 - (void) _populateTypePropertyAndThumb	{
@@ -162,6 +172,19 @@
 	}
 	return @"???";
 }
+
+
+#pragma mark - control
+
+
+- (void) start	{
+}
+- (void) stop	{
+}
+/*
+- (void) running	{
+}
+*/
 
 
 @end

@@ -47,9 +47,10 @@
 }
 - (void) refreshUI	{
 	if (self.op == nil)	{
-		[enableToggle setIntValue:NSOffState];
+		[enableToggle setIntValue:NSControlStateValueOff];
 		[preview setImage:nil];
 		[nameField setStringValue:@""];
+		[tabView selectTabViewItemAtIndex:0];
 		[statusField setStringValue:@"XXX"];
 		return;
 	}
@@ -57,7 +58,19 @@
 	//[enableToggle setIntValue:NSOnState];
 	[preview setImage:self.op.thumb];
 	[nameField setStringValue:self.op.src.lastPathComponent.stringByDeletingPathExtension];
-	[statusField setStringValue:[self.op createStatusString]];
+	switch (self.op.status)	{
+	case OpStatus_Pending:
+	case OpStatus_PreflightErr:
+	case OpStatus_Complete:
+	case OpStatus_Err:
+		[tabView selectTabViewItemAtIndex:0];
+		[statusField setStringValue:[self.op createStatusString]];
+		break;
+	case OpStatus_Analyze:
+	case OpStatus_Cleanup:
+		[tabView selectTabViewItemAtIndex:1];
+		break;
+	}
 }
 
 - (IBAction) enableToggleUsed:(id)sender	{

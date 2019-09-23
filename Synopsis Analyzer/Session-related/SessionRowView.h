@@ -17,7 +17,12 @@
 	IBOutlet NSButton		*enableToggle;
 	IBOutlet NSTextField	*nameField;
 	IBOutlet NSPopUpButton	*presetPUB;
+	
+	IBOutlet NSTabView		*tabView;
+	
 	IBOutlet NSTextField	*descriptionField;
+	
+	IBOutlet NSProgressIndicator		*progressIndicator;
 }
 
 - (void) refreshWithSession:(SynSession *)n;

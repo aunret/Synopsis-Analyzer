@@ -12,15 +12,6 @@
             <rect key="frame" x="0.0" y="0.0" width="463" height="30"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tjs-mz-4FS">
-                    <rect key="frame" x="276" y="6" width="180" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="(XXX files, XXX files to analyze)" id="b1I-fK-aMW">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HRw-3r-c0B">
                     <rect key="frame" x="6" y="5" width="22" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
@@ -53,8 +44,60 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <tabView fixedFrame="YES" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="3x3-eR-7Mi">
+                    <rect key="frame" x="278" y="0.0" width="180" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                    <font key="font" metaFont="system"/>
+                    <tabViewItems>
+                        <tabViewItem label="not_running" identifier="" id="vXt-Od-emh">
+                            <view key="view" id="xsQ-q0-Yjr">
+                                <rect key="frame" x="0.0" y="0.0" width="180" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LSL-d1-mvk">
+                                        <rect key="frame" x="0.0" y="8" width="180" height="14"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="(XXX files, XXX files to analyze)" id="YZb-P0-t8n">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                            </view>
+                        </tabViewItem>
+                        <tabViewItem label="running" identifier="" id="ZOo-np-FKa">
+                            <view key="view" ambiguous="YES" id="9zQ-3X-Ejh">
+                                <rect key="frame" x="0.0" y="0.0" width="180" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="zQn-2x-kZi">
+                                        <rect key="frame" x="0.0" y="5" width="180" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                    </progressIndicator>
+                                </subviews>
+                            </view>
+                        </tabViewItem>
+                    </tabViewItems>
+                </tabView>
             </subviews>
-            <point key="canvasLocation" x="96.5" y="29"/>
+            <point key="canvasLocation" x="49" y="-346"/>
+        </customView>
+        <customView id="0W3-Be-IjL">
+            <rect key="frame" x="0.0" y="0.0" width="569" height="360"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mgw-Ix-NLk">
+                    <rect key="frame" x="70" y="323" width="399" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="THIS ISN'T THE REAL XIB FOR THIS VIEW this is just a sandbox..." id="HUk-bn-V2b">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <point key="canvasLocation" x="20" y="69"/>
         </customView>
     </objects>
 </document>

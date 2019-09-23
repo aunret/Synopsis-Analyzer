@@ -17,7 +17,12 @@
 	IBOutlet NSButton		*enableToggle;
 	IBOutlet NSImageView	*preview;
 	IBOutlet NSTextField	*nameField;
+	
+	IBOutlet NSTabView		*tabView;
+	
 	IBOutlet NSTextField	*statusField;
+	
+	IBOutlet NSProgressIndicator		*progressIndicator;
 }
 
 - (void) refreshWithOp:(SynOp *)n;

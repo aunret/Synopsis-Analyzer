@@ -57,6 +57,7 @@
 		[enableToggle setIntValue:NSControlStateValueOff];
 		[nameField setStringValue:@""];
 		[presetPUB selectItemWithRepresentedObject:nil andOutput:NO];
+		[tabView selectTabViewItemAtIndex:0];
 		[descriptionField setStringValue:@"XXX"];
 		return;
 	}
@@ -64,7 +65,16 @@
 	[enableToggle setIntValue:(self.session.enabled) ? NSControlStateValueOn : NSControlStateValueOff];
 	[nameField setStringValue:@"Session"];
 	[presetPUB selectItemWithRepresentedObject:self.session.preset andOutput:NO];
-	[descriptionField setStringValue:[self.session createDescriptionString]];
+	
+	double			tmpProgress = [self.session calculateProgress];
+	if (tmpProgress < 0.0)	{
+		[tabView selectTabViewItemAtIndex:0];
+		[descriptionField setStringValue:[self.session createDescriptionString]];
+	}
+	else	{
+		[tabView selectTabViewItemAtIndex:1];
+		[progressIndicator setDoubleValue:tmpProgress];
+	}
 }
 
 
@@ -73,7 +83,7 @@
 		[self refreshUI];
 		return;
 	}
-	self.session.enabled = ([sender intValue]==NSOnState) ? YES : NO;
+	self.session.enabled = ([sender intValue]==NSControlStateValueOn) ? YES : NO;
 }
 - (IBAction) presetPUBItemSelected:(id)sender	{
 	//NSLog(@"%s ... %@",__func__,[(NSMenuItem *)sender representedObject]);

@@ -17,6 +17,9 @@
 #import "OpRowView.h"
 #import "SessionRowView.h"
 
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
 
 
 
@@ -28,7 +31,12 @@ static SessionController			*globalSessionController = nil;
 @interface SessionController ()
 - (void) generalInit;
 @property (strong) NSMutableArray<SynSession*> * sessions;
+
+@property (strong,nullable) NSTimer * progressRefreshTimer;
+@property (strong) NSMutableArray<SynOp*> * opsInProgress;
 @property (atomic,readwrite) BOOL running;
+- (void) startAnOp;
+- (int) maxOpCount;
 @end
 
 
@@ -52,6 +60,8 @@ static SessionController			*globalSessionController = nil;
 }
 - (void) generalInit	{
 	self.sessions = [[NSMutableArray alloc] init];
+	//self.sessionsInProgress = [[NSMutableArray alloc] init];
+	self.opsInProgress = [[NSMutableArray alloc] init];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 	//[self window];
@@ -73,8 +83,16 @@ static SessionController			*globalSessionController = nil;
 
 
 //static BOOL isRunning = NO;
-- (IBAction) runAnalysisAndTranscode:(id)sender {
-	
+- (IBAction) runPauseButtonClicked:(id)sender {
+	NSLog(@"%s",__func__);
+	@synchronized (self)	{
+		if (self.running)	{
+			[self stop];
+		}
+		else	{
+			[self start];
+		}
+	}
 }
 
 - (IBAction)openMovies:(id)sender	{
@@ -113,6 +131,7 @@ static SessionController			*globalSessionController = nil;
 	SynSession			*newSession = [SynSession createWithFiles:n];
 	if (newSession == nil)
 		return;
+	//newSession.delegate = self;
 	//	add the session to our list of sessions
 	@synchronized (self)	{
 		[self.sessions addObject:newSession];
@@ -129,6 +148,7 @@ static SessionController			*globalSessionController = nil;
 	SynSession			*newSession = [SynSession createWithDir:n recursively:isRecursive];
 	if (newSession == nil)
 		return;
+	//newSession.delegate = self;
 	//	add the session to our list of sessions
 	@synchronized (self)	{
 		[self.sessions addObject:newSession];
@@ -228,21 +248,132 @@ static SessionController			*globalSessionController = nil;
 
 
 - (void) start	{
+	NSLog(@"%s",__func__);
 	@synchronized (self)	{
+		//	if we're already running, something went wrong- bail
+		if (self.running)
+			return;
+		
+		//	update the toolbar item's label/image
+		[runPauseButton setLabel:@"Stop"];
+		[runPauseButton setImage:[NSImage imageNamed:@"ic_stop"]];
 	
+		self.running = YES;
+		for (int i=0; i<[self maxOpCount]; ++i)	{
+			[self startAnOp];
+		}
+		
+		//	if we weren't able to start any jobs, we're effectively stopped, so....stop it officially.
+		if (self.opsInProgress.count < 1)
+			[self stop];
 	}
 }
 - (void) stop	{
+	NSLog(@"%s",__func__);
 	@synchronized (self)	{
+		//	if we're already stopped, something went wrong- bail
+		if (!self.running)
+			return;
+		
+		//	update the toolbar item's label/image
+		[runPauseButton setLabel:@"Start"];
+		[runPauseButton setImage:[NSImage imageNamed:@"ic_play_circle_filled"]];
 	
+		self.running = NO;
+		@synchronized (self)	{
+	
+		}
 	}
 }
-- (BOOL) processing	{
-	BOOL			returnMe = NO;
-	@synchronized (self)	{
-		returnMe = self.running;
+- (void) startAnOp	{
+	NSLog(@"%s",__func__);
+	//	if we're not running, something went wrong- bail, we don't want to do this
+	if (!self.running)
+		return;
+	@synchronized (self.sessions)	{
+		SynOp		*startedOp = nil;
+		for (SynSession * session in self.sessions)	{
+			startedOp = [session startAnOp];
+			if (startedOp != nil)	{
+				[self.opsInProgress addObject:startedOp];
+				break;
+			}
+		}
 	}
+}
+- (int) maxOpCount	{
+	int				returnMe = 1;
+	NSNumber		*tmpNum = [[NSUserDefaults standardUserDefaults] objectForKey:kSynopsisAnalyzerConcurrentJobCountPreferencesKey];
+	//	 a val of -1 indicates that the user selected "auto" in the prefs
+	if (tmpNum==nil || [tmpNum intValue] <= 0)	{
+		/*
+		//	try to get the actual number of physical cores
+		size_t				len;
+		unsigned int		ncpu;
+		len = sizeof(ncpu);
+		sysctlbyname("hw.ncpu", &ncpu, &len, NULL, 0);
+		if (ncpu > 0)	{
+			returnMe = ncpu;
+		}
+		//	if something went wrong, use NSProcessInfo to return the number of logical cores
+		else	{
+			returnMe = [[NSProcessInfo processInfo] processorCount];
+		}
+		*/
+		returnMe = [[NSProcessInfo processInfo] processorCount];
+		
+		//	"too many" jobs just f-es things up
+		if (returnMe > 6)
+			returnMe = returnMe / 3;
+	}
+	//	else the user entered a specific number of jobs
+	else	{
+		returnMe = [tmpNum intValue];
+	}
+	
 	return returnMe;
+}
+
+
+#pragma mark - SynOpDelegate protocol
+
+
+- (void) synOpStatusChanged:(SynOp *_Nonnull)n	{
+	NSLog(@"%s ... %@",__func__,n);
+	BOOL			opFinished = NO;
+	BOOL			startAnotherOp = NO;
+ 	@synchronized (self)	{
+		
+		switch (n.status)	{
+		case OpStatus_Pending:
+		case OpStatus_PreflightErr:
+		case OpStatus_Cleanup:
+			//	do nothing...
+			break;
+		//	if the op finished, we may want to start another
+		case OpStatus_Complete:
+		case OpStatus_Err:
+			opFinished = YES;
+			[self.opsInProgress removeObjectIdenticalTo:n];
+			break;
+		//	if the op started, add it to the array of ops being tracked for progress
+		case OpStatus_Analyze:
+			[self.opsInProgress addObject:n];
+			break;
+		}
+		
+		//	if we just finished an op, we may want to start another?
+		if (opFinished)	{
+			if (self.running && self.opsInProgress.count < [self maxOpCount])	{
+				startAnotherOp = YES;
+			}
+		}
+	}
+	
+	//	if we want to start another op...
+	if (startAnotherOp)	{
+		[self startAnOp];
+	}
 }
 
 

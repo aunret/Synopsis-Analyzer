@@ -9,6 +9,14 @@
 #import <Foundation/Foundation.h>
 
 @class SynSession;
+@class SynOp;
+
+
+
+
+@protocol SynOpDelegate
+- (void) synOpStatusChanged:(SynOp *_Nonnull)n;
+@end
 
 
 
@@ -34,13 +42,23 @@ typedef NS_ENUM(NSUInteger, OpStatus)	{
 	OpStatus_Complete,	//	everything finished successfully
 	OpStatus_Err	//	err encountered somewhere during processing (resolve the error and process again)
 };
+/*
+switch (XXX)	{
+case OpStatus_Pending:
+case OpStatus_PreflightErr:
+case OpStatus_Analyze:
+case OpStatus_Cleanup:
+case OpStatus_Complete:
+case OpStatus_Err:
+}
+*/
 
 
 
 
 @interface SynOp : NSObject <NSCoding>
 
-- (id) initWithSrcURL:(NSURL *)inSrc;
+- (instancetype) initWithSrcURL:(NSURL *)inSrc;
 
 @property (atomic,readwrite,strong,nullable) NSURL * src;
 @property (atomic,readwrite,strong,nullable) NSURL * dst;
@@ -49,9 +67,13 @@ typedef NS_ENUM(NSUInteger, OpStatus)	{
 @property (atomic,readwrite) OpType type;
 @property (atomic,readwrite) OpStatus status;
 
-@property (atomic,weak) SynSession *parent;
+@property (atomic,weak,nullable) SynSession *session;
 
-- (NSString *) createStatusString;
+- (NSString *_Nonnull) createStatusString;
+
+- (void) start;
+- (void) stop;
+//- (void) running;
 
 @end
 

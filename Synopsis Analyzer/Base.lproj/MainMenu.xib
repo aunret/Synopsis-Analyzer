@@ -730,126 +730,184 @@
                                                                                     <rect key="frame" x="1" y="1" width="463" height="30"/>
                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                     <subviews>
-                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="gwW-5o-ex4">
-                                                                                            <rect key="frame" x="128" y="6" width="170" height="17"/>
-                                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="filename.mov" id="ZJb-3l-9mz">
+                                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="oHq-NC-6Ha">
+                                                                                            <rect key="frame" x="33" y="3" width="43" height="24"/>
+                                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ic_local_movies_white" id="AbP-MY-p9d"/>
+                                                                                        </imageView>
+                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="iOV-Mm-4a4">
+                                                                                            <rect key="frame" x="82" y="6" width="42" height="17"/>
+                                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                                                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="File:" id="bK0-6X-wYr">
                                                                                                 <font key="font" metaFont="system"/>
                                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                             </textFieldCell>
                                                                                         </textField>
-                                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="5nX-V4-6qI">
-                                                                                            <rect key="frame" x="33" y="3" width="43" height="24"/>
+                                                                                        <button hidden="YES" verticalHuggingPriority="750" id="Lu7-Zv-AgS">
+                                                                                            <rect key="frame" x="5" y="6" width="22" height="18"/>
                                                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
-                                                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ic_local_movies_white" id="G7a-Zl-oLz"/>
-                                                                                        </imageView>
-                                                                                        <button hidden="YES" verticalHuggingPriority="750" id="wM6-b8-mFP">
-                                                                                            <rect key="frame" x="6" y="6" width="22" height="18"/>
-                                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
-                                                                                            <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="nHT-al-2iC">
+                                                                                            <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="4MJ-Jj-HD5">
                                                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                                                 <font key="font" metaFont="system"/>
                                                                                             </buttonCell>
                                                                                             <connections>
-                                                                                                <action selector="enableToggleUsed:" target="xgH-1O-rYN" id="fNw-2x-DTk"/>
+                                                                                                <action selector="enableToggleUsed:" target="xgH-1O-rYN" id="Jdq-CW-SYi"/>
                                                                                             </connections>
                                                                                         </button>
-                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ZcH-Xz-IZV">
-                                                                                            <rect key="frame" x="82" y="6" width="42" height="17"/>
-                                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
-                                                                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="File:" id="vBe-qt-S33">
+                                                                                        <tabView type="noTabsNoBorder" id="ocf-k4-S7J">
+                                                                                            <rect key="frame" x="283" y="0.0" width="173" height="30"/>
+                                                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                                                                            <font key="font" metaFont="system"/>
+                                                                                            <tabViewItems>
+                                                                                                <tabViewItem label="not_running" identifier="" id="NZl-bJ-5P8">
+                                                                                                    <view key="view" id="GO6-yx-EfN">
+                                                                                                        <rect key="frame" x="0.0" y="0.0" width="173" height="30"/>
+                                                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                                        <subviews>
+                                                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="WER-Rk-xTn">
+                                                                                                                <rect key="frame" x="-2" y="6" width="58" height="17"/>
+                                                                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Status:" id="ANG-i2-apK">
+                                                                                                                    <font key="font" metaFont="system"/>
+                                                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                                                </textFieldCell>
+                                                                                                            </textField>
+                                                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Oet-Hh-iTh">
+                                                                                                                <rect key="frame" x="60" y="6" width="115" height="17"/>
+                                                                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Ready" id="OX6-R5-DNB">
+                                                                                                                    <font key="font" metaFont="system"/>
+                                                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                                                </textFieldCell>
+                                                                                                            </textField>
+                                                                                                        </subviews>
+                                                                                                    </view>
+                                                                                                </tabViewItem>
+                                                                                                <tabViewItem label="running" identifier="" id="Mdv-fP-esv">
+                                                                                                    <view key="view" id="Hjf-jr-KUx">
+                                                                                                        <rect key="frame" x="0.0" y="0.0" width="173" height="30"/>
+                                                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                                        <subviews>
+                                                                                                            <progressIndicator wantsLayer="YES" maxValue="1" style="bar" id="foS-ZF-ETO">
+                                                                                                                <rect key="frame" x="0.0" y="5" width="173" height="20"/>
+                                                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                                                                            </progressIndicator>
+                                                                                                        </subviews>
+                                                                                                    </view>
+                                                                                                </tabViewItem>
+                                                                                            </tabViewItems>
+                                                                                        </tabView>
+                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="6s6-Qy-nGc">
+                                                                                            <rect key="frame" x="128" y="6" width="149" height="17"/>
+                                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="filename.mov" id="dkj-he-ptA">
                                                                                                 <font key="font" metaFont="system"/>
-                                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                                            </textFieldCell>
-                                                                                        </textField>
-                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="OLp-Fs-M5u">
-                                                                                            <rect key="frame" x="302" y="8" width="57" height="14"/>
-                                                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                                                                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Status:" id="OVA-Fe-42X">
-                                                                                                <font key="font" metaFont="smallSystem"/>
-                                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                                            </textFieldCell>
-                                                                                        </textField>
-                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ULr-3N-L42">
-                                                                                            <rect key="frame" x="363" y="8" width="99" height="14"/>
-                                                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                                                                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Ready" id="4kZ-Hu-0oj">
-                                                                                                <font key="font" metaFont="smallSystem"/>
                                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                             </textFieldCell>
                                                                                         </textField>
                                                                                     </subviews>
                                                                                     <connections>
-                                                                                        <outlet property="enableToggle" destination="wM6-b8-mFP" id="iKb-EQ-Np5"/>
-                                                                                        <outlet property="nameField" destination="gwW-5o-ex4" id="ZcH-aU-qte"/>
-                                                                                        <outlet property="preview" destination="5nX-V4-6qI" id="33j-sh-E7Q"/>
-                                                                                        <outlet property="statusField" destination="ULr-3N-L42" id="a0j-vh-RrY"/>
+                                                                                        <outlet property="enableToggle" destination="Lu7-Zv-AgS" id="yuI-zE-kGB"/>
+                                                                                        <outlet property="nameField" destination="6s6-Qy-nGc" id="ZHS-n0-6I0"/>
+                                                                                        <outlet property="preview" destination="oHq-NC-6Ha" id="awO-tK-Wgq"/>
+                                                                                        <outlet property="progressIndicator" destination="foS-ZF-ETO" id="gdD-OZ-GeC"/>
+                                                                                        <outlet property="statusField" destination="Oet-Hh-iTh" id="d1n-kI-2jZ"/>
+                                                                                        <outlet property="tabView" destination="ocf-k4-S7J" id="XFU-q2-eAb"/>
                                                                                     </connections>
                                                                                 </tableCellView>
                                                                                 <tableCellView identifier="SessionRowView" id="omP-Y0-DVG" customClass="SessionRowView">
                                                                                     <rect key="frame" x="1" y="33" width="463" height="30"/>
                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                     <subviews>
-                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="HRS-Ro-HLj">
-                                                                                            <rect key="frame" x="276" y="6" width="180" height="14"/>
-                                                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                                                                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="(XXX files, XXX files to analyze)" id="b4u-Wz-6se">
-                                                                                                <font key="font" metaFont="smallSystem"/>
+                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="yFE-pC-ttU">
+                                                                                            <rect key="frame" x="30" y="6" width="105" height="17"/>
+                                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Session name" id="IAY-UM-DgF">
+                                                                                                <font key="font" metaFont="system"/>
                                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                             </textFieldCell>
+                                                                                            <connections>
+                                                                                                <action selector="nameFieldUsed:" target="omP-Y0-DVG" id="RdS-7U-Zgi"/>
+                                                                                            </connections>
                                                                                         </textField>
-                                                                                        <button verticalHuggingPriority="750" id="qWQ-dT-7SV">
-                                                                                            <rect key="frame" x="6" y="5" width="22" height="18"/>
+                                                                                        <button verticalHuggingPriority="750" id="7ne-yV-EMW">
+                                                                                            <rect key="frame" x="4" y="5" width="22" height="18"/>
                                                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
-                                                                                            <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="uoD-1e-zDk">
+                                                                                            <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Z6j-Pz-f4F">
                                                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                                                 <font key="font" metaFont="system"/>
                                                                                             </buttonCell>
                                                                                             <connections>
-                                                                                                <action selector="enableToggleUsed:" target="omP-Y0-DVG" id="yQD-uE-NAm"/>
+                                                                                                <action selector="enableToggleUsed:" target="omP-Y0-DVG" id="H8j-2M-oaZ"/>
                                                                                             </connections>
                                                                                         </button>
-                                                                                        <popUpButton verticalHuggingPriority="750" id="LQA-BG-CMa">
-                                                                                            <rect key="frame" x="140" y="3" width="133" height="22"/>
-                                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                                            <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="8Lv-Dy-W6U" id="PyS-zZ-0ph">
+                                                                                        <popUpButton verticalHuggingPriority="750" id="Lsi-Vj-YNe">
+                                                                                            <rect key="frame" x="138" y="3" width="133" height="22"/>
+                                                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                                                                            <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="wHr-5n-8eS" id="NhL-AA-aeL">
                                                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                                                 <font key="font" metaFont="smallSystem"/>
-                                                                                                <menu key="menu" id="tKz-br-uu2">
+                                                                                                <menu key="menu" id="pBb-dI-SnS">
                                                                                                     <items>
-                                                                                                        <menuItem state="on" hidden="YES" id="8Lv-Dy-W6U"/>
-                                                                                                        <menuItem title="Item 2" id="ufP-A0-v0w"/>
-                                                                                                        <menuItem title="Item 3" id="Sb4-Ze-zps"/>
+                                                                                                        <menuItem state="on" hidden="YES" id="wHr-5n-8eS"/>
+                                                                                                        <menuItem title="Item 2" id="R3p-pG-7fS"/>
+                                                                                                        <menuItem title="Item 3" id="5OI-ES-7fP"/>
                                                                                                     </items>
                                                                                                 </menu>
                                                                                             </popUpButtonCell>
                                                                                             <connections>
-                                                                                                <action selector="presetPUBItemSelected:" target="omP-Y0-DVG" id="FiO-OH-aKk"/>
+                                                                                                <action selector="presetPUBItemSelected:" target="omP-Y0-DVG" id="3zJ-H4-HZ5"/>
                                                                                             </connections>
                                                                                         </popUpButton>
-                                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="5gA-Th-7OF">
-                                                                                            <rect key="frame" x="32" y="6" width="105" height="17"/>
-                                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES"/>
-                                                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Session name" id="NYd-f3-tx8">
-                                                                                                <font key="font" metaFont="system"/>
-                                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                                            </textFieldCell>
-                                                                                            <connections>
-                                                                                                <action selector="nameFieldUsed:" target="omP-Y0-DVG" id="Ocw-J2-1LT"/>
-                                                                                            </connections>
-                                                                                        </textField>
+                                                                                        <tabView type="noTabsNoBorder" id="NvK-9G-cxt">
+                                                                                            <rect key="frame" x="276" y="0.0" width="180" height="30"/>
+                                                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                                                                            <font key="font" metaFont="system"/>
+                                                                                            <tabViewItems>
+                                                                                                <tabViewItem label="not_running" identifier="" id="uM5-kv-Lzw">
+                                                                                                    <view key="view" id="lfv-u6-zVA">
+                                                                                                        <rect key="frame" x="0.0" y="0.0" width="180" height="30"/>
+                                                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                                        <subviews>
+                                                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="o01-tB-r3J">
+                                                                                                                <rect key="frame" x="0.0" y="8" width="180" height="14"/>
+                                                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                                                                                                <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="(XXX files, XXX files to analyze)" id="9zF-hP-dLw">
+                                                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                                                </textFieldCell>
+                                                                                                            </textField>
+                                                                                                        </subviews>
+                                                                                                    </view>
+                                                                                                </tabViewItem>
+                                                                                                <tabViewItem label="running" identifier="" id="IQ0-3L-XVJ">
+                                                                                                    <view key="view" id="2SZ-9W-HlN">
+                                                                                                        <rect key="frame" x="0.0" y="0.0" width="180" height="30"/>
+                                                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                                        <subviews>
+                                                                                                            <progressIndicator wantsLayer="YES" maxValue="1" style="bar" id="ce3-O2-drg">
+                                                                                                                <rect key="frame" x="0.0" y="5" width="180" height="20"/>
+                                                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                                                                            </progressIndicator>
+                                                                                                        </subviews>
+                                                                                                    </view>
+                                                                                                </tabViewItem>
+                                                                                            </tabViewItems>
+                                                                                        </tabView>
                                                                                     </subviews>
                                                                                     <connections>
-                                                                                        <outlet property="descriptionField" destination="HRS-Ro-HLj" id="3Fy-KL-Ii5"/>
-                                                                                        <outlet property="enableToggle" destination="qWQ-dT-7SV" id="xeu-CV-nLs"/>
-                                                                                        <outlet property="nameField" destination="5gA-Th-7OF" id="O5w-zh-16h"/>
-                                                                                        <outlet property="presetPUB" destination="LQA-BG-CMa" id="Xga-3a-0cu"/>
+                                                                                        <outlet property="descriptionField" destination="o01-tB-r3J" id="M7O-ZI-KST"/>
+                                                                                        <outlet property="enableToggle" destination="7ne-yV-EMW" id="ZTq-6U-l0e"/>
+                                                                                        <outlet property="nameField" destination="yFE-pC-ttU" id="Xa6-OR-iLZ"/>
+                                                                                        <outlet property="presetPUB" destination="Lsi-Vj-YNe" id="2FP-cJ-MBl"/>
+                                                                                        <outlet property="progressIndicator" destination="ce3-O2-drg" id="DF1-xb-1lE"/>
+                                                                                        <outlet property="tabView" destination="NvK-9G-cxt" id="d48-am-ACm"/>
                                                                                     </connections>
                                                                                 </tableCellView>
                                                                             </prototypeCellViews>
@@ -913,7 +971,7 @@
                         <size key="minSize" width="24" height="24"/>
                         <size key="maxSize" width="24" height="24"/>
                         <connections>
-                            <action selector="runAnalysisAndTranscode:" target="zNf-jZ-W26" id="bwq-Fb-cI7"/>
+                            <action selector="runPauseButtonClicked:" target="zNf-jZ-W26" id="7vS-DC-Z8M"/>
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="hM4-kZ-Hva"/>
@@ -963,12 +1021,13 @@
             <connections>
                 <outlet property="delegate" destination="Voe-Tx-rLC" id="o1J-VR-G16"/>
             </connections>
-            <point key="canvasLocation" x="-46" y="278"/>
+            <point key="canvasLocation" x="-352" y="307"/>
         </window>
         <customObject id="zNf-jZ-W26" customClass="SessionController">
             <connections>
                 <outlet property="dropView" destination="iTB-3N-mmD" id="vrJ-nn-JXm"/>
                 <outlet property="outlineView" destination="1Z6-MB-YhT" id="MIb-Nz-9R3"/>
+                <outlet property="runPauseButton" destination="jIE-3U-moH" id="BKY-15-StR"/>
                 <outlet property="theColumn" destination="LJK-3l-D3k" id="GqY-yd-2yc"/>
                 <outlet property="window" destination="1a9-wX-TUg" id="7hz-kC-pjj"/>
             </connections>

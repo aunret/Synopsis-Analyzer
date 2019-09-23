@@ -10,22 +10,27 @@
 #import <Cocoa/Cocoa.h>
 #import "DropFilesView.h"
 
-@class SynSession;
+//@class SynSession;
+//#import "SynSession.h"
+#import "SynOp.h"
 
 
 
 
-@interface SessionController : NSObject <DropFileHelper>	{
+@interface SessionController : NSObject <DropFileHelper,SynOpDelegate>	{
 	IBOutlet NSWindow			*window;
 	IBOutlet NSOutlineView		*outlineView;
 	IBOutlet NSTableColumn		*theColumn;
 	IBOutlet DropFilesView		*dropView;
 	
+	IBOutlet NSToolbarItem		*runPauseButton;
+	
 }
 
 + (SessionController *) global;
 
-- (IBAction) runAnalysisAndTranscode:(id)sender;
+- (IBAction) runPauseButtonClicked:(id)sender;
+
 - (IBAction) openMovies:(id)sender;
 - (IBAction) revealLog:(id)sender;
 - (IBAction) revealPreferences:(id)sender;
@@ -37,7 +42,6 @@
 
 - (void) start;
 - (void) stop;
-- (BOOL) processing;
 
 @end
 

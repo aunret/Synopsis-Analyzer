@@ -58,10 +58,16 @@ static const NSString * SPECIALIGNOREVALUE = @"XXXIGNOREMEXXX";
 	//	update the UI
 	[self _updateUI];
 }
+- (NSString *) path	{
+	return self.path;
+}
 - (void) setEnabled:(BOOL)n	{
 	self.enabled = n;
 	//	update the UI
 	[self _updateUI];
+}
+- (BOOL) enabled	{
+	return self.enabled;
 }
 - (NSURL *) url	{
 	NSString		*tmpString = [self path];
