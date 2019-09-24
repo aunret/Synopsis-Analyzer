@@ -266,6 +266,17 @@ static SessionController			*globalSessionController = nil;
 		//	if we weren't able to start any jobs, we're effectively stopped, so....stop it officially.
 		if (self.opsInProgress.count < 1)
 			[self stop];
+		//	else we have ops- make a timer to refresh the display
+		else	{
+			self.progressRefreshTimer = [NSTimer
+				scheduledTimerWithTimeInterval:1.0
+				target:self
+				selector:@selector(refreshUITimer:)
+				userInfo:nil
+				repeats:YES];
+			//	"force" the timer to proc immediately for a quick redisplay...
+			[self refreshUITimer:nil];
+		}
 	}
 }
 - (void) stop	{
@@ -274,6 +285,12 @@ static SessionController			*globalSessionController = nil;
 		//	if we're already stopped, something went wrong- bail
 		if (!self.running)
 			return;
+		
+		//	kill the timer!
+		if (self.progressRefreshTimer != nil)	{
+			[self.progressRefreshTimer invalidate];
+			self.progressRefreshTimer = nil;
+		}
 		
 		//	update the toolbar item's label/image
 		[runPauseButton setLabel:@"Start"];
@@ -284,6 +301,9 @@ static SessionController			*globalSessionController = nil;
 	
 		}
 	}
+	
+	//	reload the outline view
+	[self reloadData];
 }
 - (void) startAnOp	{
 	NSLog(@"%s",__func__);
@@ -333,6 +353,36 @@ static SessionController			*globalSessionController = nil;
 	
 	return returnMe;
 }
+- (void) refreshUITimer:(NSTimer *)t	{
+	NSLog(@"%s",__func__);
+	NSMutableArray		*sessionsInProgress = [NSMutableArray arrayWithCapacity:0];
+	//	run through the array of ops in progress
+	for (SynOp * op in self.opsInProgress)	{
+		//	collect the sessions that are in progress (they need updating too!)
+		if ([sessionsInProgress indexOfObjectIdenticalTo:op.session] == NSNotFound)
+			[sessionsInProgress addObject:op.session];
+		
+		//	find the row that corresponds to this op, tell it to refresh its UI
+		NSInteger			rowIndex = [outlineView rowForItem:op];
+		if (rowIndex >= 0)	{
+			OpRowView			*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
+			//NSLog(@"\top row view is %@",tmpView);
+			if (tmpView != nil)
+				[tmpView refreshUI];
+		}
+	}
+	
+	for (SynSession *session in sessionsInProgress)	{
+		//	find the row that corresponds to this op, tell it to refresh its UI
+		NSInteger			rowIndex = [outlineView rowForItem:session];
+		if (rowIndex >= 0)	{
+			SessionRowView		*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
+			//NSLog(@"\tsession row view is %@",tmpView);
+			if (tmpView != nil)
+				[tmpView refreshUI];
+		}
+	}
+}
 
 
 #pragma mark - SynOpDelegate protocol
@@ -374,6 +424,10 @@ static SessionController			*globalSessionController = nil;
 	if (startAnotherOp)	{
 		[self startAnOp];
 	}
+	
+	//	if we have no more ops...
+	if (self.opsInProgress.count < 1)
+		[self stop];
 }
 
 

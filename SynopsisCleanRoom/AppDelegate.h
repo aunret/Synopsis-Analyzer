@@ -10,6 +10,8 @@
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
+- (IBAction) pauseResumeClicked:(id)sender;
+- (IBAction) cancelClicked:(id)sender;
 
 @end
 

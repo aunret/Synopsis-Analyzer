@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SynopsisJobObject.h"
 
 @class SynSession;
 @class SynOp;
@@ -66,6 +67,9 @@ case OpStatus_Err:
 
 @property (atomic,readwrite) OpType type;
 @property (atomic,readwrite) OpStatus status;
+@property (atomic,readwrite) NSString * errString;
+
+@property (atomic,strong) SynopsisJobObject * job;
 
 @property (atomic,weak,nullable) SynSession *session;
 

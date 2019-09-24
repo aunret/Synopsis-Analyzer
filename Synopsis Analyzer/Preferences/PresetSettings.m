@@ -37,4 +37,19 @@
 @end
 
 @implementation PresetAnalysisSettings;
+/*
++ (instancetype) defaultAnalysisSettings	{
+	PresetSettings		*preset = [[[self class] alloc] init];
+	
+	if (preset)	{
+		preset.settingsDictionary = @{
+			kSynopsisAnalysisSettingsQualityHintKey : @( SynopsisAnalysisQualityHintMedium ),
+			kSynopsisAnalysisSettingsEnabledPluginsKey : @[ @"StandardAnalyzerPlugin" ],
+			kSynopsisAnalysisSettingsEnableConcurrencyKey : @YES,
+		};
+	}
+	
+	return preset;
+}
+*/
 @end

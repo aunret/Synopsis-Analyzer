@@ -825,7 +825,7 @@
                                                                                     <subviews>
                                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="yFE-pC-ttU">
                                                                                             <rect key="frame" x="30" y="6" width="105" height="17"/>
-                                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES"/>
                                                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Session name" id="IAY-UM-DgF">
                                                                                                 <font key="font" metaFont="system"/>
                                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -848,7 +848,7 @@
                                                                                         </button>
                                                                                         <popUpButton verticalHuggingPriority="750" id="Lsi-Vj-YNe">
                                                                                             <rect key="frame" x="138" y="3" width="133" height="22"/>
-                                                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                                                             <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="wHr-5n-8eS" id="NhL-AA-aeL">
                                                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                                                 <font key="font" metaFont="smallSystem"/>

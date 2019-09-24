@@ -36,26 +36,29 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	//	sample audio encoding settings dict
 	NSDictionary		*audioSettings = @{
-		AVEncoderBitRateStrategyKey: @"AVAudioBitRateStrategy_Variable",
-		AVFormatIDKey: [NSNumber numberWithInteger:1633772320]
+		//AVEncoderBitRateStrategyKey: @"AVAudioBitRateStrategy_Variable",
+		//AVFormatIDKey: [NSNumber numberWithInteger:1633772320],
+		//kSynopsisStripTrackKey: @YES
 	};
 	//	sample video encoding settings dict
 	NSDictionary		*videoSettings = @{
-		AVVideoCodecKey: @"avc1",
-		AVVideoCompressionPropertiesKey: @{
-			@"ProfileLevel": @"H264_High_AutoLevel"
-		},
+		//AVVideoCodecKey: @"avc1",
+		//AVVideoCompressionPropertiesKey: @{
+		//	@"ProfileLevel": @"H264_High_AutoLevel"
+		//},
 		//VVAVVideoMultiPassEncodeKey: @YES,
 		//AVVideoCodecKey: @"jpeg",
 		//AVVideoCompressionPropertiesKey: @{
 		//	@"Quality": [NSNumber numberWithDouble:0.0]
 		//}
+		//kSynopsisStripTrackKey: @YES
 	};
 	//	sample synopsis settings dict
 	NSDictionary		*synopsisSettings = @{
 		kSynopsisAnalysisSettingsQualityHintKey : @( SynopsisAnalysisQualityHintMedium ),
 		kSynopsisAnalysisSettingsEnabledPluginsKey : @[ @"StandardAnalyzerPlugin" ],
-		kSynopsisAnalysisSettingsEnableConcurrencyKey : @TRUE,
+		kSynopsisAnalysisSettingsEnableConcurrencyKey : @YES,
+		//kSynopsisAnalyzedMetadataExportOptionKey: @YES
 	};
 	
 	
@@ -93,8 +96,8 @@
 	NSDictionary		*jobDict = @{
 		kSynopsisSrcFileKey: [srcURL path],
 		kSynopsisDstFileKey: [dstURL path],
-		//kSynopsisTranscodeVideoSettingsKey: videoSettings,
-		//kSynopsisTranscodeAudioSettingsKey: audioSettings,
+		kSynopsisTranscodeVideoSettingsKey: videoSettings,
+		kSynopsisTranscodeAudioSettingsKey: audioSettings,
 		kSynopsisAnalysisSettingsKey: synopsisSettings
 	};
 	NSError				*nsErr = nil;
@@ -104,6 +107,8 @@
 	NSLog(@"in the CLI, this jobString would be \"%@\"",[reconstituted stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""]);
 	job = (reconstituted == nil) ? nil : [SynopsisJobObject createWithJobJSONString:reconstituted completionBlock:^(SynopsisJobObject *theJob) {
 		NSLog(@"JOB COMPLETE, took %0.2f second",[theJob jobTimeElapsed]);
+		NSLog(@"JOB STATUS: %@",[SynopsisJobObject stringForStatus:[theJob jobStatus]]);
+		NSLog(@"JOB ERROR: %@/%@",[SynopsisJobObject stringForErrorType:[theJob jobErr]],[theJob jobErrString]);
 	}];
 	
 	
@@ -119,6 +124,20 @@
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
 	// Insert code here to tear down your application
+}
+
+
+- (IBAction) pauseResumeClicked:(id)sender	{
+	if (job == nil)
+		return;
+	
+	[job setPaused:(![job paused])];
+}
+- (IBAction) cancelClicked:(id)sender	{
+	if (job == nil)
+		return;
+	
+	[job cancel];
 }
 
 

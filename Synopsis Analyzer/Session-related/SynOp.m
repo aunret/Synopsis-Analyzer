@@ -9,6 +9,7 @@
 #import "SynOp.h"
 #import "SessionController.h"
 #import "SynSession.h"
+#import "PrefsController.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <HapInAVFoundation/HapInAVFoundation.h>
@@ -39,6 +40,8 @@
 		//self.type = OpType_Other;
 		[self _populateTypePropertyAndThumb];
 		self.status = OpStatus_Pending;
+		self.errString = nil;
+		self.job = nil;
 		self.delegate = [SessionController global];
 	}
 	return self;
@@ -57,6 +60,8 @@
 			//	self.type = (OpType)[coder decodeIntForKey:@"type"];
 			[self _populateTypePropertyAndThumb];
 			self.status = (![coder containsValueForKey:@"status"]) ? OpStatus_Pending : (OpStatus)[coder decodeIntForKey:@"status"];
+			self.errString = nil;
+			self.job = nil;
 			self.delegate = [SessionController global];
 		}
 	}
@@ -178,8 +183,77 @@
 
 
 - (void) start	{
+	NSLog(@"%s",__func__);
+	PresetObject		*sessionPreset = self.session.preset;
+	if (sessionPreset == nil)	{
+		self.status = OpStatus_PreflightErr;
+		[self.delegate synOpStatusChanged:self];
+		return;
+	}
+	
+	PrefsController		*pc = [PrefsController global];
+	NSURL				*tempFolderURL = [pc tempFolderURL];
+	NSDictionary			*synopsisOpts = @{
+		kSynopsisAnalysisSettingsQualityHintKey : @( SynopsisAnalysisQualityHintMedium ),
+		kSynopsisAnalysisSettingsEnabledPluginsKey : @[ @"StandardAnalyzerPlugin" ],
+		kSynopsisAnalysisSettingsEnableConcurrencyKey : @YES,
+		kSynopsisAnalyzedMetadataExportOptionKey: @( sessionPreset.metadataExportOption )
+	};
+	NSMutableDictionary		*videoOpts = (sessionPreset.videoSettings.settingsDictionary==nil) ? [NSMutableDictionary new] : [sessionPreset.videoSettings.settingsDictionary mutableCopy];
+	if (!sessionPreset.useVideo)
+		videoOpts[kSynopsisStripTrackKey] = @YES;
+	NSMutableDictionary		*audioOpts = (sessionPreset.audioSettings.settingsDictionary==nil) ? [NSMutableDictionary new] : [sessionPreset.audioSettings.settingsDictionary mutableCopy];
+	if (!sessionPreset.useAudio)
+		audioOpts[kSynopsisStripTrackKey] = @YES;
+	
+	//NSLog(@"\tpreset: %@",sessionPreset);
+	//NSLog(@"\tvideo: %@",videoOpts);
+	//NSLog(@"\taudio: %@",audioOpts);
+	//NSLog(@"\tsynopsis: %@",synopsisOpts);
+	
+	self.status = OpStatus_Analyze;
+	
+	__weak SynOp			*bss = self;
+	self.job = [[SynopsisJobObject alloc]
+		initWithSrcFile:self.src
+		dstFile:self.dst
+		tmpDir:(tempFolderURL==nil) ? nil : tempFolderURL
+		videoTransOpts:videoOpts
+		audioTransOpts:audioOpts
+		synopsisOpts:synopsisOpts
+		completionBlock:^(SynopsisJobObject *finished)	{
+			
+			switch (finished.jobStatus)	{
+			case JOStatus_Unknown:
+			case JOStatus_NotStarted:
+			case JOStatus_InProgress:
+			case JOStatus_Paused:
+				break;
+			case JOStatus_Err:
+				bss.status = OpStatus_Err;
+				bss.errString = finished.jobErrString;
+				break;
+			case JOStatus_Complete:
+				bss.status = OpStatus_Complete;
+				bss.errString = nil;
+				break;
+			case JOStatus_Cancel:
+				bss.status = OpStatus_Pending;
+				bss.errString = nil;
+				break;
+			}
+			
+			//	this block gets executed even if you cancel
+			NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+			if (tmpDelegate != nil)
+				[tmpDelegate synOpStatusChanged:bss];
+		}];
+	
+	[self.job start];
+	
 }
 - (void) stop	{
+	[self.job cancel];
 }
 /*
 - (void) running	{

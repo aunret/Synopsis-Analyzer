@@ -40,6 +40,9 @@
 
 
 @interface PresetAnalysisSettings : PresetSettings
+/*
++ (instancetype) defaultAnalysisSettings;
+*/
 @end
 
 

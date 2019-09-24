@@ -129,7 +129,10 @@ typedef enum : NSUInteger {
 #define kSynopsisAnalyzerPresetUseVideoKey @"UseVideo"
 #define kSynopsisAnalyzerPresetUseAnalysisKey @"Analysis"
 
+//	this key describes the "what kind of JSON export" value (which includes a "don't export JSON at all" state)
+//	it corresponds to 'SynopsisMetadataEncoderExportOption'
 #define kSynopsisAnalyzerPresetExportOptionsKey @"ExportJSON"
+//	i have no idea what this key corresponds to.  doesn't seem to be used at all, i don't think?
 #define kSynopsisAnalyzerPresetExportJSONKey kSynopsisAnalyzerPresetJSONOptionsKey
 
 

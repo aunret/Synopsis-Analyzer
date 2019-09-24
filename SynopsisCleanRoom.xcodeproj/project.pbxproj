@@ -49,6 +49,7 @@
 		1AC1029423328DB300510548 /* SynSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AC1029323328DB300510548 /* SynSession.m */; };
 		1AC1ED4D2318145E00AAD380 /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
 		1AC1ED4E2318146400AAD380 /* HapInAVFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1AD6237123395C4B0025703E /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
 		1AD8459E232C1E3900416F5C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AD8459D232C1E3900416F5C /* AppDelegate.m */; };
 		1AD845A0232C1E3900416F5C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AD8459F232C1E3900416F5C /* Images.xcassets */; };
 		1AD845A3232C1E3900416F5C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AD845A1232C1E3900416F5C /* MainMenu.xib */; };
@@ -726,6 +727,7 @@
 				1A1093772330205100791BDA /* SessionRowView.m in Sources */,
 				1A9B1EBE23314B73007D414A /* PrefsController.m in Sources */,
 				1AD845A6232C1E3900416F5C /* main.m in Sources */,
+				1AD6237123395C4B0025703E /* SynopsisJobObject.m in Sources */,
 				1AEE2F822334032E009193CD /* PrefsPathAbstraction.m in Sources */,
 				1A1093382330011C00791BDA /* SessionController.m in Sources */,
 				1A1093442330012900791BDA /* LogController.m in Sources */,

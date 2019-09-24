@@ -64,7 +64,7 @@ extern NSString * const kSynopsisTranscodeVideoSettingsKey;
 extern NSString * const kSynopsisTranscodeAudioSettingsKey;
 
 
-//	required to be non-nil.  associated val is dict with the following keys:
+//	associated val is a dict that describes the analysis settings.  if nil or NSNull, don't perform synopsis analysis.
 extern NSString * const kSynopsisAnalysisSettingsKey;
 
 	// Key whose value is an NSNumber wrapping a SynopsisAnalysisQualityHint enum val to use for the analysis session.
@@ -83,8 +83,11 @@ extern NSString * const kSynopsisAnalysisSettingsKey;
 	extern NSString * const kSynopsisAnalyzedMetadataExportOptionKey;
 
 
-	//	key whose value is a NSNumber/bool indicating whether or not the encode should be multi-pass.  only relevant in video transcode options dict (val associated with kSynopsisTranscodeVideoSettingsKey)
-	extern NSString * const VVAVVideoMultiPassEncodeKey;
+//	key whose value is a NSNumber/bool indicating whether or not the encode should be multi-pass.  only relevant in video transcode options dict (val associated with kSynopsisTranscodeVideoSettingsKey)
+extern NSString * const VVAVVideoMultiPassEncodeKey;
+
+//	key whose value is a NSNumber/bool indicating whether or not the track of this type should be stripped.  only relevant in video or audio transcode options dicts (a positive val indicates that the corresponding tracks should be stripped)
+extern NSString * const kSynopsisStripTrackKey;
 
 
 

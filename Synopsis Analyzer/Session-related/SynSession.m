@@ -305,33 +305,28 @@
 - (double) calculateProgress	{
 	double		returnMe = -1.0;
 	@synchronized (self.ops)	{
-		double		totalOpCount = self.ops.count;
-		double		inProgressOpCount = 0.0;
-		double		finishedOpCount = 0.0;
+		double		maxVal = 0.0;
+		double		currentVal = 0.0;
 		for (SynOp *op in self.ops)	{
 			switch (op.status)	{
 			case OpStatus_Pending:
+				maxVal += 1.0;
 				break;
 			case OpStatus_Analyze:
 			case OpStatus_Cleanup:
-				++inProgressOpCount;
+				if (op.job != nil)
+					currentVal += op.job.jobProgress;
+				maxVal += 1.0;
 				break;
 			case OpStatus_PreflightErr:
 			case OpStatus_Complete:
 			case OpStatus_Err:
-				++finishedOpCount;
+				maxVal += 1.0;
+				currentVal += 1.0;
 				break;
 			}
 		}
-		//	if no ops have been started, or all the ops have been finished (in any state), return -1
-		if ((inProgressOpCount+finishedOpCount==0.0) ||
-		(inProgressOpCount+finishedOpCount==totalOpCount))	{
-			returnMe = -1.0;
-		}
-		//	else some ops in this session are being processed...
-		else	{
-			returnMe = (inProgressOpCount/2.0 + finishedOpCount) / totalOpCount;
-		}
+		returnMe = currentVal/maxVal;
 	}
 	return returnMe;
 }

@@ -69,6 +69,7 @@
 	case OpStatus_Analyze:
 	case OpStatus_Cleanup:
 		[tabView selectTabViewItemAtIndex:1];
+		[progressIndicator setDoubleValue:(self.op.job==nil) ? 0.0 : [self.op.job jobProgress]];
 		break;
 	}
 }
