@@ -33,8 +33,8 @@
 - (NSURL*) outputFolderURL;
 - (NSURL*) watchFolderURL;
 - (NSURL*) tempFolderURL;
-- (NSURL *) opScriptURL;
-- (NSURL *) sessionScriptURL;
+- (NSString *) opScript;
+- (NSString *) sessionScript;
 
 @end
 

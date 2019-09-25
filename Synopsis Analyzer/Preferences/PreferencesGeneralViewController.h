@@ -23,8 +23,8 @@
 
 - (IBAction) defaultPresetPUBItemSelected:(id)sender;
 
-- (NSURL *) opScriptURL;
-- (NSURL *) sessionScriptURL;
+- (NSString *) opScript;
+- (NSString *) sessionScript;
 
 //	populates my preset PUB
 - (void) populateDefaultPresetPopupButton;

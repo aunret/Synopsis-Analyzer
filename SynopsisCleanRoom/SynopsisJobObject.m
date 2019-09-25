@@ -198,13 +198,13 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	return [[SynopsisJobObject alloc]
 		initWithSrcFile:(tmpSrc==nil) ? nil : [NSURL fileURLWithPath:tmpSrc]
 		dstFile:(tmpDst==nil) ? nil : [NSURL fileURLWithPath:tmpDst]
-		tmpDir:(tmpDir==nil) ? nil : [NSURL fileURLWithPath:tmpDir]
+		//tmpDir:(tmpDir==nil) ? nil : [NSURL fileURLWithPath:tmpDir]
 		videoTransOpts:tmpVideoDict
 		audioTransOpts:tmpAudioDict
 		synopsisOpts:tmpSynopsisDict
 		completionBlock:inCompletionBlock];
 }
-- (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile tmpDir:(NSURL *)inTmpDir videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock	{
+- (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile /*tmpDir:(NSURL *)inTmpDir*/ videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock	{
 	//NSLog(@"%s",__func__);
 	if (inSrcFile==nil || inDstFile==nil)	{
 		NSLog(@"ERR: bailing, missing prereq, %s",__func__);

@@ -64,6 +64,7 @@ case OpStatus_Err:
 
 @property (atomic,readwrite,strong,nullable) NSString * src;
 @property (atomic,readwrite,strong,nullable) NSString * dst;
+@property (atomic,readwrite,strong,nullable) NSString * tmpFile;
 @property (atomic,readwrite,strong,nullable) NSImage * thumb;
 
 @property (atomic,readwrite) OpType type;
@@ -78,7 +79,6 @@ case OpStatus_Err:
 - (NSAttributedString *_Nonnull) createAttributedStatusString;
 
 - (void) start;
-- (void) beginCleanup;
 - (void) stop;
 //- (void) running;
 

@@ -101,11 +101,11 @@ PrefsController			*globalPrefsController = nil;
 - (NSURL*) tempFolderURL	{
 	return [self.prefsViewController.preferencesFileViewController tempFolderURL];
 }
-- (NSURL *) opScriptURL	{
-	return [self.prefsViewController.preferencesGeneralViewController opScriptURL];
+- (NSString *) opScript	{
+	return [self.prefsViewController.preferencesGeneralViewController opScript];
 }
-- (NSURL *) sessionScriptURL	{
-	return [self.prefsViewController.preferencesGeneralViewController sessionScriptURL];
+- (NSString *) sessionScript	{
+	return [self.prefsViewController.preferencesGeneralViewController sessionScript];
 }
 
 

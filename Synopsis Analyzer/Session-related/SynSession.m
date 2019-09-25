@@ -43,15 +43,16 @@
 		
 		self.enabled = YES;
 		self.ops = [[NSMutableArray alloc] init];
+		self.srcDir = nil;
 		
 		//	set outputDir from prefs
 		self.outputDir = [[pc outputFolderURL] path];
 		//	set tmpDir from prefs
 		self.tmpDir = [[pc tempFolderURL] path];
-		//	set opScriptURL from prefs
-		self.opScriptURL = [[pc opScriptURL] path];
-		//	set sessionScriptURL from prefs
-		self.sessionScriptURL = [[pc sessionScriptURL] path];
+		//	set opScript from prefs
+		self.opScript = [pc opScript];
+		//	set sessionScript from prefs
+		self.sessionScript = [pc sessionScript];
 		//	set preset from prefs
 		self.preset = [pc defaultPreset];
 		
@@ -81,15 +82,16 @@
 		
 		self.enabled = YES;
 		self.ops = [[NSMutableArray alloc] init];
+		self.srcDir = inDir;
 		
 		//	set the outputDir from prefs
 		self.outputDir = [[pc outputFolderURL] path];
 		//	set tmpDir from prefs
 		self.tmpDir = [[pc tempFolderURL] path];
-		//	set opScriptURL from prefs
-		self.opScriptURL = [[pc opScriptURL] path];
-		//	set sessionScriptURL from prefs
-		self.sessionScriptURL = [[pc sessionScriptURL] path];
+		//	set opScript from prefs
+		self.opScript = [pc opScript];
+		//	set sessionScript from prefs
+		self.sessionScript = [pc sessionScript];
 		//	set preset from prefs
 		self.preset = [pc defaultPreset];
 		
@@ -154,13 +156,13 @@
 				? [[pc tempFolderURL] path]
 				: [coder decodeObjectForKey:@"tmpDir"];
 			
-			self.opScriptURL = (![coder containsValueForKey:@"opScriptURL"])
-				? [[pc opScriptURL] path]
-				: [coder decodeObjectForKey:@"opScriptURL"];
+			self.opScript = (![coder containsValueForKey:@"opScript"])
+				? [pc opScript]
+				: [coder decodeObjectForKey:@"opScript"];
 			
-			self.sessionScriptURL = (![coder containsValueForKey:@"sessionScriptURL"])
-				? [[pc sessionScriptURL] path]
-				: [coder decodeObjectForKey:@"sessionScriptURL"];
+			self.sessionScript = (![coder containsValueForKey:@"sessionScript"])
+				? [pc sessionScript]
+				: [coder decodeObjectForKey:@"sessionScript"];
 			
 			self.preset = (![coder containsValueForKey:@"preset"])
 				? [pc defaultPreset]
@@ -196,11 +198,11 @@
 		if (self.tmpDir != nil)
 			[coder encodeObject:self.tmpDir forKey:@"tmpDir"];
 		
-		if (self.opScriptURL != nil)
-			[coder encodeObject:self.opScriptURL forKey:@"opScriptURL"];
+		if (self.opScript != nil)
+			[coder encodeObject:self.opScript forKey:@"opScript"];
 		
-		if (self.sessionScriptURL != nil)
-			[coder encodeObject:self.sessionScriptURL forKey:@"sessionScriptURL"];
+		if (self.sessionScript != nil)
+			[coder encodeObject:self.sessionScript forKey:@"sessionScript"];
 		
 		if (self.preset.uuid != nil)
 			[coder encodeObject:self.preset.uuid forKey:@"preset"];
@@ -233,6 +235,7 @@
 	returnMe.session = self;
 	//NSLog(@"\t\tnew op is %@",returnMe);
 	
+	/*
 	//	get the path extension & orig filename
 	NSString		*pathExtension = n.pathExtension;
 	NSString		*origFileName = [[n URLByDeletingPathExtension] lastPathComponent];
@@ -254,6 +257,7 @@
 		NSURL			*dstURL = [[[NSURL fileURLWithPath:returnMe.src] URLByDeletingLastPathComponent] URLByAppendingPathComponent:newFileName isDirectory:NO];
 		returnMe.dst = [dstURL path];
 	}
+	*/
 	
 	return returnMe;
 }
