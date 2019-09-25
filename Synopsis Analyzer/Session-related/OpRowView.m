@@ -58,18 +58,37 @@
 	//[enableToggle setIntValue:NSOnState];
 	[preview setImage:self.op.thumb];
 	[nameField setStringValue:self.op.src.lastPathComponent.stringByDeletingPathExtension];
+	//NSLog(@"op is %@",self.op);
+	//NSLog(@"op src is %@",self.op.src);
 	switch (self.op.status)	{
 	case OpStatus_Pending:
-	case OpStatus_PreflightErr:
-	case OpStatus_Complete:
-	case OpStatus_Err:
 		[tabView selectTabViewItemAtIndex:0];
 		[statusField setStringValue:[self.op createStatusString]];
+		statusField.toolTip = nil;
+		break;
+	case OpStatus_PreflightErr:
+		[tabView selectTabViewItemAtIndex:0];
+		//[statusField setStringValue:[self.op createStatusString]];
+		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
+		statusField.toolTip = self.op.job.jobErrString;
+		break;
+	case OpStatus_Complete:
+		[tabView selectTabViewItemAtIndex:0];
+		//[statusField setStringValue:[self.op createStatusString]];
+		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
+		statusField.toolTip = nil;
+		break;
+	case OpStatus_Err:
+		[tabView selectTabViewItemAtIndex:0];
+		//[statusField setStringValue:[self.op createStatusString]];
+		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
+		statusField.toolTip = self.op.job.jobErrString;
 		break;
 	case OpStatus_Analyze:
 	case OpStatus_Cleanup:
 		[tabView selectTabViewItemAtIndex:1];
 		[progressIndicator setDoubleValue:(self.op.job==nil) ? 0.0 : [self.op.job jobProgress]];
+		statusField.toolTip = nil;
 		break;
 	}
 }

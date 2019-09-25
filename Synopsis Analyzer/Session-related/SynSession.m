@@ -44,13 +44,13 @@
 		self.ops = [[NSMutableArray alloc] init];
 		
 		//	set outputDir from prefs
-		self.outputDir = [pc outputFolderURL];
+		self.outputDir = [[pc outputFolderURL] path];
 		//	set tmpDir from prefs
-		self.tmpDir = [pc tempFolderURL];
+		self.tmpDir = [[pc tempFolderURL] path];
 		//	set opScriptURL from prefs
-		self.opScriptURL = [pc opScriptURL];
+		self.opScriptURL = [[pc opScriptURL] path];
 		//	set sessionScriptURL from prefs
-		self.sessionScriptURL = [pc sessionScriptURL];
+		self.sessionScriptURL = [[pc sessionScriptURL] path];
 		//	set preset from prefs
 		self.preset = [pc defaultPreset];
 		
@@ -79,13 +79,13 @@
 		self.ops = [[NSMutableArray alloc] init];
 		
 		//	set the outputDir from prefs
-		self.outputDir = [pc outputFolderURL];
+		self.outputDir = [[pc outputFolderURL] path];
 		//	set tmpDir from prefs
-		self.tmpDir = [pc tempFolderURL];
+		self.tmpDir = [[pc tempFolderURL] path];
 		//	set opScriptURL from prefs
-		self.opScriptURL = [pc opScriptURL];
+		self.opScriptURL = [[pc opScriptURL] path];
 		//	set sessionScriptURL from prefs
-		self.sessionScriptURL = [pc sessionScriptURL];
+		self.sessionScriptURL = [[pc sessionScriptURL] path];
 		//	set preset from prefs
 		self.preset = [pc defaultPreset];
 		
@@ -140,19 +140,19 @@
 				: [coder decodeBoolForKey:@"enabled"];
 			
 			self.outputDir = (![coder containsValueForKey:@"outputDir"])
-				? [pc outputFolderURL]
+				? [[pc outputFolderURL] path]
 				: [coder decodeObjectForKey:@"outputDir"];
 			
 			self.tmpDir = (![coder containsValueForKey:@"tmpDir"])
-				? [pc tempFolderURL]
+				? [[pc tempFolderURL] path]
 				: [coder decodeObjectForKey:@"tmpDir"];
 			
 			self.opScriptURL = (![coder containsValueForKey:@"opScriptURL"])
-				? [pc opScriptURL]
+				? [[pc opScriptURL] path]
 				: [coder decodeObjectForKey:@"opScriptURL"];
 			
 			self.sessionScriptURL = (![coder containsValueForKey:@"sessionScriptURL"])
-				? [pc sessionScriptURL]
+				? [[pc sessionScriptURL] path]
 				: [coder decodeObjectForKey:@"sessionScriptURL"];
 			
 			self.preset = (![coder containsValueForKey:@"preset"])
@@ -227,14 +227,14 @@
 	NSFileManager	*fm = [NSFileManager defaultManager];
 	BOOL			isDir = NO;
 	//	if there's an output dir, we're putting the file in there
-	if (self.outputDir != nil && [fm fileExistsAtPath:self.outputDir.path isDirectory:&isDir] && isDir)	{
-		NSURL			*dstURL = [self.outputDir URLByAppendingPathComponent:newFileName isDirectory:NO];
-		returnMe.dst = dstURL;
+	if (self.outputDir != nil && [fm fileExistsAtPath:self.outputDir isDirectory:&isDir] && isDir)	{
+		NSURL			*dstURL = [[NSURL fileURLWithPath:self.outputDir] URLByAppendingPathComponent:newFileName isDirectory:NO];
+		returnMe.dst = [dstURL path];
 	}
 	//	else we're putting the file in the same dir it came from
 	else	{
-		NSURL			*dstURL = [[returnMe.src URLByDeletingLastPathComponent] URLByAppendingPathComponent:newFileName isDirectory:NO];
-		returnMe.dst = dstURL;
+		NSURL			*dstURL = [[[NSURL fileURLWithPath:returnMe.src] URLByDeletingLastPathComponent] URLByAppendingPathComponent:newFileName isDirectory:NO];
+		returnMe.dst = [dstURL path];
 	}
 	
 	return returnMe;
@@ -271,6 +271,7 @@
 #pragma mark - control
 
 
+/*
 - (void) stopAllOps	{
 }
 - (SynOp *) startAnOp	{
@@ -302,11 +303,13 @@
 	
 	return returnMe;
 }
+*/
 - (double) calculateProgress	{
 	double		returnMe = -1.0;
 	@synchronized (self.ops)	{
 		double		maxVal = 0.0;
 		double		currentVal = 0.0;
+		BOOL		hideProgressBar = YES;
 		for (SynOp *op in self.ops)	{
 			switch (op.status)	{
 			case OpStatus_Pending:
@@ -314,6 +317,7 @@
 				break;
 			case OpStatus_Analyze:
 			case OpStatus_Cleanup:
+				hideProgressBar = NO;
 				if (op.job != nil)
 					currentVal += op.job.jobProgress;
 				maxVal += 1.0;
@@ -327,6 +331,8 @@
 			}
 		}
 		returnMe = currentVal/maxVal;
+		if (hideProgressBar)
+			returnMe = -1.0;
 	}
 	return returnMe;
 }
@@ -336,7 +342,7 @@
 #pragma mark - SynOpDelegate protocol
 
 
-- (void) synOpStatusChanged:(SynOp *)n	{
+- (void) synOpStatusFinished:(SynOp *)n	{
 	NSLog(@"%s ... %@",__func__,n);
 	
 	switch (n.status)	{
@@ -353,7 +359,7 @@
 	}
 	
 	//if (self.delegate != nil)
-	//	[self.delegate synOpStatusChanged:n];
+	//	[self.delegate synOpStatusFinished:n];
 }
 */
 

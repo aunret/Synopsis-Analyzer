@@ -53,7 +53,7 @@
 	[self refreshUI];
 }
 - (void) refreshUI	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	if (self.session == nil)	{
 		[enableToggle setIntValue:NSControlStateValueOff];
 		[nameField setStringValue:@""];
@@ -68,7 +68,7 @@
 	[presetPUB selectItemWithRepresentedObject:self.session.preset andOutput:NO];
 	
 	double			tmpProgress = [self.session calculateProgress];
-	NSLog(@"\ttmpProgress is %0.2f",tmpProgress);
+	//NSLog(@"\ttmpProgress is %0.2f",tmpProgress);
 	if (tmpProgress < 0.0)	{
 		[tabView selectTabViewItemAtIndex:0];
 		[descriptionField setStringValue:[self.session createDescriptionString]];

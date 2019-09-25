@@ -15,12 +15,12 @@
 
 
 
-
+/*
 @protocol SynSessionDelegate
 - (void) synSessionStatusChanged:(SynSession *_Nonnull)n;
-- (void) synOpStatusChanged:(SynOp *_Nonnull)n;
+- (void) synOpStatusFinished:(SynOp *_Nonnull)n;
 @end
-
+*/
 
 
 
@@ -33,10 +33,10 @@
 @property (assign,readwrite) BOOL enabled;
 
 @property (atomic,readwrite,strong,nullable) NSMutableArray<SynOp*> * ops;
-@property (atomic,readwrite,strong,nullable) NSURL * outputDir;
-@property (atomic,readwrite,strong,nullable) NSURL * tmpDir;
-@property (atomic,readwrite,strong,nullable) NSURL * opScriptURL;
-@property (atomic,readwrite,strong,nullable) NSURL * sessionScriptURL;
+@property (atomic,readwrite,strong,nullable) NSString * outputDir;
+@property (atomic,readwrite,strong,nullable) NSString * tmpDir;
+@property (atomic,readwrite,strong,nullable) NSString * opScriptURL;
+@property (atomic,readwrite,strong,nullable) NSString * sessionScriptURL;
 @property (atomic,readwrite,strong,nullable) PresetObject * preset;
 
 //@property (atomic,readwrite) SessionStatus status;
@@ -46,8 +46,8 @@
 - (SynOp *) createOpForSrcURL:(NSURL *_Nonnull)n;
 - (NSString *_Nonnull) createDescriptionString;
 
-- (void) stopAllOps;
-- (SynOp *) startAnOp;
+//- (void) stopAllOps;
+//- (SynOp *) startAnOp;
 //	returns -1 if session isn't being processed yet, for any reason (disabled, all pending, all complete/err, etc)
 - (double) calculateProgress;
 

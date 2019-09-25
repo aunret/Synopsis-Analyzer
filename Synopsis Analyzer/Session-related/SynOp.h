@@ -16,7 +16,7 @@
 
 
 @protocol SynOpDelegate
-- (void) synOpStatusChanged:(SynOp *_Nonnull)n;
+- (void) synOpStatusFinished:(SynOp *_Nonnull)n;
 @end
 
 
@@ -60,9 +60,10 @@ case OpStatus_Err:
 @interface SynOp : NSObject <NSCoding>
 
 - (instancetype) initWithSrcURL:(NSURL *)inSrc;
+- (instancetype) initWithSrcPath:(NSString *)inSrc;
 
-@property (atomic,readwrite,strong,nullable) NSURL * src;
-@property (atomic,readwrite,strong,nullable) NSURL * dst;
+@property (atomic,readwrite,strong,nullable) NSString * src;
+@property (atomic,readwrite,strong,nullable) NSString * dst;
 @property (atomic,readwrite,strong,nullable) NSImage * thumb;
 
 @property (atomic,readwrite) OpType type;
@@ -74,6 +75,7 @@ case OpStatus_Err:
 @property (atomic,weak,nullable) SynSession *session;
 
 - (NSString *_Nonnull) createStatusString;
+- (NSAttributedString *_Nonnull) createAttributedStatusString;
 
 - (void) start;
 - (void) stop;

@@ -35,7 +35,8 @@ static SessionController			*globalSessionController = nil;
 @property (strong,nullable) NSTimer * progressRefreshTimer;
 @property (strong) NSMutableArray<SynOp*> * opsInProgress;
 @property (atomic,readwrite) BOOL running;
-- (void) startAnOp;
+//- (void) startAnOp;
+- (NSArray<SynOp*> *) getOpsToStart:(NSUInteger)numOpsToGet;
 - (int) maxOpCount;
 @end
 
@@ -259,10 +260,13 @@ static SessionController			*globalSessionController = nil;
 		[runPauseButton setImage:[NSImage imageNamed:@"ic_stop"]];
 	
 		self.running = YES;
-		for (int i=0; i<[self maxOpCount]; ++i)	{
-			[self startAnOp];
+		NSArray<SynOp*>		*opsToStart = [self getOpsToStart:[self maxOpCount]];
+		for (SynOp * op in opsToStart)	{
+			[self.opsInProgress addObject:op];
+			[op start];
 		}
 		
+		NSLog(@"\tafter starting ops, we have %d total ops in progress",self.opsInProgress.count);
 		//	if we weren't able to start any jobs, we're effectively stopped, so....stop it officially.
 		if (self.opsInProgress.count < 1)
 			[self stop];
@@ -305,6 +309,7 @@ static SessionController			*globalSessionController = nil;
 	//	reload the outline view
 	[self reloadData];
 }
+/*
 - (void) startAnOp	{
 	NSLog(@"%s",__func__);
 	//	if we're not running, something went wrong- bail, we don't want to do this
@@ -321,7 +326,34 @@ static SessionController			*globalSessionController = nil;
 		}
 	}
 }
+*/
+- (NSArray<SynOp*> *) getOpsToStart:(NSUInteger)numOpsToGet	{
+	@synchronized (self)	{
+		NSMutableArray		*returnMe = [NSMutableArray arrayWithCapacity:0];
+		if ([returnMe count] == numOpsToGet)
+			return returnMe;
+		for (SynSession * session in self.sessions)	{
+			for (SynOp * op in session.ops)	{
+				switch (op.status)	{
+				case OpStatus_Pending:
+					[returnMe addObject:op];
+					break;
+				case OpStatus_PreflightErr:
+				case OpStatus_Analyze:
+				case OpStatus_Cleanup:
+				case OpStatus_Complete:
+				case OpStatus_Err:
+					break;
+				}
+				if ([returnMe count] == numOpsToGet)
+					return returnMe;
+			}
+		}
+		return returnMe;
+	}
+}
 - (int) maxOpCount	{
+	return 3;
 	int				returnMe = 1;
 	NSNumber		*tmpNum = [[NSUserDefaults standardUserDefaults] objectForKey:kSynopsisAnalyzerConcurrentJobCountPreferencesKey];
 	//	 a val of -1 indicates that the user selected "auto" in the prefs
@@ -354,7 +386,7 @@ static SessionController			*globalSessionController = nil;
 	return returnMe;
 }
 - (void) refreshUITimer:(NSTimer *)t	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	NSMutableArray		*sessionsInProgress = [NSMutableArray arrayWithCapacity:0];
 	//	run through the array of ops in progress
 	for (SynOp * op in self.opsInProgress)	{
@@ -388,46 +420,42 @@ static SessionController			*globalSessionController = nil;
 #pragma mark - SynOpDelegate protocol
 
 
-- (void) synOpStatusChanged:(SynOp *_Nonnull)n	{
-	NSLog(@"%s ... %@",__func__,n);
+- (void) synOpStatusFinished:(SynOp *_Nonnull)n	{
+	NSLog(@"%s ... %@: %@",__func__,n,[SynopsisJobObject stringForStatus:n.job.jobStatus]);
 	BOOL			opFinished = NO;
 	BOOL			startAnotherOp = NO;
  	@synchronized (self)	{
 		
-		switch (n.status)	{
-		case OpStatus_Pending:
-		case OpStatus_PreflightErr:
-		case OpStatus_Cleanup:
-			//	do nothing...
-			break;
-		//	if the op finished, we may want to start another
-		case OpStatus_Complete:
-		case OpStatus_Err:
-			opFinished = YES;
-			[self.opsInProgress removeObjectIdenticalTo:n];
-			break;
-		//	if the op started, add it to the array of ops being tracked for progress
-		case OpStatus_Analyze:
-			[self.opsInProgress addObject:n];
-			break;
-		}
+		[self.opsInProgress removeObjectIdenticalTo:n];
 		
 		//	if we just finished an op, we may want to start another?
-		if (opFinished)	{
-			if (self.running && self.opsInProgress.count < [self maxOpCount])	{
-				startAnotherOp = YES;
+		if (self.running && self.opsInProgress.count < [self maxOpCount])	{
+			startAnotherOp = YES;
+		}
+		
+		//	if we want to start another op...
+		if (startAnotherOp)	{
+			NSArray<SynOp*>		*opsToStart = [self getOpsToStart:1];
+			for (SynOp * op in opsToStart)	{
+				[self.opsInProgress addObject:op];
+				[op start];
 			}
 		}
 	}
 	
-	//	if we want to start another op...
-	if (startAnotherOp)	{
-		[self startAnOp];
-	}
-	
-	//	if we have no more ops...
+	//	if we have no more ops, stop!
 	if (self.opsInProgress.count < 1)
 		[self stop];
+	//	else just refresh the UI for the op that completed
+	else	{
+		NSInteger			rowIndex = [outlineView rowForItem:n];
+		if (rowIndex >= 0)	{
+			OpRowView			*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
+			//NSLog(@"\top row view is %@",tmpView);
+			if (tmpView != nil)
+				[tmpView refreshUI];
+		}
+	}
 }
 
 

@@ -765,19 +765,10 @@
                                                                                                         <rect key="frame" x="0.0" y="0.0" width="173" height="30"/>
                                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                                         <subviews>
-                                                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="WER-Rk-xTn">
-                                                                                                                <rect key="frame" x="-2" y="6" width="58" height="17"/>
-                                                                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Status:" id="ANG-i2-apK">
-                                                                                                                    <font key="font" metaFont="system"/>
-                                                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                                                                </textFieldCell>
-                                                                                                            </textField>
                                                                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Oet-Hh-iTh">
-                                                                                                                <rect key="frame" x="60" y="6" width="115" height="17"/>
-                                                                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Ready" id="OX6-R5-DNB">
+                                                                                                                <rect key="frame" x="-2" y="6" width="177" height="17"/>
+                                                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                                                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Ready" id="OX6-R5-DNB">
                                                                                                                     <font key="font" metaFont="system"/>
                                                                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1021,7 +1012,7 @@
             <connections>
                 <outlet property="delegate" destination="Voe-Tx-rLC" id="o1J-VR-G16"/>
             </connections>
-            <point key="canvasLocation" x="-352" y="307"/>
+            <point key="canvasLocation" x="-352.5" y="307"/>
         </window>
         <customObject id="zNf-jZ-W26" customClass="SessionController">
             <connections>

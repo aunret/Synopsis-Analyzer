@@ -34,6 +34,21 @@
 - (instancetype) initWithSrcURL:(NSURL *)inSrc	{
 	self = [super init];
 	if (self != nil)	{
+		self.src = [inSrc path];
+		self.dst = nil;
+		self.thumb = nil;
+		//self.type = OpType_Other;
+		[self _populateTypePropertyAndThumb];
+		self.status = OpStatus_Pending;
+		self.errString = nil;
+		self.job = nil;
+		self.delegate = [SessionController global];
+	}
+	return self;
+}
+- (instancetype) initWithSrcPath:(NSString *)inSrc	{
+	self = [super init];
+	if (self != nil)	{
 		self.src = inSrc;
 		self.dst = nil;
 		self.thumb = nil;
@@ -94,11 +109,11 @@
 	if (self.src == nil)
 		self.type = OpType_Other;
 	else	{
-		AVAsset			*asset = [AVAsset assetWithURL:self.src];
+		AVAsset			*asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:self.src]];
 		if (asset == nil)	{
 			self.type = OpType_Other;
 			NSWorkspace		*ws = [NSWorkspace sharedWorkspace];
-			NSImage			*tmpImg = [ws iconForFile:self.src.path];
+			NSImage			*tmpImg = [ws iconForFile:self.src];
 			self.thumb = tmpImg;
 		}
 		else	{
@@ -152,7 +167,7 @@
 			else	{
 				self.type = OpType_Other;
 				NSWorkspace		*ws = [NSWorkspace sharedWorkspace];
-				NSImage			*tmpImg = [ws iconForFile:self.src.path];
+				NSImage			*tmpImg = [ws iconForFile:self.src];
 				self.thumb = tmpImg;
 			}
 		}
@@ -177,17 +192,50 @@
 	}
 	return @"???";
 }
+- (NSAttributedString *_Nonnull) createAttributedStatusString	{
+	NSMutableAttributedString		*returnMe = nil;
+	NSMutableParagraphStyle			*ps = nil;
+	switch (self.status)	{
+	case OpStatus_Pending:
+		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Pending"];
+		break;
+	case OpStatus_PreflightErr:
+		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Preflight Err"];
+		[returnMe addAttribute:NSForegroundColorAttributeName value:[NSColor redColor] range:NSMakeRange(0,returnMe.length)];
+		break;
+	case OpStatus_Analyze:
+		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Analyzing"];
+		break;
+	case OpStatus_Cleanup:
+		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Cleaning up"];
+		break;
+	case OpStatus_Complete:
+		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Completed"];
+		[returnMe addAttribute:NSForegroundColorAttributeName value:[NSColor greenColor] range:NSMakeRange(0,returnMe.length)];
+		break;
+	case OpStatus_Err:
+		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Error"];
+		[returnMe addAttribute:NSForegroundColorAttributeName value:[NSColor redColor] range:NSMakeRange(0,returnMe.length)];
+		break;
+	}
+	if (returnMe == nil)
+		returnMe = [[NSMutableAttributedString alloc] initWithString:@"???"];
+	ps = [[NSMutableParagraphStyle alloc] init];
+	[ps setAlignment:NSTextAlignmentCenter];
+	[returnMe addAttribute:NSParagraphStyleAttributeName value:ps range:NSMakeRange(0,returnMe.length)];
+	return returnMe;
+}
 
 
 #pragma mark - control
 
 
 - (void) start	{
-	NSLog(@"%s",__func__);
+	NSLog(@"%s ... %@",__func__,self);
 	PresetObject		*sessionPreset = self.session.preset;
 	if (sessionPreset == nil)	{
 		self.status = OpStatus_PreflightErr;
-		[self.delegate synOpStatusChanged:self];
+		[self.delegate synOpStatusFinished:self];
 		return;
 	}
 	
@@ -215,14 +263,16 @@
 	
 	__weak SynOp			*bss = self;
 	self.job = [[SynopsisJobObject alloc]
-		initWithSrcFile:self.src
-		dstFile:self.dst
+		initWithSrcFile:(self.src==nil) ? nil : [NSURL fileURLWithPath:self.src]
+		dstFile:(self.dst==nil) ? nil : [NSURL fileURLWithPath:self.dst]
 		tmpDir:(tempFolderURL==nil) ? nil : tempFolderURL
 		videoTransOpts:videoOpts
 		audioTransOpts:audioOpts
 		synopsisOpts:synopsisOpts
 		completionBlock:^(SynopsisJobObject *finished)	{
-			
+			NSLog(@"\tjob finished, status is %@",[SynopsisJobObject stringForStatus:finished.jobStatus]);
+			//NSLog(@"\tjob err is %@",[SynopsisJobObject stringForErrorType:finished.jobErr]);
+			//NSLog(@"\tjob err string is %@",finished.jobErrString);
 			switch (finished.jobStatus)	{
 			case JOStatus_Unknown:
 			case JOStatus_NotStarted:
@@ -231,7 +281,7 @@
 				break;
 			case JOStatus_Err:
 				bss.status = OpStatus_Err;
-				bss.errString = finished.jobErrString;
+				bss.errString = [SynopsisJobObject stringForErrorType:finished.jobErr];
 				break;
 			case JOStatus_Complete:
 				bss.status = OpStatus_Complete;
@@ -244,9 +294,11 @@
 			}
 			
 			//	this block gets executed even if you cancel
-			NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
-			if (tmpDelegate != nil)
-				[tmpDelegate synOpStatusChanged:bss];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+				if (tmpDelegate != nil)
+					[tmpDelegate synOpStatusFinished:bss];
+			});
 		}];
 	
 	[self.job start];
