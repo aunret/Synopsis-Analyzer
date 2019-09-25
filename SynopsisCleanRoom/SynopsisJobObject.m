@@ -108,8 +108,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 }
 @property (atomic, strong) NSURL * srcFile;
 @property (atomic, strong) NSURL * dstFile;
-@property (atomic, strong) NSURL * tmpDirectory;
-@property (atomic, strong) NSURL * tmpFile;
+//@property (atomic, strong) NSURL * tmpDirectory;
+//@property (atomic, strong) NSURL * tmpFile;
 @property (atomic, copy) void (^completionBlock)(SynopsisJobObject *theJob);
 
 @property (atomic, strong) NSMutableDictionary * videoTransOpts;
@@ -252,8 +252,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		
 		self.srcFile = inSrcFile;
 		self.dstFile = inDstFile;
-		self.tmpDirectory = inTmpDir;
-		self.tmpFile = (self.tmpDirectory != nil) ? [[self.tmpDirectory URLByAppendingPathComponent:[[NSUUID UUID] UUIDString]] URLByAppendingPathExtension:@"mov"] : nil;
+		//self.tmpDirectory = inTmpDir;
+		//self.tmpFile = (self.tmpDirectory != nil) ? [[self.tmpDirectory URLByAppendingPathComponent:[[NSUUID UUID] UUIDString]] URLByAppendingPathExtension:@"mov"] : nil;
 		self.completionBlock = inCompletionBlock;
 		self.videoTransOpts = (inVidTransOpts==nil || inVidTransOpts.count<1) ? nil : [inVidTransOpts mutableCopy];
 		self.audioTransOpts = (inAudioTransOpts==nil || inAudioTransOpts.count<1) ? nil : [inAudioTransOpts mutableCopy];
@@ -289,7 +289,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	self.globalMetadata = [NSMutableDictionary new];
 	
 	//	make sure we know where to read from and where to write to, bail if we don't
-	if (self.srcFile == nil || (self.dstFile==nil && self.tmpFile==nil))	{
+	if (self.srcFile == nil || (self.dstFile==nil /*&& self.tmpFile==nil*/))	{
 		self.jobStatus = JOStatus_Err;
 		self.jobErr = JOErr_NoSrcFile;
 		self.jobErrString = @"No src or dst file specified";
@@ -318,7 +318,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	}
 	//	if the dst file (either in the tmp dir or the actual dst file) already exists, move it to the trash
 	NSFileManager		*fm = [NSFileManager defaultManager];
-	NSURL				*actualDstURL = (self.tmpFile!=nil) ? self.tmpFile : self.dstFile;
+	NSURL				*actualDstURL = /*(self.tmpFile!=nil) ? self.tmpFile :*/ self.dstFile;
 	if ([fm fileExistsAtPath:[actualDstURL path]])	{
 		if (![fm removeItemAtURL:actualDstURL error:&nsErr] || nsErr != nil)	{
 			self.jobStatus = JOStatus_Err;
@@ -1444,7 +1444,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	
 	//	write the finalized metadata to the appropriate file
 	{
-		NSURL			*targetURL = (self.tmpFile != nil) ? self.tmpFile : self.dstFile;
+		NSURL			*targetURL = /*(self.tmpFile != nil) ? self.tmpFile :*/ self.dstFile;
 		NSString		*targetPathExt = (targetURL==nil) ? nil : [targetURL pathExtension];
 		AVFileType		exportFileType = AVFileTypeQuickTimeMovie;
 		//if (targetPathExt!=nil && [targetPathExt caseInsensitiveCompare:@"mp4"]==NSOrderedSame)
@@ -1553,10 +1553,12 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		//	trash the dst and tmp files
 		self.jobProgress = 0.0;
 		NSFileManager		*fm = [NSFileManager defaultManager];
+		/*
 		if (self.tmpFile != nil)	{
 			if ([fm fileExistsAtPath:[self.tmpFile path]])
 				[fm trashItemAtURL:self.tmpFile resultingItemURL:nil error:nil];
 		}
+		*/
 		if (self.dstFile != nil)	{
 			if ([fm fileExistsAtPath:[self.dstFile path]])
 				[fm trashItemAtURL:self.dstFile resultingItemURL:nil error:nil];
@@ -1566,6 +1568,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	else	{
 		self.jobProgress = 1.0;
 		self.jobErrString = nil;
+		//	do any file copying outside this class...
+		/*
 		//	if there's a temp file
 		if (self.tmpFile != nil)	{
 			NSFileManager		*fm = [NSFileManager defaultManager];
@@ -1586,6 +1590,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 				[fm trashItemAtURL:self.tmpFile resultingItemURL:nil error:nil];
 			}
 		}
+		*/
 	}
 	
 	id<BaseJobObjectDelegate>		localDelegate = self.delegate;

@@ -128,19 +128,40 @@ static SessionController			*globalSessionController = nil;
 - (void) newSessionWithFiles:(NSArray<NSURL*> *)n	{
 	if (n == nil || [n count] < 1)
 		return;
-	//	make a session
-	SynSession			*newSession = [SynSession createWithFiles:n];
-	if (newSession == nil)
-		return;
-	//newSession.delegate = self;
-	//	add the session to our list of sessions
-	@synchronized (self)	{
-		[self.sessions addObject:newSession];
+	NSFileManager				*fm = [NSFileManager defaultManager];
+	BOOL						isDir = NO;
+	//	run through the array of URLs- we want to put all the dirs in one array, and all the loose files in another
+	NSMutableArray<NSURL*>		*dirs = [NSMutableArray arrayWithCapacity:0];
+	NSMutableArray<NSURL*>		*files = [NSMutableArray arrayWithCapacity:0];
+	for (NSURL *tmpURL in n)	{
+		if ([fm fileExistsAtPath:tmpURL.path isDirectory:&isDir])	{
+			if (isDir)
+				[dirs addObject:tmpURL];
+			else
+				[files addObject:tmpURL];
+		}
 	}
+	SynSession			*filesSession = nil;
+	@synchronized (self)	{
+		//	run through the array of dirs- make a session for each dir
+		for (NSURL *tmpURL in dirs)	{
+			SynSession		*newSession = [SynSession createWithDir:tmpURL recursively:YES];
+			if (newSession == nil)
+				continue;
+			[self.sessions addObject:newSession];
+		}
+		//	make a single session with all the loose files
+		if (files != nil && files.count > 0)	{
+			filesSession = [SynSession createWithFiles:files];
+			if (filesSession != nil)
+				[self.sessions addObject:filesSession];
+		}
+	}
+	
 	//	reload the table view
 	[self reloadData];
 	//	expand the item for the session we just created
-	[outlineView expandItem:newSession expandChildren:YES];
+	[outlineView expandItem:filesSession expandChildren:YES];
 }
 - (void) newSessionWithDir:(NSURL *)n recursively:(BOOL)isRecursive	{
 	if (n == nil)
@@ -215,8 +236,13 @@ static SessionController			*globalSessionController = nil;
 - (BOOL) outlineView:(NSOutlineView *)ov isItemExpandable:(id)item	{
 	if (item == nil)
 		return YES;
-	if ([item isKindOfClass:[SynSession class]])
-		return YES;
+	if ([item isKindOfClass:[SynSession class]])	{
+		SynSession		*recast = (SynSession *)item;
+		if (recast.type == SessionType_Dir)
+			return NO;
+		else
+			return YES;
+	}
 	return NO;
 }
 

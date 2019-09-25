@@ -78,6 +78,7 @@ case OpStatus_Err:
 - (NSAttributedString *_Nonnull) createAttributedStatusString;
 
 - (void) start;
+- (void) beginCleanup;
 - (void) stop;
 //- (void) running;
 

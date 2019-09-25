@@ -36,6 +36,7 @@
 
 
 - (instancetype) initWithFiles:(NSArray<NSURL*> *)n	{
+	NSLog(@"%s",__func__);
 	self = [super init];
 	if (self != nil)	{
 		PrefsController			*pc = [PrefsController global];
@@ -54,6 +55,8 @@
 		//	set preset from prefs
 		self.preset = [pc defaultPreset];
 		
+		self.type = SessionType_List;
+		
 		//	make ops from the passed files, add them to my array
 		for (NSURL *tmpURL in n)	{
 			SynOp		*newOp = [self createOpForSrcURL:tmpURL];
@@ -66,6 +69,7 @@
 	return self;
 }
 - (instancetype) initWithDir:(NSURL *)inDir recursively:(BOOL)isRecursive	{
+	NSLog(@"%s",__func__);
 	NSFileManager		*fm = [NSFileManager defaultManager];
 	BOOL				isDir = NO;
 	if (![fm fileExistsAtPath:[inDir path] isDirectory:&isDir] || !isDir)
@@ -89,6 +93,8 @@
 		//	set preset from prefs
 		self.preset = [pc defaultPreset];
 		
+		self.type = SessionType_Dir;
+		
 		
 		//	run through the passed dir recursively, creating ops for the passed files
 		NSFileManager			*fm = [NSFileManager defaultManager];
@@ -104,6 +110,7 @@
 			options:iterOpts
 			errorHandler:nil];
 		for (NSURL *fileURL in dirIt)	{
+			NSLog(@"\tchecking url %@",fileURL.path);
 			NSError			*nsErr = nil;
 			NSNumber		*isDir = nil;
 			if (![fileURL getResourceValue:&isDir forKey:NSURLIsDirectoryKey error:&nsErr])	{
@@ -161,9 +168,17 @@
 			//if (self.preset == nil)
 			//	self.preset = [pc defaultPreset];
 			
+			self.type = (![coder containsValueForKey:@"type"])
+				? SessionType_List
+				: (SessionType)[coder decodeIntForKey:@"type"];
+			
 			//	load the ops last so we can use self's properties to populate the op's properties
 			NSArray		*tmpArray = (![coder containsValueForKey:@"ops"]) ? [[NSMutableArray alloc] init] : [coder decodeObjectForKey:@"ops"];
 			self.ops = [tmpArray mutableCopy];
+			//	don't forget to set the parent session of the ops i loaded
+			for (SynOp *op in self.ops)	{
+				op.session = self;
+			}
 		}
 	}
 	return self;
@@ -190,6 +205,8 @@
 		if (self.preset.uuid != nil)
 			[coder encodeObject:self.preset.uuid forKey:@"preset"];
 		
+		[coder encodeInt:(NSInteger)self.type forKey:@"type"];
+		
 		//[coder encodeInt:(NSInteger)self.status forKey:@"status"];
 	}
 }
@@ -210,6 +227,7 @@
 	//NSLog(@"%s ... %@",__func__,n);
 	if (n == nil)
 		return nil;
+	
 	SynOp			*returnMe = [[SynOp alloc] initWithSrcURL:n];
 	//returnMe.delegate = [SessionController global];
 	returnMe.session = self;

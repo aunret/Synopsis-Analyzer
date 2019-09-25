@@ -19,7 +19,8 @@
 
 @interface SynOp()
 @property (atomic,weak,nullable) NSObject<SynOpDelegate> * delegate;
-- (void) _populateTypePropertyAndThumb;
+- (void) _populateTypeProperty;
+- (void) _populateThumb;
 @end
 
 
@@ -38,7 +39,7 @@
 		self.dst = nil;
 		self.thumb = nil;
 		//self.type = OpType_Other;
-		[self _populateTypePropertyAndThumb];
+		[self _populateTypeProperty];
 		self.status = OpStatus_Pending;
 		self.errString = nil;
 		self.job = nil;
@@ -53,7 +54,7 @@
 		self.dst = nil;
 		self.thumb = nil;
 		//self.type = OpType_Other;
-		[self _populateTypePropertyAndThumb];
+		[self _populateTypeProperty];
 		self.status = OpStatus_Pending;
 		self.errString = nil;
 		self.job = nil;
@@ -73,7 +74,7 @@
 			//	self.type = [self _populateTypeProperty];
 			//else
 			//	self.type = (OpType)[coder decodeIntForKey:@"type"];
-			[self _populateTypePropertyAndThumb];
+			[self _populateTypeProperty];
 			self.status = (![coder containsValueForKey:@"status"]) ? OpStatus_Pending : (OpStatus)[coder decodeIntForKey:@"status"];
 			self.errString = nil;
 			self.job = nil;
@@ -100,26 +101,56 @@
 - (NSString *) description	{
 	return [NSString stringWithFormat:@"<SynOp: %@>",self.src.lastPathComponent];
 }
+//	synthesize using a different name so we avoid recursion (we're overriding the setter/getter so we only populate the thumb when appropriate)
+@synthesize session=mySession;
+- (void) setSession:(SynSession *)n	{
+	mySession = n;
+	if (self.session.type == SessionType_List)
+		[self _populateThumb];
+}
+- (SynSession *) session	{
+	return mySession;
+}
 
 
 #pragma mark - backend
 
 
-- (void) _populateTypePropertyAndThumb	{
+- (void) _populateTypeProperty	{
+	//NSLog(@"%s",__func__);
 	if (self.src == nil)
 		self.type = OpType_Other;
 	else	{
 		AVAsset			*asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:self.src]];
 		if (asset == nil)	{
 			self.type = OpType_Other;
-			NSWorkspace		*ws = [NSWorkspace sharedWorkspace];
-			NSImage			*tmpImg = [ws iconForFile:self.src];
-			self.thumb = tmpImg;
 		}
 		else	{
 			//	if it's a simple AVF asset...
 			if ([asset isPlayable])	{
 				self.type = OpType_AVFFile;
+			}
+			//	else if the AVF asset has a hap track...
+			else if ([asset containsHapVideoTrack])	{
+				self.type = OpType_AVFFile;
+			}
+			//	else it's not recognizable as an AVF asset (even though you could make an AVAsset from it)
+			else	{
+				self.type = OpType_Other;
+			}
+		}
+	}
+	
+}
+- (void) _populateThumb	{
+	//NSLog(@"%s",__func__);
+	if (self.type == OpType_AVFFile)	{
+		AVAsset			*asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:self.src]];
+		if (asset == nil)	{
+			//	do nothing- don't make a thumb for a non-avf asset
+		}
+		else	{
+			if ([asset isPlayable])	{
 				AVAssetImageGenerator		*gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
 				NSError				*nsErr = nil;
 				CMTime				time = CMTimeMake(1,60);
@@ -127,9 +158,7 @@
 				NSImage				*img = (imgRef==NULL) ? nil : [[NSImage alloc] initWithCGImage:imgRef size:NSMakeSize(CGImageGetWidth(imgRef),CGImageGetHeight(imgRef))];
 				self.thumb = img;
 			}
-			//	else if the AVF asset has a hap track...
 			else if ([asset containsHapVideoTrack])	{
-				self.type = OpType_AVFFile;
 				NSArray				*assetHapTracks = [asset hapVideoTracks];
 				AVAssetTrack		*hapTrack = assetHapTracks[0];
 				//	make a hap output item- doesn't actually need a player...
@@ -163,14 +192,13 @@
 					self.thumb = tmpImg;
 				}
 			}
-			//	else it's not recognizable as an AVF asset (even though you could make an AVAsset from it)
 			else	{
-				self.type = OpType_Other;
-				NSWorkspace		*ws = [NSWorkspace sharedWorkspace];
-				NSImage			*tmpImg = [ws iconForFile:self.src];
-				self.thumb = tmpImg;
+				//	do nothing: the asset is neither playable, nor hap
 			}
 		}
+	}
+	else if (self.type == OpType_Other)	{
+		//	do nothing- don't make a thumb for a non-avf asset
 	}
 }
 
@@ -302,6 +330,9 @@
 		}];
 	
 	[self.job start];
+	
+}
+- (void) beginCleanup	{
 	
 }
 - (void) stop	{

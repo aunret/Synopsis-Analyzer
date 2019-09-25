@@ -21,6 +21,10 @@
 - (void) synOpStatusFinished:(SynOp *_Nonnull)n;
 @end
 */
+typedef NS_ENUM(NSUInteger, SessionType)	{
+	SessionType_Dir = 0,
+	SessionType_List
+};
 
 
 
@@ -40,6 +44,7 @@
 @property (atomic,readwrite,strong,nullable) PresetObject * preset;
 
 //@property (atomic,readwrite) SessionStatus status;
+@property (atomic,readwrite) SessionType type;
 
 //@property (atomic,weak,nullable) NSObject<SynSessionDelegate> * delegate;
 
