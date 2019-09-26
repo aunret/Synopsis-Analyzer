@@ -53,21 +53,23 @@ static const NSString * SPECIALIGNOREVALUE = @"XXXIGNOREMEXXX";
 #pragma mark - public key-value methods
 
 
+@synthesize path=myPath;
 - (void) setPath:(NSString *)n	{
-	self.path = n;
+	myPath = n;
 	//	update the UI
 	[self _updateUI];
 }
 - (NSString *) path	{
-	return self.path;
+	return myPath;
 }
+@synthesize enabled=myEnabled;
 - (void) setEnabled:(BOOL)n	{
-	self.enabled = n;
+	myEnabled = n;
 	//	update the UI
 	[self _updateUI];
 }
 - (BOOL) enabled	{
-	return self.enabled;
+	return myEnabled;
 }
 - (NSURL *) url	{
 	NSString		*tmpString = [self path];

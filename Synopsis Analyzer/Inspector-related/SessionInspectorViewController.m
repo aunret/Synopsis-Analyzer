@@ -8,15 +8,31 @@
 
 #import "SessionInspectorViewController.h"
 
-@interface SessionInspectorViewController ()
+#import "SynSession.h"
 
+
+
+
+@interface SessionInspectorViewController ()
+@property (readwrite,atomic,weak,nullable) SynSession * inspectedObject;
 @end
+
+
+
 
 @implementation SessionInspectorViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do view setup here.
+}
+
+- (void) inspectSession:(SynSession *)n	{
+	self.inspectedObject = n;
+	if (self.inspectedObject == nil)	{
+		return;
+	}
+	
 }
 
 @end

@@ -8,12 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class SynSession;
+
 NS_ASSUME_NONNULL_BEGIN
 
 
 
 
 @interface SessionInspectorViewController : NSViewController
+
+- (void) inspectSession:(SynSession *)n;
 
 @end
 

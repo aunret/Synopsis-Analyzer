@@ -8,12 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class SynOp;
+
 NS_ASSUME_NONNULL_BEGIN
 
 
 
 
 @interface OpInspectorViewController : NSViewController
+
+- (void) inspectOp:(SynOp *)n;
 
 @end
 

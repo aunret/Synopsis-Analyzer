@@ -16,7 +16,7 @@
 @interface InspectorViewController ()
 - (void) generalInit;
 - (void) transitionToViewController:(NSViewController *)inVC;
-@property (readwrite,atomic,weak,nullable) id inspectedObject;
+//@property (readwrite,atomic,weak,nullable) id inspectedObject;
 @property (readwrite,nonatomic,strong) OpInspectorViewController * opInspectorViewController;
 @property (readwrite,nonatomic,strong) SessionInspectorViewController *sessionInspectorViewController;
 @property (readwrite,nonatomic,strong) EmptyInspectorViewController *emptyInspectorViewController;
@@ -44,7 +44,7 @@ static InspectorViewController		*globalInspectorViewController = nil;
 	self = [super init];
 	if (self != nil)	{
 		globalInspectorViewController = self;
-		self.inspectedObject = nil;
+		//self.inspectedObject = nil;
 		[self generalInit];
 	}
 	return self;
@@ -97,18 +97,45 @@ static InspectorViewController		*globalInspectorViewController = nil;
 
 
 - (void) inspectSession:(SynSession *)n	{
+	if (![NSThread isMainThread])	{
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self inspectSession:n];
+		});
+		return;
+	}
+	
 	@synchronized (self)	{
-		self.inspectedObject = n;
+		//self.inspectedObject = n;
+		[self.opInspectorViewController inspectOp:nil];
+		
+		[self.sessionInspectorViewController inspectSession:n];
 		[self transitionToViewController:self.sessionInspectorViewController];
 	}
 }
 - (void) inspectOp:(SynOp *)n	{
+	if (![NSThread isMainThread])	{
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self inspectOp:n];
+		});
+		return;
+	}
+	
 	@synchronized (self)	{
-		self.inspectedObject = n;
+		//self.inspectedObject = n;
+		[self.sessionInspectorViewController inspectSession:nil];
+		
+		[self.opInspectorViewController inspectOp:n];
 		[self transitionToViewController:self.opInspectorViewController];
 	}
 }
 - (void) inspectItem:(id)n	{
+	if (![NSThread isMainThread])	{
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self inspectItem:n];
+		});
+		return;
+	}
+	
 	@synchronized (self)	{
 		if (n == nil)	{
 			[self uninspectAll];
@@ -127,8 +154,18 @@ static InspectorViewController		*globalInspectorViewController = nil;
 	}
 }
 - (void) uninspectAll	{
+	if (![NSThread isMainThread])	{
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self uninspectAll];
+		});
+		return;
+	}
+	
 	@synchronized (self)	{
-		self.inspectedObject = nil;
+		//self.inspectedObject = nil;
+		[self.opInspectorViewController inspectOp:nil];
+		[self.sessionInspectorViewController inspectSession:nil];
+		
 		[self transitionToViewController:self.emptyInspectorViewController];
 	}
 }

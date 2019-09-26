@@ -8,15 +8,33 @@
 
 #import "OpInspectorViewController.h"
 
-@interface OpInspectorViewController ()
+#import "SynOp.h"
 
+
+
+
+@interface OpInspectorViewController ()
+@property (readwrite,atomic,weak,nullable) SynOp * inspectedObject;
 @end
 
+
+
+
 @implementation OpInspectorViewController
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do view setup here.
 }
+
+- (void) inspectOp:(SynOp *)n	{
+	self.inspectedObject = n;
+	if (self.inspectedObject == nil)	{
+		return;
+	}
+	
+}
+
 
 @end
