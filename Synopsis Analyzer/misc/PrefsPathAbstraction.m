@@ -77,12 +77,7 @@ static const NSString * SPECIALIGNOREVALUE = @"XXXIGNOREMEXXX";
 - (NSString *) path	{
 	//	set up the keys we'll need to retrieve the vals from the defaults...
 	NSString			*valKey = self.internalUserDefaultsKey;
-	NSString			*enableKey = [self _deriveEnableKey];
 	NSUserDefaults		*def = [NSUserDefaults standardUserDefaults];
-	//	if this hasn't been enabled, return nil (even if it may have a value)
-	BOOL				tmpBool = (enableKey==nil) ? NO : [def boolForKey:enableKey];
-	if (!tmpBool)
-		return nil;
 	//	get and return the value
 	NSString			*tmpString = (valKey==nil) ? nil : [def stringForKey:valKey];
 	return tmpString;
@@ -92,6 +87,15 @@ static const NSString * SPECIALIGNOREVALUE = @"XXXIGNOREMEXXX";
 	if (tmpString == nil)
 		return nil;
 	return [NSURL fileURLWithPath:tmpString];
+}
+- (BOOL) enabled	{
+	//	set up the keys we'll need to retrieve the vals from the defaults...
+	NSString			*valKey = self.internalUserDefaultsKey;
+	NSString			*enableKey = [self _deriveEnableKey];
+	NSUserDefaults		*def = [NSUserDefaults standardUserDefaults];
+	//	if this hasn't been enabled, return nil (even if it may have a value)
+	BOOL				tmpBool = (enableKey==nil) ? NO : [def boolForKey:enableKey];
+	return tmpBool;
 }
 
 
@@ -111,7 +115,7 @@ static const NSString * SPECIALIGNOREVALUE = @"XXXIGNOREMEXXX";
 	[self _updateUI];
 	//	if there's an enable toggle block, execute it now
 	if (self.enableToggleBlock != nil)
-		self.enableToggleBlock();
+		self.enableToggleBlock(self);
 }
 - (IBAction) selectButtonUsed:(id)sender	{
 	//	execute 'selectButtonBlock', which should open an NSOpenPanel that calls 'setPath:' from within its completion block

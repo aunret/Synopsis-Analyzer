@@ -14,17 +14,17 @@
 
 @interface PreferencesFileViewController : NSViewController	{
 	IBOutlet PrefsPathAbstraction		*outputFolderAbs;
-	IBOutlet PrefsPathAbstraction		*watchFolderAbs;
+	//IBOutlet PrefsPathAbstraction		*watchFolderAbs;
 	IBOutlet PrefsPathAbstraction		*tempFolderAbs;
 }
 
-//- (BOOL) usingOutputFolder;
+- (BOOL) outputFolderEnabled;
 - (NSURL*) outputFolderURL;
-
-//- (BOOL) usingWatchFolder;
+/*
+- (BOOL) watchFolderEnabled;
 - (NSURL*) watchFolderURL;
-
-//- (BOOL) usingTempFolder;
+*/
+- (BOOL) tempFolderEnabled;
 - (NSURL*) tempFolderURL;
 
 - (BOOL) usingMirroredFolders;

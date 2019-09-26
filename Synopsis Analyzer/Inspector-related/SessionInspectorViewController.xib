@@ -7,12 +7,24 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="SessionInspectorViewController">
             <connections>
+                <outlet property="outputFolderPathAbs" destination="qnn-nE-DuA" id="KGt-5L-tMF"/>
+                <outlet property="presetDescriptionField" destination="BqU-ft-Liq" id="RCR-dY-vWZ"/>
+                <outlet property="presetsPUB" destination="Dh4-UO-h7n" id="VuX-qm-E9h"/>
+                <outlet property="scriptPathAbs" destination="oDr-2M-UcV" id="aiv-Mv-Wev"/>
+                <outlet property="tempFolderPathAbs" destination="9ii-mB-ZE0" id="B8F-yX-XZl"/>
                 <outlet property="view" destination="Aib-os-nkP" id="jvP-cl-sef"/>
+                <outlet property="watchFolderPathAbs" destination="9Gz-ti-LWN" id="1WW-Rx-iFb"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customObject id="qnn-nE-DuA" customClass="PathAbstraction"/>
+        <customObject id="qnn-nE-DuA" customClass="PathAbstraction">
+            <connections>
+                <outlet property="enableToggle" destination="OVc-8W-HCx" id="qOQ-Mk-2nw"/>
+                <outlet property="statusButton" destination="sWI-cB-pLk" id="Bvu-C6-Jlx"/>
+                <outlet property="statusTextField" destination="SZp-sr-38r" id="ZGp-Mi-kbE"/>
+            </connections>
+        </customObject>
         <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="Aib-os-nkP">
             <rect key="frame" x="0.0" y="0.0" width="385" height="701"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -64,6 +76,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="revealButtonUsed:" target="oDr-2M-UcV" id="Mlo-ky-xZw"/>
+                                            </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AsR-aP-ZXy">
                                             <rect key="frame" x="19" y="77" width="131" height="20"/>
@@ -72,6 +87,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="enableToggleUsed:" target="oDr-2M-UcV" id="dVg-PH-RRk"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qkp-VP-V6a">
                                             <rect key="frame" x="156" y="77" width="125" height="19"/>
@@ -80,6 +98,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="selectButtonUsed:" target="oDr-2M-UcV" id="9s3-W2-pOk"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -125,6 +146,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="revealButtonUsed:" target="qnn-nE-DuA" id="7ln-6c-HqD"/>
+                                            </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVc-8W-HCx">
                                             <rect key="frame" x="19" y="234" width="119" height="20"/>
@@ -133,6 +157,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="enableToggleUsed:" target="qnn-nE-DuA" id="4Dx-zD-mMz"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QYu-xU-PLH">
                                             <rect key="frame" x="144" y="235" width="125" height="19"/>
@@ -141,6 +168,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="selectButtonUsed:" target="qnn-nE-DuA" id="IJ1-qa-EJj"/>
+                                            </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FnN-sO-rQc">
                                             <rect key="frame" x="44" y="78" width="273" height="11"/>
@@ -175,6 +205,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="revealButtonUsed:" target="9ii-mB-ZE0" id="7Gn-0Q-B20"/>
+                                            </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rnh-OI-rOa">
                                             <rect key="frame" x="19" y="120" width="116" height="20"/>
@@ -183,6 +216,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="enableToggleUsed:" target="9ii-mB-ZE0" id="gf3-DP-rm7"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="340-9r-Knq">
                                             <rect key="frame" x="145" y="120" width="162" height="19"/>
@@ -191,14 +227,20 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="selectButtonUsed:" target="9ii-mB-ZE0" id="OGn-BU-zu1"/>
+                                            </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uHZ-HF-fPo">
-                                            <rect key="frame" x="17" y="35" width="28" height="20"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <rect key="frame" x="17" y="35" width="322" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Xgf-V0-0PE">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="copyNonMediaToggleUsed:" target="-2" id="0wG-6E-9pq"/>
+                                            </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bow-9n-WTd">
                                             <rect key="frame" x="42" y="25" width="296" height="28"/>
@@ -242,6 +284,9 @@
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetsPUBUsed:" target="-2" id="Pfm-AD-4Rp"/>
+                                            </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tdc-dN-acG">
                                             <rect key="frame" x="20" y="108" width="42" height="14"/>
@@ -278,6 +323,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="enableToggleUsed:" target="9Gz-ti-LWN" id="gXU-Yq-WW8"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e4h-5n-xsP">
                                             <rect key="frame" x="144" y="94" width="125" height="19"/>
@@ -286,6 +334,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="selectButtonUsed:" target="9Gz-ti-LWN" id="OOH-2y-nCP"/>
+                                            </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="38C-9R-ZMy">
                                             <rect key="frame" x="44" y="24" width="273" height="11"/>
@@ -311,6 +362,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="revealButtonUsed:" target="9Gz-ti-LWN" id="7tX-JS-a81"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -329,6 +383,27 @@
             </scroller>
             <point key="canvasLocation" x="367.5" y="102.5"/>
         </scrollView>
+        <customObject id="9ii-mB-ZE0" customClass="PathAbstraction">
+            <connections>
+                <outlet property="enableToggle" destination="Rnh-OI-rOa" id="7pN-13-EKT"/>
+                <outlet property="statusButton" destination="JWG-4N-PD2" id="eyF-Gk-cSx"/>
+                <outlet property="statusTextField" destination="FnN-sO-rQc" id="NWr-Zg-OqC"/>
+            </connections>
+        </customObject>
+        <customObject id="9Gz-ti-LWN" customClass="PathAbstraction">
+            <connections>
+                <outlet property="enableToggle" destination="FTF-wL-d0W" id="ZeT-ce-deg"/>
+                <outlet property="statusButton" destination="fy8-RB-3z9" id="DfA-Bg-bxn"/>
+                <outlet property="statusTextField" destination="38C-9R-ZMy" id="4Jl-Df-atm"/>
+            </connections>
+        </customObject>
+        <customObject id="oDr-2M-UcV" customClass="PathAbstraction">
+            <connections>
+                <outlet property="enableToggle" destination="AsR-aP-ZXy" id="6GM-US-rbd"/>
+                <outlet property="statusButton" destination="2Sh-69-TWa" id="6eg-uf-v7i"/>
+                <outlet property="statusTextField" destination="z15-90-Upe" id="66S-Rw-1g2"/>
+            </connections>
+        </customObject>
     </objects>
     <resources>
         <image name="NSFollowLinkFreestandingTemplate" width="14" height="14"/>

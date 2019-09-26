@@ -382,9 +382,9 @@
 							path];
 			}
 		
-			//	if my session has a tmpDir, the op will do the analysis to the tmpDir, then copy it to the appropriate location during cleanup
-			if (self.session.tmpDir != nil)	{
-				self.tmpFile = [[[[NSURL fileURLWithPath:self.session.tmpDir isDirectory:YES]
+			//	if my session has a tempDir, the op will do the analysis to the tempDir, then copy it to the appropriate location during cleanup
+			if (self.session.tempDir != nil)	{
+				self.tmpFile = [[[[NSURL fileURLWithPath:self.session.tempDir isDirectory:YES]
 					URLByAppendingPathComponent:[[NSUUID UUID] UUIDString]]
 						URLByAppendingPathExtension:srcPathExtension]
 							path];
@@ -408,9 +408,9 @@
 							path];
 			}
 		
-			//	if my session has a tmpDir, the op will do the analysis to the tmpDir, then copy it to the appropriate location during cleanup
-			if (self.session.tmpDir != nil)	{
-				self.tmpFile = [[[[NSURL fileURLWithPath:self.session.tmpDir isDirectory:YES]
+			//	if my session has a tempDir, the op will do the analysis to the tempDir, then copy it to the appropriate location during cleanup
+			if (self.session.tempDir != nil)	{
+				self.tmpFile = [[[[NSURL fileURLWithPath:self.session.tempDir isDirectory:YES]
 					URLByAppendingPathComponent:[[NSUUID UUID] UUIDString]]
 						URLByAppendingPathExtension:srcPathExtension]
 							path];

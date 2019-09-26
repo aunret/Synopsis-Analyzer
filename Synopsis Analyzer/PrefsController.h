@@ -30,8 +30,11 @@
 - (PresetObject *) defaultPreset;
 - (NSArray *) allPresets;
 //	convenience methods that return the vals in the prefs
+- (BOOL) outputFolderEnabled;
 - (NSURL*) outputFolderURL;
-- (NSURL*) watchFolderURL;
+//- (BOOL) watchFolderEnabled;
+//- (NSURL*) watchFolderURL;
+- (BOOL) tempFolderEnabled;
 - (NSURL*) tempFolderURL;
 - (NSString *) opScript;
 - (NSString *) sessionScript;

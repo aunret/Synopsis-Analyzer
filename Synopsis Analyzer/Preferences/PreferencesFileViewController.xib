@@ -11,7 +11,6 @@
                 <outlet property="tempFolderAbs" destination="KfN-0n-6l6" id="Cp3-Wh-Pwe"/>
                 <outlet property="usingMirroredFoldersButton" destination="5a5-0x-jy6" id="bpj-Ve-zz0"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
-                <outlet property="watchFolderAbs" destination="ZS1-bO-fhE" id="MIk-Uw-kx6"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
@@ -27,43 +26,6 @@
                         <rect key="frame" x="3" y="3" width="446" height="340"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d0t-ta-LkN">
-                                <rect key="frame" x="41" y="157" width="367" height="11"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Watch Folder" id="BR4-aG-8Ya">
-                                    <font key="font" metaFont="miniSystem"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FEC-MV-xFF">
-                                <rect key="frame" x="18" y="176" width="412" height="28"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Any supported media added to any sub-directory of the watch folder will be automatically analyzed with the default preset." id="MdA-r9-LOH">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="heC-wO-VqR">
-                                <rect key="frame" x="17" y="155" width="16" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStatusAvailable" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="hUI-ZZ-ufO">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nwv-Bn-Hbf">
-                                <rect key="frame" x="414" y="156" width="14" height="14"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="bM0-xx-he6">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="revealButtonUsed:" target="ZS1-bO-fhE" id="ECr-gD-EYK"/>
-                                </connections>
-                            </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hil-L7-HW7">
                                 <rect key="frame" x="42" y="247" width="367" height="11"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -102,17 +64,6 @@
                                     <action selector="revealButtonUsed:" target="6zj-mz-1O9" id="KIh-D3-4al"/>
                                 </connections>
                             </button>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8p0-mg-LUL">
-                                <rect key="frame" x="16" y="210" width="116" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Use Watch Folder" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="ysF-Me-5wf">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="enableToggleUsed:" target="ZS1-bO-fhE" id="nLl-nu-MDO"/>
-                                </connections>
-                            </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mLx-sD-Pd9">
                                 <rect key="frame" x="17" y="300" width="119" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -122,17 +73,6 @@
                                 </buttonCell>
                                 <connections>
                                     <action selector="enableToggleUsed:" target="6zj-mz-1O9" id="G3h-cJ-5FV"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bLL-Fu-nlK">
-                                <rect key="frame" x="141" y="210" width="125" height="19"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="roundTextured" title="Select Watch Folder" bezelStyle="texturedRounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eVT-dG-i1b">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="selectButtonUsed:" target="ZS1-bO-fhE" id="XUY-AD-ANW"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A7C-ug-KYv">
@@ -227,13 +167,6 @@
                 <outlet property="enableToggle" destination="mLx-sD-Pd9" id="ZHb-lc-cok"/>
                 <outlet property="statusButton" destination="tTZ-7e-W48" id="Hxh-uh-riu"/>
                 <outlet property="statusTextField" destination="Hil-L7-HW7" id="2CT-uZ-Qlu"/>
-            </connections>
-        </customObject>
-        <customObject id="ZS1-bO-fhE" customClass="PrefsPathAbstraction">
-            <connections>
-                <outlet property="enableToggle" destination="8p0-mg-LUL" id="xNV-UG-GT4"/>
-                <outlet property="statusButton" destination="heC-wO-VqR" id="JnD-wZ-JxV"/>
-                <outlet property="statusTextField" destination="d0t-ta-LkN" id="ENj-F1-Ovt"/>
             </connections>
         </customObject>
         <customObject id="KfN-0n-6l6" customClass="PrefsPathAbstraction">

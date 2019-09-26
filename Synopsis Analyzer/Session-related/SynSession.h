@@ -41,7 +41,7 @@ typedef NS_ENUM(NSUInteger, SessionType)	{
 @property (atomic,readwrite,strong,nullable) NSMutableArray<SynOp*> * ops;
 @property (atomic,readwrite,strong,nullable) NSString * srcDir;	//	only non-nil if this is a SessionType_Dir!
 @property (atomic,readwrite,strong,nullable) NSString * outputDir;
-@property (atomic,readwrite,strong,nullable) NSString * tmpDir;
+@property (atomic,readwrite,strong,nullable) NSString * tempDir;
 @property (atomic,readwrite,strong,nullable) NSString * opScript;
 @property (atomic,readwrite,strong,nullable) NSString * sessionScript;
 @property (atomic,readwrite,strong,nullable) PresetObject * preset;

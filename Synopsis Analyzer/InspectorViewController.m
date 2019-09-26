@@ -39,27 +39,26 @@ static InspectorViewController		*globalInspectorViewController = nil;
 }
 
 
-- (id) init	{
-	NSLog(@"%s",__func__);
-	self = [super init];
+- (id) initWithNibName:(NSString *)inNibName bundle:(NSBundle *)inBundle	{
+	//NSLog(@"%s",__func__);
+	self = [super initWithNibName:inNibName bundle:inBundle];
 	if (self != nil)	{
 		globalInspectorViewController = self;
-		//self.inspectedObject = nil;
 		[self generalInit];
 	}
 	return self;
 }
 - (void) generalInit	{
-	
+	//	make the view controllers i own...
+	self.opInspectorViewController = [[OpInspectorViewController alloc] initWithNibName:@"OpInspectorViewController" bundle:[NSBundle mainBundle]];
+	self.sessionInspectorViewController = [[SessionInspectorViewController alloc] initWithNibName:@"SessionInspectorViewController" bundle:[NSBundle mainBundle]];
+	self.emptyInspectorViewController = [[EmptyInspectorViewController alloc] initWithNibName:@"EmptyInspectorViewController" bundle:[NSBundle mainBundle]];
 }
 
 
 - (void)viewDidLoad {
+	//NSLog(@"%s",__func__);
     [super viewDidLoad];
-    
-    self.opInspectorViewController = [[OpInspectorViewController alloc] initWithNibName:@"OpInspectorViewController" bundle:[NSBundle mainBundle]];
-    self.sessionInspectorViewController = [[SessionInspectorViewController alloc] initWithNibName:@"SessionInspectorViewController" bundle:[NSBundle mainBundle]];
-    self.emptyInspectorViewController = [[EmptyInspectorViewController alloc] initWithNibName:@"EmptyInspectorViewController" bundle:[NSBundle mainBundle]];
     
     [self addChildViewController:self.emptyInspectorViewController];
     
@@ -68,13 +67,18 @@ static InspectorViewController		*globalInspectorViewController = nil;
     
     self.currentViewController = self.emptyInspectorViewController;
     
-    //	make sure my child views get loaded
+ 	//	force my view controllers to load/awake from nibs...
     NSViewController			*tmpVC = nil;
     tmpVC = self.opInspectorViewController;
+    [tmpVC view];
     tmpVC = self.sessionInspectorViewController;
+    [tmpVC view];
     tmpVC = self.emptyInspectorViewController;
+    [tmpVC view];
 }
-
+- (void) awakeFromNib	{
+	//NSLog(@"%s",__func__);
+}
 - (void) transitionToViewController:(NSViewController *)inVC	{
 	NSViewControllerTransitionOptions		opt = NSViewControllerTransitionSlideRight;
 	

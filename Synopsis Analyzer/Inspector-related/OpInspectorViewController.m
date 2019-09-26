@@ -23,11 +23,6 @@
 @implementation OpInspectorViewController
 
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do view setup here.
-}
-
 - (void) inspectOp:(SynOp *)n	{
 	self.inspectedObject = n;
 	if (self.inspectedObject == nil)	{

@@ -30,6 +30,7 @@
 
 - (instancetype)initWithNibName:(nullable NSNibName)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil
 {
+	//NSLog(@"%s",__func__);
 	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 	if(self)
 	{
@@ -39,6 +40,7 @@
 
 - (void) awakeFromNib
 {
+	//NSLog(@"%s",__func__);
 	__block PreferencesFileViewController		*bss = self;
 	[outputFolderAbs setUserDefaultsKey:kSynopsisAnalyzerOutputFolderURLKey];
 	[outputFolderAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
@@ -58,7 +60,7 @@
 			}
 		}];
 	}];
-	
+	/*
 	[watchFolderAbs setUserDefaultsKey:kSynopsisAnalyzerWatchFolderURLKey];
 	[watchFolderAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
@@ -79,10 +81,10 @@
 			}
 		}];
 	}];
-	[watchFolderAbs setEnableToggleBlock:^()	{
+	[watchFolderAbs setEnableToggleBlock:^(PrefsPathAbstraction *inAbs)	{
 		[bss initDirectoryWatcherIfNeeded];
 	}];
-	
+	*/
 	[tempFolderAbs setUserDefaultsKey:kSynopsisAnalyzerTempFolderURLKey];
 	[tempFolderAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
@@ -104,13 +106,16 @@
 	}];
 	
 	[self validateMirroredFoldersUI];
-	[self initDirectoryWatcherIfNeeded];
+	//[self initDirectoryWatcherIfNeeded];
 }
 
 
 #pragma mark - Output Folder
 
 
+- (BOOL) outputFolderEnabled	{
+	return [outputFolderAbs enabled];
+}
 - (NSURL*) outputFolderURL
 {
 	NSString* outputPath = [outputFolderAbs path];
@@ -128,9 +133,13 @@
 }
 
 
+/*
 #pragma mark - Watch Folder
 
 
+- (BOOL) watchFolderEnabled	{
+	return [watchFolderAbs enabled];
+}
 - (NSURL*) watchFolderURL
 {
 	NSString* outputPath = [watchFolderAbs path];
@@ -148,23 +157,25 @@
 	return nil;
 }
 
+
 - (void) initDirectoryWatcherIfNeeded
 {
+	BOOL		watchURLEnabled = [self watchFolderEnabled];
 	NSURL* watchURL = [self watchFolderURL];
 	//BOOL usingWatchFolder = [self usingWatchFolder];
 
 	//AppDelegate* appDelegate = (AppDelegate*) [[NSApplication sharedApplication] delegate];
-	if(/*usingWatchFolder &&*/ watchURL!=nil)
+	if(watchURLEnabled && watchURL!=nil)
 	{
 		self.directoryWatcher = [[SynopsisDirectoryWatcher alloc] initWithDirectoryAtURL:watchURL mode:SynopsisDirectoryWatcherModeDefault notificationBlock:^(NSArray<NSURL *> *changedURLS) {
 			// Kick off Analysis Session
-			/*
-			[appDelegate analysisSessionForFiles:changedURLS sessionCompletionBlock:^{
-				dispatch_async(dispatch_get_main_queue(), ^{
-					NSLog(@"SESSION COMPLETE ALL SESSION MEDIA AND SUB FOLDERS TO OUTPUT FOLDER FROM TEMP WORKING FOLDER");
-				});
-			}];
-			*/
+			
+			//[appDelegate analysisSessionForFiles:changedURLS sessionCompletionBlock:^{
+			//	dispatch_async(dispatch_get_main_queue(), ^{
+			//		NSLog(@"SESSION COMPLETE ALL SESSION MEDIA AND SUB FOLDERS TO OUTPUT FOLDER FROM TEMP WORKING FOLDER");
+			//	});
+			//}];
+			
 			[[SessionController global] newSessionWithFiles:changedURLS];
 		}];
 	}
@@ -173,11 +184,15 @@
 		self.directoryWatcher = nil;
 	}
 }
+*/
 
 
 #pragma mark - Temp Folder
 
 
+- (BOOL) tempFolderEnabled	{
+	return [tempFolderAbs enabled];
+}
 - (NSURL*) tempFolderURL
 {
 	NSString* outputPath = [[NSUserDefaults standardUserDefaults] valueForKey:kSynopsisAnalyzerTempFolderURLKey];

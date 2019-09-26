@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (copy,nullable) void (^selectButtonBlock)(PrefsPathAbstraction *);
 
 //	optional- this block is executed after you change the state of 'enableToggle'.
-@property (copy,nullable) void (^enableToggleBlock)(void);
+@property (copy,nullable) void (^enableToggleBlock)(PrefsPathAbstraction *);
 
 //	this is the path which gets stored in the user defaults.
 //	calling this method updates the UI, but you should only really call it from within 'selectButtonBlock'...
@@ -66,6 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 //	other objects can query these to retrieve the path/URL.  returns nil if not enabled, or if no path has been stored.  returns a non-nil value only if enabled && a value is stored
 - (nullable NSString *) path;
 - (nullable NSURL *) url;
+- (BOOL) enabled;
 
 @end
 

@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (copy,nullable) void (^selectButtonBlock)(PathAbstraction *);
 
 //	optional- this block is executed after you change the state of 'enableToggle'.
-@property (copy,nullable) void (^enableToggleBlock)(void);
+@property (copy,nullable) void (^enableToggleBlock)(PathAbstraction *);
 
 @end
 

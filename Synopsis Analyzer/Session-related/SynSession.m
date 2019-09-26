@@ -46,9 +46,9 @@
 		self.srcDir = nil;
 		
 		//	set outputDir from prefs
-		self.outputDir = [[pc outputFolderURL] path];
-		//	set tmpDir from prefs
-		self.tmpDir = [[pc tempFolderURL] path];
+		self.outputDir = ([pc outputFolderEnabled] && [pc outputFolderURL]!=nil) ? [[pc outputFolderURL] path] : nil;
+		//	set tempDir from prefs
+		self.tempDir = ([pc tempFolderEnabled] && [pc tempFolderURL]!=nil) ? [[pc tempFolderURL] path] : nil;
 		//	set opScript from prefs
 		self.opScript = [pc opScript];
 		//	set sessionScript from prefs
@@ -85,9 +85,9 @@
 		self.srcDir = [inDir path];
 		
 		//	set the outputDir from prefs
-		self.outputDir = [[pc outputFolderURL] path];
-		//	set tmpDir from prefs
-		self.tmpDir = [[pc tempFolderURL] path];
+		self.outputDir = ([pc outputFolderEnabled] && [pc outputFolderURL]!=nil) ? [[pc outputFolderURL] path] : nil;
+		//	set tempDir from prefs
+		self.tempDir = ([pc tempFolderEnabled] && [pc tempFolderURL]!=nil) ? [[pc tempFolderURL] path] : nil;
 		//	set opScript from prefs
 		self.opScript = [pc opScript];
 		//	set sessionScript from prefs
@@ -149,12 +149,12 @@
 				: [coder decodeBoolForKey:@"enabled"];
 			
 			self.outputDir = (![coder containsValueForKey:@"outputDir"])
-				? [[pc outputFolderURL] path]
+				? ([pc outputFolderEnabled] && [pc outputFolderURL]!=nil) ? [[pc outputFolderURL] path] : nil
 				: [coder decodeObjectForKey:@"outputDir"];
 			
-			self.tmpDir = (![coder containsValueForKey:@"tmpDir"])
-				? [[pc tempFolderURL] path]
-				: [coder decodeObjectForKey:@"tmpDir"];
+			self.tempDir = (![coder containsValueForKey:@"tempDir"])
+				? ([pc tempFolderEnabled] && [pc tempFolderURL]!=nil) ? [[pc tempFolderURL] path] : nil
+				: [coder decodeObjectForKey:@"tempDir"];
 			
 			self.opScript = (![coder containsValueForKey:@"opScript"])
 				? [pc opScript]
@@ -195,8 +195,8 @@
 		if (self.outputDir != nil)
 			[coder encodeObject:self.outputDir forKey:@"outputDir"];
 		
-		if (self.tmpDir != nil)
-			[coder encodeObject:self.tmpDir forKey:@"tmpDir"];
+		if (self.tempDir != nil)
+			[coder encodeObject:self.tempDir forKey:@"tempDir"];
 		
 		if (self.opScript != nil)
 			[coder encodeObject:self.opScript forKey:@"opScript"];

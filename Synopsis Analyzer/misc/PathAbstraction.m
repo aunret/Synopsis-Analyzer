@@ -32,6 +32,7 @@ static const NSString * SPECIALIGNOREVALUE = @"XXXIGNOREMEXXX";
 
 
 - (id) init	{
+	//NSLog(@"%s",__func__);
 	self = [super init];
 	if (self != nil)	{
 		self.path = nil;
@@ -55,6 +56,7 @@ static const NSString * SPECIALIGNOREVALUE = @"XXXIGNOREMEXXX";
 
 @synthesize path=myPath;
 - (void) setPath:(NSString *)n	{
+	//NSLog(@"%s ... %@",__func__,n);
 	myPath = n;
 	//	update the UI
 	[self _updateUI];
@@ -64,6 +66,7 @@ static const NSString * SPECIALIGNOREVALUE = @"XXXIGNOREMEXXX";
 }
 @synthesize enabled=myEnabled;
 - (void) setEnabled:(BOOL)n	{
+	//NSLog(@"%s ... %d",__func__,n);
 	myEnabled = n;
 	//	update the UI
 	[self _updateUI];
@@ -88,7 +91,7 @@ static const NSString * SPECIALIGNOREVALUE = @"XXXIGNOREMEXXX";
 	[self _updateUI];
 	//	if there's an enable toggle block, execute it now
 	if (self.enableToggleBlock != nil)
-		self.enableToggleBlock();
+		self.enableToggleBlock(self);
 }
 - (IBAction) selectButtonUsed:(id)sender	{
 	//	execute 'selectButtonBlock', which should open an NSOpenPanel that calls 'setPath:' from within its completion block

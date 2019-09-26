@@ -33,7 +33,7 @@ static NSInteger currentTag = 0;
 
 
 - (void)viewDidLoad {
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	[super viewDidLoad];
 	
 	self.preferencesGeneralViewController = [[PreferencesGeneralViewController alloc] initWithNibName:@"PreferencesGeneralViewController" bundle:[NSBundle mainBundle]];

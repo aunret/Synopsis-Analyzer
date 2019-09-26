@@ -28,7 +28,7 @@
 @implementation PreferencesGeneralViewController
 
 - (void) awakeFromNib	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	__block PreferencesGeneralViewController		*bss = self;
 	
 	[scriptAbs setUserDefaultsKey:kSynopsisAnalyzerOperationScriptKey];
@@ -68,8 +68,8 @@
 	[self populateDefaultPresetPopupButton];
 }
 - (void)viewDidLoad {
+	//NSLog(@"%s",__func__);
 	[super viewDidLoad];
-	// Do view setup here.
 }
 
 - (IBAction) defaultPresetPUBItemSelected:(id)sender	{
