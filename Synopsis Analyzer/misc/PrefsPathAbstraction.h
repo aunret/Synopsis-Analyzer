@@ -10,6 +10,8 @@
 #import <Cocoa/Cocoa.h>
 #import <AppKit/AppKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 
 
@@ -52,7 +54,7 @@
 //	required for minimal functionality.  this block is executed when the user clicks the select 
 //	button- create, configure, and open an NSOpenPanel to pick the relevant file. 'inParentAbstraction' 
 //	is the instance of PrefsPathAbstraction that is responding to the 'selectButton' action.
-@property (copy,nullable) void (^selectButtonBlock)(PrefsPathAbstraction * _Nonnull);
+@property (copy,nullable) void (^selectButtonBlock)(PrefsPathAbstraction *);
 
 //	optional- this block is executed after you change the state of 'enableToggle'.
 @property (copy,nullable) void (^enableToggleBlock)(void);
@@ -68,3 +70,7 @@
 @end
 
 
+
+
+
+NS_ASSUME_NONNULL_END

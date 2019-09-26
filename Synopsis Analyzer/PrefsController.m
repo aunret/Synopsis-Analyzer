@@ -9,6 +9,9 @@
 #import "PrefsController.h"
 #import "PreferencesViewController.h"
 
+#import "NSPopUpButtonAdditions.h"
+#import "NSMenuAdditions.h"
+
 
 
 

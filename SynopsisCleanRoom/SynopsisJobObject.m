@@ -117,8 +117,6 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 @property (atomic, strong) NSMutableDictionary * synopsisOpts;
 
 @property (atomic, strong) NSMutableArray * availableAnalyzers;
-//@property (atomic, strong) NSMutableArray<AVTimedMetadataGroup*> * videoMetadata;
-//@property (atomic, strong) NSMutableArray<AVTimedMetadataGroup*> * audioMetadata;
 @property (atomic, strong) NSMutableDictionary * globalMetadata;
 
 - (void) _finishWritingAndCleanUp;
@@ -180,7 +178,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//NSLog(@"\t\ttmpJSONObj = %@",tmpJSONObj);
 	NSString		*tmpSrc = tmpJSONObj[kSynopsisSrcFileKey];
 	NSString		*tmpDst = tmpJSONObj[kSynopsisDstFileKey];
-	NSString		*tmpDir = tmpJSONObj[kSynopsisTmpDirKey];
+	//NSString		*tmpDir = tmpJSONObj[kSynopsisTmpDirKey];
 	NSDictionary	*tmpVideoDict = tmpJSONObj[kSynopsisTranscodeVideoSettingsKey];
 	NSDictionary	*tmpAudioDict = tmpJSONObj[kSynopsisTranscodeAudioSettingsKey];
 	NSDictionary	*tmpSynopsisDict = tmpJSONObj[kSynopsisAnalysisSettingsKey];
@@ -204,7 +202,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		synopsisOpts:tmpSynopsisDict
 		completionBlock:inCompletionBlock];
 }
-- (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile /*tmpDir:(NSURL *)inTmpDir*/ videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock	{
+- (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock	{
 	//NSLog(@"%s",__func__);
 	if (inSrcFile==nil || inDstFile==nil)	{
 		NSLog(@"ERR: bailing, missing prereq, %s",__func__);
@@ -259,8 +257,6 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		self.audioTransOpts = (inAudioTransOpts==nil || inAudioTransOpts.count<1) ? nil : [inAudioTransOpts mutableCopy];
 		self.synopsisOpts = (inSynopsisOpts==nil) ? nil : [inSynopsisOpts mutableCopy];
 		self.availableAnalyzers = [[NSMutableArray alloc] init];
-		//self.videoMetadata = [[NSMutableArray alloc] init];
-		//self.audioMetadata = [[NSMutableArray alloc] init];
 		self.globalMetadata = [[NSMutableDictionary alloc] init];
 	}
 	return self;
@@ -468,7 +464,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//	is done so we know that all of the items at index X are related to one another, and we can 
 	//	iterate across the arrays at the same time to configure processing.
 	for (AVAssetTrack *track in tracks)	{
-		AVAssetReaderOutput		*newOutput = nil;
+		//AVAssetReaderOutput		*newOutput = nil;
 		//	if the track isn't playable and it isn't hap, we can neither transcode nor analyze it
 		if (![track isPlayable] && ![track isHapTrack])	{
 			[readerVideoPassthruOutputs addObject:[NSNull null]];
@@ -862,7 +858,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		for (NSMutableArray *outputArray in outputArrays)	{
 			int			tmpIndex = 0;
 			for (AVAssetReaderOutput *output in outputArray)	{
-				if (output == [NSNull null])	{
+				if (output == (AVAssetReaderOutput*)[NSNull null])	{
 					++tmpIndex;
 					continue;
 				}
@@ -887,7 +883,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		for (NSMutableArray *inputArray in inputArrays)	{
 			int			tmpIndex = 0;
 			for (AVAssetWriterInput *input in inputArray)	{
-				if (input == [NSNull null])	{
+				if (input == (AVAssetWriterInput*)[NSNull null])	{
 					++tmpIndex;
 					continue;
 				}
@@ -972,12 +968,12 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		BOOL							writerIsPassthru = NO;
 		
 		//	if there's a video writer input for this track...
-		if (vidWriteIn != [NSNull null])	{
+		if (vidWriteIn != (AVAssetWriterInput*)[NSNull null])	{
 			//NSLog(@"\tconfiguring video writer track");
 			localInput = vidWriteIn;
 			localQueue = videoWriterQueue;
 			isVideoWriter = YES;
-			if (vidReadPassthruOut != [NSNull null])	{
+			if (vidReadPassthruOut != (AVAssetReaderTrackOutput*)[NSNull null])	{
 				writerIsPassthru = YES;
 				localOutput = vidReadPassthruOut;
 			}
@@ -985,12 +981,12 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 				localOutput = vidReadAnalysisOut;
 		}
 		//	else if there's an audio writer input for this track...
-		else if (audWriteIn != [NSNull null])	{
+		else if (audWriteIn != (AVAssetWriterInput*)[NSNull null])	{
 			//NSLog(@"\tconfiguring audio writer track");
 			localInput = audWriteIn;
 			localQueue = audioWriterQueue;
 			isAudioWriter = YES;
-			if (audReadPassthruOut!=[NSNull null])	{
+			if (audReadPassthruOut!=(AVAssetReaderTrackOutput*)[NSNull null])	{
 				writerIsPassthru = YES;
 				localOutput = audReadPassthruOut;
 			}
@@ -998,18 +994,18 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 				localOutput = audReadAnalysisOut;
 		}
 		//	else if there's a misc writer input for this track...
-		else if (miscWriteIn != [NSNull null])	{
+		else if (miscWriteIn != (AVAssetWriterInput*)[NSNull null])	{
 			//NSLog(@"\tconfiguring misc writer track");
 			localInput = miscWriteIn;
 			localQueue = miscWriterQueue;
 			isMiscWriter = YES;
-			if (miscReadPassthruOut!=[NSNull null])	{
+			if (miscReadPassthruOut!=(AVAssetReaderTrackOutput*)[NSNull null])	{
 				writerIsPassthru = YES;
 				localOutput = miscReadPassthruOut;
 			}
 		}
 		//	else there's no video/audio/misc writer input for this track...maybe we're stripping the actual tracks, and this is a metadata writer input?
-		else if (metadataWriteIn != [NSNull null])	{
+		else if (metadataWriteIn != (AVAssetWriterInput*)[NSNull null])	{
 			//NSLog(@"\tconfiguring metadata writer track (w/no video writer track)");
 			localInput = metadataWriteIn;
 			localQueue = videoWriterQueue;
@@ -1018,7 +1014,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		}
 		
 		//	if the local input is null (because we're stripping this track)
-		if (localInput == nil || localInput == [NSNull null])	{
+		if (localInput == nil || localInput == (AVAssetWriterInput*)[NSNull null])	{
 			//	increment the iterators
 			vidReadPassthruOut = [vidReadPassthruOutIt nextObject];
 			vidReadAnalysisOut = [vidReadAnalysisOutIt nextObject];
@@ -1056,7 +1052,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 						targetIndex = [writerVideoInputs indexOfObjectIdenticalTo:localInput];
 						//	if this was a video input, we need to mark the metadata input as finished, too!
 						AVAssetWriterInput		*synopsisInput = (targetIndex<0 || targetIndex>=writerMetadataInputs.count) ? nil : [writerMetadataInputs objectAtIndex:targetIndex];
-						if (synopsisInput != nil && synopsisInput != [NSNull null])
+						if (synopsisInput != nil && synopsisInput != (AVAssetWriterInput*)[NSNull null])
 							[synopsisInput markAsFinished];
 					}
 					else if (isAudioWriter)
@@ -1069,7 +1065,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 					//	reader from the array of reader outputs.  remember, you have to delete the 
 					//	same (corresponding) input/output from every array of inputs/outputs!
 					NSArray			*tmpArray = @[ readerVideoPassthruOutputs, readerVideoAnalysisOutputs, readerAudioPassthruOutputs, readerAudioAnalysisOutputs, readerMiscPassthruOutputs, writerVideoInputs, writerAudioInputs, writerMiscInputs, writerMetadataInputs ];
-					NSUInteger		maxSubArrayCount = 0;
+					//NSUInteger		maxSubArrayCount = 0;
 					for (NSMutableArray *subArray in tmpArray)	{
 						if (targetIndex>=0 && targetIndex<subArray.count)
 							[subArray removeObjectAtIndex:targetIndex];
@@ -1174,7 +1170,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 									if (writerIsPassthru)	{
 										//	(...the sample buffer's image buffer is NOT usable for analysis)
 										//	copy a sample from the reader video analysis output that corresponds to this writer input
-										analysisSB = (vidReadAnalysisOut==NULL || vidReadAnalysisOut==[NSNull null]) ? NULL : [vidReadAnalysisOut copyNextSampleBuffer];
+										analysisSB = (vidReadAnalysisOut==NULL || vidReadAnalysisOut==(AVAssetReaderOutput*)[NSNull null]) ? NULL : [vidReadAnalysisOut copyNextSampleBuffer];
 									}
 									//	else this was a non-passthru input...
 									else	{
@@ -1408,7 +1404,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		NSArray<NSMutableArray*>		*outputArrays = @[ readerVideoPassthruOutputs,readerVideoAnalysisOutputs,readerAudioPassthruOutputs,readerAudioAnalysisOutputs,readerMiscPassthruOutputs ];
 		for (NSMutableArray *outputArray in outputArrays)	{
 			for (AVAssetReaderOutput *output in outputArray)	{
-				if (output != [NSNull null])
+				if (output != (AVAssetReaderOutput*)[NSNull null])
 					[output markConfigurationAsFinal];
 			}
 		}
@@ -1445,7 +1441,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//	write the finalized metadata to the appropriate file
 	{
 		NSURL			*targetURL = /*(self.tmpFile != nil) ? self.tmpFile :*/ self.dstFile;
-		NSString		*targetPathExt = (targetURL==nil) ? nil : [targetURL pathExtension];
+		//NSString		*targetPathExt = (targetURL==nil) ? nil : [targetURL pathExtension];
 		AVFileType		exportFileType = AVFileTypeQuickTimeMovie;
 		//if (targetPathExt!=nil && [targetPathExt caseInsensitiveCompare:@"mp4"]==NSOrderedSame)
 		//	exportFileType = AVFileTypeMPEG4;

@@ -13,6 +13,8 @@
 #import "SynOp.h"
 #import "PresetObject.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 
 /*
@@ -59,4 +61,9 @@ typedef NS_ENUM(NSUInteger, SessionType)	{
 
 @end
 
+
+
+
+
+NS_ASSUME_NONNULL_END
 

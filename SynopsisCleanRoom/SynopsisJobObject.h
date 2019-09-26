@@ -54,9 +54,6 @@ extern NSString * const kSynopsisSrcFileKey;
 //	required to be non-nil.  associated val is an NSString describing the path to the dst file.  if kSynopsisTmpDirKey is non-nil, file will be copied here when done, else file will be written here during processing.
 extern NSString * const kSynopsisDstFileKey;
 
-//	may be nil.  associated val is an NSString describing the path to the tmp dir.  if non-nil, file will be written here during processing.
-//extern NSString * const kSynopsisTmpDirKey;	//	this class should not have any concept of "temp directories" or "temp files".  let's keep it simple...
-
 //	associated val is dict that gets passed to AVAssetWriterInput describing video transcode settings.  if nil or NSNull, don't transcode video (passthrough)
 extern NSString * const kSynopsisTranscodeVideoSettingsKey;
 
@@ -111,12 +108,12 @@ extern NSString * const kSynopsisStripTrackKey;
 + (NSString *) stringForErrorType:(JOErr)inErr;
 
 + (instancetype) createWithJobJSONString:(NSString *)inJSONStr completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock;
-- (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile /*tmpDir:(NSURL *)inTmpDir*/ videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock;
+- (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock;
 
-@property (atomic, readwrite, strong) id<BaseJobObjectDelegate> delegate;
+@property (atomic, readwrite, weak, nullable) id<BaseJobObjectDelegate> delegate;
 @property (atomic, readwrite) JOStatus jobStatus;
 @property (atomic, readwrite) JOErr jobErr;
-@property (atomic, readwrite, strong) NSString * jobErrString;
+@property (atomic, readwrite, strong, nullable) NSString * jobErrString;
 
 @property (atomic, readwrite) double jobProgress;
 @property (atomic, strong) NSDate * jobStartDate;

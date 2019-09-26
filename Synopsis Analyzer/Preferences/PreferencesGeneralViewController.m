@@ -93,7 +93,7 @@
 - (NSString *) opScript	{
 	NSString		*scriptPath = [scriptAbs path];
 	if (scriptPath != nil)	{
-		NSURL			*outputURL = [NSURL fileURLWithPath:scriptPath];
+		//NSURL			*outputURL = [NSURL fileURLWithPath:scriptPath];
 		BOOL			isDirectory = NO;
 		if([[NSFileManager defaultManager] fileExistsAtPath:scriptPath isDirectory:&isDirectory] && !isDirectory)	{
 			return scriptPath;
@@ -105,7 +105,7 @@
 - (NSString *) sessionScript	{
 	NSString		*scriptPath = [sessionScriptAbs path];
 	if (scriptPath != nil)	{
-		NSURL			*outputURL = [NSURL fileURLWithPath:scriptPath];
+		//NSURL			*outputURL = [NSURL fileURLWithPath:scriptPath];
 		BOOL			isDirectory = NO;
 		if([[NSFileManager defaultManager] fileExistsAtPath:scriptPath isDirectory:&isDirectory] && !isDirectory)	{
 			return scriptPath;

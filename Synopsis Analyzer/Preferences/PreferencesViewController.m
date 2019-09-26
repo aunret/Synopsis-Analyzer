@@ -10,20 +10,27 @@
 #import "Constants.h"
 #import "PresetGroup.h"
 
-@interface PreferencesViewController ()
 
+
+
+@interface PreferencesViewController ()
 @property (readwrite, nonatomic, strong) PreferencesGeneralViewController* preferencesGeneralViewController;
 @property (readwrite, nonatomic, strong) PreferencesFileViewController* preferencesFileViewController;
 @property (readwrite, nonatomic, strong) PreferencesPresetViewController* preferencesPresetViewController;
 @property (readwrite, nonatomic, strong) PreferencesAdvancedViewController* preferencesAdvancedViewController;
-
-
 @property (weak) NSViewController* currentViewController;
-
 @end
+
+
+
+
 static NSInteger currentTag = 0;
 
+
+
+
 @implementation PreferencesViewController
+
 
 - (void)viewDidLoad {
 	NSLog(@"%s",__func__);
@@ -45,10 +52,11 @@ static NSInteger currentTag = 0;
 	//[self buildPresetMenu];
 	
 	//	make sure my child views get loaded
-	self.preferencesGeneralViewController.view;
-	self.preferencesFileViewController.view;
-	self.preferencesPresetViewController.view;
-	self.preferencesAdvancedViewController.view;
+	NSView			*tmpView = nil;
+	tmpView = self.preferencesGeneralViewController.view;
+	tmpView = self.preferencesFileViewController.view;
+	tmpView = self.preferencesPresetViewController.view;
+	tmpView = self.preferencesAdvancedViewController.view;
 	
  //	   for(NSObject* object in [self.preferencesPresetViewController allPresets])
 //	  {

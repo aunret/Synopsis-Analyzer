@@ -17,6 +17,8 @@
 #import "OpRowView.h"
 #import "SessionRowView.h"
 
+#import "InspectorViewController.h"
+
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
@@ -30,6 +32,7 @@ static SessionController			*globalSessionController = nil;
 
 @interface SessionController ()
 - (void) generalInit;
+@property (assign,readwrite,atomic) BOOL paused;
 @property (strong) NSMutableArray<SynSession*> * sessions;
 
 @property (strong,nullable) NSTimer * progressRefreshTimer;
@@ -70,6 +73,7 @@ static SessionController			*globalSessionController = nil;
 - (void) awakeFromNib	{
 	[dropView setDragDelegate:self];
 	outlineView.outlineTableColumn = theColumn;
+	[stopButton setEnabled:NO];
 }
 
 
@@ -80,6 +84,237 @@ static SessionController			*globalSessionController = nil;
 }
 
 
+#pragma mark - backend
+
+
+- (void) start	{
+	NSLog(@"%s",__func__);
+	@synchronized (self)	{
+		//	if we're already running, something went wrong- bail
+		if (self.running)
+			return;
+		
+		//	update the relevant toolbar items
+		[runPauseButton setLabel:@"Pause"];
+		[runPauseButton setImage:[NSImage imageNamed:@"ic_pause_circle_filled"]];
+		[stopButton setEnabled:YES];
+		
+		//	update ivars
+		self.running = YES;
+		self.paused = NO;
+		
+		//	do stuff with ops
+		NSArray<SynOp*>		*opsToStart = [self getOpsToStart:[self maxOpCount]];
+		for (SynOp * op in opsToStart)	{
+			[self.opsInProgress addObject:op];
+			[op start];
+		}
+		
+		//	if we weren't able to start any jobs, we're effectively stopped, so....stop it officially.
+		if (self.opsInProgress.count < 1)
+			[self stop];
+		//	else we have ops- make a timer to refresh the display
+		else	{
+			self.progressRefreshTimer = [NSTimer
+				scheduledTimerWithTimeInterval:1.0
+				target:self
+				selector:@selector(refreshUITimer:)
+				userInfo:nil
+				repeats:YES];
+			//	"force" the timer to proc immediately for a quick redisplay...
+			[self refreshUITimer:nil];
+		}
+	}
+}
+- (void) pause	{
+	NSLog(@"%s",__func__);
+	@synchronized (self)	{
+		if (self.paused)
+			return;
+		
+		//	update the relevant toolbar items
+		[runPauseButton setLabel:@"Resume"];
+		[runPauseButton setImage:[NSImage imageNamed:@"ic_play_circle_filled"]];
+		
+		//	update ivars
+		self.running = YES;
+		self.paused = YES;
+		
+		//	do stuff with ops
+		for (SynOp *op in self.opsInProgress)	{
+			[op pause];
+		}
+		
+		//	do stuff with the timer
+		if (self.progressRefreshTimer != nil)	{
+			[self.progressRefreshTimer invalidate];
+			self.progressRefreshTimer = nil;
+		}
+	}
+}
+- (void) resume	{
+	NSLog(@"%s",__func__);
+	@synchronized (self)	{
+		if (!self.paused)
+			return;
+		
+		//	update the relevant toolbar items
+		[runPauseButton setLabel:@"Pause"];
+		[runPauseButton setImage:[NSImage imageNamed:@"ic_pause_circle_filled"]];
+		
+		//	update ivars
+		self.running = YES;
+		self.paused = NO;
+		
+		//	do stuff with ops
+		for (SynOp *op in self.opsInProgress)	{
+			[op resume];
+		}
+		//	it's possible that an op state change occurred juuust as pausing, and as such we may have fewer jobs than we should...
+		if (self.opsInProgress.count < self.maxOpCount)	{
+			NSArray<SynOp*>		*opsToStart = [self getOpsToStart:(self.maxOpCount - self.opsInProgress.count)];
+			for (SynOp *opToStart in opsToStart)	{
+				[opToStart start];
+			}
+		}
+		
+		//	it's also possible that the user paused juuuust as jobs were finishing, and there are now no more jobs to process...
+		if (self.opsInProgress.count < 1)
+			[self stop];
+		//	else we have ops- we need to start the timer!
+		else	{
+			//	do stuff with the timer
+			self.progressRefreshTimer = [NSTimer
+				scheduledTimerWithTimeInterval:1.0
+				target:self
+				selector:@selector(refreshUITimer:)
+				userInfo:nil
+				repeats:YES];
+			//	"force" the timer to proc immediately for a quick redisplay...
+			[self refreshUITimer:nil];
+		}
+	}
+}
+- (void) stop	{
+	NSLog(@"%s",__func__);
+	@synchronized (self)	{
+		//	if we're already stopped, something went wrong- bail
+		if (!self.running)
+			return;
+		
+		//	update the relevant toolbar items
+		[runPauseButton setLabel:@"Start"];
+		[runPauseButton setImage:[NSImage imageNamed:@"ic_play_circle_filled"]];
+		[stopButton setEnabled:NO];
+		
+		//	update ivars
+		self.running = NO;
+		self.paused = NO;
+		
+		//	do stuff with ops
+		for (SynOp *op in self.opsInProgress)	{
+			[op stop];
+		}
+		
+		//	do stuff with the timer
+		if (self.progressRefreshTimer != nil)	{
+			[self.progressRefreshTimer invalidate];
+			self.progressRefreshTimer = nil;
+		}
+	}
+	
+	//	reload the outline view
+	[self reloadData];
+}
+- (NSArray<SynOp*> *) getOpsToStart:(NSUInteger)numOpsToGet	{
+	@synchronized (self)	{
+		NSMutableArray		*returnMe = [NSMutableArray arrayWithCapacity:0];
+		if ([returnMe count] == numOpsToGet)
+			return returnMe;
+		for (SynSession * session in self.sessions)	{
+			for (SynOp * op in session.ops)	{
+				switch (op.status)	{
+				case OpStatus_Pending:
+					[returnMe addObject:op];
+					break;
+				case OpStatus_PreflightErr:
+				case OpStatus_Analyze:
+				case OpStatus_Cleanup:
+				case OpStatus_Complete:
+				case OpStatus_Err:
+					break;
+				}
+				if ([returnMe count] == numOpsToGet)
+					return returnMe;
+			}
+		}
+		return returnMe;
+	}
+}
+- (int) maxOpCount	{
+	int				returnMe = 1;
+	NSNumber		*tmpNum = [[NSUserDefaults standardUserDefaults] objectForKey:kSynopsisAnalyzerConcurrentJobCountPreferencesKey];
+	//	 a val of -1 indicates that the user selected "auto" in the prefs
+	if (tmpNum==nil || [tmpNum intValue] <= 0)	{
+		/*
+		//	try to get the actual number of physical cores
+		size_t				len;
+		unsigned int		ncpu;
+		len = sizeof(ncpu);
+		sysctlbyname("hw.ncpu", &ncpu, &len, NULL, 0);
+		if (ncpu > 0)	{
+			returnMe = ncpu;
+		}
+		//	if something went wrong, use NSProcessInfo to return the number of logical cores
+		else	{
+			returnMe = [[NSProcessInfo processInfo] processorCount];
+		}
+		*/
+		returnMe = [[NSProcessInfo processInfo] processorCount];
+		
+		//	"too many" jobs just f-es things up
+		if (returnMe > 6)
+			returnMe = returnMe / 2;
+	}
+	//	else the user entered a specific number of jobs
+	else	{
+		returnMe = [tmpNum intValue];
+	}
+	
+	return returnMe;
+}
+- (void) refreshUITimer:(NSTimer *)t	{
+	//NSLog(@"%s",__func__);
+	NSMutableArray		*sessionsInProgress = [NSMutableArray arrayWithCapacity:0];
+	//	run through the array of ops in progress
+	for (SynOp * op in self.opsInProgress)	{
+		//	collect the sessions that are in progress (they need updating too!)
+		if ([sessionsInProgress indexOfObjectIdenticalTo:op.session] == NSNotFound)
+			[sessionsInProgress addObject:op.session];
+		
+		//	find the row that corresponds to this op, tell it to refresh its UI
+		NSInteger			rowIndex = [outlineView rowForItem:op];
+		if (rowIndex >= 0)	{
+			OpRowView			*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
+			//NSLog(@"\top row view is %@",tmpView);
+			if (tmpView != nil)
+				[tmpView refreshUI];
+		}
+	}
+	
+	for (SynSession *session in sessionsInProgress)	{
+		//	find the row that corresponds to this op, tell it to refresh its UI
+		NSInteger			rowIndex = [outlineView rowForItem:session];
+		if (rowIndex >= 0)	{
+			SessionRowView		*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
+			//NSLog(@"\tsession row view is %@",tmpView);
+			if (tmpView != nil)
+				[tmpView refreshUI];
+		}
+	}
+}
+
+
 #pragma mark - UI
 
 
@@ -87,13 +322,34 @@ static SessionController			*globalSessionController = nil;
 - (IBAction) runPauseButtonClicked:(id)sender {
 	NSLog(@"%s",__func__);
 	@synchronized (self)	{
+		//	if we aren't running yet, just start
+		if (!self.running)	{
+			[self start];
+		}
+		//	else we're running...
+		else	{
+			//	if we're paused, resume!
+			if (self.paused)	{
+				[self resume];
+			}
+			//	else we're not paused- we should pause!
+			else	{
+				[self pause];
+			}
+		}
+		/*
 		if (self.running)	{
 			[self stop];
 		}
 		else	{
 			[self start];
 		}
+		*/
 	}
+}
+- (IBAction) cancelButtonClicked:(id)sender	{
+	NSLog(@"%s",__func__);
+	[self stop];
 }
 
 - (IBAction)openMovies:(id)sender	{
@@ -120,7 +376,6 @@ static SessionController			*globalSessionController = nil;
 
 - (IBAction) revealPreferences:(id)sender	{
 	//[self revealHelper:self.prefsWindow sender:sender];
-	NSLog(@"should be opening preferences here");
 	[[[PrefsController global] window] makeKeyAndOrderFront:nil];
 }
 
@@ -184,6 +439,51 @@ static SessionController			*globalSessionController = nil;
 
 - (void) reloadData	{
 	[outlineView reloadData];
+}
+
+
+#pragma mark - SynOpDelegate protocol
+
+
+- (void) synOpStatusFinished:(SynOp *)n	{
+	NSLog(@"%s ... %@: %@",__func__,n,[SynopsisJobObject stringForStatus:n.job.jobStatus]);
+	//BOOL			opFinished = NO;
+	BOOL			startAnotherOp = NO;
+ 	@synchronized (self)	{
+		
+		[self.opsInProgress removeObjectIdenticalTo:n];
+		
+		//	if we just finished an op, we may want to start another?
+		if (self.running && self.opsInProgress.count < [self maxOpCount])	{
+			startAnotherOp = YES;
+		}
+		
+		//	if we want to start another op...
+		if (startAnotherOp)	{
+			//	only start another op if we're not paused!
+			if (!self.paused)	{
+				NSArray<SynOp*>		*opsToStart = [self getOpsToStart:1];
+				for (SynOp * op in opsToStart)	{
+					[self.opsInProgress addObject:op];
+					[op start];
+				}
+			}
+		}
+	}
+	
+	//	if we have no more ops, stop!
+	if (self.opsInProgress.count < 1)
+		[self stop];
+	//	else just refresh the UI for the op that completed
+	else	{
+		NSInteger			rowIndex = [outlineView rowForItem:n];
+		if (rowIndex >= 0)	{
+			OpRowView			*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
+			//NSLog(@"\top row view is %@",tmpView);
+			if (tmpView != nil)
+				[tmpView refreshUI];
+		}
+	}
 }
 
 
@@ -267,220 +567,12 @@ static SessionController			*globalSessionController = nil;
 }
 */
 - (void) outlineViewSelectionDidChange:(NSNotification *)note	{
-	//NSLog(@"%s",__func__);
-}
-
-
-#pragma mark - backend
-
-
-- (void) start	{
-	NSLog(@"%s",__func__);
-	@synchronized (self)	{
-		//	if we're already running, something went wrong- bail
-		if (self.running)
-			return;
-		
-		//	update the toolbar item's label/image
-		[runPauseButton setLabel:@"Stop"];
-		[runPauseButton setImage:[NSImage imageNamed:@"ic_stop"]];
-	
-		self.running = YES;
-		NSArray<SynOp*>		*opsToStart = [self getOpsToStart:[self maxOpCount]];
-		for (SynOp * op in opsToStart)	{
-			[self.opsInProgress addObject:op];
-			[op start];
-		}
-		
-		NSLog(@"\tafter starting ops, we have %d total ops in progress",self.opsInProgress.count);
-		//	if we weren't able to start any jobs, we're effectively stopped, so....stop it officially.
-		if (self.opsInProgress.count < 1)
-			[self stop];
-		//	else we have ops- make a timer to refresh the display
-		else	{
-			self.progressRefreshTimer = [NSTimer
-				scheduledTimerWithTimeInterval:1.0
-				target:self
-				selector:@selector(refreshUITimer:)
-				userInfo:nil
-				repeats:YES];
-			//	"force" the timer to proc immediately for a quick redisplay...
-			[self refreshUITimer:nil];
-		}
-	}
-}
-- (void) stop	{
-	NSLog(@"%s",__func__);
-	@synchronized (self)	{
-		//	if we're already stopped, something went wrong- bail
-		if (!self.running)
-			return;
-		
-		//	kill the timer!
-		if (self.progressRefreshTimer != nil)	{
-			[self.progressRefreshTimer invalidate];
-			self.progressRefreshTimer = nil;
-		}
-		
-		//	update the toolbar item's label/image
-		[runPauseButton setLabel:@"Start"];
-		[runPauseButton setImage:[NSImage imageNamed:@"ic_play_circle_filled"]];
-	
-		self.running = NO;
-		@synchronized (self)	{
-	
-		}
-	}
-	
-	//	reload the outline view
-	[self reloadData];
-}
-/*
-- (void) startAnOp	{
-	NSLog(@"%s",__func__);
-	//	if we're not running, something went wrong- bail, we don't want to do this
-	if (!self.running)
-		return;
-	@synchronized (self.sessions)	{
-		SynOp		*startedOp = nil;
-		for (SynSession * session in self.sessions)	{
-			startedOp = [session startAnOp];
-			if (startedOp != nil)	{
-				[self.opsInProgress addObject:startedOp];
-				break;
-			}
-		}
-	}
-}
-*/
-- (NSArray<SynOp*> *) getOpsToStart:(NSUInteger)numOpsToGet	{
-	@synchronized (self)	{
-		NSMutableArray		*returnMe = [NSMutableArray arrayWithCapacity:0];
-		if ([returnMe count] == numOpsToGet)
-			return returnMe;
-		for (SynSession * session in self.sessions)	{
-			for (SynOp * op in session.ops)	{
-				switch (op.status)	{
-				case OpStatus_Pending:
-					[returnMe addObject:op];
-					break;
-				case OpStatus_PreflightErr:
-				case OpStatus_Analyze:
-				case OpStatus_Cleanup:
-				case OpStatus_Complete:
-				case OpStatus_Err:
-					break;
-				}
-				if ([returnMe count] == numOpsToGet)
-					return returnMe;
-			}
-		}
-		return returnMe;
-	}
-}
-- (int) maxOpCount	{
-	return 3;
-	int				returnMe = 1;
-	NSNumber		*tmpNum = [[NSUserDefaults standardUserDefaults] objectForKey:kSynopsisAnalyzerConcurrentJobCountPreferencesKey];
-	//	 a val of -1 indicates that the user selected "auto" in the prefs
-	if (tmpNum==nil || [tmpNum intValue] <= 0)	{
-		/*
-		//	try to get the actual number of physical cores
-		size_t				len;
-		unsigned int		ncpu;
-		len = sizeof(ncpu);
-		sysctlbyname("hw.ncpu", &ncpu, &len, NULL, 0);
-		if (ncpu > 0)	{
-			returnMe = ncpu;
-		}
-		//	if something went wrong, use NSProcessInfo to return the number of logical cores
-		else	{
-			returnMe = [[NSProcessInfo processInfo] processorCount];
-		}
-		*/
-		returnMe = [[NSProcessInfo processInfo] processorCount];
-		
-		//	"too many" jobs just f-es things up
-		if (returnMe > 6)
-			returnMe = returnMe / 3;
-	}
-	//	else the user entered a specific number of jobs
+	NSInteger		selectedRow = [outlineView selectedRow];
+	if (selectedRow == -1)
+		[[InspectorViewController global] uninspectAll];
 	else	{
-		returnMe = [tmpNum intValue];
-	}
-	
-	return returnMe;
-}
-- (void) refreshUITimer:(NSTimer *)t	{
-	//NSLog(@"%s",__func__);
-	NSMutableArray		*sessionsInProgress = [NSMutableArray arrayWithCapacity:0];
-	//	run through the array of ops in progress
-	for (SynOp * op in self.opsInProgress)	{
-		//	collect the sessions that are in progress (they need updating too!)
-		if ([sessionsInProgress indexOfObjectIdenticalTo:op.session] == NSNotFound)
-			[sessionsInProgress addObject:op.session];
-		
-		//	find the row that corresponds to this op, tell it to refresh its UI
-		NSInteger			rowIndex = [outlineView rowForItem:op];
-		if (rowIndex >= 0)	{
-			OpRowView			*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
-			//NSLog(@"\top row view is %@",tmpView);
-			if (tmpView != nil)
-				[tmpView refreshUI];
-		}
-	}
-	
-	for (SynSession *session in sessionsInProgress)	{
-		//	find the row that corresponds to this op, tell it to refresh its UI
-		NSInteger			rowIndex = [outlineView rowForItem:session];
-		if (rowIndex >= 0)	{
-			SessionRowView		*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
-			//NSLog(@"\tsession row view is %@",tmpView);
-			if (tmpView != nil)
-				[tmpView refreshUI];
-		}
-	}
-}
-
-
-#pragma mark - SynOpDelegate protocol
-
-
-- (void) synOpStatusFinished:(SynOp *_Nonnull)n	{
-	NSLog(@"%s ... %@: %@",__func__,n,[SynopsisJobObject stringForStatus:n.job.jobStatus]);
-	BOOL			opFinished = NO;
-	BOOL			startAnotherOp = NO;
- 	@synchronized (self)	{
-		
-		[self.opsInProgress removeObjectIdenticalTo:n];
-		
-		//	if we just finished an op, we may want to start another?
-		if (self.running && self.opsInProgress.count < [self maxOpCount])	{
-			startAnotherOp = YES;
-		}
-		
-		//	if we want to start another op...
-		if (startAnotherOp)	{
-			NSArray<SynOp*>		*opsToStart = [self getOpsToStart:1];
-			for (SynOp * op in opsToStart)	{
-				[self.opsInProgress addObject:op];
-				[op start];
-			}
-		}
-	}
-	
-	//	if we have no more ops, stop!
-	if (self.opsInProgress.count < 1)
-		[self stop];
-	//	else just refresh the UI for the op that completed
-	else	{
-		NSInteger			rowIndex = [outlineView rowForItem:n];
-		if (rowIndex >= 0)	{
-			OpRowView			*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
-			//NSLog(@"\top row view is %@",tmpView);
-			if (tmpView != nil)
-				[tmpView refreshUI];
-		}
+		id				tmpObj = [outlineView itemAtRow:selectedRow];
+		[[InspectorViewController global] inspectItem:tmpObj];
 	}
 }
 

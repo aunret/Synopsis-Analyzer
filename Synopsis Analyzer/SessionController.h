@@ -24,12 +24,13 @@
 	IBOutlet DropFilesView		*dropView;
 	
 	IBOutlet NSToolbarItem		*runPauseButton;
-	
+	IBOutlet NSToolbarItem		*stopButton;
 }
 
 + (SessionController *) global;
 
 - (IBAction) runPauseButtonClicked:(id)sender;
+- (IBAction) cancelButtonClicked:(id)sender;
 
 - (IBAction) openMovies:(id)sender;
 - (IBAction) revealLog:(id)sender;
@@ -41,6 +42,8 @@
 - (void) reloadData;
 
 - (void) start;
+- (void) pause;
+- (void) resume;
 - (void) stop;
 
 @end

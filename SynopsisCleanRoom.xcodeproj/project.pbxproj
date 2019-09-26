@@ -45,7 +45,13 @@
 		1A9B1ECC23315051007D414A /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
 		1A9B1ED123315076007D414A /* Synopsis.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626155231476DD00DC2B06 /* Synopsis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1A9B1ED223315076007D414A /* HapInAVFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		1AA3EF632332ADA6008C14C7 /* FilePreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AA3EF622332ADA6008C14C7 /* FilePreviewController.m */; };
+		1AA3C04B233C1400009F6821 /* InspectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AA3C04A233C1400009F6821 /* InspectorViewController.m */; };
+		1AA3C04F233C1425009F6821 /* SessionInspectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AA3C04D233C1425009F6821 /* SessionInspectorViewController.m */; };
+		1AA3C050233C1425009F6821 /* SessionInspectorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AA3C04E233C1425009F6821 /* SessionInspectorViewController.xib */; };
+		1AA3C054233C1432009F6821 /* OpInspectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AA3C052233C1432009F6821 /* OpInspectorViewController.m */; };
+		1AA3C055233C1432009F6821 /* OpInspectorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AA3C053233C1432009F6821 /* OpInspectorViewController.xib */; };
+		1AA3C05A233C1E58009F6821 /* EmptyInspectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AA3C058233C1E58009F6821 /* EmptyInspectorViewController.m */; };
+		1AA3C05B233C1E58009F6821 /* EmptyInspectorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AA3C059233C1E58009F6821 /* EmptyInspectorViewController.xib */; };
 		1AC1029423328DB300510548 /* SynSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AC1029323328DB300510548 /* SynSession.m */; };
 		1AC1ED4D2318145E00AAD380 /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
 		1AC1ED4E2318146400AAD380 /* HapInAVFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -252,8 +258,17 @@
 		1A9B1EBD23314B73007D414A /* PrefsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsController.xib; sourceTree = "<group>"; };
 		1A9B1EC223314C1C007D414A /* LogController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogController.xib; sourceTree = "<group>"; };
 		1A9B1ED3233155B9007D414A /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = "Synopsis Analyzer/Constants.h"; sourceTree = SOURCE_ROOT; };
-		1AA3EF612332ADA6008C14C7 /* FilePreviewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilePreviewController.h; sourceTree = "<group>"; };
-		1AA3EF622332ADA6008C14C7 /* FilePreviewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilePreviewController.m; sourceTree = "<group>"; };
+		1AA3C049233C1400009F6821 /* InspectorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InspectorViewController.h; sourceTree = "<group>"; };
+		1AA3C04A233C1400009F6821 /* InspectorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InspectorViewController.m; sourceTree = "<group>"; };
+		1AA3C04C233C1425009F6821 /* SessionInspectorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SessionInspectorViewController.h; sourceTree = "<group>"; };
+		1AA3C04D233C1425009F6821 /* SessionInspectorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SessionInspectorViewController.m; sourceTree = "<group>"; };
+		1AA3C04E233C1425009F6821 /* SessionInspectorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SessionInspectorViewController.xib; sourceTree = "<group>"; };
+		1AA3C051233C1432009F6821 /* OpInspectorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpInspectorViewController.h; sourceTree = "<group>"; };
+		1AA3C052233C1432009F6821 /* OpInspectorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpInspectorViewController.m; sourceTree = "<group>"; };
+		1AA3C053233C1432009F6821 /* OpInspectorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpInspectorViewController.xib; sourceTree = "<group>"; };
+		1AA3C057233C1E58009F6821 /* EmptyInspectorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmptyInspectorViewController.h; sourceTree = "<group>"; };
+		1AA3C058233C1E58009F6821 /* EmptyInspectorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmptyInspectorViewController.m; sourceTree = "<group>"; };
+		1AA3C059233C1E58009F6821 /* EmptyInspectorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyInspectorViewController.xib; sourceTree = "<group>"; };
 		1AC1029223328DB300510548 /* SynSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynSession.h; sourceTree = "<group>"; };
 		1AC1029323328DB300510548 /* SynSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SynSession.m; sourceTree = "<group>"; };
 		1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HapInAVFoundation.xcodeproj; path = ./HapInAVFoundation/HapInAVFoundation.xcodeproj; sourceTree = "<group>"; };
@@ -440,6 +455,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		1AA3C056233C143D009F6821 /* Inspector-related */ = {
+			isa = PBXGroup;
+			children = (
+				1AA3C04C233C1425009F6821 /* SessionInspectorViewController.h */,
+				1AA3C04D233C1425009F6821 /* SessionInspectorViewController.m */,
+				1AA3C04E233C1425009F6821 /* SessionInspectorViewController.xib */,
+				1AA3C051233C1432009F6821 /* OpInspectorViewController.h */,
+				1AA3C052233C1432009F6821 /* OpInspectorViewController.m */,
+				1AA3C053233C1432009F6821 /* OpInspectorViewController.xib */,
+				1AA3C057233C1E58009F6821 /* EmptyInspectorViewController.h */,
+				1AA3C058233C1E58009F6821 /* EmptyInspectorViewController.m */,
+				1AA3C059233C1E58009F6821 /* EmptyInspectorViewController.xib */,
+			);
+			path = "Inspector-related";
+			sourceTree = "<group>";
+		};
 		1AC1ED342318144500AAD380 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -462,10 +493,11 @@
 				1AD845A4232C1E3900416F5C /* Info.plist */,
 				1AD845A5232C1E3900416F5C /* main.m */,
 				1AD845A7232C1E3900416F5C /* Synopsis_Analyzer.entitlements */,
+				1AA3C049233C1400009F6821 /* InspectorViewController.h */,
+				1AA3C04A233C1400009F6821 /* InspectorViewController.m */,
+				1AA3C056233C143D009F6821 /* Inspector-related */,
 				1A1093362330011C00791BDA /* SessionController.h */,
 				1A1093372330011C00791BDA /* SessionController.m */,
-				1AA3EF612332ADA6008C14C7 /* FilePreviewController.h */,
-				1AA3EF622332ADA6008C14C7 /* FilePreviewController.m */,
 				1A10936F233002E200791BDA /* Session-related */,
 				1A9B1EBB23314B72007D414A /* PrefsController.h */,
 				1A9B1EBC23314B72007D414A /* PrefsController.m */,
@@ -677,7 +709,10 @@
 				1A9B1EC423314C1C007D414A /* LogController.xib in Resources */,
 				1AD845A0232C1E3900416F5C /* Images.xcassets in Resources */,
 				1A9B1EBF23314B73007D414A /* PrefsController.xib in Resources */,
+				1AA3C05B233C1E58009F6821 /* EmptyInspectorViewController.xib in Resources */,
+				1AA3C055233C1432009F6821 /* OpInspectorViewController.xib in Resources */,
 				1A1093782330205100791BDA /* SessionRowView.xib in Resources */,
+				1AA3C050233C1425009F6821 /* SessionInspectorViewController.xib in Resources */,
 				1A10935A2330025500791BDA /* PreferencesFileViewController.xib in Resources */,
 				1A10937D2330205800791BDA /* OpRowView.xib in Resources */,
 				1A1093552330024A00791BDA /* PreferencesGeneralViewController.xib in Resources */,
@@ -713,16 +748,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AA3C04B233C1400009F6821 /* InspectorViewController.m in Sources */,
 				1AEE2F792333C917009193CD /* PresetSettings.m in Sources */,
 				1A10935E2330025E00791BDA /* PreferencesPresetViewController.m in Sources */,
+				1AA3C054233C1432009F6821 /* OpInspectorViewController.m in Sources */,
 				1A10937C2330205800791BDA /* OpRowView.m in Sources */,
 				1AEC50FE233553840053C1B0 /* NSPopUpButtonAdditions.m in Sources */,
 				1AEC510F2335556C0053C1B0 /* NSMenuAdditions.m in Sources */,
 				1A10934A233001A300791BDA /* CustomVisualEffectView.m in Sources */,
 				1A1093542330024A00791BDA /* PreferencesGeneralViewController.m in Sources */,
-				1AA3EF632332ADA6008C14C7 /* FilePreviewController.m in Sources */,
 				1A1093592330025500791BDA /* PreferencesFileViewController.m in Sources */,
 				1A1093672330027600791BDA /* PresetObject.m in Sources */,
+				1AA3C04F233C1425009F6821 /* SessionInspectorViewController.m in Sources */,
 				1A1093472330016D00791BDA /* DropFilesView.m in Sources */,
 				1A1093772330205100791BDA /* SessionRowView.m in Sources */,
 				1A9B1EBE23314B73007D414A /* PrefsController.m in Sources */,
@@ -738,6 +775,7 @@
 				1AC1029423328DB300510548 /* SynSession.m in Sources */,
 				1A1093502330023200791BDA /* PreferencesViewController.m in Sources */,
 				1AD8459E232C1E3900416F5C /* AppDelegate.m in Sources */,
+				1AA3C05A233C1E58009F6821 /* EmptyInspectorViewController.m in Sources */,
 				1A10934D233001AE00791BDA /* CustomBackgroundView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

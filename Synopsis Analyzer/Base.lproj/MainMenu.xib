@@ -925,21 +925,6 @@
                                             <customView id="EQ2-Fk-uIz">
                                                 <rect key="frame" x="478" y="0.0" width="289" height="482"/>
                                                 <autoresizingMask key="autoresizingMask"/>
-                                                <subviews>
-                                                    <customView id="5tk-iJ-pZQ">
-                                                        <rect key="frame" x="20" y="328" width="194" height="134"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    </customView>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="g6V-ix-IAR">
-                                                        <rect key="frame" x="18" y="20" width="253" height="300"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        <textFieldCell key="cell" selectable="YES" title="Multiline Label" id="ebR-sB-6y1">
-                                                            <font key="font" usesAppearanceFont="YES"/>
-                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                </subviews>
                                             </customView>
                                         </subviews>
                                         <holdingPriorities>
@@ -963,6 +948,13 @@
                         <size key="maxSize" width="24" height="24"/>
                         <connections>
                             <action selector="runPauseButtonClicked:" target="zNf-jZ-W26" id="7vS-DC-Z8M"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="473B2C43-74FD-41FB-867C-53A8B9014809" label="Stop" paletteLabel="Stop" tag="-1" image="ic_stop" autovalidates="NO" id="mie-pS-Giy">
+                        <size key="minSize" width="24" height="24"/>
+                        <size key="maxSize" width="24" height="24"/>
+                        <connections>
+                            <action selector="cancelButtonClicked:" target="zNf-jZ-W26" id="dyH-uW-x8Y"/>
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="hM4-kZ-Hva"/>
@@ -999,6 +991,7 @@
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="jIE-3U-moH"/>
+                    <toolbarItem reference="mie-pS-Giy"/>
                     <toolbarItem reference="hM4-kZ-Hva"/>
                     <toolbarItem reference="7fq-1i-wVh"/>
                     <toolbarItem reference="TLi-wI-Xej"/>
@@ -1019,11 +1012,16 @@
                 <outlet property="dropView" destination="iTB-3N-mmD" id="vrJ-nn-JXm"/>
                 <outlet property="outlineView" destination="1Z6-MB-YhT" id="MIb-Nz-9R3"/>
                 <outlet property="runPauseButton" destination="jIE-3U-moH" id="BKY-15-StR"/>
+                <outlet property="stopButton" destination="mie-pS-Giy" id="6NJ-vr-GRo"/>
                 <outlet property="theColumn" destination="LJK-3l-D3k" id="GqY-yd-2yc"/>
                 <outlet property="window" destination="1a9-wX-TUg" id="7hz-kC-pjj"/>
             </connections>
         </customObject>
-        <customObject id="Qm9-NM-uUq" customClass="FilePreviewController"/>
+        <customObject id="jtr-hW-Hhz" customClass="InspectorViewController">
+            <connections>
+                <outlet property="view" destination="EQ2-Fk-uIz" id="QCU-ls-1V8"/>
+            </connections>
+        </customObject>
     </objects>
     <resources>
         <image name="ic_add_circle" width="24" height="24"/>
@@ -1033,5 +1031,6 @@
         <image name="ic_play_circle_filled" width="24" height="24"/>
         <image name="ic_remove_circle" width="24" height="24"/>
         <image name="ic_settings" width="24" height="24"/>
+        <image name="ic_stop" width="24" height="24"/>
     </resources>
 </document>

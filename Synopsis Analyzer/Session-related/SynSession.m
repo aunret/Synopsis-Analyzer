@@ -82,7 +82,7 @@
 		
 		self.enabled = YES;
 		self.ops = [[NSMutableArray alloc] init];
-		self.srcDir = inDir;
+		self.srcDir = [inDir path];
 		
 		//	set the outputDir from prefs
 		self.outputDir = [[pc outputFolderURL] path];
@@ -172,7 +172,7 @@
 			
 			self.type = (![coder containsValueForKey:@"type"])
 				? SessionType_List
-				: (SessionType)[coder decodeIntForKey:@"type"];
+				: (SessionType)[coder decodeInt64ForKey:@"type"];
 			
 			//	load the ops last so we can use self's properties to populate the op's properties
 			NSArray		*tmpArray = (![coder containsValueForKey:@"ops"]) ? [[NSMutableArray alloc] init] : [coder decodeObjectForKey:@"ops"];
@@ -207,7 +207,7 @@
 		if (self.preset.uuid != nil)
 			[coder encodeObject:self.preset.uuid forKey:@"preset"];
 		
-		[coder encodeInt:(NSInteger)self.type forKey:@"type"];
+		[coder encodeInt64:(NSInteger)self.type forKey:@"type"];
 		
 		//[coder encodeInt:(NSInteger)self.status forKey:@"status"];
 	}
@@ -218,7 +218,7 @@
 
 
 - (NSString *) description	{
-	return [NSString stringWithFormat:@"<SynSession, %d SynOps>",self.ops.count];
+	return [NSString stringWithFormat:@"<SynSession, %ld SynOps>",(unsigned long)self.ops.count];
 }
 
 

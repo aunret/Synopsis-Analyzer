@@ -12,6 +12,8 @@
 @class SynSession;
 @class SynOp;
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 
 
@@ -69,19 +71,26 @@ case OpStatus_Err:
 
 @property (atomic,readwrite) OpType type;
 @property (atomic,readwrite) OpStatus status;
-@property (atomic,readwrite) NSString * errString;
+@property (atomic,readwrite,nullable) NSString * errString;
 
-@property (atomic,strong) SynopsisJobObject * job;
+@property (atomic,strong,nullable) SynopsisJobObject * job;
 
 @property (atomic,weak,nullable) SynSession *session;
 
-- (NSString *_Nonnull) createStatusString;
-- (NSAttributedString *_Nonnull) createAttributedStatusString;
+- (NSString *) createStatusString;
+- (NSAttributedString *) createAttributedStatusString;
 
 - (void) start;
+- (void) pause;
+- (void) resume;
 - (void) stop;
 //- (void) running;
 
 @end
 
+
+
+
+
+NS_ASSUME_NONNULL_END
 
