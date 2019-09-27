@@ -17,11 +17,11 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="416"/>
+            <rect key="frame" x="0.0" y="0.0" width="480" height="420"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <box autoresizesSubviews="NO" borderType="line" title="Default Preset" id="BzG-v1-ojR">
-                    <rect key="frame" x="17" y="254" width="446" height="142"/>
+                    <rect key="frame" x="17" y="258" width="446" height="142"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <view key="contentView" id="gFO-T4-PX7">
                         <rect key="frame" x="3" y="3" width="440" height="124"/>
@@ -57,15 +57,15 @@
                         </subviews>
                     </view>
                 </box>
-                <box autoresizesSubviews="NO" borderType="line" title="Default Scripts" id="n92-Bb-2zs">
-                    <rect key="frame" x="17" y="16" width="446" height="234"/>
+                <box autoresizesSubviews="NO" borderType="line" title="Scripts" id="n92-Bb-2zs">
+                    <rect key="frame" x="17" y="16" width="446" height="238"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <view key="contentView" id="IUI-CI-NpH">
-                        <rect key="frame" x="3" y="3" width="440" height="216"/>
+                        <rect key="frame" x="3" y="3" width="440" height="220"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="hOF-nH-wqj">
-                                <rect key="frame" x="38" y="40" width="367" height="11"/>
+                                <rect key="frame" x="38" y="24" width="367" height="11"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Script Location" id="U5e-Ze-DQ9">
                                     <font key="font" metaFont="miniSystem"/>
@@ -74,7 +74,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="RwF-Mj-AVB">
-                                <rect key="frame" x="15" y="59" width="412" height="28"/>
+                                <rect key="frame" x="15" y="43" width="412" height="28"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="If enabled this script will be executed after each file has been analyzed/transcoded." id="YTf-p3-Mgp">
                                     <font key="font" metaFont="smallSystem"/>
@@ -83,7 +83,7 @@
                                 </textFieldCell>
                             </textField>
                             <button id="NX5-j1-GAc">
-                                <rect key="frame" x="14" y="38" width="16" height="16"/>
+                                <rect key="frame" x="14" y="22" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStatusAvailable" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="XHY-PT-1W4">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -91,7 +91,7 @@
                                 </buttonCell>
                             </button>
                             <button id="erm-PR-CVS">
-                                <rect key="frame" x="411" y="39" width="14" height="14"/>
+                                <rect key="frame" x="411" y="23" width="14" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="idI-O4-9hg">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -102,7 +102,7 @@
                                 </connections>
                             </button>
                             <button id="gKQ-NM-VMs">
-                                <rect key="frame" x="13" y="93" width="161" height="20"/>
+                                <rect key="frame" x="13" y="77" width="161" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Use per-file script" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Hrs-lh-Scz">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -113,7 +113,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" id="H9L-vP-EDV">
-                                <rect key="frame" x="180" y="94" width="125" height="19"/>
+                                <rect key="frame" x="180" y="78" width="125" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundTextured" title="Select script" bezelStyle="texturedRounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ws2-Cr-dQA">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -124,7 +124,7 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="6gG-tZ-7de">
-                                <rect key="frame" x="40" y="123" width="367" height="11"/>
+                                <rect key="frame" x="40" y="127" width="367" height="11"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Script Location" id="EHX-Tb-c1j">
                                     <font key="font" metaFont="miniSystem"/>
@@ -133,7 +133,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="0Eh-eR-Ov7">
-                                <rect key="frame" x="17" y="142" width="412" height="28"/>
+                                <rect key="frame" x="17" y="146" width="412" height="28"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="uER-17-1ds">
                                     <font key="font" metaFont="smallSystem"/>
@@ -143,7 +143,7 @@
                                 </textFieldCell>
                             </textField>
                             <button id="Igj-W1-0Vs">
-                                <rect key="frame" x="16" y="121" width="16" height="16"/>
+                                <rect key="frame" x="16" y="125" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStatusAvailable" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="piL-fW-dNV">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -151,7 +151,7 @@
                                 </buttonCell>
                             </button>
                             <button id="SZ1-D5-spX">
-                                <rect key="frame" x="413" y="122" width="14" height="14"/>
+                                <rect key="frame" x="413" y="126" width="14" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JyV-dR-m8O">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -162,7 +162,7 @@
                                 </connections>
                             </button>
                             <button id="6Ux-72-hzF">
-                                <rect key="frame" x="15" y="176" width="161" height="20"/>
+                                <rect key="frame" x="15" y="180" width="161" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Use per-session script" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="KgC-iT-Af4">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -173,7 +173,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" id="LcY-qe-sex">
-                                <rect key="frame" x="182" y="177" width="125" height="19"/>
+                                <rect key="frame" x="182" y="181" width="125" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundTextured" title="Select script" bezelStyle="texturedRounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="FTt-9B-HBc">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -187,7 +187,7 @@
                     </view>
                 </box>
             </subviews>
-            <point key="canvasLocation" x="105" y="-34"/>
+            <point key="canvasLocation" x="105" y="-32"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="qNL-dS-myo"/>
         <customObject id="sN0-66-umG" customClass="PrefsPathAbstraction">

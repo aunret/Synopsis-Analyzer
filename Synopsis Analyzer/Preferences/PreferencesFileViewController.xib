@@ -16,18 +16,18 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="405"/>
+            <rect key="frame" x="0.0" y="0.0" width="480" height="319"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="File Preferences" translatesAutoresizingMaskIntoConstraints="NO" id="cSn-KB-6yL">
-                    <rect key="frame" x="11" y="27" width="452" height="358"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
+                    <rect key="frame" x="11" y="16" width="452" height="283"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <view key="contentView" id="JPi-xL-Fz6">
-                        <rect key="frame" x="3" y="3" width="446" height="340"/>
+                        <rect key="frame" x="3" y="3" width="446" height="265"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hil-L7-HW7">
-                                <rect key="frame" x="42" y="247" width="367" height="11"/>
+                                <rect key="frame" x="42" y="172" width="367" height="11"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Output Folder" id="EXa-Kx-OW0">
                                     <font key="font" metaFont="miniSystem"/>
@@ -36,7 +36,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vh5-2x-0O7">
-                                <rect key="frame" x="19" y="266" width="412" height="28"/>
+                                <rect key="frame" x="19" y="191" width="412" height="28"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="Jmb-rJ-vxJ">
                                     <font key="font" metaFont="smallSystem"/>
@@ -46,7 +46,7 @@
                                 </textFieldCell>
                             </textField>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tTZ-7e-W48">
-                                <rect key="frame" x="18" y="245" width="16" height="16"/>
+                                <rect key="frame" x="18" y="170" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStatusAvailable" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="rTj-jF-mYy">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -54,7 +54,7 @@
                                 </buttonCell>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CzV-rw-f84">
-                                <rect key="frame" x="415" y="246" width="14" height="14"/>
+                                <rect key="frame" x="415" y="171" width="14" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="vTG-Fz-uAB">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -65,7 +65,7 @@
                                 </connections>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mLx-sD-Pd9">
-                                <rect key="frame" x="17" y="300" width="119" height="20"/>
+                                <rect key="frame" x="17" y="225" width="119" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Use Output Folder" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="t50-tc-1vl">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -76,7 +76,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A7C-ug-KYv">
-                                <rect key="frame" x="142" y="301" width="125" height="19"/>
+                                <rect key="frame" x="142" y="226" width="125" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundTextured" title="Select Output Folder" bezelStyle="texturedRounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="E8P-zA-dkB">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -87,7 +87,7 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UGb-xk-trm">
-                                <rect key="frame" x="41" y="67" width="367" height="11"/>
+                                <rect key="frame" x="42" y="70" width="367" height="11"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Temp Folder" id="L77-05-xnK">
                                     <font key="font" metaFont="miniSystem"/>
@@ -96,7 +96,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jjc-Ho-2WJ">
-                                <rect key="frame" x="18" y="86" width="412" height="28"/>
+                                <rect key="frame" x="19" y="89" width="412" height="28"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Temporary files and folders are stored within this folder." id="vyf-At-CRZ">
                                     <font key="font" metaFont="smallSystem"/>
@@ -105,7 +105,7 @@
                                 </textFieldCell>
                             </textField>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xWv-NL-9Mx">
-                                <rect key="frame" x="17" y="65" width="16" height="16"/>
+                                <rect key="frame" x="18" y="68" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStatusAvailable" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="5H8-Dh-ilJ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -113,7 +113,7 @@
                                 </buttonCell>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1ed-Pf-7WN">
-                                <rect key="frame" x="414" y="66" width="14" height="14"/>
+                                <rect key="frame" x="415" y="69" width="14" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="XQE-8F-JtS">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -124,7 +124,7 @@
                                 </connections>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9jn-x9-gTb">
-                                <rect key="frame" x="16" y="120" width="116" height="20"/>
+                                <rect key="frame" x="17" y="123" width="116" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Use Temp Folder" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="QNW-qW-MS0">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -135,7 +135,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nRa-Ju-IJ0">
-                                <rect key="frame" x="142" y="120" width="162" height="19"/>
+                                <rect key="frame" x="143" y="123" width="162" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="roundTextured" title="Select Temporary File Folder" bezelStyle="texturedRounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XoP-bi-Q7C">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -146,7 +146,7 @@
                                 </connections>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5a5-0x-jy6">
-                                <rect key="frame" x="15" y="27" width="352" height="20"/>
+                                <rect key="frame" x="15" y="23" width="352" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Copy 'Non media' documents and media to output folder." bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="GLr-AG-6gX">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -160,7 +160,7 @@
                     </view>
                 </box>
             </subviews>
-            <point key="canvasLocation" x="139" y="235.5"/>
+            <point key="canvasLocation" x="139" y="192.5"/>
         </customView>
         <customObject id="6zj-mz-1O9" customClass="PrefsPathAbstraction">
             <connections>
