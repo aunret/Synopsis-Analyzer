@@ -14,7 +14,6 @@
 
 
 @interface OpInspectorViewController ()
-@property (readwrite,atomic,weak,nullable) SynOp * inspectedObject;
 @end
 
 
@@ -29,6 +28,9 @@
 		return;
 	}
 	
+}
+- (void) updateUI	{
+
 }
 
 

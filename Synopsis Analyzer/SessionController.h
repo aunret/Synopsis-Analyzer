@@ -40,6 +40,7 @@
 - (void) newSessionWithDir:(NSURL *)n recursively:(BOOL)isRecursive;
 
 - (void) reloadData;
+- (void) reloadRowForItem:(id)n;
 
 - (void) start;
 - (void) pause;

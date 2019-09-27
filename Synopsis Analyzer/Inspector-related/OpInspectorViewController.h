@@ -19,6 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) inspectOp:(SynOp *)n;
 
+//	should be nil unless inspector is currently active
+@property (readwrite,atomic,weak,nullable) SynOp * inspectedObject;
+
+- (void) updateUI;
+
 @end
 
 

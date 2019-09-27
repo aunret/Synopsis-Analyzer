@@ -66,7 +66,6 @@ case OpStatus_Err:
 
 @property (atomic,readwrite,strong,nullable) NSString * src;
 @property (atomic,readwrite,strong,nullable) NSString * dst;
-@property (atomic,readwrite,strong,nullable) NSString * tmpFile;
 @property (atomic,readwrite,strong,nullable) NSImage * thumb;
 
 @property (atomic,readwrite) OpType type;

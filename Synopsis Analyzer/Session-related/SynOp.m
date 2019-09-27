@@ -20,6 +20,7 @@
 @interface SynOp()
 @property (atomic,weak,nullable) NSObject<SynOpDelegate> * delegate;
 @property (assign,readwrite,atomic) BOOL paused;
+@property (atomic,readwrite,strong,nullable) NSString * tmpFile;
 - (void) _beginPreflight;
 - (void) _beginJob;
 - (void) _beginCleanup;

@@ -110,6 +110,7 @@ typedef enum : NSUInteger {
 
 #define kSynopsisAnalyzerConcurrentJobAnalysisDidChangeNotification @"kSynopsisAnalyzerConcurrentJobAnalysisDidChangeNotification"
 #define kSynopsisAnalyzerConcurrentFrameAnalysisDidChangeNotification @"kSynopsisAnalyzerConcurrentFrameAnalysisD"
+#define kSynopsisPresetsChangedNotification @"kSynopsisPresetsChangedNotification"
 
 
 

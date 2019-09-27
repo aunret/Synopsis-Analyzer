@@ -90,29 +90,17 @@
 }
 
 
+- (BOOL) opScriptEnabled	{
+	return [scriptAbs enabled];
+}
 - (NSString *) opScript	{
-	NSString		*scriptPath = [scriptAbs path];
-	if (scriptPath != nil)	{
-		//NSURL			*outputURL = [NSURL fileURLWithPath:scriptPath];
-		BOOL			isDirectory = NO;
-		if([[NSFileManager defaultManager] fileExistsAtPath:scriptPath isDirectory:&isDirectory] && !isDirectory)	{
-			return scriptPath;
-		}
-	}
-	
-	return nil;
+	return [scriptAbs path];
+}
+- (BOOL) sessionScriptEnabled	{
+	return [sessionScriptAbs enabled];
 }
 - (NSString *) sessionScript	{
-	NSString		*scriptPath = [sessionScriptAbs path];
-	if (scriptPath != nil)	{
-		//NSURL			*outputURL = [NSURL fileURLWithPath:scriptPath];
-		BOOL			isDirectory = NO;
-		if([[NSFileManager defaultManager] fileExistsAtPath:scriptPath isDirectory:&isDirectory] && !isDirectory)	{
-			return scriptPath;
-		}
-	}
-	
-	return nil;
+	return [sessionScriptAbs path];
 }
 
 

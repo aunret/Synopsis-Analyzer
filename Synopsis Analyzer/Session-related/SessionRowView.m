@@ -12,6 +12,7 @@
 #import "SynSession.h"
 
 #import "NSPopUpButtonAdditions.h"
+#import "InspectorViewController.h"
 
 
 
@@ -93,8 +94,11 @@
 	if (newPreset != nil && ![newPreset isKindOfClass:[PresetObject class]])
 		newPreset = nil;
 	self.session.preset = newPreset;
+	
+	[[InspectorViewController global] reloadInspectorIfInspected:self.session];
 }
 - (IBAction) nameFieldUsed:(id)sender	{
+	//	should this even be editable?
 }
 
 

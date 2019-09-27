@@ -99,8 +99,8 @@ PrefsController			*globalPrefsController = nil;
 - (BOOL) outputFolderEnabled	{
 	return [self.prefsViewController.preferencesFileViewController outputFolderEnabled];
 }
-- (NSURL*) outputFolderURL	{
-	return [self.prefsViewController.preferencesFileViewController outputFolderURL];
+- (NSString *) outputFolder	{
+	return [self.prefsViewController.preferencesFileViewController outputFolder];
 }
 /*
 - (BOOL) watchFolderEnabled	{
@@ -113,11 +113,17 @@ PrefsController			*globalPrefsController = nil;
 - (BOOL) tempFolderEnabled	{
 	return [self.prefsViewController.preferencesFileViewController tempFolderEnabled];
 }
-- (NSURL*) tempFolderURL	{
-	return [self.prefsViewController.preferencesFileViewController tempFolderURL];
+- (NSString *) tempFolder	{
+	return [self.prefsViewController.preferencesFileViewController tempFolder];
+}
+- (BOOL) opScriptEnabled	{
+	return [self.prefsViewController.preferencesGeneralViewController opScriptEnabled];
 }
 - (NSString *) opScript	{
 	return [self.prefsViewController.preferencesGeneralViewController opScript];
+}
+- (BOOL) sessionScriptEnabled	{
+	return [self.prefsViewController.preferencesGeneralViewController sessionScriptEnabled];
 }
 - (NSString *) sessionScript	{
 	return [self.prefsViewController.preferencesGeneralViewController sessionScript];

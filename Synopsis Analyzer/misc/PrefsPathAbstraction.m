@@ -90,7 +90,7 @@ static const NSString * SPECIALIGNOREVALUE = @"XXXIGNOREMEXXX";
 }
 - (BOOL) enabled	{
 	//	set up the keys we'll need to retrieve the vals from the defaults...
-	NSString			*valKey = self.internalUserDefaultsKey;
+	//NSString			*valKey = self.internalUserDefaultsKey;
 	NSString			*enableKey = [self _deriveEnableKey];
 	NSUserDefaults		*def = [NSUserDefaults standardUserDefaults];
 	//	if this hasn't been enabled, return nil (even if it may have a value)

@@ -46,15 +46,18 @@
 		self.srcDir = nil;
 		
 		//	set outputDir from prefs
-		self.outputDir = ([pc outputFolderEnabled] && [pc outputFolderURL]!=nil) ? [[pc outputFolderURL] path] : nil;
+		self.outputDir = ([pc outputFolderEnabled] && [pc outputFolder]!=nil) ? [pc outputFolder] : nil;
 		//	set tempDir from prefs
-		self.tempDir = ([pc tempFolderEnabled] && [pc tempFolderURL]!=nil) ? [[pc tempFolderURL] path] : nil;
+		self.tempDir = ([pc tempFolderEnabled] && [pc tempFolder]!=nil) ? [pc tempFolder] : nil;
 		//	set opScript from prefs
 		self.opScript = [pc opScript];
 		//	set sessionScript from prefs
 		self.sessionScript = [pc sessionScript];
 		//	set preset from prefs
 		self.preset = [pc defaultPreset];
+		
+		self.copyNonMediaFiles = NO;
+		self.watchFolder = NO;
 		
 		self.type = SessionType_List;
 		
@@ -85,15 +88,18 @@
 		self.srcDir = [inDir path];
 		
 		//	set the outputDir from prefs
-		self.outputDir = ([pc outputFolderEnabled] && [pc outputFolderURL]!=nil) ? [[pc outputFolderURL] path] : nil;
+		self.outputDir = ([pc outputFolderEnabled] && [pc outputFolder]!=nil) ? [pc outputFolder] : nil;
 		//	set tempDir from prefs
-		self.tempDir = ([pc tempFolderEnabled] && [pc tempFolderURL]!=nil) ? [[pc tempFolderURL] path] : nil;
+		self.tempDir = ([pc tempFolderEnabled] && [pc tempFolder]!=nil) ? [pc tempFolder] : nil;
 		//	set opScript from prefs
 		self.opScript = [pc opScript];
 		//	set sessionScript from prefs
 		self.sessionScript = [pc sessionScript];
 		//	set preset from prefs
 		self.preset = [pc defaultPreset];
+		
+		self.copyNonMediaFiles = NO;
+		self.watchFolder = NO;
 		
 		self.type = SessionType_Dir;
 		
@@ -128,6 +134,9 @@
 	}
 	return self;
 }
+- (void) dealloc	{
+	[self destroyDirectoryWatcher];
+}
 
 
 #pragma mark - NSCoding protocol
@@ -149,11 +158,11 @@
 				: [coder decodeBoolForKey:@"enabled"];
 			
 			self.outputDir = (![coder containsValueForKey:@"outputDir"])
-				? ([pc outputFolderEnabled] && [pc outputFolderURL]!=nil) ? [[pc outputFolderURL] path] : nil
+				? ([pc outputFolderEnabled] && [pc outputFolder]!=nil) ? [pc outputFolder] : nil
 				: [coder decodeObjectForKey:@"outputDir"];
 			
 			self.tempDir = (![coder containsValueForKey:@"tempDir"])
-				? ([pc tempFolderEnabled] && [pc tempFolderURL]!=nil) ? [[pc tempFolderURL] path] : nil
+				? ([pc tempFolderEnabled] && [pc tempFolder]!=nil) ? [pc tempFolder] : nil
 				: [coder decodeObjectForKey:@"tempDir"];
 			
 			self.opScript = (![coder containsValueForKey:@"opScript"])
@@ -169,6 +178,14 @@
 				: [pc presetForUUID:[coder decodeObjectForKey:@"preset"]];
 			//if (self.preset == nil)
 			//	self.preset = [pc defaultPreset];
+			
+			self.copyNonMediaFiles = (![coder containsValueForKey:@"copyNonMediaFiles"])
+				? NO
+				: [coder decodeBoolForKey:@"copyNonMediaFiles"];
+			
+			self.watchFolder = (![coder containsValueForKey:@"watchFolder"])
+				? NO
+				: [coder decodeBoolForKey:@"watchFolder"];
 			
 			self.type = (![coder containsValueForKey:@"type"])
 				? SessionType_List
@@ -206,6 +223,9 @@
 		
 		if (self.preset.uuid != nil)
 			[coder encodeObject:self.preset.uuid forKey:@"preset"];
+		
+		[coder encodeBool:self.copyNonMediaFiles forKey:@"copyNonMediaFiles"];
+		[coder encodeBool:self.watchFolder forKey:@"watchFolder"];
 		
 		[coder encodeInt64:(NSInteger)self.type forKey:@"type"];
 		
@@ -288,6 +308,24 @@
 			return [NSString stringWithFormat:@"(%d files, %d files to analyze)",totalCount,analyzeCount];
 	}
 }
+@synthesize watchFolder=myWatchFolder;
+- (void) setWatchFolder:(BOOL)n	{
+	@synchronized (self)	{
+		BOOL			changed = (myWatchFolder==n) ? NO : YES;
+		myWatchFolder = n;
+		if (changed)	{
+			if (n)	{
+				[self createDirectoryWatcher];
+			}
+			else	{
+				[self destroyDirectoryWatcher];
+			}
+		}
+	}
+}
+- (BOOL) watchFolder	{
+	return myWatchFolder;
+}
 
 
 #pragma mark - control
@@ -357,6 +395,12 @@
 			returnMe = -1.0;
 	}
 	return returnMe;
+}
+- (void) createDirectoryWatcher	{
+	NSLog(@"ERR- INCOMPLETE, %s",__func__);
+}
+- (void) destroyDirectoryWatcher	{
+	NSLog(@"ERR- INCOMPLETE, %s",__func__);
 }
 
 

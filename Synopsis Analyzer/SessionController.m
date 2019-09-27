@@ -270,7 +270,7 @@ static SessionController			*globalSessionController = nil;
 			returnMe = [[NSProcessInfo processInfo] processorCount];
 		}
 		*/
-		returnMe = [[NSProcessInfo processInfo] processorCount];
+		returnMe = (int)[[NSProcessInfo processInfo] processorCount];
 		
 		//	"too many" jobs just f-es things up
 		if (returnMe > 6)
@@ -440,13 +440,33 @@ static SessionController			*globalSessionController = nil;
 - (void) reloadData	{
 	[outlineView reloadData];
 }
+- (void) reloadRowForItem:(id)n	{
+	if (n == nil)
+		return;
+	if ([n isKindOfClass:[SynOp class]])	{
+		NSInteger			rowIndex = [outlineView rowForItem:n];
+		if (rowIndex >= 0)	{
+			OpRowView			*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
+			if (tmpView != nil)
+				[tmpView refreshUI];
+		}
+	}
+	else if ([n isKindOfClass:[SynSession class]])	{
+		NSInteger			rowIndex = [outlineView rowForItem:n];
+		if (rowIndex >= 0)	{
+			SessionRowView		*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
+			if (tmpView != nil)
+				[tmpView refreshUI];
+		}
+	}
+}
 
 
 #pragma mark - SynOpDelegate protocol
 
 
 - (void) synOpStatusFinished:(SynOp *)n	{
-	NSLog(@"%s ... %@: %@",__func__,n,[SynopsisJobObject stringForStatus:n.job.jobStatus]);
+	//NSLog(@"%s ... %@: %@",__func__,n,[SynopsisJobObject stringForStatus:n.job.jobStatus]);
 	//BOOL			opFinished = NO;
 	BOOL			startAnotherOp = NO;
  	@synchronized (self)	{
@@ -491,7 +511,7 @@ static SessionController			*globalSessionController = nil;
 
 
 - (void) analysisSessionForFiles:(NSArray *)fileURLArray sessionCompletionBlock:(void (^)(void))completionBlock {
-	NSLog(@"%s ... %@",__func__,fileURLArray);
+	//NSLog(@"%s ... %@",__func__,fileURLArray);
 	[self newSessionWithFiles:fileURLArray];
 	completionBlock();
 }

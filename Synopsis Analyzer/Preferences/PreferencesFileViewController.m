@@ -116,20 +116,8 @@
 - (BOOL) outputFolderEnabled	{
 	return [outputFolderAbs enabled];
 }
-- (NSURL*) outputFolderURL
-{
-	NSString* outputPath = [outputFolderAbs path];
-	if(outputPath)
-	{
-		NSURL* outputURL = [NSURL fileURLWithPath:outputPath];
-		BOOL isDirectory = NO;
-		if([[NSFileManager defaultManager] fileExistsAtPath:outputPath isDirectory:&isDirectory])
-		{
-			if(isDirectory)
-				return outputURL;
-		}
-	}
-	return nil;
+- (NSString *) outputFolder	{
+	return [outputFolderAbs path];
 }
 
 
@@ -193,21 +181,8 @@
 - (BOOL) tempFolderEnabled	{
 	return [tempFolderAbs enabled];
 }
-- (NSURL*) tempFolderURL
-{
-	NSString* outputPath = [[NSUserDefaults standardUserDefaults] valueForKey:kSynopsisAnalyzerTempFolderURLKey];
-	if(outputPath)
-	{
-		NSURL* outputURL = [NSURL fileURLWithPath:outputPath];
-		BOOL isDirectory = NO;
-		if([[NSFileManager defaultManager] fileExistsAtPath:outputPath isDirectory:&isDirectory])
-		{
-			if(isDirectory)
-				return outputURL;
-		}
-	}
-	
-	return nil;
+- (NSString *) tempFolder	{
+	return [tempFolderAbs path];
 }
 
 

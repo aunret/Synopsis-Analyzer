@@ -23,7 +23,9 @@
 
 - (IBAction) defaultPresetPUBItemSelected:(id)sender;
 
+- (BOOL) opScriptEnabled;
 - (NSString *) opScript;
+- (BOOL) sessionScriptEnabled;
 - (NSString *) sessionScript;
 
 //	populates my preset PUB

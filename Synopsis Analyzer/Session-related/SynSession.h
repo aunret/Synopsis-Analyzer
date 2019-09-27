@@ -45,6 +45,8 @@ typedef NS_ENUM(NSUInteger, SessionType)	{
 @property (atomic,readwrite,strong,nullable) NSString * opScript;
 @property (atomic,readwrite,strong,nullable) NSString * sessionScript;
 @property (atomic,readwrite,strong,nullable) PresetObject * preset;
+@property (atomic,readwrite) BOOL copyNonMediaFiles;
+@property (atomic,readwrite) BOOL watchFolder;
 
 //@property (atomic,readwrite) SessionStatus status;
 @property (atomic,readwrite) SessionType type;
@@ -58,6 +60,9 @@ typedef NS_ENUM(NSUInteger, SessionType)	{
 //- (SynOp *) startAnOp;
 //	returns -1 if session isn't being processed yet, for any reason (disabled, all pending, all complete/err, etc)
 - (double) calculateProgress;
+
+- (void) createDirectoryWatcher;
+- (void) destroyDirectoryWatcher;
 
 @end
 

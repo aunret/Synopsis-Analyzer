@@ -1712,6 +1712,12 @@ const NSString* value = @"Value";
 	*/
 	PrefsController			*pc = [PrefsController global];
 	[pc.prefsViewController.preferencesGeneralViewController populateDefaultPresetPopupButton];
+	
+	//	post a notification so other UI items that list presets know to update their lists
+	[[NSNotificationCenter defaultCenter]
+		postNotificationName:kSynopsisPresetsChangedNotification
+		object:nil
+		userInfo:nil];
 }
 
 - (void) configureOverviewContainerViewFromPreset:(PresetObject*)preset

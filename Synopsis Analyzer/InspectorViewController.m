@@ -9,6 +9,7 @@
 #import "InspectorViewController.h"
 #import "SynSession.h"
 #import "SynOp.h"
+#import "SessionController.h"
 
 
 
@@ -172,6 +173,30 @@ static InspectorViewController		*globalInspectorViewController = nil;
 		
 		[self transitionToViewController:self.emptyInspectorViewController];
 	}
+}
+- (void) reloadInspectorIfInspected:(id)n	{
+	NSLog(@"ERR: INCOMPLETE, %s",__func__);
+	if (n == nil)	{
+		[self uninspectAll];
+		return;
+	}
+	
+	if ([n isKindOfClass:[SynOp class]])	{
+		if (self.opInspectorViewController.inspectedObject == n)
+			[self.opInspectorViewController updateUI];
+	}
+	else if ([n isKindOfClass:[SynSession class]])	{
+		if (self.sessionInspectorViewController.inspectedObject == n)
+			[self.sessionInspectorViewController updateUI];
+	}
+	else	{
+		[self uninspectAll];
+	}
+}
+- (void) reloadRowForItem:(id)n	{
+	if (n == nil)
+		return;
+	[[SessionController global] reloadRowForItem:n];
 }
 
 

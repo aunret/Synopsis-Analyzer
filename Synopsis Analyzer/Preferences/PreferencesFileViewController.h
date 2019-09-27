@@ -19,13 +19,13 @@
 }
 
 - (BOOL) outputFolderEnabled;
-- (NSURL*) outputFolderURL;
+- (NSString *) outputFolder;
 /*
 - (BOOL) watchFolderEnabled;
 - (NSURL*) watchFolderURL;
 */
 - (BOOL) tempFolderEnabled;
-- (NSURL*) tempFolderURL;
+- (NSString *) tempFolder;
 
 - (BOOL) usingMirroredFolders;
 
