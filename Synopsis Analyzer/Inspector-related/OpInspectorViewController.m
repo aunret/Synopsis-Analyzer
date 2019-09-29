@@ -10,6 +10,8 @@
 
 #import "SynOp.h"
 
+#import "NSStringAdditions.h"
+
 
 
 
@@ -28,7 +30,7 @@ static NSString * AudioFourCCStringToHumanReadableCodec(NSString *subType)	{
 		returnMe = @"AC-3 for transport";
 	else if ([subType caseInsensitiveCompare:@"ima4"]==NSOrderedSame)
 		returnMe = @"Apple IMA 4:1";
-	else if ([subType caseInsensitiveCompare:@"aac "]==NSOrderedSame)
+	else if ([subType caseInsensitiveCompare:@"aac"]==NSOrderedSame)
 		returnMe = @"MPEG-4 Low Complexity AAC";
 	else if ([subType caseInsensitiveCompare:@"celp"]==NSOrderedSame)
 		returnMe = @"MPEG-4 CELP";
@@ -103,7 +105,9 @@ static NSString * AudioFourCCStringToHumanReadableCodec(NSString *subType)	{
 //	this could totally be more efficient (use the actually fourcc instead of NSString)
 static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 	NSString		*returnMe = nil;
-	if ([subtype caseInsensitiveCompare:@"1"] == NSOrderedSame)
+	if ([subtype isEqualToString:@""])
+		returnMe = @"Uncompressed";
+	else if ([subtype caseInsensitiveCompare:@"1"] == NSOrderedSame)
 		returnMe = @"Uncompressed 1-bit Indexed Color";
 	else if ([subtype caseInsensitiveCompare:@"2"] == NSOrderedSame)
 		returnMe = @"Uncompressed 2-bit Indexed Color";
@@ -185,7 +189,7 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 		returnMe = @"Avid Motion JPEG";
 	else if ([subtype caseInsensitiveCompare:@"ADJV"] == NSOrderedSame)
 		returnMe = @"Avid Motion JPEG";
-	else if ([subtype caseInsensitiveCompare:@"avr "] == NSOrderedSame)
+	else if ([subtype caseInsensitiveCompare:@"avr"] == NSOrderedSame)
 		returnMe = @"Motion JPEG AVR";
 	else if ([subtype caseInsensitiveCompare:@"b16g"] == NSOrderedSame)
 		returnMe = @"Uncompressed 16-bit Grayscale";
@@ -213,7 +217,7 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 		returnMe = @"DVCPRO50 - NTSC";
 	else if ([subtype caseInsensitiveCompare:@"dv5p"] == NSOrderedSame)
 		returnMe = @"DVCPRO50 - PAL";
-	else if ([subtype caseInsensitiveCompare:@"dvc "] == NSOrderedSame)
+	else if ([subtype caseInsensitiveCompare:@"dvc"] == NSOrderedSame)
 		returnMe = @"DV/DVCPRO NTSC";
 	else if ([subtype caseInsensitiveCompare:@"dvcp"] == NSOrderedSame)
 		returnMe = @"DVC - PAL";
@@ -229,11 +233,11 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 		returnMe = @"DVCPRO HD (720p60)";
 	else if ([subtype caseInsensitiveCompare:@"dvhq"] == NSOrderedSame)
 		returnMe = @"DVCPRO HD (720p50)";
-	else if ([subtype caseInsensitiveCompare:@"dvp "] == NSOrderedSame)
+	else if ([subtype caseInsensitiveCompare:@"dvp"] == NSOrderedSame)
 		returnMe = @"DV Video Pro";
 	else if ([subtype caseInsensitiveCompare:@"dvpp"] == NSOrderedSame)
 		returnMe = @"DVCPRO - PAL";
-	else if ([subtype caseInsensitiveCompare:@"flv "] == NSOrderedSame)
+	else if ([subtype caseInsensitiveCompare:@"flv"] == NSOrderedSame)
 		returnMe = @"Flash";
 	else if ([subtype caseInsensitiveCompare:@"gif"] == NSOrderedSame)
 		returnMe = @"GIF";
@@ -337,11 +341,11 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 		returnMe = @"On2's VP6 Video";
 	else if ([subtype caseInsensitiveCompare:@"VP70"] == NSOrderedSame)
 		returnMe = @"On2's VP7 Video";
-	else if ([subtype caseInsensitiveCompare:@"wmv1 "] == NSOrderedSame)
+	else if ([subtype caseInsensitiveCompare:@"wmv1"] == NSOrderedSame)
 		returnMe = @"Windows Media Video 7";
-	else if ([subtype caseInsensitiveCompare:@"wmv2 "] == NSOrderedSame)
+	else if ([subtype caseInsensitiveCompare:@"wmv2"] == NSOrderedSame)
 		returnMe = @"Windows Media Video 8";
-	else if ([subtype caseInsensitiveCompare:@"wmv3 "] == NSOrderedSame)
+	else if ([subtype caseInsensitiveCompare:@"wmv3"] == NSOrderedSame)
 		returnMe = @"Windows Media Video 9";
 	else if ([subtype caseInsensitiveCompare:@"x264"] == NSOrderedSame)
 		returnMe = @"H.264";
@@ -427,9 +431,379 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 		});
 		return;
 	}
+	//NSLog(@"%s",__func__);
 	
-	AVAsset				*asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:self.inspectedObject.src isDirectory:NO]];
 	
+	if (self.inspectedObject.type == OpType_Other)	{
+		//	populate the field field
+		//	populate the video field
+		//	populate the auido field
+	}
+	else	{
+		AVAsset						*asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:self.inspectedObject.src isDirectory:NO]];
+		
+		NSString						*tmpString = nil;
+		NSMutableAttributedString		*tmpAttrString = nil;
+		NSMutableParagraphStyle			*ps = nil;
+	
+		NSMutableAttributedString		*fileString = [[NSMutableAttributedString alloc] initWithString:@""];
+		NSMutableAttributedString		*videoString = [[NSMutableAttributedString alloc] initWithString:@""];
+		NSMutableAttributedString		*audioString = [[NSMutableAttributedString alloc] initWithString:@""];
+	
+		//	populate the file string
+		{
+			//	filename
+			tmpString = self.inspectedObject.src.lastPathComponent.stringByDeletingPathExtension;
+			tmpAttrString = [[NSMutableAttributedString alloc] initWithString:tmpString];
+			[tmpAttrString
+				addAttribute:NSFontAttributeName
+				value:[NSFont systemFontOfSize:[NSFont systemFontSize]]
+				range:NSMakeRange(0,tmpAttrString.length)];
+			[fileString appendAttributedString:tmpAttrString];
+			
+			
+			[fileString appendAttributedString:[[NSMutableAttributedString alloc] initWithString:@"\n\n"]];
+			
+			
+			//	file type
+			NSString			*extension = self.inspectedObject.src.pathExtension;
+			if (extension != nil)	{
+				tmpAttrString = nil;
+				if ([extension caseInsensitiveCompare:@"mp4"] == NSOrderedSame)	{
+					//[description appendString:@"MPEG-4 movie\n"];
+					tmpAttrString = [[NSMutableAttributedString alloc] initWithString:@"MPEG-4 movie"];
+				}
+				else if ([extension caseInsensitiveCompare:@"mov"] == NSOrderedSame)	{
+					//[description appendString:@"QuickTime movie\n"];
+					tmpAttrString = [[NSMutableAttributedString alloc] initWithString:@"QuickTime movie"];
+				}
+				if (tmpAttrString != nil)	{
+					[tmpAttrString
+						addAttribute:NSFontAttributeName
+						value:[NSFont labelFontOfSize:[NSFont labelFontSize]]
+						range:NSMakeRange(0,[tmpAttrString length])];
+					[fileString appendAttributedString:tmpAttrString];
+				
+				
+					[fileString appendAttributedString:[[NSMutableAttributedString alloc] initWithString:@"\n\n"]];
+				}
+			}
+			
+			
+			//	full path to file
+			tmpString = self.inspectedObject.src;
+			tmpAttrString = [[NSMutableAttributedString alloc] initWithString:tmpString];
+			[tmpAttrString 
+				addAttribute:NSFontAttributeName
+				value:[NSFont labelFontOfSize:[NSFont labelFontSize]]
+				range:NSMakeRange(0,tmpAttrString.length)];
+			[fileString appendAttributedString:tmpAttrString];
+			
+			
+			[fileString appendAttributedString:[[NSMutableAttributedString alloc] initWithString:@"\n\n"]];
+			
+			
+			//	duration of file
+			NSArray<AVAssetTrack*>		*visualTracks = [asset tracksWithMediaCharacteristic:AVMediaCharacteristicVisual];
+			if (visualTracks!=nil && visualTracks.count > 0)	{
+				AVAssetTrack		*videoTrack = visualTracks[0];
+				CMTime				tmpTime = [asset duration];
+				double				tmpDouble = [videoTrack nominalFrameRate];
+				NSString			*tmpString = (asset==nil) ? nil : [NSString smpteStringForTimeInSeconds:CMTimeGetSeconds(tmpTime) withFPS:tmpDouble];
+				if (tmpString != nil)	{
+					tmpString = [NSString stringWithFormat:@"Duration: %@",tmpString];
+					tmpAttrString = [[NSMutableAttributedString alloc] initWithString:tmpString];
+					[tmpAttrString
+						addAttribute:NSFontAttributeName
+						value:[NSFont labelFontOfSize:[NSFont labelFontSize]]
+						range:NSMakeRange(0,tmpAttrString.length)];
+					[fileString appendAttributedString:tmpAttrString];
+				
+				
+					//[fileString appendAttributedString:[[NSMutableAttributedString alloc] initWithString:@"\n\n"]];
+				}
+				
+				
+				[fileField setAttributedStringValue:fileString];
+				[fileField setAllowsEditingTextAttributes:YES];
+				[fileField sizeToFit];
+			}
+		}
+	
+		
+		//	populate the video string
+		{
+			tmpString = nil;
+			NSArray<AVAssetTrack*>		*tracks = [asset tracks];
+			int							trackIndex = 1;
+			for (AVAssetTrack *track in tracks)	{
+				BOOL				isVideoTrack = NO;
+				AVMediaType			trackMediaType = [track mediaType];
+				//NSLog(@"\t\tprocessing track %@, media type is %@",track,trackMediaType);
+				if ([trackMediaType isEqualToString:AVMediaTypeMuxed])	{
+					isVideoTrack = YES;
+					NSString		*codecsString = nil;
+					for (int i=0; i<track.formatDescriptions.count; ++i)	{
+						CMFormatDescriptionRef		desc = (__bridge CMFormatDescriptionRef)track.formatDescriptions[i];
+						if (desc == NULL)
+							continue;
+						CMMediaType			mediaType = CMFormatDescriptionGetMediaType(desc);
+						NSString			*subtype = FourCCString(CMFormatDescriptionGetMediaSubType(desc));
+						NSString			*humanReadable = nil;
+						switch (mediaType)	{
+						case kCMMediaType_Video:
+							humanReadable = VideoFourCCStringToHumanReadableCodec(subtype);
+							break;
+						case kCMMediaType_Audio:
+							humanReadable = AudioFourCCStringToHumanReadableCodec(subtype);
+							break;
+						//case kCMMediaType_Muxed:
+						case kCMMediaType_Text:
+							humanReadable = @"Text";
+							break;
+						case kCMMediaType_ClosedCaption:
+							humanReadable = @"Closed Caption";
+							break;
+						case kCMMediaType_Subtitle:
+							humanReadable = @"Subtitle";
+							break;
+						case kCMMediaType_TimeCode:
+							humanReadable = @"Timecode";
+							break;
+						//	weird, not recognized for some reason?
+						//case kCMMediaType_TimedMetadata:
+						//	humanReadable = @"Timed Metadata";
+						//	break;
+						case kCMMediaType_Metadata:
+							humanReadable = @"Metadata";
+							break;
+						}
+						
+						if (codecsString == nil)
+							codecsString = humanReadable;
+						else
+							codecsString = [codecsString stringByAppendingFormat:@", %@",humanReadable];
+					}
+					//[description appendFormat:@"\t%d: Muxed (%@)\n",trackIndex,codecsString];
+					if (tmpString == nil)
+						tmpString = [NSString stringWithFormat:@"Track %d: Muxed (%@)",trackIndex,codecsString];
+					else
+						tmpString = [tmpString stringByAppendingFormat:@"\nTrack %d: Muxed (%@)",trackIndex,codecsString];
+					
+				}
+				else if ([trackMediaType isEqualToString:AVMediaTypeVideo])	{
+					isVideoTrack = YES;
+					NSString		*codecsString = nil;
+					for (int i=0; i<track.formatDescriptions.count; ++i)	{
+						CMFormatDescriptionRef		desc = (__bridge CMFormatDescriptionRef)track.formatDescriptions[i];
+						if (desc == NULL)
+							continue;
+						NSString			*type = FourCCString(CMFormatDescriptionGetMediaSubType(desc));
+						if (type == nil)
+							continue;
+						NSString			*humanReadable = VideoFourCCStringToHumanReadableCodec(type);
+						if (humanReadable == nil)
+							continue;
+						
+						if (codecsString == nil)	{
+							codecsString = humanReadable;
+							break;	//	only display the first format description for non-muxed tracks
+						}
+						//else
+						//	codecsString = [codecsString stringByAppendingFormat:@", %@",humanReadable];
+					}
+					//[description appendFormat:@"\t%d: Video (%@)\n",trackIndex,codecsString];
+					if (tmpString == nil)
+						tmpString = [NSString stringWithFormat:@"Track %d: %@",trackIndex,codecsString];
+					else
+						tmpString = [tmpString stringByAppendingFormat:@"\nTrack %d: %@",trackIndex,codecsString];
+				}
+				
+				//	regardless if its muxed or not, all video tracks need to display some common properties
+				if (isVideoTrack)	{
+					//	get the resolution
+					CGSize				tmpSize = [track naturalSize];
+					tmpString = [tmpString stringByAppendingFormat:@", %d x %d",(int)tmpSize.width,(int)tmpSize.height];
+				
+					//	get the framerate
+					double				tmpDouble = [track nominalFrameRate];
+					tmpString = [tmpString stringByAppendingFormat:@", %0.2f FPS",tmpDouble];
+				
+					//	get the duration
+					//CMTime				tmpTime = [asset duration];
+					//NSString			*tmpString = [NSString smpteStringForTimeInSeconds:CMTimeGetSeconds(tmpTime) withFPS:tmpDouble];
+					//if (tmpString != nil)
+					//	[description appendFormat:@", Duration: %@",tmpString];
+				
+				
+					if (track.formatDescriptions.count > 0)	{
+						CMFormatDescriptionRef		desc = (__bridge CMFormatDescriptionRef)track.formatDescriptions[0];
+						CFTypeRef			tmpTypeRef = NULL;
+						id					recastTypeRef = nil;
+					
+						//	check the field count
+						tmpTypeRef = CMFormatDescriptionGetExtension(desc, kCMFormatDescriptionExtension_FieldCount);
+						//NSLog(@"FieldCount is %@",(__bridge id)tmpTypeRef);
+						recastTypeRef = (__bridge id)tmpTypeRef;
+						if (tmpTypeRef == NULL || 
+						([recastTypeRef isKindOfClass:[NSNumber class]] && [(NSNumber *)recastTypeRef intValue]<2))	{
+							tmpString = [tmpString stringByAppendingFormat:@", Progressive"];
+						}
+						else
+							tmpString = [tmpString stringByAppendingFormat:@", Interlaced"];
+					
+						//	check the pixel aspect ratio
+						tmpTypeRef = CMFormatDescriptionGetExtension(desc, kCMFormatDescriptionExtension_PixelAspectRatio);
+						recastTypeRef = (__bridge id)tmpTypeRef;
+						//NSLog(@"PixelAspectRatio is (%@), %@",[recastTypeRef class],recastTypeRef);
+						if (tmpTypeRef == NULL)
+							tmpString = [tmpString stringByAppendingFormat:@", Square pixels"];
+						else	{
+							NSNumber		*tmpWidth = [(NSDictionary *)recastTypeRef objectForKey:@"HorizontalSpacing"];
+							NSNumber		*tmpHeight = [(NSDictionary *)recastTypeRef objectForKey:@"VerticalSpacing"];
+							if (tmpWidth==nil || tmpHeight==nil)
+								tmpString = [tmpString stringByAppendingFormat:@", Square pixels"];
+							else	{
+								if (tmpWidth.intValue == tmpHeight.intValue)
+									tmpString = [tmpString stringByAppendingFormat:@", Square pixels"];
+								else
+									tmpString = [tmpString stringByAppendingFormat:@", %d:%d pixel aspect ratio",tmpWidth.intValue,tmpHeight.intValue];
+							}
+						}
+					
+						//	can we get the color space/color profile?
+						//	i have no idea how this is supposed to work, these return NULL and i'm gonna try something else instead of spending more time here
+						//tmpTypeRef = CMFormatDescriptionGetExtension(desc, kCMFormatDescriptionExtension_ICCProfile);
+						//recastTypeRef = (__bridge id)tmpTypeRef;
+						//NSLog(@"ICCProfile is %@",recastTypeRef);
+						//tmpTypeRef = CMFormatDescriptionGetExtension(desc, kCMFormatDescriptionExtension_ColorPrimaries);
+						//recastTypeRef = (__bridge id)tmpTypeRef;
+						//NSLog(@"ColorPrimaries are %@",recastTypeRef);
+						//tmpTypeRef = CMFormatDescriptionGetExtension(desc, kCMFormatDescriptionColorPrimaries_ITU_R_709_2);
+						//recastTypeRef = (__bridge id)tmpTypeRef;
+						//NSLog(@"709 is %@",recastTypeRef);
+					
+					
+					}
+				}
+				
+				++trackIndex;
+			}
+			
+			tmpAttrString = [[NSMutableAttributedString alloc] initWithString:(tmpString==nil) ? @"(No video tracks)" : tmpString];
+			[tmpAttrString
+				addAttribute:NSFontAttributeName
+				value:[NSFont labelFontOfSize:[NSFont labelFontSize]]
+				range:NSMakeRange(0,tmpAttrString.length)];
+			[videoString appendAttributedString:tmpAttrString];
+			
+			[videoField setAttributedStringValue:videoString];
+			[videoField setAllowsEditingTextAttributes:YES];
+			[videoField sizeToFit];
+		}
+		
+		
+		//	populate the audio string
+		{
+			tmpString = nil;
+			NSArray<AVAssetTrack*>		*tracks = [asset tracks];
+			int							trackIndex = 1;
+			for (AVAssetTrack *track in tracks)	{
+				AVMediaType			trackMediaType = [track mediaType];
+				//NSLog(@"\t\tprocessing track %@, media type is %@",track,trackMediaType);
+				if ([trackMediaType isEqualToString:AVMediaTypeAudio])	{
+					NSString		*codecsString = nil;
+					for (int i=0; i<track.formatDescriptions.count; ++i)	{
+						CMFormatDescriptionRef		desc = (__bridge CMFormatDescriptionRef)track.formatDescriptions[i];
+						if (desc == NULL)
+							continue;
+						NSString			*type = FourCCString(CMFormatDescriptionGetMediaSubType(desc));
+						if (type == nil)
+							continue;
+						NSString			*humanReadable = AudioFourCCStringToHumanReadableCodec(type);
+						if (humanReadable == nil)
+							continue;
+						
+						if (codecsString == nil)
+							codecsString = humanReadable;
+						else
+							codecsString = [codecsString stringByAppendingFormat:@", %@",humanReadable];
+					}
+					//[description appendFormat:@"\t%d: Audio (%@)\n",trackIndex,codecsString];
+					if (tmpString == nil)
+						tmpString = [NSString stringWithFormat:@"Track %d: %@",trackIndex,codecsString];
+					else
+						tmpString = [tmpString stringByAppendingFormat:@"\nTrack %d: %@",trackIndex,codecsString];
+				}
+				else if ([trackMediaType isEqualToString:AVMediaTypeMuxed])	{
+					NSString		*codecsString = nil;
+					for (int i=0; i<track.formatDescriptions.count; ++i)	{
+						CMFormatDescriptionRef		desc = (__bridge CMFormatDescriptionRef)track.formatDescriptions[i];
+						if (desc == NULL)
+							continue;
+						CMMediaType			mediaType = CMFormatDescriptionGetMediaType(desc);
+						NSString			*subtype = FourCCString(CMFormatDescriptionGetMediaSubType(desc));
+						NSString			*humanReadable = nil;
+						switch (mediaType)	{
+						case kCMMediaType_Video:
+							humanReadable = VideoFourCCStringToHumanReadableCodec(subtype);
+							break;
+						case kCMMediaType_Audio:
+							humanReadable = AudioFourCCStringToHumanReadableCodec(subtype);
+							break;
+						//case kCMMediaType_Muxed:
+						case kCMMediaType_Text:
+							humanReadable = @"Text";
+							break;
+						case kCMMediaType_ClosedCaption:
+							humanReadable = @"Closed Caption";
+							break;
+						case kCMMediaType_Subtitle:
+							humanReadable = @"Subtitle";
+							break;
+						case kCMMediaType_TimeCode:
+							humanReadable = @"Timecode";
+							break;
+						//	weird, not recognized for some reason?
+						//case kCMMediaType_TimedMetadata:
+						//	humanReadable = @"Timed Metadata";
+						//	break;
+						case kCMMediaType_Metadata:
+							humanReadable = @"Metadata";
+							break;
+						}
+						
+						if (codecsString == nil)
+							codecsString = humanReadable;
+						else
+							codecsString = [codecsString stringByAppendingFormat:@", %@",humanReadable];
+					}
+					//[description appendFormat:@"\t%d: Muxed (%@)\n",trackIndex,codecsString];
+					if (tmpString == nil)
+						tmpString = [NSString stringWithFormat:@"Track %d: Muxed (%@)",trackIndex,codecsString];
+					else
+						tmpString = [tmpString stringByAppendingFormat:@"\nTrack %d: Muxed (%@)",trackIndex,codecsString];
+				}
+				
+				++trackIndex;
+			}
+			
+			tmpAttrString = [[NSMutableAttributedString alloc] initWithString:(tmpString==nil) ? @"(No audio tracks)" : tmpString];
+			[tmpAttrString
+				addAttribute:NSFontAttributeName
+				value:[NSFont labelFontOfSize:[NSFont labelFontSize]]
+				range:NSMakeRange(0,tmpAttrString.length)];
+			[audioString appendAttributedString:tmpAttrString];
+			
+			[audioField setAttributedStringValue:audioString];
+			[audioField setAllowsEditingTextAttributes:YES];
+			[audioField sizeToFit];
+		}
+	}
+	
+	
+	
+	/*
 	NSMutableString		*description = [[NSMutableString alloc] init];
 	[description appendFormat:@"%@\n",self.inspectedObject.src];
 	if (self.inspectedObject.type == OpType_Other)	{
@@ -447,13 +821,17 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 		}
 		
 		if (asset != nil)	{
+			//	get some vars we're gonna need ahead of time
+			NSArray<AVAssetTrack*>		*tracks = [asset tracks];
+			NSArray<AVAssetTrack*>		*visualTracks = [asset tracksWithMediaCharacteristic:AVMediaCharacteristicVisual];
+			
 			//	run through the tracks, assemble a quick summary of each track
 			[description appendString:@"Tracks:\n"];
-			NSArray<AVAssetTrack*>		*tracks = [asset tracks];
 			int							trackIndex = 1;
 			for (AVAssetTrack *track in tracks)	{
 				AVMediaType			trackMediaType = [track mediaType];
-				if (trackMediaType == AVMediaTypeAudio)	{
+				NSLog(@"\t\tprocessing track %@, media type is %@",track,trackMediaType);
+				if ([trackMediaType isEqualToString:AVMediaTypeAudio])	{
 					NSString		*codecsString = nil;
 					for (int i=0; i<track.formatDescriptions.count; ++i)	{
 						CMFormatDescriptionRef		desc = (__bridge CMFormatDescriptionRef)track.formatDescriptions[i];
@@ -473,20 +851,20 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 					}
 					[description appendFormat:@"\t%d: Audio (%@)\n",trackIndex,codecsString];
 				}
-				else if (trackMediaType == AVMediaTypeClosedCaption)	{
+				else if ([trackMediaType isEqualToString:AVMediaTypeClosedCaption])	{
 					[description appendFormat:@"\t%d: Closed-caption\n",trackIndex];
 				}
-				else if (trackMediaType == AVMediaTypeDepthData)	{
+				else if ([trackMediaType isEqualToString:AVMediaTypeDepthData])	{
 					[description appendFormat:@"\t%d: Depth Data\n",trackIndex];
 				}
-				else if (trackMediaType == AVMediaTypeMetadata)	{
+				else if ([trackMediaType isEqualToString:AVMediaTypeMetadata])	{
 					[description appendFormat:@"\t%d: Metadata\n",trackIndex];
 				}
 				//	not available on macOS
 				//else if (trackMediaType == AVMediaTypeMetadataObject)	{
 				//	[description appendFormat:@"\t%d: Metadata Object\n",trackIndex];
 				//}
-				else if (trackMediaType == AVMediaTypeMuxed)	{
+				else if ([trackMediaType isEqualToString:AVMediaTypeMuxed])	{
 					NSString		*codecsString = nil;
 					for (int i=0; i<track.formatDescriptions.count; ++i)	{
 						CMFormatDescriptionRef		desc = (__bridge CMFormatDescriptionRef)track.formatDescriptions[i];
@@ -531,16 +909,16 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 					}
 					[description appendFormat:@"\t%d: Muxed (%@)\n",trackIndex,codecsString];
 				}
-				else if (trackMediaType == AVMediaTypeSubtitle)	{
+				else if ([trackMediaType isEqualToString:AVMediaTypeSubtitle])	{
 					[description appendFormat:@"\t%d: Subtitles\n",trackIndex];
 				}
-				else if (trackMediaType == AVMediaTypeText)	{
+				else if ([trackMediaType isEqualToString:AVMediaTypeText])	{
 					[description appendFormat:@"\t%d: Text\n",trackIndex];
 				}
-				else if (trackMediaType == AVMediaTypeTimecode)	{
+				else if ([trackMediaType isEqualToString:AVMediaTypeTimecode])	{
 					[description appendFormat:@"\t%d: Timecode\n",trackIndex];
 				}
-				else if (trackMediaType == AVMediaTypeVideo)	{
+				else if ([trackMediaType isEqualToString:AVMediaTypeVideo])	{
 					NSString		*codecsString = nil;
 					for (int i=0; i<track.formatDescriptions.count; ++i)	{
 						CMFormatDescriptionRef		desc = (__bridge CMFormatDescriptionRef)track.formatDescriptions[i];
@@ -564,19 +942,90 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 				++trackIndex;
 			}	//	end of 'for' loop iterating across tracks
 			
+			//	make a space
+			[description appendFormat:@"\n"];
+			
+			
 			//	now get the primary video track- we want to describe it more qualitatively...
-			NSArray<AVAssetTrack*>	*videoTracks = [asset tracksWithMediaCharacteristic:AVMediaCharacteristicVisual];
-			if (videoTracks!=nil && videoTracks.count > 0)	{
-				AVAssetTrack			*videoTrack = videoTracks[0];
+			if (visualTracks!=nil && visualTracks.count > 0)	{
+				AVAssetTrack		*videoTrack = visualTracks[0];
+				
+				//	get the resolution
+				CGSize				tmpSize = [videoTrack naturalSize];
+				[description appendFormat:@"%d x %d",(int)tmpSize.width,(int)tmpSize.height];
+				
+				//	get the framerate
+				double				tmpDouble = [videoTrack nominalFrameRate];
+				[description appendFormat:@", %0.2f FPS",tmpDouble];
+				
+				//	get the duration
+				CMTime				tmpTime = [asset duration];
+				NSString			*tmpString = [NSString smpteStringForTimeInSeconds:CMTimeGetSeconds(tmpTime) withFPS:tmpDouble];
+				if (tmpString != nil)
+					[description appendFormat:@", Duration: %@",tmpString];
+				
+				
 				if (videoTrack.formatDescriptions.count > 0)	{
 					CMFormatDescriptionRef		desc = (__bridge CMFormatDescriptionRef)videoTrack.formatDescriptions[0];
 					CFTypeRef			tmpTypeRef = NULL;
+					id					recastTypeRef = nil;
+					
+					//	check the field count
 					tmpTypeRef = CMFormatDescriptionGetExtension(desc, kCMFormatDescriptionExtension_FieldCount);
-					NSLog(@"extension field count is %p",(__bridge id)tmpTypeRef);
+					NSLog(@"FieldCount is %@",(__bridge id)tmpTypeRef);
+					recastTypeRef = (__bridge id)tmpTypeRef;
+					if (tmpTypeRef == NULL || 
+					([recastTypeRef isKindOfClass:[NSNumber class]] && [(NSNumber *)recastTypeRef intValue]<2))	{
+						[description appendFormat:@", Progressive"];
+					}
+					else
+						[description appendFormat:@", Interlaced"];
+					
+					//	check the pixel aspect ratio
+					tmpTypeRef = CMFormatDescriptionGetExtension(desc, kCMFormatDescriptionExtension_PixelAspectRatio);
+					recastTypeRef = (__bridge id)tmpTypeRef;
+					NSLog(@"PixelAspectRatio is (%@), %@",[recastTypeRef class],recastTypeRef);
+					if (tmpTypeRef == NULL)
+						[description appendFormat:@", Square pixels"];
+					else	{
+						NSNumber		*tmpWidth = [(NSDictionary *)recastTypeRef objectForKey:@"HorizontalSpacing"];
+						NSNumber		*tmpHeight = [(NSDictionary *)recastTypeRef objectForKey:@"VerticalSpacing"];
+						if (tmpWidth==nil || tmpHeight==nil)
+							[description appendFormat:@", Square pixels"];
+						else	{
+							if (tmpWidth.intValue == tmpHeight.intValue)
+								[description appendFormat:@", Square pixels"];
+							else
+								[description appendFormat:@", %d:%d pixel aspect ratio",tmpWidth.intValue,tmpHeight.intValue];
+						}
+					}
+					
+					//	can we get the color space/color profile?
+					//	i have no idea how this is supposed to work, these return NULL and i'm gonna try something else instead of spending more time here
+					//tmpTypeRef = CMFormatDescriptionGetExtension(desc, kCMFormatDescriptionExtension_ICCProfile);
+					//recastTypeRef = (__bridge id)tmpTypeRef;
+					//NSLog(@"ICCProfile is %@",recastTypeRef);
+					//tmpTypeRef = CMFormatDescriptionGetExtension(desc, kCMFormatDescriptionExtension_ColorPrimaries);
+					//recastTypeRef = (__bridge id)tmpTypeRef;
+					//NSLog(@"ColorPrimaries are %@",recastTypeRef);
+					//tmpTypeRef = CMFormatDescriptionGetExtension(desc, kCMFormatDescriptionColorPrimaries_ITU_R_709_2);
+					//recastTypeRef = (__bridge id)tmpTypeRef;
+					//NSLog(@"709 is %@",recastTypeRef);
+					
+					
 				}
+				
 			}
+			
+			
+			
+			//	actually update the description field
+			[opDescriptionField setStringValue:description];
+			
+			//	we need to resize the description field + box
 		}
 	}
+	*/
 }
 
 

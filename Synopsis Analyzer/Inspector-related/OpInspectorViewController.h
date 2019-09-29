@@ -15,7 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-@interface OpInspectorViewController : NSViewController
+@interface OpInspectorViewController : NSViewController	{
+	IBOutlet NSClipView				*clipView;
+	IBOutlet NSStackView			*stackView;
+	
+	IBOutlet NSTextField			*fileField;
+	IBOutlet NSTextField			*videoField;
+	IBOutlet NSTextField			*audioField;
+}
 
 - (void) inspectOp:(SynOp *)n;
 

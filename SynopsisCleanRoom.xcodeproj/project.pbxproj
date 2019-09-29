@@ -38,6 +38,8 @@
 		1A626145231476D000DC2B06 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A626144231476D000DC2B06 /* main.m */; };
 		1A62615B231476F000DC2B06 /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
 		1A62615D2314770100DC2B06 /* Synopsis.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1A85F56E233ED6FE00541CFB /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A85F567233ED6FE00541CFB /* CoreMedia.framework */; };
+		1A85F571233EDE5A00541CFB /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A85F570233EDE5A00541CFB /* NSStringAdditions.m */; };
 		1A9B1EBE23314B73007D414A /* PrefsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A9B1EBC23314B72007D414A /* PrefsController.m */; };
 		1A9B1EBF23314B73007D414A /* PrefsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A9B1EBD23314B73007D414A /* PrefsController.xib */; };
 		1A9B1EC423314C1C007D414A /* LogController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A9B1EC223314C1C007D414A /* LogController.xib */; };
@@ -52,6 +54,7 @@
 		1AA3C055233C1432009F6821 /* OpInspectorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AA3C053233C1432009F6821 /* OpInspectorViewController.xib */; };
 		1AA3C05A233C1E58009F6821 /* EmptyInspectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AA3C058233C1E58009F6821 /* EmptyInspectorViewController.m */; };
 		1AA3C05B233C1E58009F6821 /* EmptyInspectorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AA3C059233C1E58009F6821 /* EmptyInspectorViewController.xib */; };
+		1AA77B0D233FC5400049DEC4 /* FlippedClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AA77B0C233FC5400049DEC4 /* FlippedClipView.m */; };
 		1AC1029423328DB300510548 /* SynSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AC1029323328DB300510548 /* SynSession.m */; };
 		1AC1ED4D2318145E00AAD380 /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
 		1AC1ED4E2318146400AAD380 /* HapInAVFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -253,6 +256,9 @@
 		1A626144231476D000DC2B06 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1A626146231476D000DC2B06 /* SynopsisCleanRoom.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SynopsisCleanRoom.entitlements; sourceTree = "<group>"; };
 		1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Synopsis-Framework.xcodeproj"; path = "./Synopsis-Framework/Synopsis/Synopsis-Framework.xcodeproj"; sourceTree = "<group>"; };
+		1A85F567233ED6FE00541CFB /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		1A85F56F233EDE5A00541CFB /* NSStringAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
+		1A85F570233EDE5A00541CFB /* NSStringAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		1A9B1EBB23314B72007D414A /* PrefsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefsController.h; sourceTree = "<group>"; };
 		1A9B1EBC23314B72007D414A /* PrefsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrefsController.m; sourceTree = "<group>"; };
 		1A9B1EBD23314B73007D414A /* PrefsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsController.xib; sourceTree = "<group>"; };
@@ -269,6 +275,8 @@
 		1AA3C057233C1E58009F6821 /* EmptyInspectorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmptyInspectorViewController.h; sourceTree = "<group>"; };
 		1AA3C058233C1E58009F6821 /* EmptyInspectorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmptyInspectorViewController.m; sourceTree = "<group>"; };
 		1AA3C059233C1E58009F6821 /* EmptyInspectorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyInspectorViewController.xib; sourceTree = "<group>"; };
+		1AA77B0B233FC5400049DEC4 /* FlippedClipView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlippedClipView.h; sourceTree = "<group>"; };
+		1AA77B0C233FC5400049DEC4 /* FlippedClipView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlippedClipView.m; sourceTree = "<group>"; };
 		1AC1029223328DB300510548 /* SynSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynSession.h; sourceTree = "<group>"; };
 		1AC1029323328DB300510548 /* SynSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SynSession.m; sourceTree = "<group>"; };
 		1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HapInAVFoundation.xcodeproj; path = ./HapInAVFoundation/HapInAVFoundation.xcodeproj; sourceTree = "<group>"; };
@@ -317,6 +325,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A85F56E233ED6FE00541CFB /* CoreMedia.framework in Frameworks */,
 				1A9B1ECB23315051007D414A /* HapInAVFoundation.framework in Frameworks */,
 				1A9B1ECC23315051007D414A /* Synopsis.framework in Frameworks */,
 			);
@@ -387,6 +396,10 @@
 				1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */,
 				1AEC510D2335556C0053C1B0 /* NSMenuAdditions.h */,
 				1AEC510E2335556C0053C1B0 /* NSMenuAdditions.m */,
+				1A85F56F233EDE5A00541CFB /* NSStringAdditions.h */,
+				1A85F570233EDE5A00541CFB /* NSStringAdditions.m */,
+				1AA77B0B233FC5400049DEC4 /* FlippedClipView.h */,
+				1AA77B0C233FC5400049DEC4 /* FlippedClipView.m */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -451,6 +464,7 @@
 		1A62615A231476F000DC2B06 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1A85F567233ED6FE00541CFB /* CoreMedia.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -757,6 +771,7 @@
 				1AEC510F2335556C0053C1B0 /* NSMenuAdditions.m in Sources */,
 				1A10934A233001A300791BDA /* CustomVisualEffectView.m in Sources */,
 				1A1093542330024A00791BDA /* PreferencesGeneralViewController.m in Sources */,
+				1A85F571233EDE5A00541CFB /* NSStringAdditions.m in Sources */,
 				1A1093592330025500791BDA /* PreferencesFileViewController.m in Sources */,
 				1A1093672330027600791BDA /* PresetObject.m in Sources */,
 				1AA3C04F233C1425009F6821 /* SessionInspectorViewController.m in Sources */,
@@ -767,6 +782,7 @@
 				1AD6237123395C4B0025703E /* SynopsisJobObject.m in Sources */,
 				1AEE2F822334032E009193CD /* PrefsPathAbstraction.m in Sources */,
 				1A1093382330011C00791BDA /* SessionController.m in Sources */,
+				1AA77B0D233FC5400049DEC4 /* FlippedClipView.m in Sources */,
 				1A1093442330012900791BDA /* LogController.m in Sources */,
 				1AEE2F85233448E0009193CD /* PathAbstraction.m in Sources */,
 				1A10936A2330027C00791BDA /* PresetGroup.m in Sources */,
