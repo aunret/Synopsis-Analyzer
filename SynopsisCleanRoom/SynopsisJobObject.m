@@ -316,7 +316,9 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	NSFileManager		*fm = [NSFileManager defaultManager];
 	NSURL				*actualDstURL = /*(self.tmpFile!=nil) ? self.tmpFile :*/ self.dstFile;
 	if ([fm fileExistsAtPath:[actualDstURL path]])	{
-		if (![fm removeItemAtURL:actualDstURL error:&nsErr] || nsErr != nil)	{
+		if (![fm removeItemAtURL:actualDstURL error:&nsErr] || nsErr != nil)
+		//if (![fm trashItemAtURL:actualDstURL resultingItemURL:nil error:&nsErr] || nsErr != nil)
+		{
 			self.jobStatus = JOStatus_Err;
 			self.jobErr = JOErr_CantWriteDest;
 			self.jobErrString = @"Destination file already exists but cannot be deleted";
@@ -1551,13 +1553,17 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		NSFileManager		*fm = [NSFileManager defaultManager];
 		/*
 		if (self.tmpFile != nil)	{
-			if ([fm fileExistsAtPath:[self.tmpFile path]])
-				[fm trashItemAtURL:self.tmpFile resultingItemURL:nil error:nil];
+			if ([fm fileExistsAtPath:[self.tmpFile path]])	{
+				//[fm trashItemAtURL:self.tmpFile resultingItemURL:nil error:nil];
+				[fm removeItemAtURL:self.tmpFile error:nil];
+			}
 		}
 		*/
 		if (self.dstFile != nil)	{
-			if ([fm fileExistsAtPath:[self.dstFile path]])
-				[fm trashItemAtURL:self.dstFile resultingItemURL:nil error:nil];
+			if ([fm fileExistsAtPath:[self.dstFile path]])	{
+				//[fm trashItemAtURL:self.dstFile resultingItemURL:nil error:nil];
+				[fm removeItemAtURL:self.dstFile error:nil];
+			}
 		}
 	}
 	//	else the job completed successfully!  hooray!
@@ -1583,7 +1589,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			}
 			//	else i copied the temp file to the dest file- trash the temp file
 			else	{
-				[fm trashItemAtURL:self.tmpFile resultingItemURL:nil error:nil];
+				//[fm trashItemAtURL:self.tmpFile resultingItemURL:nil error:nil];
+				[fm removeItemAtURL:self.tmpFile error:nil];
 			}
 		}
 		*/

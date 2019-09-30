@@ -1079,7 +1079,7 @@ const NSString* value = @"Value";
 
 - (IBAction)selectVideoResolution:(id)sender
 {
-	NSLog(@"selected Video Resolution: %@", [sender representedObject]);
+	//NSLog(@"selected Video Resolution: %@", [sender representedObject]);
 	
 	// If we are on the first (Native) resolution
 	if (self.prefsVideoDimensions.indexOfSelectedItem == 0)
@@ -1123,7 +1123,7 @@ const NSString* value = @"Value";
 
 - (IBAction)selectVideoQuality:(id)sender
 {
-	NSLog(@"selected Video Quality: %@", [sender representedObject]);
+	//NSLog(@"selected Video Quality: %@", [sender representedObject]);
 	
 //	  [self validateVideoPrefsUI];
 //	  [self buildVideoPreferences];
@@ -1133,7 +1133,7 @@ const NSString* value = @"Value";
 
 - (IBAction)selectVideoAspectRatio:(id)sender
 {
-	NSLog(@"selected Video Quality: %@", [sender representedObject]);
+	//NSLog(@"selected Video Quality: %@", [sender representedObject]);
 	
 //	  [self validateVideoPrefsUI];
 //	  [self buildVideoPreferences];
@@ -1211,7 +1211,7 @@ const NSString* value = @"Value";
 	
 	self.selectedPreset.videoSettings = [PresetVideoSettings settingsWithDict:videoSettingsDictonary];
 	
-	NSLog(@"Calculated Video Settings : %@", self.selectedPreset.videoSettings.settingsDictionary);
+	//NSLog(@"Calculated Video Settings : %@", self.selectedPreset.videoSettings.settingsDictionary);
 }
 
 #pragma mark - Audio Prefs Actions
@@ -1268,21 +1268,21 @@ const NSString* value = @"Value";
 
 - (IBAction)selectAudioSamplerate:(id)sender
 {
-	NSLog(@"selected Audio Sampleate: %@", [sender representedObject]);
+	//NSLog(@"selected Audio Sampleate: %@", [sender representedObject]);
 	self.presetChanged = YES;
 
 }
 
 - (IBAction)selectAudioQuality:(id)sender
 {
-	NSLog(@"selected Audio Quality: %@", [sender representedObject]);
+	//NSLog(@"selected Audio Quality: %@", [sender representedObject]);
 	self.presetChanged = YES;
 
 }
 
 - (IBAction)selectAudioBitrate:(id)sender
 {
-	NSLog(@"selected Audio Bitrate: %@", [sender representedObject]);
+	//NSLog(@"selected Audio Bitrate: %@", [sender representedObject]);
 	self.presetChanged = YES;
 
 }
@@ -1345,7 +1345,7 @@ const NSString* value = @"Value";
 	
 	self.selectedPreset.audioSettings = [PresetAudioSettings settingsWithDict:audioSettingsDictonary];
 	
-	NSLog(@"Calculated Audio Settings : %@", self.selectedPreset.audioSettings.settingsDictionary);
+	//NSLog(@"Calculated Audio Settings : %@", self.selectedPreset.audioSettings.settingsDictionary);
 }
 
 #pragma mark - Analysis Prefs Actions
@@ -1628,7 +1628,7 @@ const NSString* value = @"Value";
 
 - (void) cellDidEditText:(NSNotification*)notification
 {
-	NSLog(@"Update Selected Preset Title");
+	//NSLog(@"Update Selected Preset Title");
 	NSTextField* updatedTextField = (NSTextField*)notification.object;
 	self.selectedPreset.title = updatedTextField.stringValue;
 

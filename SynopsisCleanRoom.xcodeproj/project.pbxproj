@@ -63,6 +63,7 @@
 		1AD845A0232C1E3900416F5C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AD8459F232C1E3900416F5C /* Images.xcassets */; };
 		1AD845A3232C1E3900416F5C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AD845A1232C1E3900416F5C /* MainMenu.xib */; };
 		1AD845A6232C1E3900416F5C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AD845A5232C1E3900416F5C /* main.m */; };
+		1ADA766123426A9A0072EB10 /* FSDirectoryWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ADA766023426A9A0072EB10 /* FSDirectoryWatcher.m */; };
 		1AEC50FE233553840053C1B0 /* NSPopUpButtonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */; };
 		1AEC510F2335556C0053C1B0 /* NSMenuAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC510E2335556C0053C1B0 /* NSMenuAdditions.m */; };
 		1AEE2F792333C917009193CD /* PresetSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F782333C917009193CD /* PresetSettings.m */; };
@@ -288,6 +289,8 @@
 		1AD845A4232C1E3900416F5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AD845A5232C1E3900416F5C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1AD845A7232C1E3900416F5C /* Synopsis_Analyzer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Synopsis_Analyzer.entitlements; sourceTree = "<group>"; };
+		1ADA765F23426A9A0072EB10 /* FSDirectoryWatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FSDirectoryWatcher.h; path = misc/FSDirectoryWatcher.h; sourceTree = "<group>"; };
+		1ADA766023426A9A0072EB10 /* FSDirectoryWatcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FSDirectoryWatcher.m; path = misc/FSDirectoryWatcher.m; sourceTree = "<group>"; };
 		1AEC50FC233553840053C1B0 /* NSPopUpButtonAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSPopUpButtonAdditions.h; sourceTree = "<group>"; };
 		1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSPopUpButtonAdditions.m; sourceTree = "<group>"; };
 		1AEC510D2335556C0053C1B0 /* NSMenuAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSMenuAdditions.h; sourceTree = "<group>"; };
@@ -521,6 +524,8 @@
 				1A1093432330012900791BDA /* LogController.m */,
 				1A9B1EC223314C1C007D414A /* LogController.xib */,
 				1A109370233002FD00791BDA /* misc */,
+				1ADA765F23426A9A0072EB10 /* FSDirectoryWatcher.h */,
+				1ADA766023426A9A0072EB10 /* FSDirectoryWatcher.m */,
 			);
 			path = "Synopsis Analyzer";
 			sourceTree = "<group>";
@@ -770,6 +775,7 @@
 				1AEC50FE233553840053C1B0 /* NSPopUpButtonAdditions.m in Sources */,
 				1AEC510F2335556C0053C1B0 /* NSMenuAdditions.m in Sources */,
 				1A10934A233001A300791BDA /* CustomVisualEffectView.m in Sources */,
+				1ADA766123426A9A0072EB10 /* FSDirectoryWatcher.m in Sources */,
 				1A1093542330024A00791BDA /* PreferencesGeneralViewController.m in Sources */,
 				1A85F571233EDE5A00541CFB /* NSStringAdditions.m in Sources */,
 				1A1093592330025500791BDA /* PreferencesFileViewController.m in Sources */,

@@ -29,7 +29,7 @@
 
 - (void) awakeFromNib	{
 	//NSLog(@"%s",__func__);
-	__block PreferencesGeneralViewController		*bss = self;
+	__weak PreferencesGeneralViewController		*bss = self;
 	
 	[scriptAbs setUserDefaultsKey:kSynopsisAnalyzerOperationScriptKey];
 	[scriptAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{

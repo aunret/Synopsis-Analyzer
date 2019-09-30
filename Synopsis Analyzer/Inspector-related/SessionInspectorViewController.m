@@ -45,7 +45,7 @@
 }
 - (void) awakeFromNib	{
 	//NSLog(@"%s",__func__);
-	__block SessionInspectorViewController		*bss = self;
+	__weak SessionInspectorViewController		*bss = self;
 	
 	//	configure the presets PUB
 	[self _updatePresetsPUB];

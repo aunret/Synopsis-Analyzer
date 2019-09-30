@@ -38,6 +38,7 @@
 
 
 - (instancetype) initWithSrcURL:(NSURL *)inSrc	{
+	//NSLog(@"%s ... %@",__func__,inSrc.path);
 	self = [super init];
 	if (self != nil)	{
 		self.src = [inSrc path];
@@ -54,6 +55,7 @@
 	return self;
 }
 - (instancetype) initWithSrcPath:(NSString *)inSrc	{
+	//NSLog(@"%s ... %@",__func__,inSrc);
 	self = [super init];
 	if (self != nil)	{
 		self.src = inSrc;
@@ -70,7 +72,7 @@
 	return self;
 }
 - (instancetype) initWithCoder:(NSCoder *)coder	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	self = [super init];
 	if (self != nil)	{
 		if ([coder allowsKeyedCoding])	{
@@ -106,7 +108,7 @@
 
 
 - (NSString *) description	{
-	return [NSString stringWithFormat:@"<SynOp: %@>",self.src.lastPathComponent];
+	return [NSString stringWithFormat:@"<SynOp: %@, %@>",self.src.lastPathComponent,[self createStatusString]];
 }
 //	synthesize using a different name so we avoid recursion (we're overriding the setter/getter so we only populate the thumb when appropriate)
 @synthesize session=mySession;
@@ -266,7 +268,7 @@
 
 
 - (void) start	{
-	NSLog(@"%s ... %@",__func__,self);
+	//NSLog(@"%s ... %@",__func__,self);
 	@synchronized (self)	{
 		self.paused = NO;
 		dispatch_async(dispatch_get_main_queue(), ^{
@@ -331,7 +333,7 @@
 	}
 }
 - (void) _beginPreflight	{
-	NSLog(@"%s ... %@",__func__,self);
+	//NSLog(@"%s ... %@",__func__,self);
 	@synchronized (self)	{
 		__weak SynOp			*bss = self;
 		//	if i don't have a session, something's wrong: bail (call my delegate 'finished' method)
@@ -351,7 +353,7 @@
 		BOOL				isDir = NO;
 		NSString			*srcPathExtension = self.src.pathExtension;
 		NSString			*srcFileName = [self.src.lastPathComponent stringByDeletingPathExtension];
-		NSString			*dstFilename = [srcFileName stringByAppendingString:@"_analyzed"];
+		NSString			*dstFilename = (self.type==OpType_AVFFile) ? [srcFileName stringByAppendingString:@"_analyzed"] : srcFileName;
 		NSString			*srcDir = [[[NSURL fileURLWithPath:self.src] URLByDeletingLastPathComponent] path];
 	
 		//	if my session is a dir-type
@@ -522,11 +524,12 @@
 	}
 }
 - (void) _beginJob	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	
 	@synchronized (self)	{
 		//	if this isn't an AVF file, proceed directly to cleanup
 		if (self.type != OpType_AVFFile)	{
+			self.status = OpStatus_Analyze;
 			[self _beginCleanup];
 			return;
 		}
@@ -606,7 +609,7 @@
 	}
 }
 - (void) _beginCleanup	{
-	NSLog(@"%s ... %@",__func__,self);
+	//NSLog(@"%s ... %@",__func__,self);
 	@synchronized (self)	{
 		NSFileManager			*fm = [NSFileManager defaultManager];
 		NSError					*nsErr = nil;
@@ -616,11 +619,13 @@
 		if (self.status == OpStatus_Err || self.status == OpStatus_Pending)	{
 			//	move tmp file to trash
 			if (self.tmpFile != nil)	{
-				[fm trashItemAtURL:[NSURL fileURLWithPath:self.tmpFile isDirectory:NO] resultingItemURL:nil error:&nsErr];
+				//[fm trashItemAtURL:[NSURL fileURLWithPath:self.tmpFile isDirectory:NO] resultingItemURL:nil error:&nsErr];
+				[fm removeItemAtURL:[NSURL fileURLWithPath:self.tmpFile isDirectory:NO] error:&nsErr];
 			}
 			//	move dst file to trash
 			if (self.dst != nil)	{
-				[fm trashItemAtURL:[NSURL fileURLWithPath:self.dst isDirectory:NO] resultingItemURL:nil error:&nsErr];
+				//[fm trashItemAtURL:[NSURL fileURLWithPath:self.dst isDirectory:NO] resultingItemURL:nil error:&nsErr];
+				[fm removeItemAtURL:[NSURL fileURLWithPath:self.dst isDirectory:NO] error:&nsErr];
 			}
 			//	bail- tell delegate we're done...
 			dispatch_async(dispatch_get_main_queue(), ^{
@@ -640,9 +645,23 @@
 		if (self.type == OpType_AVFFile)	{
 			//	if there's a temp file, copy it to the dest file and then move the tmp file to the trash
 			if (self.tmpFile != nil)	{
+				//	copy the tmp file to the dst location
 				if (![fm copyItemAtPath:self.tmpFile toPath:self.dst error:&nsErr])	{
 					self.status = OpStatus_Err;
 					self.errString = [NSString stringWithFormat:@"Couldn't copy tmp file to destination (%@)",nsErr.localizedDescription];
+					dispatch_async(dispatch_get_main_queue(), ^{
+						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+						if (tmpDelegate != nil)
+							[tmpDelegate synOpStatusFinished:bss];
+					});
+					return;
+				}
+				//	move the tmp file to the trash
+				//if (![fm trashItemAtURL:[NSURL fileURLWithPath:self.tmpFile isDirectory:NO] resultingItemURL:nil error:&nsErr])
+				if (![fm removeItemAtURL:[NSURL fileURLWithPath:self.tmpFile isDirectory:NO] error:&nsErr])
+				{
+					self.status = OpStatus_Err;
+					self.errString = [NSString stringWithFormat:@"Couldn't trash tmp file (%@)",nsErr.localizedDescription];
 					dispatch_async(dispatch_get_main_queue(), ^{
 						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
 						if (tmpDelegate != nil)
@@ -695,6 +714,21 @@
 - (void) running	{
 }
 */
+
+
+#pragma mark - NSObject protocol
+
+
+- (BOOL) isEqual:(id)n	{
+	if (n == nil)
+		return NO;
+	if (![n isKindOfClass:[self class]])
+		return NO;
+	SynOp			*recast = (SynOp *)n;
+	if (self.src != nil && recast.src != nil && [self.src isEqualToString:recast.src])
+		return YES;
+	return NO;
+}
 
 
 @end

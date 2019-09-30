@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-//@class SynOp;
-//@class PresetObject;	//	can't fwd declare protocol (d'oh)
 #import "SynOp.h"
 #import "PresetObject.h"
 
@@ -17,12 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-/*
-@protocol SynSessionDelegate
-- (void) synSessionStatusChanged:(SynSession *_Nonnull)n;
-- (void) synOpStatusFinished:(SynOp *_Nonnull)n;
-@end
-*/
 typedef NS_ENUM(NSUInteger, SessionType)	{
 	SessionType_Dir = 0,
 	SessionType_List
@@ -48,21 +40,15 @@ typedef NS_ENUM(NSUInteger, SessionType)	{
 @property (atomic,readwrite) BOOL copyNonMediaFiles;
 @property (atomic,readwrite) BOOL watchFolder;
 
-//@property (atomic,readwrite) SessionStatus status;
 @property (atomic,readwrite) SessionType type;
-
-//@property (atomic,weak,nullable) NSObject<SynSessionDelegate> * delegate;
 
 - (SynOp *) createOpForSrcURL:(NSURL *_Nonnull)n;
 - (NSString *_Nonnull) createDescriptionString;
 
-//- (void) stopAllOps;
-//- (SynOp *) startAnOp;
 //	returns -1 if session isn't being processed yet, for any reason (disabled, all pending, all complete/err, etc)
 - (double) calculateProgress;
 
-- (void) createDirectoryWatcher;
-- (void) destroyDirectoryWatcher;
+- (SynOp *) getOpWithSrcFile:(NSString *)n;
 
 @end
 

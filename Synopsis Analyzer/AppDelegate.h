@@ -23,6 +23,7 @@
 }
 
 - (IBAction) openMovies:(id)sender;
+- (IBAction) openPreferences:(id)sender;
 
 @end
 

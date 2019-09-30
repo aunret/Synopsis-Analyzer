@@ -252,33 +252,42 @@ static SessionController			*globalSessionController = nil;
 	}
 }
 - (int) maxOpCount	{
+	//NSLog(@"%s",__func__);
 	int				returnMe = 1;
-	NSNumber		*tmpNum = [[NSUserDefaults standardUserDefaults] objectForKey:kSynopsisAnalyzerConcurrentJobCountPreferencesKey];
-	//	 a val of -1 indicates that the user selected "auto" in the prefs
-	if (tmpNum==nil || [tmpNum intValue] <= 0)	{
-		/*
-		//	try to get the actual number of physical cores
-		size_t				len;
-		unsigned int		ncpu;
-		len = sizeof(ncpu);
-		sysctlbyname("hw.ncpu", &ncpu, &len, NULL, 0);
-		if (ncpu > 0)	{
-			returnMe = ncpu;
-		}
-		//	if something went wrong, use NSProcessInfo to return the number of logical cores
-		else	{
-			returnMe = [[NSProcessInfo processInfo] processorCount];
-		}
-		*/
-		returnMe = (int)[[NSProcessInfo processInfo] processorCount];
-		
-		//	"too many" jobs just f-es things up
-		if (returnMe > 6)
-			returnMe = returnMe / 2;
+	
+	NSNumber		*tmpConcurrentJobs = [[NSUserDefaults standardUserDefaults] objectForKey:kSynopsisAnalyzerConcurrentJobAnalysisPreferencesKey];
+	if (tmpConcurrentJobs == nil || ![tmpConcurrentJobs boolValue])	{
+		returnMe = 1;
 	}
-	//	else the user entered a specific number of jobs
 	else	{
-		returnMe = [tmpNum intValue];
+		NSNumber		*tmpJobCount = [[NSUserDefaults standardUserDefaults] objectForKey:kSynopsisAnalyzerConcurrentJobCountPreferencesKey];
+		//NSLog(@"\tval from defaults is %@",tmpJobCount);
+		//	 a val of -1 indicates that the user selected "auto" in the prefs
+		if (tmpJobCount==nil || [tmpJobCount intValue] <= 0)	{
+			/*
+			//	try to get the actual number of physical cores
+			size_t				len;
+			unsigned int		ncpu;
+			len = sizeof(ncpu);
+			sysctlbyname("hw.ncpu", &ncpu, &len, NULL, 0);
+			if (ncpu > 0)	{
+				returnMe = ncpu;
+			}
+			//	if something went wrong, use NSProcessInfo to return the number of logical cores
+			else	{
+				returnMe = [[NSProcessInfo processInfo] processorCount];
+			}
+			*/
+			returnMe = (int)[[NSProcessInfo processInfo] processorCount];
+		
+			//	"too many" jobs just f-es things up
+			if (returnMe > 6)
+				returnMe = returnMe / 2;
+		}
+		//	else the user entered a specific number of jobs
+		else	{
+			returnMe = [tmpJobCount intValue];
+		}
 	}
 	
 	return returnMe;
@@ -353,7 +362,6 @@ static SessionController			*globalSessionController = nil;
 }
 
 - (IBAction)openMovies:(id)sender	{
-	NSLog(@"should be adding movies here");
 	// Open a movie or two
 	NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 	[openPanel setAllowsMultipleSelection:YES];
@@ -418,6 +426,7 @@ static SessionController			*globalSessionController = nil;
 	//	expand the item for the session we just created
 	[outlineView expandItem:filesSession expandChildren:YES];
 }
+/*
 - (void) newSessionWithDir:(NSURL *)n recursively:(BOOL)isRecursive	{
 	if (n == nil)
 		return;
@@ -435,6 +444,7 @@ static SessionController			*globalSessionController = nil;
 	//	expand the item for the session we just created
 	[outlineView expandItem:newSession expandChildren:YES];
 }
+*/
 
 
 - (void) reloadData	{
@@ -466,12 +476,14 @@ static SessionController			*globalSessionController = nil;
 
 
 - (void) synOpStatusFinished:(SynOp *)n	{
-	//NSLog(@"%s ... %@: %@",__func__,n,[SynopsisJobObject stringForStatus:n.job.jobStatus]);
+	NSLog(@"%s ... %@",__func__,n);
 	//BOOL			opFinished = NO;
 	BOOL			startAnotherOp = NO;
  	@synchronized (self)	{
 		
+		//NSLog(@"\tbefore, opsInProgress was %@",self.opsInProgress);
 		[self.opsInProgress removeObjectIdenticalTo:n];
+		//NSLog(@"\tafter, opsInProgress was %@",self.opsInProgress);
 		
 		//	if we just finished an op, we may want to start another?
 		if (self.running && self.opsInProgress.count < [self maxOpCount])	{

@@ -51,13 +51,13 @@ PrefsController			*globalPrefsController = nil;
 	[self window];
 }
 - (void)windowDidLoad {
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
     [super windowDidLoad];
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 - (void) awakeFromNib	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	[self.prefsViewController view];
 }
 

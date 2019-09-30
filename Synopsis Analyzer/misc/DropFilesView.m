@@ -75,7 +75,6 @@
 
 - (NSDragOperation) draggingEntered:(id<NSDraggingInfo>)sender
 {
-	NSLog(@"%s",__func__);
 	if ((NSDragOperationGeneric & [sender draggingSourceOperationMask]) == NSDragOperationGeneric)
 	{
 
@@ -135,9 +134,9 @@
 		if([self.dragDelegate respondsToSelector:@selector(analysisSessionForFiles:sessionCompletionBlock:)])
 		{
 			[self.dragDelegate analysisSessionForFiles:urls sessionCompletionBlock:^{
-				dispatch_async(dispatch_get_main_queue(),^{
-					NSLog(@"Drag Session Completed");
-				});
+				//dispatch_async(dispatch_get_main_queue(),^{
+				//	NSLog(@"Drag Session Completed");
+				//});
 			}];
 		}
 	}

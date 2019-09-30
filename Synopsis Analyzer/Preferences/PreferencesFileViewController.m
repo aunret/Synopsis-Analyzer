@@ -41,7 +41,7 @@
 - (void) awakeFromNib
 {
 	//NSLog(@"%s",__func__);
-	__block PreferencesFileViewController		*bss = self;
+	__weak PreferencesFileViewController		*bss = self;
 	[outputFolderAbs setUserDefaultsKey:kSynopsisAnalyzerOutputFolderURLKey];
 	[outputFolderAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];

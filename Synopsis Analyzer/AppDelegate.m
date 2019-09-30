@@ -198,7 +198,9 @@
 - (IBAction)openMovies:(id)sender	{
 	[[SessionController global] openMovies:sender];
 }
-
+- (IBAction) openPreferences:(id)sender	{
+	[[SessionController global] revealPreferences:sender];
+}
 
 
 #pragma mark - NSFileManager Delegate -

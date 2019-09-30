@@ -10,6 +10,9 @@
 #import "SynOp.h"
 #import "PresetObject.h"
 #import "PrefsController.h"
+//#import <Synopsis/Synopsis.h>
+#import "FSDirectoryWatcher.h"
+#import "SessionController.h"
 
 
 
@@ -17,6 +20,9 @@
 @interface SynSession ()
 - (instancetype) initWithFiles:(NSArray<NSURL*> *)n;
 - (instancetype) initWithDir:(NSURL *)n recursively:(BOOL)isRecursive;
+@property (strong,readwrite,nullable) FSDirectoryWatcher * watcher;
+- (void) createDirectoryWatcher;
+- (void) destroyDirectoryWatcher;
 @end
 
 
@@ -36,7 +42,7 @@
 
 
 - (instancetype) initWithFiles:(NSArray<NSURL*> *)n	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	self = [super init];
 	if (self != nil)	{
 		PrefsController			*pc = [PrefsController global];
@@ -58,6 +64,7 @@
 		
 		self.copyNonMediaFiles = NO;
 		self.watchFolder = NO;
+		self.watcher = nil;
 		
 		self.type = SessionType_List;
 		
@@ -73,7 +80,7 @@
 	return self;
 }
 - (instancetype) initWithDir:(NSURL *)inDir recursively:(BOOL)isRecursive	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	NSFileManager		*fm = [NSFileManager defaultManager];
 	BOOL				isDir = NO;
 	if (![fm fileExistsAtPath:[inDir path] isDirectory:&isDir] || !isDir)
@@ -100,6 +107,7 @@
 		
 		self.copyNonMediaFiles = NO;
 		self.watchFolder = NO;
+		self.watcher = nil;
 		
 		self.type = SessionType_Dir;
 		
@@ -107,18 +115,15 @@
 		//	run through the passed dir recursively, creating ops for the passed files
 		NSFileManager			*fm = [NSFileManager defaultManager];
 		NSDirectoryEnumerationOptions		iterOpts = NSDirectoryEnumerationSkipsPackageDescendants | NSDirectoryEnumerationSkipsHiddenFiles;
-		//if (!isRecursive)	{
+		if (!isRecursive)	{
 			iterOpts = iterOpts | NSDirectoryEnumerationSkipsSubdirectoryDescendants;
-		//}
-		if (isRecursive)
-			NSLog(@"ERR: recursive is disabled right now!");
+		}
 		NSDirectoryEnumerator				*dirIt = [fm
 			enumeratorAtURL:inDir
 			includingPropertiesForKeys:@[ NSURLIsDirectoryKey ]
 			options:iterOpts
 			errorHandler:nil];
 		for (NSURL *fileURL in dirIt)	{
-			NSLog(@"\tchecking url %@",fileURL.path);
 			NSError			*nsErr = nil;
 			NSNumber		*isDir = nil;
 			if (![fileURL getResourceValue:&isDir forKey:NSURLIsDirectoryKey error:&nsErr])	{
@@ -129,8 +134,6 @@
 					[self.ops addObject:newOp];
 			}
 		}
-		
-		//self.status = SessionStatus_Pending;
 	}
 	return self;
 }
@@ -143,15 +146,11 @@
 
 
 - (instancetype) initWithCoder:(NSCoder *)coder	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	self = [super init];
 	if (self != nil)	{
 		if ([coder allowsKeyedCoding])	{
 			PrefsController			*pc = [PrefsController global];
-			
-			//self.src = (![coder containsValueForKey:@"src"]) ? nil : [coder decodeObjectForKey:@"src"];
-			//self.dst = (![coder containsValueForKey:@"dst"]) ? nil : [coder decodeObjectForKey:@"dst"];
-			//self.status = (![coder containsValueForKey:@"status"]) ? OpStatus_Pending : (OpStatus)[coder decodeIntForKey:@"status"];
 			
 			self.enabled = (![coder containsValueForKey:@"enabled"])
 				? YES
@@ -176,8 +175,11 @@
 			self.preset = (![coder containsValueForKey:@"preset"])
 				? [pc defaultPreset]
 				: [pc presetForUUID:[coder decodeObjectForKey:@"preset"]];
-			//if (self.preset == nil)
-			//	self.preset = [pc defaultPreset];
+			
+			//	'type' must be loaded before 'copyNonMediaFiles' and 'watchFolder'
+			self.type = (![coder containsValueForKey:@"type"])
+				? SessionType_List
+				: (SessionType)[coder decodeInt64ForKey:@"type"];
 			
 			self.copyNonMediaFiles = (![coder containsValueForKey:@"copyNonMediaFiles"])
 				? NO
@@ -186,10 +188,6 @@
 			self.watchFolder = (![coder containsValueForKey:@"watchFolder"])
 				? NO
 				: [coder decodeBoolForKey:@"watchFolder"];
-			
-			self.type = (![coder containsValueForKey:@"type"])
-				? SessionType_List
-				: (SessionType)[coder decodeInt64ForKey:@"type"];
 			
 			//	load the ops last so we can use self's properties to populate the op's properties
 			NSArray		*tmpArray = (![coder containsValueForKey:@"ops"]) ? [[NSMutableArray alloc] init] : [coder decodeObjectForKey:@"ops"];
@@ -224,12 +222,11 @@
 		if (self.preset.uuid != nil)
 			[coder encodeObject:self.preset.uuid forKey:@"preset"];
 		
-		[coder encodeBool:self.copyNonMediaFiles forKey:@"copyNonMediaFiles"];
-		[coder encodeBool:self.watchFolder forKey:@"watchFolder"];
-		
+		//	'type' must be loaded before 'copyNonMediaFiles' and 'watchFolder'
 		[coder encodeInt64:(NSInteger)self.type forKey:@"type"];
 		
-		//[coder encodeInt:(NSInteger)self.status forKey:@"status"];
+		[coder encodeBool:self.copyNonMediaFiles forKey:@"copyNonMediaFiles"];
+		[coder encodeBool:self.watchFolder forKey:@"watchFolder"];
 	}
 }
 
@@ -251,8 +248,18 @@
 		return nil;
 	
 	SynOp			*returnMe = [[SynOp alloc] initWithSrcURL:n];
+	
+	if (returnMe != nil)	{
+		if (returnMe.type == OpType_Other && !self.copyNonMediaFiles)	{
+			returnMe = nil;
+		}
+		else
+			returnMe.session = self;
+	}
+	
 	//returnMe.delegate = [SessionController global];
-	returnMe.session = self;
+	//if (returnMe != nil)
+	//	returnMe.session = self;
 	//NSLog(@"\t\tnew op is %@",returnMe);
 	
 	/*
@@ -308,6 +315,61 @@
 			return [NSString stringWithFormat:@"(%d files, %d files to analyze)",totalCount,analyzeCount];
 	}
 }
+
+@synthesize copyNonMediaFiles=myCopyNonMediaFiles;
+- (void) setCopyNonMediaFiles:(BOOL)n	{
+	@synchronized (self)	{
+		BOOL			changed = (myCopyNonMediaFiles==n) ? NO : YES;
+		myCopyNonMediaFiles = n;
+		//	if we're enabling this 'copyNonMediaFiles'...
+		if (changed)	{
+			if (self.srcDir != nil)	{
+				//	enumerate everything in 'srcDir'- make sure that ops exist for all the non-AVF files that haven't already been added...
+				NSFileManager		*fm = [NSFileManager defaultManager];
+				NSDirectoryEnumerationOptions		iterOpts = NSDirectoryEnumerationSkipsPackageDescendants | NSDirectoryEnumerationSkipsHiddenFiles;
+				NSDirectoryEnumerator				*dirIt = [fm
+					enumeratorAtURL:[NSURL fileURLWithPath:self.srcDir]
+					includingPropertiesForKeys:@[ NSURLIsDirectoryKey ]
+					options:iterOpts
+					errorHandler:nil];
+				for (NSURL *fileURL in dirIt)	{
+					//NSLog(@"\tchecking url %@",fileURL.path);
+					NSError			*nsErr = nil;
+					NSNumber		*isDir = nil;
+					if (![fileURL getResourceValue:&isDir forKey:NSURLIsDirectoryKey error:&nsErr])	{
+					}
+					else if (![isDir boolValue])	{
+						//	if 'copyNonMediaFiles' is enabled, make sure that an op exists for this file (even if it's not an AVF file)
+						if (n)	{
+							if ([self getOpWithSrcFile:[fileURL path]] == nil)	{
+								SynOp			*newOp = [self createOpForSrcURL:fileURL];
+								if (newOp != nil)	{
+									[self.ops addObject:newOp];
+								}
+							}
+						}
+						//	else 'copyNonMediaFiles' is disabled- try to find an op for this file, and if it's not an AVF file, delete it
+						else	{
+							SynOp		*existingOp = [self getOpWithSrcFile:[fileURL path]];
+							if (existingOp != nil && existingOp.type != OpType_AVFFile)	{
+								[self.ops removeObjectIdenticalTo:existingOp];
+							}
+						}
+						
+					}
+				}
+			
+			}
+			
+			//	if we added or removed files we need to update the outline view...
+			[[SessionController global] reloadRowForItem:self];
+		}
+	}
+}
+- (BOOL) copyNonMediaFiles	{
+	return myCopyNonMediaFiles;
+}
+
 @synthesize watchFolder=myWatchFolder;
 - (void) setWatchFolder:(BOOL)n	{
 	@synchronized (self)	{
@@ -326,44 +388,6 @@
 - (BOOL) watchFolder	{
 	return myWatchFolder;
 }
-
-
-#pragma mark - control
-
-
-/*
-- (void) stopAllOps	{
-}
-- (SynOp *) startAnOp	{
-	if (!self.enabled)
-		return nil;
-	SynOp		*returnMe = nil;
-	@synchronized (self.ops)	{
-		//	run through the array of ops until we find one we can start
-		for (SynOp * op in self.ops)	{
-			switch (op.status)	{
-			case OpStatus_Pending:
-				returnMe = op;
-				break;
-			case OpStatus_PreflightErr:
-			case OpStatus_Analyze:
-			case OpStatus_Cleanup:
-			case OpStatus_Complete:
-			case OpStatus_Err:
-				break;
-			}
-			if (returnMe != nil)
-				break;
-		}
-	}
-	
-	//	start the op
-	if (returnMe != nil)
-		[returnMe start];
-	
-	return returnMe;
-}
-*/
 - (double) calculateProgress	{
 	double		returnMe = -1.0;
 	@synchronized (self.ops)	{
@@ -397,37 +421,83 @@
 	return returnMe;
 }
 - (void) createDirectoryWatcher	{
-	NSLog(@"ERR- INCOMPLETE, %s",__func__);
+	@synchronized (self)	{
+		if (self.watcher != nil)
+			self.watcher = nil;
+		if (self.watchFolder && self.srcDir != nil && [[NSFileManager defaultManager] fileExistsAtPath:self.srcDir])	{
+			//	make a watcher for the top-level directory
+			//NSLog(@"\tmaking directory watcher for %@",self.srcDir);
+			
+			/*
+			self.watcher = [[VVKQueue alloc] init];
+			self.watcher.delegate = self;
+			[self.watcher watchPath:self.srcDir];
+			*/
+			
+			
+			__weak SynSession		*bss = self;
+			self.watcher = [[FSDirectoryWatcher alloc]
+				initWithDirectory:self.srcDir
+				notificationBlock:^(NSArray<NSString*> * changedPaths)	{
+					NSLog(@"watched paths changed! %@",changedPaths);
+					
+					//	run through the URLs (they may be files or folders, we don't know at this point)
+					NSFileManager			*fm = [NSFileManager defaultManager];
+					for (NSString *changedPath in changedPaths)	{
+						BOOL			isDir = NO;
+						//	if the file doesn't exist at this path, try to remove any ops with this as a src
+						if (![fm fileExistsAtPath:changedPath isDirectory:&isDir])	{
+							BOOL			foundMatch;
+							do	{
+								int				tmpIndex = 0;
+								foundMatch = NO;
+								for (SynOp *op in bss.ops)	{
+									if (op.src != nil && [op.src isEqualToString:changedPath])	{
+										[bss.ops removeObjectAtIndex:tmpIndex];
+										foundMatch = YES;
+										break;
+									}
+									++tmpIndex;
+								}
+							} while (foundMatch);
+						}
+						//	else if the file exists and it isn't a directory, make an op for it and add it to this session
+						else if (!isDir)	{
+							SynOp		*newOp = [bss createOpForSrcURL:[NSURL fileURLWithPath:changedPath]];
+							if (newOp != nil)
+								[bss.ops addObject:newOp];
+						}
+					}
+					
+					//	now that my ops have been updated, i need to reload my row in the outline view
+					[[SessionController global] reloadRowForItem:bss];
+					
+					//	it's a watch folder, so start the session!
+					[[SessionController global] start];
+				}];
+			
+		}
+	}
 }
 - (void) destroyDirectoryWatcher	{
-	NSLog(@"ERR- INCOMPLETE, %s",__func__);
-}
-
-
-/*
-#pragma mark - SynOpDelegate protocol
-
-
-- (void) synOpStatusFinished:(SynOp *)n	{
-	NSLog(@"%s ... %@",__func__,n);
-	
-	switch (n.status)	{
-	case OpStatus_Pending:
-	case OpStatus_PreflightErr:
-	case OpStatus_Cleanup:
-		break;
-	case OpStatus_Complete:
-	case OpStatus_Err:
-		//	
-		break;
-	case OpStatus_Analyze:
-		break;
+	@synchronized (self)	{
+		self.watcher = nil;
 	}
-	
-	//if (self.delegate != nil)
-	//	[self.delegate synOpStatusFinished:n];
 }
-*/
+- (SynOp *) getOpWithSrcFile:(NSString *)n	{
+	if (n == nil)
+		return nil;
+	SynOp			*returnMe = nil;
+	@synchronized (self)	{
+		for (SynOp *op in self.ops)	{
+			if (op.src!=nil && [op.src isEqualToString:n])	{
+				returnMe = op;
+				break;
+			}
+		}
+	}
+	return returnMe;
+}
 
 
 @end
