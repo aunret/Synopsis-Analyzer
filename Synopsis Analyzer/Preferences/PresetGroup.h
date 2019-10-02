@@ -14,12 +14,14 @@
 
 @interface PresetGroup : NSObject
 
-@property (copy) NSString* title;
-@property (readonly) BOOL editable;
-
-@property (copy) NSArray* children;
++ (PresetGroup *) standardPresets;
++ (PresetGroup *) customPresets;
 
 - (id) initWithTitle:(NSString*)title editable:(BOOL)editable NS_DESIGNATED_INITIALIZER;
 - (instancetype) init NS_UNAVAILABLE;
+
+@property (strong,readwrite) NSString * title;
+@property (readonly) BOOL editable;
+@property (strong,readonly) NSMutableArray * children;
 
 @end

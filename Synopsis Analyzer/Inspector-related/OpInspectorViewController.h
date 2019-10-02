@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 	IBOutlet NSTextField			*audioField;
 }
 
-- (void) inspectOp:(SynOp *)n;
+- (void) inspectOp:(nullable SynOp *)n;
 
 //	should be nil unless inspector is currently active
 @property (readwrite,atomic,weak,nullable) SynOp * inspectedObject;

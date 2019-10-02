@@ -57,7 +57,7 @@
                         </subviews>
                     </view>
                 </box>
-                <box autoresizesSubviews="NO" borderType="line" title="Scripts" id="n92-Bb-2zs">
+                <box hidden="YES" autoresizesSubviews="NO" borderType="line" title="Scripts" id="n92-Bb-2zs">
                     <rect key="frame" x="17" y="16" width="446" height="238"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <view key="contentView" id="IUI-CI-NpH">

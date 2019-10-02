@@ -32,6 +32,7 @@
 		1A34044C23283EFA004A434D /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
 		1A34044D23283EFA004A434D /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
 		1A34044E23283F0C004A434D /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
+		1A55FD7F2343F78E007CA355 /* PresetSettingsUIController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A55FD7E2343F78E007CA355 /* PresetSettingsUIController.m */; };
 		1A62613D231476CF00DC2B06 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A62613C231476CF00DC2B06 /* AppDelegate.m */; };
 		1A62613F231476D000DC2B06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A62613E231476D000DC2B06 /* Assets.xcassets */; };
 		1A626142231476D000DC2B06 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A626140231476D000DC2B06 /* MainMenu.xib */; };
@@ -248,6 +249,8 @@
 		1A10937B2330205800791BDA /* OpRowView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpRowView.xib; sourceTree = "<group>"; };
 		1A34043F23283C25004A434D /* synopsis_cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = synopsis_cli; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A34044123283C25004A434D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1A55FD7D2343F78E007CA355 /* PresetSettingsUIController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetSettingsUIController.h; sourceTree = "<group>"; };
+		1A55FD7E2343F78E007CA355 /* PresetSettingsUIController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetSettingsUIController.m; sourceTree = "<group>"; };
 		1A626138231476CF00DC2B06 /* SynopsisCleanRoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SynopsisCleanRoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A62613B231476CF00DC2B06 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1A62613C231476CF00DC2B06 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -360,6 +363,8 @@
 				1A1093692330027C00791BDA /* PresetGroup.m */,
 				1AEE2F772333C917009193CD /* PresetSettings.h */,
 				1AEE2F782333C917009193CD /* PresetSettings.m */,
+				1A55FD7D2343F78E007CA355 /* PresetSettingsUIController.h */,
+				1A55FD7E2343F78E007CA355 /* PresetSettingsUIController.m */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -787,6 +792,7 @@
 				1AD845A6232C1E3900416F5C /* main.m in Sources */,
 				1AD6237123395C4B0025703E /* SynopsisJobObject.m in Sources */,
 				1AEE2F822334032E009193CD /* PrefsPathAbstraction.m in Sources */,
+				1A55FD7F2343F78E007CA355 /* PresetSettingsUIController.m in Sources */,
 				1A1093382330011C00791BDA /* SessionController.m in Sources */,
 				1AA77B0D233FC5400049DEC4 /* FlippedClipView.m in Sources */,
 				1A1093442330012900791BDA /* LogController.m in Sources */,

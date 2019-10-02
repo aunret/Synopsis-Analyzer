@@ -10,9 +10,16 @@
 
 #import "PresetObject.h"
 
+@class PresetSettingsUIController;
+
+
+
+
 @interface PreferencesPresetViewController : NSViewController
 
-
 - (NSArray*) allPresets;
+
+- (IBAction) addPresetClicked:(id)sender;
+- (IBAction) removePresetClicked:(id)sender;
 
 @end

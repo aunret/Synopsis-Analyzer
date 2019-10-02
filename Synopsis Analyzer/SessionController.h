@@ -25,6 +25,10 @@
 	
 	IBOutlet NSToolbarItem		*runPauseButton;
 	IBOutlet NSToolbarItem		*stopButton;
+	
+	IBOutlet NSToolbarItem		*addItem;
+	IBOutlet NSToolbarItem		*removeItem;
+	IBOutlet NSToolbarItem		*clearItem;
 }
 
 + (SessionController *) global;
@@ -33,6 +37,9 @@
 - (IBAction) cancelButtonClicked:(id)sender;
 
 - (IBAction) openMovies:(id)sender;
+- (IBAction) removeSelectedItems:(id)sender;
+- (IBAction) clearClicked:(id)sender;
+
 - (IBAction) revealLog:(id)sender;
 - (IBAction) revealPreferences:(id)sender;
 

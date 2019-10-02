@@ -962,20 +962,26 @@
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="hM4-kZ-Hva"/>
-                    <toolbarItem implicitItemIdentifier="F3232DA9-670E-41E3-AF4A-B66DAC378227" label="Add" paletteLabel="Add" tag="-1" image="ic_add_circle" id="7fq-1i-wVh">
+                    <toolbarItem implicitItemIdentifier="F3232DA9-670E-41E3-AF4A-B66DAC378227" label="Add" paletteLabel="Add" tag="-1" image="ic_add_circle" autovalidates="NO" id="7fq-1i-wVh">
                         <size key="minSize" width="24" height="24"/>
                         <size key="maxSize" width="24" height="24"/>
                         <connections>
                             <action selector="openMovies:" target="zNf-jZ-W26" id="4XG-b3-r8B"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="B9E1F858-8F5A-4A15-A3BF-8E83C3639C34" label="Remove" paletteLabel="Remove" tag="-1" image="ic_remove_circle" id="TLi-wI-Xej">
+                    <toolbarItem implicitItemIdentifier="B9E1F858-8F5A-4A15-A3BF-8E83C3639C34" label="Remove" paletteLabel="Remove" tag="-1" image="ic_remove_circle" autovalidates="NO" id="TLi-wI-Xej">
                         <size key="minSize" width="24" height="24"/>
                         <size key="maxSize" width="24" height="24"/>
+                        <connections>
+                            <action selector="removeSelectedItems:" target="zNf-jZ-W26" id="v5t-QN-CmW"/>
+                        </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="2117281B-9EAD-45A6-ABB5-26822E1290AB" label="Clear" paletteLabel="Clear" tag="-1" image="ic_clear" id="Hpn-Om-EL5">
+                    <toolbarItem implicitItemIdentifier="2117281B-9EAD-45A6-ABB5-26822E1290AB" label="Clear" paletteLabel="Clear" tag="-1" image="ic_clear" autovalidates="NO" id="Hpn-Om-EL5">
                         <size key="minSize" width="24" height="24"/>
                         <size key="maxSize" width="24" height="24"/>
+                        <connections>
+                            <action selector="clearClicked:" target="zNf-jZ-W26" id="FrQ-M8-fKu"/>
+                        </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="NFT-IA-jpw"/>
                     <toolbarItem implicitItemIdentifier="27C9A2D7-0BA5-4840-A613-FD2ED9ED00C3" label="Settings" paletteLabel="Settings" tag="-1" image="ic_settings" id="Lam-eY-H8Z">
@@ -1013,8 +1019,11 @@
         </window>
         <customObject id="zNf-jZ-W26" customClass="SessionController">
             <connections>
+                <outlet property="addItem" destination="7fq-1i-wVh" id="x8L-Ku-qaW"/>
+                <outlet property="clearItem" destination="Hpn-Om-EL5" id="ljw-D3-GWz"/>
                 <outlet property="dropView" destination="iTB-3N-mmD" id="vrJ-nn-JXm"/>
                 <outlet property="outlineView" destination="1Z6-MB-YhT" id="MIb-Nz-9R3"/>
+                <outlet property="removeItem" destination="TLi-wI-Xej" id="quJ-Dk-oWL"/>
                 <outlet property="runPauseButton" destination="jIE-3U-moH" id="BKY-15-StR"/>
                 <outlet property="stopButton" destination="mie-pS-Giy" id="6NJ-vr-GRo"/>
                 <outlet property="theColumn" destination="LJK-3l-D3k" id="GqY-yd-2yc"/>

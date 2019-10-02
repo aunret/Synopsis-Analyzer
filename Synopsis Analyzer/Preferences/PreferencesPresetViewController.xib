@@ -7,28 +7,12 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PreferencesPresetViewController">
             <connections>
-                <outlet property="analysisContainerView" destination="74g-Bj-gWe" id="sdM-QO-TCW"/>
-                <outlet property="audioContainerView" destination="alG-nm-dAK" id="D2f-C9-8QS"/>
-                <outlet property="jsonOptionsButton" destination="8PI-Bz-YBg" id="bkT-6u-PhO"/>
-                <outlet property="overViewSavePresetButton" destination="ukI-ft-GBe" id="gfk-3d-LWt"/>
-                <outlet property="overviewContainerView" destination="Xa5-Iy-SzP" id="JcP-Nf-N4G"/>
-                <outlet property="prefsAudioBitrate" destination="zeY-EF-YHN" id="4Zk-SM-WEL"/>
-                <outlet property="prefsAudioFormat" destination="OFq-eQ-pCf" id="Fug-I4-hP6"/>
-                <outlet property="prefsAudioQuality" destination="hFk-0X-eqA" id="PaR-Oj-saD"/>
-                <outlet property="prefsAudioRate" destination="rOv-mh-de1" id="CXr-St-GWb"/>
-                <outlet property="prefsVideoAspectRatio" destination="wT3-U8-sSo" id="xlQ-iw-OO7"/>
-                <outlet property="prefsVideoCompressor" destination="U4s-x4-kfn" id="d6H-Mm-rMH"/>
-                <outlet property="prefsVideoDimensions" destination="DTo-vQ-MRZ" id="d6g-RO-gYv"/>
-                <outlet property="prefsVideoDimensionsCustomHeight" destination="8ks-wp-ttA" id="efO-tZ-ABg"/>
-                <outlet property="prefsVideoDimensionsCustomWidth" destination="Nmj-ag-4jb" id="AKP-Kg-cLi"/>
-                <outlet property="prefsVideoQuality" destination="JTn-E5-6oB" id="xRD-xW-Ztd"/>
+                <outlet property="overViewSavePresetButton" destination="ukI-ft-GBe" id="qH3-dW-Tq7"/>
+                <outlet property="overviewContainerView" destination="Xa5-Iy-SzP" id="n1O-hy-kSW"/>
                 <outlet property="presetInfoContainerBox" destination="ohq-Pm-nFc" id="3dM-hy-g51"/>
                 <outlet property="presetOutlineView" destination="JLF-lU-CXy" id="OYj-zd-Dhm"/>
+                <outlet property="settingsUIController" destination="fgX-hC-Hqc" id="xT4-1c-Tpa"/>
                 <outlet property="stupidFuckingSplitview" destination="pps-mz-jjt" id="dxN-ep-51O"/>
-                <outlet property="useAnalysisCheckButton" destination="kYa-Zd-tia" id="rtz-0v-IWO"/>
-                <outlet property="useAudioCheckButton" destination="Tox-VS-7g3" id="Xf7-ep-sYG"/>
-                <outlet property="useVideoCheckButton" destination="kPv-pb-csI" id="yAF-Og-7Ut"/>
-                <outlet property="videoContainerView" destination="CYX-UF-twh" id="z78-cQ-8ow"/>
                 <outlet property="view" destination="xLZ-dC-Hui" id="Be5-lf-pk9"/>
             </connections>
         </customObject>
@@ -60,7 +44,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="236" height="396"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <outlineView appearanceType="vibrantLight" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="16" autosaveExpandedItems="YES" outlineTableColumn="nib-Ee-dtW" id="JLF-lU-CXy">
+                                                        <outlineView appearanceType="vibrantLight" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="16" autosaveExpandedItems="YES" outlineTableColumn="nib-Ee-dtW" id="JLF-lU-CXy">
                                                             <rect key="frame" x="0.0" y="0.0" width="236" height="396"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <size key="intercellSpacing" width="2" height="3"/>
@@ -131,7 +115,7 @@
                                         <font key="font" metaFont="smallSystem"/>
                                     </buttonCell>
                                     <connections>
-                                        <action selector="addPreset:" target="-2" id="XGl-Da-UIT"/>
+                                        <action selector="addPresetClicked:" target="-2" id="gcU-Su-RMC"/>
                                     </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" id="tQe-ZU-bFo">
@@ -141,6 +125,9 @@
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="smallSystem"/>
                                     </buttonCell>
+                                    <connections>
+                                        <action selector="removePresetClicked:" target="-2" id="bR8-XD-YFn"/>
+                                    </connections>
                                 </button>
                             </subviews>
                         </customView>
@@ -188,26 +175,26 @@
                     <tabViewItems>
                         <tabViewItem label="Audio" identifier="1" id="yQS-zl-c4w">
                             <view key="view" id="beZ-Ed-cEV">
-                                <rect key="frame" x="10" y="25" width="325" height="394"/>
+                                <rect key="frame" x="10" y="29" width="325" height="390"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view id="alG-nm-dAK" userLabel="Audio View">
-                                        <rect key="frame" x="0.0" y="-4" width="325" height="398"/>
+                                        <rect key="frame" x="0.0" y="-4" width="325" height="394"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <button id="Tox-VS-7g3">
-                                                <rect key="frame" x="70" y="361" width="124" height="20"/>
+                                                <rect key="frame" x="70" y="357" width="124" height="20"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="check" title="Write Audio Track" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="2Sp-dP-DZd">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="smallSystem"/>
                                                 </buttonCell>
                                                 <connections>
-                                                    <action selector="selectUseAudio:" target="-2" id="WbN-Bw-zde"/>
+                                                    <action selector="selectUseAudio:" target="fgX-hC-Hqc" id="K9T-9m-Qj1"/>
                                                 </connections>
                                             </button>
                                             <popUpButton verticalHuggingPriority="750" id="OFq-eQ-pCf">
-                                                <rect key="frame" x="73" y="336" width="192" height="19"/>
+                                                <rect key="frame" x="73" y="332" width="192" height="19"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <popUpButtonCell key="cell" type="roundRect" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ybs-6f-Dz2">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -221,11 +208,11 @@
                                                     </menu>
                                                 </popUpButtonCell>
                                                 <connections>
-                                                    <action selector="selectAudioFormat:" target="-2" id="DYO-5B-kCC"/>
+                                                    <action selector="selectAudioFormat:" target="fgX-hC-Hqc" id="G9G-Sk-URa"/>
                                                 </connections>
                                             </popUpButton>
                                             <popUpButton verticalHuggingPriority="750" id="rOv-mh-de1">
-                                                <rect key="frame" x="73" y="284" width="127" height="19"/>
+                                                <rect key="frame" x="73" y="280" width="127" height="19"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <popUpButtonCell key="cell" type="roundRect" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2Zu-rc-DUg">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -239,11 +226,11 @@
                                                     </menu>
                                                 </popUpButtonCell>
                                                 <connections>
-                                                    <action selector="selectAudioSamplerate:" target="-2" id="bca-hF-pzO"/>
+                                                    <action selector="selectAudioSamplerate:" target="fgX-hC-Hqc" id="AoW-ue-zLR"/>
                                                 </connections>
                                             </popUpButton>
                                             <popUpButton verticalHuggingPriority="750" id="hFk-0X-eqA">
-                                                <rect key="frame" x="73" y="310" width="127" height="19"/>
+                                                <rect key="frame" x="73" y="306" width="127" height="19"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <popUpButtonCell key="cell" type="roundRect" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sJg-df-Ire">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -263,11 +250,11 @@
                                                     </menu>
                                                 </popUpButtonCell>
                                                 <connections>
-                                                    <action selector="selectAudioQuality:" target="-2" id="lXv-6l-LKt"/>
+                                                    <action selector="selectAudioQuality:" target="fgX-hC-Hqc" id="bYK-ds-bfF"/>
                                                 </connections>
                                             </popUpButton>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Kjf-3d-bVi">
-                                                <rect key="frame" x="22" y="314" width="45" height="14"/>
+                                                <rect key="frame" x="22" y="310" width="45" height="14"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Quality:" id="4ml-M2-HSS">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -276,7 +263,7 @@
                                                 </textFieldCell>
                                             </textField>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="foW-on-IiD">
-                                                <rect key="frame" x="34" y="288" width="32" height="14"/>
+                                                <rect key="frame" x="34" y="284" width="32" height="14"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Rate:" id="2gl-3K-WIM">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -285,7 +272,7 @@
                                                 </textFieldCell>
                                             </textField>
                                             <popUpButton verticalHuggingPriority="750" id="zeY-EF-YHN">
-                                                <rect key="frame" x="73" y="258" width="127" height="19"/>
+                                                <rect key="frame" x="73" y="254" width="127" height="19"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <popUpButtonCell key="cell" type="roundRect" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="949-59-jbh">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -299,11 +286,11 @@
                                                     </menu>
                                                 </popUpButtonCell>
                                                 <connections>
-                                                    <action selector="selectAudioBitrate:" target="-2" id="W1o-8l-Ca9"/>
+                                                    <action selector="selectAudioBitrate:" target="fgX-hC-Hqc" id="qpf-aJ-OAo"/>
                                                 </connections>
                                             </popUpButton>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="zUN-ZH-XJZ">
-                                                <rect key="frame" x="24" y="262" width="43" height="14"/>
+                                                <rect key="frame" x="24" y="258" width="43" height="14"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Bitrate:" id="eVX-h0-fKK">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -312,7 +299,7 @@
                                                 </textFieldCell>
                                             </textField>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="xEq-fZ-K94">
-                                                <rect key="frame" x="22" y="340" width="45" height="14"/>
+                                                <rect key="frame" x="22" y="336" width="45" height="14"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Format:" id="2yK-SL-WLU">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -357,7 +344,7 @@
                                                     </menu>
                                                 </popUpButtonCell>
                                                 <connections>
-                                                    <action selector="selectVideoAspectRatio:" target="-2" id="6OC-DL-Jew"/>
+                                                    <action selector="selectVideoAspectRatio:" target="fgX-hC-Hqc" id="E4k-AH-AZy"/>
                                                 </connections>
                                             </popUpButton>
                                             <popUpButton verticalHuggingPriority="750" id="U4s-x4-kfn" userLabel="Codec">
@@ -375,7 +362,7 @@
                                                     </menu>
                                                 </popUpButtonCell>
                                                 <connections>
-                                                    <action selector="selectVideoEncoder:" target="-2" id="xo8-xp-ESp"/>
+                                                    <action selector="selectVideoEncoder:" target="fgX-hC-Hqc" id="AFg-LX-ywf"/>
                                                 </connections>
                                             </popUpButton>
                                             <button id="kPv-pb-csI">
@@ -386,7 +373,7 @@
                                                     <font key="font" metaFont="smallSystem"/>
                                                 </buttonCell>
                                                 <connections>
-                                                    <action selector="selectUseVideo:" target="-2" id="iNE-kT-Uoc"/>
+                                                    <action selector="selectUseVideo:" target="fgX-hC-Hqc" id="BqE-zF-qUU"/>
                                                 </connections>
                                             </button>
                                             <popUpButton verticalHuggingPriority="750" id="JTn-E5-6oB">
@@ -410,7 +397,7 @@
                                                     </menu>
                                                 </popUpButtonCell>
                                                 <connections>
-                                                    <action selector="selectVideoQuality:" target="-2" id="Bg6-SY-Q2R"/>
+                                                    <action selector="selectVideoQuality:" target="fgX-hC-Hqc" id="n5h-oO-ZWG"/>
                                                 </connections>
                                             </popUpButton>
                                             <textField verticalHuggingPriority="750" id="Nmj-ag-4jb">
@@ -461,7 +448,7 @@
                                                     </menu>
                                                 </popUpButtonCell>
                                                 <connections>
-                                                    <action selector="selectVideoResolution:" target="-2" id="UQT-5O-hUd"/>
+                                                    <action selector="selectVideoResolution:" target="fgX-hC-Hqc" id="b4q-dy-rnf"/>
                                                 </connections>
                                             </popUpButton>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="WCd-Jy-Cfo">
@@ -518,7 +505,7 @@
                                             <font key="font" metaFont="smallSystem"/>
                                         </buttonCell>
                                         <connections>
-                                            <action selector="selectUseAnalysis:" target="-2" id="YyZ-io-fRj"/>
+                                            <action selector="selectUseAnalysis:" target="fgX-hC-Hqc" id="J5k-K3-rRH"/>
                                         </connections>
                                     </button>
                                     <popUpButton verticalHuggingPriority="750" id="8PI-Bz-YBg">
@@ -545,7 +532,7 @@
                                             </menu>
                                         </popUpButtonCell>
                                         <connections>
-                                            <action selector="selectExportJSON:" target="-2" id="co6-vW-f2d"/>
+                                            <action selector="selectExportJSON:" target="fgX-hC-Hqc" id="rd7-0F-xI7"/>
                                         </connections>
                                     </popUpButton>
                                 </subviews>
@@ -597,7 +584,32 @@
                     </view>
                 </box>
             </subviews>
+            <point key="canvasLocation" x="1" y="521"/>
         </customView>
+        <customObject id="fgX-hC-Hqc" customClass="PresetSettingsUIController">
+            <connections>
+                <outlet property="analysisContainerView" destination="74g-Bj-gWe" id="Dth-4A-3xx"/>
+                <outlet property="audioContainerView" destination="alG-nm-dAK" id="Bql-nW-lrB"/>
+                <outlet property="jsonOptionsButton" destination="8PI-Bz-YBg" id="oNA-wc-4AL"/>
+                <outlet property="overViewSavePresetButton" destination="ukI-ft-GBe" id="Pqv-z1-V6b"/>
+                <outlet property="overviewContainerView" destination="Xa5-Iy-SzP" id="yo6-fB-xI6"/>
+                <outlet property="prefsAudioBitrate" destination="zeY-EF-YHN" id="GTb-qm-FI7"/>
+                <outlet property="prefsAudioFormat" destination="OFq-eQ-pCf" id="9PN-zY-JeY"/>
+                <outlet property="prefsAudioQuality" destination="hFk-0X-eqA" id="eyI-jM-Ib1"/>
+                <outlet property="prefsAudioRate" destination="rOv-mh-de1" id="Y3Q-rK-Vnt"/>
+                <outlet property="prefsVideoAspectRatio" destination="wT3-U8-sSo" id="lnu-Wr-k5H"/>
+                <outlet property="prefsVideoCompressor" destination="U4s-x4-kfn" id="uCU-Zm-hb8"/>
+                <outlet property="prefsVideoDimensions" destination="DTo-vQ-MRZ" id="mj6-ZF-SjS"/>
+                <outlet property="prefsVideoDimensionsCustomHeight" destination="8ks-wp-ttA" id="HG8-qU-Ljk"/>
+                <outlet property="prefsVideoDimensionsCustomWidth" destination="Nmj-ag-4jb" id="TFJ-AG-YCW"/>
+                <outlet property="prefsVideoQuality" destination="JTn-E5-6oB" id="Rjk-G1-EXb"/>
+                <outlet property="presetViewController" destination="-2" id="JUN-Dp-qdR"/>
+                <outlet property="useAnalysisCheckButton" destination="kYa-Zd-tia" id="rmM-mv-vY6"/>
+                <outlet property="useAudioCheckButton" destination="Tox-VS-7g3" id="aRU-Rm-uCl"/>
+                <outlet property="useVideoCheckButton" destination="kPv-pb-csI" id="cCu-m9-1Th"/>
+                <outlet property="videoContainerView" destination="CYX-UF-twh" id="vk8-0v-Z7t"/>
+            </connections>
+        </customObject>
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>

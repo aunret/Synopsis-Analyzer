@@ -20,15 +20,13 @@
 @interface PresetObject ()
 @property (readwrite) BOOL editable;
 @property (readwrite) NSUUID* uuid;
-//@property (readwrite) NSString* zero;
-//@property (readwrite) NSString* one;
-//@property (readwrite) NSString* two;
 @end
 
 
 
 
 @implementation PresetObject
+
 
 - (id) initWithTitle:(NSString*)title audioSettings:(PresetAudioSettings*)audioSettings videoSettings:(PresetVideoSettings*)videoSettings analyzerSettings:(PresetAnalysisSettings*)analyzerSettings useAudio:(BOOL)useAudio useVideo:(BOOL)useVideo useAnalysis:(BOOL) useAnalysis exportOption:(SynopsisMetadataEncoderExportOption)exportOption editable:(BOOL)editable uuid:(NSString*)UUIDString
 {
@@ -182,6 +180,32 @@
 	if (self.uuid == nil || recast.uuid == nil)
 		return NO;
 	return ([self.uuid.UUIDString isEqualToString:recast.uuid.UUIDString]);
+}
+- (BOOL) saveToDisk	{
+	BOOL			returnMe = NO;
+	
+	NSError				*error = nil;
+	NSString			*fileTitle = self.uuid.UUIDString;
+	NSData				*presetData = [self copyPresetDataWithError:&error];
+	NSString			*appName = @"Synopsis Analyzer";
+
+	if (presetData)	{
+		NSArray<NSURL*>		*appSupportURLS = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
+		
+		if (appSupportURLS.count)	{
+			NSURL				*presetURL = [appSupportURLS[0] URLByAppendingPathComponent:appName isDirectory:YES];
+			presetURL = [presetURL URLByAppendingPathComponent:@"Presets" isDirectory:YES];
+
+			if ([[NSFileManager defaultManager] createDirectoryAtURL:presetURL withIntermediateDirectories:YES attributes:nil error:nil])	{
+				presetURL = [presetURL URLByAppendingPathComponent:fileTitle];
+				presetURL = [presetURL URLByAppendingPathExtension:@"SynopsisPreset"];
+				
+				returnMe = [presetData writeToURL:presetURL atomically:YES];
+			}
+		}
+	}
+	
+	return returnMe;
 }
 
 

@@ -98,6 +98,9 @@ static SessionController			*globalSessionController = nil;
 		[runPauseButton setLabel:@"Pause"];
 		[runPauseButton setImage:[NSImage imageNamed:@"ic_pause_circle_filled"]];
 		[stopButton setEnabled:YES];
+		[addItem setEnabled:NO];
+		[removeItem setEnabled:NO];
+		[clearItem setEnabled:NO];
 		
 		//	update ivars
 		self.running = YES;
@@ -206,6 +209,9 @@ static SessionController			*globalSessionController = nil;
 		[runPauseButton setLabel:@"Start"];
 		[runPauseButton setImage:[NSImage imageNamed:@"ic_play_circle_filled"]];
 		[stopButton setEnabled:NO];
+		[addItem setEnabled:YES];
+		[removeItem setEnabled:YES];
+		[clearItem setEnabled:YES];
 		
 		//	update ivars
 		self.running = NO;
@@ -361,6 +367,7 @@ static SessionController			*globalSessionController = nil;
 	[self stop];
 }
 
+
 - (IBAction)openMovies:(id)sender	{
 	// Open a movie or two
 	NSOpenPanel* openPanel = [NSOpenPanel openPanel];
@@ -376,6 +383,38 @@ static SessionController			*globalSessionController = nil;
 		}
 	}];
 }
+- (IBAction) removeSelectedItems:(id)sender	{
+	NSLog(@"%s",__func__);
+	@synchronized (self)	{
+		NSInteger		selRow = [outlineView selectedRow];
+		if (selRow < 0)
+			return;
+		id				selItem = [outlineView itemAtRow:selRow];
+		if (selItem == nil)
+			return;
+		NSLog(@"\t\tshould be removing %@",selItem);
+		if ([selItem isKindOfClass:[SynSession class]])	{
+			SynSession		*tmpSession = (SynSession *)selItem;
+			[self.sessions removeObjectIdenticalTo:tmpSession];
+			[self reloadData];
+		}
+		else if ([selItem isKindOfClass:[SynOp class]])	{
+			SynOp			*tmpTop = (SynOp *)selItem;
+			SynSession		*tmpSession = tmpTop.session;
+			if (tmpSession == nil)
+				return;
+			[tmpSession.ops removeObjectIdenticalTo:tmpTop];
+			[self reloadData];
+		}
+	}
+}
+- (IBAction) clearClicked:(id)sender	{
+	@synchronized (self)	{
+		[self.sessions removeAllObjects];
+		[self reloadData];
+	}
+}
+
 
 - (IBAction) revealLog:(id)sender	{
 	//[self revealHelper:self.logWindow sender:sender];

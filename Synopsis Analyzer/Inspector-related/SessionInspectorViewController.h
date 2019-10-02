@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 	IBOutlet NSButton				*watchFolderToggle;
 }
 
-- (void) inspectSession:(SynSession *)n;
+- (void) inspectSession:(nullable SynSession *)n;
 
 - (IBAction) presetsPUBItemSelected:(id)sender;
 - (IBAction) copyNonMediaToggleUsed:(id)sender;

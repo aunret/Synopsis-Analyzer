@@ -65,7 +65,10 @@
 	}
 	
 	[enableToggle setIntValue:(self.session.enabled) ? NSControlStateValueOn : NSControlStateValueOff];
-	[nameField setStringValue:@"Session"];
+	if (self.session.type == SessionType_Dir)
+		[nameField setStringValue:[NSString stringWithFormat:@"\"%@\"",self.session.srcDir.lastPathComponent]];
+	else
+		[nameField setStringValue:@"Session"];
 	[presetPUB selectItemWithRepresentedObject:self.session.preset andOutput:NO];
 	
 	double			tmpProgress = [self.session calculateProgress];

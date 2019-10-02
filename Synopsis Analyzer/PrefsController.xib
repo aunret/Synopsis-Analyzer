@@ -17,7 +17,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="600" height="500"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="3840" height="2137"/>
             <view key="contentView" id="RK4-6L-tby" customClass="CustomBackgroundView">
                 <rect key="frame" x="0.0" y="0.0" width="600" height="500"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -37,10 +37,6 @@
                         <connections>
                             <action selector="transitionToFile:" target="Bxq-7w-ged" id="qDM-Sg-X7V"/>
                         </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="21E967AB-65D8-4B49-8833-433597A83317" label="Plugins" paletteLabel="Plugins" tag="-1" image="ic_extension_white" id="971-QX-k0w">
-                        <size key="minSize" width="24" height="24"/>
-                        <size key="maxSize" width="24" height="24"/>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="209ED105-EACE-4885-BB5A-7F546E6A6C96" label="Presets" paletteLabel="Presets" tag="-1" image="ic_insert_drive_file_white" id="bg1-46-FsY">
                         <size key="minSize" width="24" height="24"/>
@@ -63,7 +59,6 @@
                     <toolbarItem reference="8uD-BJ-IOp"/>
                     <toolbarItem reference="RG6-Go-X53"/>
                     <toolbarItem reference="bg1-46-FsY"/>
-                    <toolbarItem reference="971-QX-k0w"/>
                     <toolbarItem reference="fpK-My-vsB"/>
                     <toolbarItem reference="0zJ-Ad-sJg"/>
                 </defaultToolbarItems>
@@ -79,7 +74,6 @@
         </customObject>
     </objects>
     <resources>
-        <image name="ic_extension_white" width="24" height="24"/>
         <image name="ic_folder_white" width="24" height="24"/>
         <image name="ic_insert_drive_file_white" width="24" height="24"/>
         <image name="ic_tune_white" width="24" height="24"/>

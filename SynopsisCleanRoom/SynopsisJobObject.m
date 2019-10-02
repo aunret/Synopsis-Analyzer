@@ -932,7 +932,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//	  only if it's a passthru video track and analysis is being performed on it)
 	//	
 	//	run through all of these arrays simultaneously, configuring each writer input to request data as needed
-	__block SynopsisJobObject		*bss = self;
+	__weak SynopsisJobObject		*bss = self;
 	//__block int					trackIndex = 0;
 	NSEnumerator				*vidReadPassthruOutIt = [readerVideoPassthruOutputs objectEnumerator];
 	AVAssetReaderTrackOutput	*vidReadPassthruOut = [vidReadPassthruOutIt nextObject];
@@ -1092,7 +1092,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 					if (maxNumberOfInputsOrOutputsPerSubArray == 0 || maxNumberOfNonNullInputsOrOutputsPerSubArray == 0)	{
 						[writer finishWritingWithCompletionHandler:^{
 							//NSLog(@"finished writing!");
-							self.jobStatus = JOStatus_Complete;
+							bss.jobStatus = JOStatus_Complete;
 							[bss _finishWritingAndCleanUp];
 						}];
 					}
@@ -1130,7 +1130,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 						} while (junkBuffer != NULL);
 						//	sometimes, AVF gives conflicting time ranges, so we need to wrap this with an exception handler
 						@try	{
-							self.jobErrString = @"";
+							bss.jobErrString = @"";
 							[outputToAdvance resetForReadingTimeRanges:[tmpDesc sourceTimeRanges]];
 						}
 						@catch (NSException *err)	{
