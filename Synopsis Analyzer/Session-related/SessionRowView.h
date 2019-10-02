@@ -15,6 +15,7 @@
 
 @interface SessionRowView : NSTableCellView	{
 	IBOutlet NSButton		*enableToggle;
+	IBOutlet NSImageView	*iconView;
 	IBOutlet NSTextField	*nameField;
 	IBOutlet NSPopUpButton	*presetPUB;
 	

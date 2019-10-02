@@ -48,6 +48,7 @@
 		PrefsController			*pc = [PrefsController global];
 		
 		self.enabled = YES;
+		self.title = @"Files";
 		self.ops = [[NSMutableArray alloc] init];
 		self.srcDir = nil;
 		
@@ -91,6 +92,7 @@
 		PrefsController			*pc = [PrefsController global];
 		
 		self.enabled = YES;
+		self.title = [NSString stringWithFormat:@"Folder: %@",[inDir lastPathComponent]];
 		self.ops = [[NSMutableArray alloc] init];
 		self.srcDir = [inDir path];
 		

@@ -50,7 +50,7 @@
                     <font key="font" metaFont="system"/>
                     <tabViewItems>
                         <tabViewItem label="not_running" identifier="" id="vXt-Od-emh">
-                            <view key="view" id="xsQ-q0-Yjr">
+                            <view key="view" ambiguous="YES" id="xsQ-q0-Yjr">
                                 <rect key="frame" x="0.0" y="0.0" width="180" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -67,7 +67,7 @@
                             </view>
                         </tabViewItem>
                         <tabViewItem label="running" identifier="" id="ZOo-np-FKa">
-                            <view key="view" ambiguous="YES" id="9zQ-3X-Ejh">
+                            <view key="view" id="9zQ-3X-Ejh">
                                 <rect key="frame" x="0.0" y="0.0" width="180" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>

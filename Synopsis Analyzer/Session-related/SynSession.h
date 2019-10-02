@@ -29,6 +29,7 @@ typedef NS_ENUM(NSUInteger, SessionType)	{
 + (instancetype) createWithDir:(NSURL *)n recursively:(BOOL)isRecursive;
 
 @property (assign,readwrite) BOOL enabled;
+@property (strong,readwrite,atomic) NSString * title;
 
 @property (atomic,readwrite,strong,nullable) NSMutableArray<SynOp*> * ops;
 @property (atomic,readwrite,strong,nullable) NSString * srcDir;	//	only non-nil if this is a SessionType_Dir!

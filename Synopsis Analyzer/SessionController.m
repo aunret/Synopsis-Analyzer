@@ -102,6 +102,9 @@ static SessionController			*globalSessionController = nil;
 		[removeItem setEnabled:NO];
 		[clearItem setEnabled:NO];
 		
+		//	make sure nothing's inspected
+		[outlineView deselectAll:nil];
+		
 		//	update ivars
 		self.running = YES;
 		self.paused = NO;
@@ -645,6 +648,11 @@ static SessionController			*globalSessionController = nil;
 		id				tmpObj = [outlineView itemAtRow:selectedRow];
 		[[InspectorViewController global] inspectItem:tmpObj];
 	}
+}
+- (BOOL) outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item	{
+	if (self.running)
+		return NO;
+	return YES;
 }
 
 

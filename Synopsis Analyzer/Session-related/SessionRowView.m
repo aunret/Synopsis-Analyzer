@@ -65,10 +65,15 @@
 	}
 	
 	[enableToggle setIntValue:(self.session.enabled) ? NSControlStateValueOn : NSControlStateValueOff];
-	if (self.session.type == SessionType_Dir)
-		[nameField setStringValue:[NSString stringWithFormat:@"\"%@\"",self.session.srcDir.lastPathComponent]];
-	else
-		[nameField setStringValue:@"Session"];
+	[nameField setStringValue:self.session.title];
+	if (self.session.type == SessionType_Dir)	{
+		[nameField setEditable:NO];
+		[iconView setImage:[NSImage imageNamed:@"ic_folder_white"]];
+	}
+	else	{
+		[nameField setEditable:YES];
+		[iconView setImage:[NSImage imageNamed:@"ic_insert_drive_file_white"]];
+	}
 	[presetPUB selectItemWithRepresentedObject:self.session.preset andOutput:NO];
 	
 	double			tmpProgress = [self.session calculateProgress];
@@ -101,7 +106,11 @@
 	[[InspectorViewController global] reloadInspectorIfInspected:self.session];
 }
 - (IBAction) nameFieldUsed:(id)sender	{
-	//	should this even be editable?
+	if (self.session == nil)
+		return;
+	if (self.session.type == SessionType_Dir)
+		return;
+	self.session.title = [sender stringValue];
 }
 
 
