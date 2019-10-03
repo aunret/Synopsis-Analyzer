@@ -161,6 +161,8 @@
 		else	{
 			if ([asset isReadable])	{
 				AVAssetImageGenerator		*gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+                gen.appliesPreferredTrackTransform = YES;
+                gen.maximumSize = CGSizeMake(320, 240);
 				NSError				*nsErr = nil;
 				//CMTime				time = CMTimeMake(1,60);
 				CGImageRef			imgRef = [gen copyCGImageAtTime:CMTimeMake(1,60) actualTime:NULL error:&nsErr];
