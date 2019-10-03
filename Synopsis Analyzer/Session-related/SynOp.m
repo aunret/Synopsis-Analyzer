@@ -610,6 +610,14 @@
 		[self.job start];
 	}
 }
+
+- (void) _finalCleanup {
+ 
+    // force dealloc of our expensive job object
+    self.job = nil;
+
+}
+
 - (void) _beginCleanup	{
 	//NSLog(@"%s ... %@",__func__,self);
 	@synchronized (self)	{
@@ -634,7 +642,9 @@
 				NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
 				if (tmpDelegate != nil)
 					[tmpDelegate synOpStatusFinished:bss];
-			});
+
+                [self _finalCleanup];
+            });
 			return;
 		}
 	
@@ -655,6 +665,8 @@
 						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
 						if (tmpDelegate != nil)
 							[tmpDelegate synOpStatusFinished:bss];
+
+                        [self _finalCleanup];
 					});
 					return;
 				}
@@ -668,7 +680,10 @@
 						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
 						if (tmpDelegate != nil)
 							[tmpDelegate synOpStatusFinished:bss];
-					});
+
+                        [self _finalCleanup];
+
+                    });
 					return;
 				}
 			}
@@ -688,6 +703,8 @@
 					NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
 					if (tmpDelegate != nil)
 						[tmpDelegate synOpStatusFinished:bss];
+                    
+                    [self _finalCleanup];
 				});
 				return;
 			}
@@ -703,6 +720,8 @@
 			NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
 			if (tmpDelegate != nil)
 				[tmpDelegate synOpStatusFinished:bss];
+            
+            [self _finalCleanup];
 		});
 	}
 }
@@ -710,6 +729,9 @@
 	@synchronized (self)	{
 		self.paused = NO;
 		[self.job cancel];
+        
+        // force dealloc of our expensive job object
+        self.job = nil;
 	}
 }
 /*
