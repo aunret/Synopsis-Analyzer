@@ -159,7 +159,7 @@
 			//	do nothing- don't make a thumb for a non-avf asset
 		}
 		else	{
-			if ([asset isPlayable])	{
+			if ([asset isReadable])	{
 				AVAssetImageGenerator		*gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
 				NSError				*nsErr = nil;
 				//CMTime				time = CMTimeMake(1,60);

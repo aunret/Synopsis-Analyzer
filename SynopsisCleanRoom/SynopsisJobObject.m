@@ -468,7 +468,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	for (AVAssetTrack *track in tracks)	{
 		//AVAssetReaderOutput		*newOutput = nil;
 		//	if the track isn't playable and it isn't hap, we can neither transcode nor analyze it
-		if (![track isPlayable] && ![track isHapTrack])	{
+		if (![track isDecodable] && ![track isHapTrack])	{
 			[readerVideoPassthruOutputs addObject:[NSNull null]];
 			[readerVideoAnalysisOutputs addObject:[NSNull null]];
 			[readerAudioPassthruOutputs addObject:[NSNull null]];
