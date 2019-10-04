@@ -14,13 +14,16 @@
 
 
 
-@interface AppDelegate : NSObject <NSApplicationDelegate,NSSplitViewDelegate>	{
+@interface AppDelegate : NSObject <NSApplicationDelegate,NSAnimationDelegate>	{
 	IBOutlet NSWindow				*window;
 	
-	IBOutlet NSSplitView			*splitView;
+	IBOutlet NSView					*windowContentView;
 	IBOutlet NSView					*sessionSubview;
 	IBOutlet NSView					*previewSubview;
 }
+
+- (void) showPreview;
+- (void) hidePreview;
 
 - (IBAction) openMovies:(id)sender;
 - (IBAction) openPreferences:(id)sender;

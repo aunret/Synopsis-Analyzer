@@ -13,6 +13,7 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import <HapInAVFoundation/HapInAVFoundation.h>
+#import "InspectorViewController.h"
 
 
 
@@ -21,6 +22,7 @@
 @property (atomic,weak,nullable) NSObject<SynOpDelegate> * delegate;
 @property (assign,readwrite,atomic) BOOL paused;
 @property (atomic,readwrite,strong,nullable) NSString * tmpFile;
+@property (atomic,strong,readwrite) NSUUID * dragUUID;	//	literally only used for drag-and-drop.
 - (void) _beginPreflight;
 - (void) _beginJob;
 - (void) _beginCleanup;
@@ -51,6 +53,11 @@
 		self.errString = nil;
 		self.job = nil;
 		self.delegate = [SessionController global];
+		self.dragUUID = [NSUUID UUID];
+		NSFileManager		*fm = [NSFileManager defaultManager];
+		BOOL				isDir = NO;
+		if (![fm fileExistsAtPath:[inSrc path] isDirectory:&isDir] || isDir)
+			self = nil;
 	}
 	return self;
 }
@@ -68,6 +75,11 @@
 		self.errString = nil;
 		self.job = nil;
 		self.delegate = [SessionController global];
+		self.dragUUID = [NSUUID UUID];
+		NSFileManager		*fm = [NSFileManager defaultManager];
+		BOOL				isDir = NO;
+		if (![fm fileExistsAtPath:inSrc isDirectory:&isDir] || isDir)
+			self = nil;
 	}
 	return self;
 }
@@ -88,6 +100,11 @@
 			self.errString = nil;
 			self.job = nil;
 			self.delegate = [SessionController global];
+			self.dragUUID = [NSUUID UUID];
+			NSFileManager		*fm = [NSFileManager defaultManager];
+			BOOL				isDir = NO;
+			if (![fm fileExistsAtPath:self.src isDirectory:&isDir] || isDir)
+				self = nil;
 		}
 	}
 	return self;
@@ -101,6 +118,9 @@
 		//	don't encode the 'type' property
 		[coder encodeInt64:(NSInteger)self.status forKey:@"status"];
 	}
+}
+- (void) dealloc	{
+	[[InspectorViewController global] uninspectItem:self];
 }
 
 

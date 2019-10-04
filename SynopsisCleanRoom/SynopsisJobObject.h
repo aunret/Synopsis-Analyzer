@@ -2,7 +2,7 @@
 //  SynopsisJobObject.h
 //  SynopsisCleanRoom
 //
-//  Created by testAdmin on 8/26/19.
+//  Created by ray on 8/26/19.
 //  Copyright © 2019 yourcompany. All rights reserved.
 //
 

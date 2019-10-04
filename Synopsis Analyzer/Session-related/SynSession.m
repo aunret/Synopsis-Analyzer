@@ -13,6 +13,7 @@
 //#import <Synopsis/Synopsis.h>
 #import "FSDirectoryWatcher.h"
 #import "SessionController.h"
+#import "InspectorViewController.h"
 
 
 
@@ -21,6 +22,7 @@
 - (instancetype) initWithFiles:(NSArray<NSURL*> *)n;
 - (instancetype) initWithDir:(NSURL *)n recursively:(BOOL)isRecursive;
 @property (strong,readwrite,nullable) FSDirectoryWatcher * watcher;
+@property (atomic,strong,readwrite) NSUUID * dragUUID;	//	literally only used for drag-and-drop.
 - (void) createDirectoryWatcher;
 - (void) destroyDirectoryWatcher;
 @end
@@ -32,7 +34,7 @@
 
 
 + (instancetype) createWithFiles:(NSArray<NSURL*> *)n	{
-	SynSession		*returnMe = (n==nil || [n count]<1) ? nil : [[SynSession alloc] initWithFiles:n];
+	SynSession		*returnMe = [[SynSession alloc] initWithFiles:n];
 	return returnMe;
 }
 + (instancetype) createWithDir:(NSURL *)n recursively:(BOOL)isRecursive	{
@@ -66,6 +68,7 @@
 		self.copyNonMediaFiles = NO;
 		self.watchFolder = NO;
 		self.watcher = nil;
+		self.dragUUID = [NSUUID UUID];
 		
 		self.type = SessionType_List;
 		
@@ -110,6 +113,7 @@
 		self.copyNonMediaFiles = NO;
 		self.watchFolder = NO;
 		self.watcher = nil;
+		self.dragUUID = [NSUUID UUID];
 		
 		self.type = SessionType_Dir;
 		
@@ -141,6 +145,7 @@
 }
 - (void) dealloc	{
 	[self destroyDirectoryWatcher];
+	[[InspectorViewController global] uninspectItem:self];
 }
 
 
@@ -190,6 +195,8 @@
 			self.watchFolder = (![coder containsValueForKey:@"watchFolder"])
 				? NO
 				: [coder decodeBoolForKey:@"watchFolder"];
+			
+			self.dragUUID = [NSUUID UUID];
 			
 			//	load the ops last so we can use self's properties to populate the op's properties
 			NSArray		*tmpArray = (![coder containsValueForKey:@"ops"]) ? [[NSMutableArray alloc] init] : [coder decodeObjectForKey:@"ops"];
