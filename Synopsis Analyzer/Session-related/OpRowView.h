@@ -23,6 +23,7 @@
 	IBOutlet NSTextField	*statusField;
 	
 	IBOutlet NSProgressIndicator		*progressIndicator;
+	IBOutlet NSTextField	*timeRemainingField;
 }
 
 - (void) refreshWithOp:(SynOp *)n;

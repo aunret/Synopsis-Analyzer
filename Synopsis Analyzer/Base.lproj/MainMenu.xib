@@ -737,17 +737,17 @@
                                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ic_local_movies_white" id="AbP-MY-p9d"/>
                                                                         </imageView>
                                                                         <tabView type="noTabsNoBorder" id="ocf-k4-S7J">
-                                                                            <rect key="frame" x="292" y="0.0" width="173" height="30"/>
-                                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                                                            <rect key="frame" x="351" y="0.0" width="122" height="30"/>
+                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                             <font key="font" metaFont="system"/>
                                                                             <tabViewItems>
                                                                                 <tabViewItem label="not_running" identifier="" id="NZl-bJ-5P8">
                                                                                     <view key="view" id="GO6-yx-EfN">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="173" height="30"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="114" height="30"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <subviews>
                                                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Oet-Hh-iTh">
-                                                                                                <rect key="frame" x="-2" y="6" width="177" height="17"/>
+                                                                                                <rect key="frame" x="-2" y="6" width="118" height="17"/>
                                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Ready" id="OX6-R5-DNB">
                                                                                                     <font key="font" metaFont="system"/>
@@ -760,22 +760,31 @@
                                                                                 </tabViewItem>
                                                                                 <tabViewItem label="running" identifier="" id="Mdv-fP-esv">
                                                                                     <view key="view" id="Hjf-jr-KUx">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="173" height="30"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="122" height="30"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <subviews>
                                                                                             <progressIndicator wantsLayer="YES" maxValue="1" style="bar" id="foS-ZF-ETO">
-                                                                                                <rect key="frame" x="0.0" y="5" width="173" height="20"/>
+                                                                                                <rect key="frame" x="0.0" y="5" width="5" height="20"/>
                                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                                             </progressIndicator>
+                                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="n9o-Tc-1TP">
+                                                                                                <rect key="frame" x="11" y="8" width="113" height="14"/>
+                                                                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                                                                                <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Label" id="GYO-C6-9y1">
+                                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                                </textFieldCell>
+                                                                                            </textField>
                                                                                         </subviews>
                                                                                     </view>
                                                                                 </tabViewItem>
                                                                             </tabViewItems>
                                                                         </tabView>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="6s6-Qy-nGc">
-                                                                            <rect key="frame" x="58" y="6" width="228" height="17"/>
-                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="filename.mov" id="dkj-he-ptA">
+                                                                            <rect key="frame" x="58" y="6" width="291" height="17"/>
+                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                                                            <textFieldCell key="cell" lineBreakMode="truncatingMiddle" title="filename.mov" id="dkj-he-ptA">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -788,6 +797,7 @@
                                                                         <outlet property="progressIndicator" destination="foS-ZF-ETO" id="gdD-OZ-GeC"/>
                                                                         <outlet property="statusField" destination="Oet-Hh-iTh" id="d1n-kI-2jZ"/>
                                                                         <outlet property="tabView" destination="ocf-k4-S7J" id="XFU-q2-eAb"/>
+                                                                        <outlet property="timeRemainingField" destination="n9o-Tc-1TP" id="YKa-HG-PMZ"/>
                                                                     </connections>
                                                                 </tableCellView>
                                                                 <tableCellView identifier="SessionRowView" id="omP-Y0-DVG" customClass="SessionRowView">
