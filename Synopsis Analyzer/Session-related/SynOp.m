@@ -610,7 +610,8 @@
 					break;
 				case JOStatus_Err:
 					bss.status = OpStatus_Err;
-					bss.errString = [SynopsisJobObject stringForErrorType:finished.jobErr];
+					//bss.errString = [SynopsisJobObject stringForErrorType:finished.jobErr];
+					bss.errString = finished.jobErrString;
 					break;
 				case JOStatus_Complete:
 					//	intentionally blank- fall through, we want to run cleanup next
@@ -631,22 +632,19 @@
 	}
 }
 
-- (void) _finalCleanup {
- 
-    // force dealloc of our expensive job object
-    self.job = nil;
-
-}
-
 - (void) _beginCleanup	{
 	//NSLog(@"%s ... %@",__func__,self);
 	@synchronized (self)	{
 		NSFileManager			*fm = [NSFileManager defaultManager];
 		NSError					*nsErr = nil;
 		__weak SynOp			*bss = self;
-	
+		
 		//	if my status is 'error' (error during analysis) or 'pending' (user cancelled)
 		if (self.status == OpStatus_Err || self.status == OpStatus_Pending)	{
+		
+			// force dealloc of our expensive job object
+			self.job = nil;
+			
 			//	move tmp file to trash
 			if (self.tmpFile != nil)	{
 				//[fm trashItemAtURL:[NSURL fileURLWithPath:self.tmpFile isDirectory:NO] resultingItemURL:nil error:&nsErr];
@@ -662,8 +660,6 @@
 				NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
 				if (tmpDelegate != nil)
 					[tmpDelegate synOpStatusFinished:bss];
-
-                [self _finalCleanup];
             });
 			return;
 		}
@@ -671,8 +667,11 @@
 	
 		//	...if we're here, our status was something other than 'error'/'pending'- update my status property...
 		self.status = OpStatus_Cleanup;
-	
-	
+		
+		
+		// force dealloc of our expensive job object
+		self.job = nil;
+		
 		//	if this is an AVF file...
 		if (self.type == OpType_AVFFile)	{
 			//	if there's a temp file, copy it to the dest file and then move the tmp file to the trash
@@ -685,8 +684,6 @@
 						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
 						if (tmpDelegate != nil)
 							[tmpDelegate synOpStatusFinished:bss];
-
-                        [self _finalCleanup];
 					});
 					return;
 				}
@@ -700,8 +697,6 @@
 						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
 						if (tmpDelegate != nil)
 							[tmpDelegate synOpStatusFinished:bss];
-
-                        [self _finalCleanup];
 
                     });
 					return;
@@ -723,8 +718,6 @@
 					NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
 					if (tmpDelegate != nil)
 						[tmpDelegate synOpStatusFinished:bss];
-                    
-                    [self _finalCleanup];
 				});
 				return;
 			}
@@ -740,8 +733,6 @@
 			NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
 			if (tmpDelegate != nil)
 				[tmpDelegate synOpStatusFinished:bss];
-            
-            [self _finalCleanup];
 		});
 	}
 }
@@ -749,9 +740,6 @@
 	@synchronized (self)	{
 		self.paused = NO;
 		[self.job cancel];
-        
-        // force dealloc of our expensive job object
-        self.job = nil;
 	}
 }
 /*

@@ -70,7 +70,8 @@
 		[tabView selectTabViewItemAtIndex:0];
 		//[statusField setStringValue:[self.op createStatusString]];
 		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
-		statusField.toolTip = self.op.job.jobErrString;
+		//statusField.toolTip = self.op.job.jobErrString;
+		statusField.toolTip = self.op.errString;
 		break;
 	case OpStatus_Complete:
 		[tabView selectTabViewItemAtIndex:0];
@@ -82,7 +83,8 @@
 		[tabView selectTabViewItemAtIndex:0];
 		//[statusField setStringValue:[self.op createStatusString]];
 		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
-		statusField.toolTip = self.op.job.jobErrString;
+		//statusField.toolTip = self.op.job.jobErrString;
+		statusField.toolTip = self.op.errString;
 		break;
 	case OpStatus_Analyze:
 	case OpStatus_Cleanup:

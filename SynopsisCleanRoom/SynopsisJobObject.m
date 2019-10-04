@@ -406,7 +406,6 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			//pluginInstance.warningLog = ^void(NSString* log){[[LogController global] appendWarningLog:log];};
 			//pluginInstance.verboseLog = ^void(NSString* log){[[LogController global] appendVerboseLog:log];};
 			//pluginInstance.errorLog = ^void(NSString* log){[[LogController global] appendErrorLog:log];};
-			
 			[self.availableAnalyzers addObject:pluginInstance];
 		}
 		else	{
@@ -1596,12 +1595,12 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		*/
 	}
 	
+	if (self.completionBlock != nil)
+		self.completionBlock(self);
+	
 	id<BaseJobObjectDelegate>		localDelegate = self.delegate;
 	if (localDelegate != nil)
 		[localDelegate finishedJob:self];
-	
-	if (self.completionBlock != nil)
-		self.completionBlock(self);
 }
 
 
