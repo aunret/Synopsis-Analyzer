@@ -14,14 +14,17 @@
 //#import "SynSession.h"
 #import "SynOp.h"
 
+@class AppDelegate;
+
 
 
 
 @interface SessionController : NSObject <DropFileHelper,SynOpDelegate>	{
+	IBOutlet AppDelegate		*appDelegate;
 	IBOutlet NSWindow			*window;
 	IBOutlet NSOutlineView		*outlineView;
 	IBOutlet NSTableColumn		*theColumn;
-	IBOutlet DropFilesView		*dropView;
+	//IBOutlet DropFilesView		*dropView;
 	
 	IBOutlet NSToolbarItem		*runPauseButton;
 	IBOutlet NSToolbarItem		*stopButton;
@@ -43,7 +46,8 @@
 - (IBAction) revealLog:(id)sender;
 - (IBAction) revealPreferences:(id)sender;
 
-- (void) newSessionWithFiles:(NSArray<NSURL*> *)n;
+- (NSArray<SynSession*> *) createSessionsWithFiles:(NSArray<NSURL*> *)n;
+- (void) createAndAppendSessionsWithFiles:(NSArray<NSURL*> *)n;
 //- (void) newSessionWithDir:(NSURL *)n recursively:(BOOL)isRecursive;
 
 - (void) reloadData;

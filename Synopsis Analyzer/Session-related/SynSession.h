@@ -43,6 +43,8 @@ typedef NS_ENUM(NSUInteger, SessionType)	{
 
 @property (atomic,readwrite) SessionType type;
 
+@property (atomic,strong,readonly) NSUUID * dragUUID;	//	literally only used for drag-and-drop.
+
 - (SynOp *) createOpForSrcURL:(NSURL *_Nonnull)n;
 - (NSString *_Nonnull) createDescriptionString;
 

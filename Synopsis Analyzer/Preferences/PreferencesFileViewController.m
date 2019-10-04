@@ -164,7 +164,7 @@
 			//	});
 			//}];
 			
-			[[SessionController global] newSessionWithFiles:changedURLS];
+			[[SessionController global] createAndAppendSessionsWithFiles:changedURLS];
 		}];
 	}
 	else

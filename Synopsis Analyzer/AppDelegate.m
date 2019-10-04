@@ -28,8 +28,11 @@
 
 @interface AppDelegate () <NSFileManagerDelegate>
 
-
 @property (readwrite, strong) NSFileManager* fileManager;
+@property (strong,nullable) NSViewAnimation * previewAnimation;
+
+@property (strong,readwrite,nullable) NSTimer * fileOpenTimer;
+@property (strong,readwrite) NSMutableArray * URLsToOpen;
 
 @end
 
@@ -65,6 +68,10 @@
 		
 		[[NSUserDefaults standardUserDefaults] registerDefaults:standardDefaults];
 		
+		self.previewAnimation = nil;
+		
+		self.fileOpenTimer = nil;
+		self.URLsToOpen = [NSMutableArray arrayWithCapacity:0];
 		
 		//	make the various top-level controllers
 		[LogController global];
@@ -158,6 +165,31 @@
 {
 	
 }
+
+- (void) application:(NSApplication *)sender openURLs:(NSArray<NSURL *> *)urls	{
+	//	when dropping multiple files onto the dock, this method gets called twice: first with a single URL, and then again with the remainder, so we have to coalesce these calls...
+	@synchronized (self)	{
+		if (self.fileOpenTimer != nil)	{
+			[self.fileOpenTimer invalidate];
+			self.fileOpenTimer = nil;
+		}
+		[self.URLsToOpen addObjectsFromArray:urls];
+		self.fileOpenTimer = [NSTimer
+			scheduledTimerWithTimeInterval:0.25
+			repeats:NO
+			block:^(NSTimer *inTimer)	{
+				@synchronized (self)	{
+					[self actuallyOpenURLs:self.URLsToOpen];
+					[self.URLsToOpen removeAllObjects];
+				}
+			}];
+	}
+	
+}
+- (void) actuallyOpenURLs:(NSArray<NSURL*> *)n	{
+	[[SessionController global] createAndAppendSessionsWithFiles:n];
+}
+
 
 #pragma mark - Prefs
 
@@ -256,38 +288,75 @@
 }
 
 
-#pragma mark - NSSplitViewDelegate
+#pragma mark - NSViewAnimationDelegate & related
 
 
-- (BOOL)splitView:(NSSplitView *)sv shouldAdjustSizeOfSubview:(NSView *)view	{
-	if (view == sessionSubview)
-		return YES;
-	else
-		return NO;
+- (void) animationDidEnd:(NSAnimation *)animation	{
+	@synchronized (self)	{
+		self.previewAnimation = nil;
+	}
 }
-- (BOOL)splitView:(NSSplitView *)sv canCollapseSubview:(NSView *)subview	{
-	if (subview == sessionSubview)
-		return NO;
-	else
-		return YES;
+- (void) showPreview	{
+	@synchronized (self)	{
+		if (self.previewAnimation != nil)	{
+			[self.previewAnimation stopAnimation];
+			self.previewAnimation = nil;
+		}
+		
+		NSRect			winBounds = [windowContentView bounds];
+		//	start an animation sliding the preview subview back into the window
+		NSRect			previewFrame = [previewSubview frame];
+		NSRect			targetPreviewFrame = previewFrame;
+		targetPreviewFrame.origin.x = NSMaxX(winBounds) - previewFrame.size.width;
+		NSDictionary	*previewAnimDict = @{
+			NSViewAnimationTargetKey: previewSubview,
+			NSViewAnimationEndFrameKey: [NSValue valueWithRect:targetPreviewFrame]
+		};
+		//	start an animation shrinking the session subview
+		NSRect			sessionFrame = [sessionSubview frame];
+		NSRect			targetSessionFrame = winBounds;
+		targetSessionFrame.size.width = winBounds.size.width - previewFrame.size.width;
+		NSDictionary	*sessionAnimDict = @{
+			NSViewAnimationTargetKey: sessionSubview,
+			NSViewAnimationEndFrameKey: [NSValue valueWithRect:targetSessionFrame]
+		};
+		
+		self.previewAnimation = [[NSViewAnimation alloc] initWithViewAnimations:@[ previewAnimDict, sessionAnimDict ]];
+		[self.previewAnimation setDelegate:self];
+		[self.previewAnimation setDuration:0.25];
+		[self.previewAnimation startAnimation];
+	}
 }
-- (BOOL)splitView:(NSSplitView *)sv shouldCollapseSubview:(NSView *)subview forDoubleClickOnDividerAtIndex:(NSInteger)divIndex	{
-	if (subview == sessionSubview)
-		return NO;
-	else
-		return YES;
+- (void) hidePreview	{
+	@synchronized (self)	{
+		if (self.previewAnimation != nil)	{
+			[self.previewAnimation stopAnimation];
+			self.previewAnimation = nil;
+		}
+	
+		NSRect			winBounds = [windowContentView bounds];
+		//	start an animation sliding the preview subview off the window
+		NSRect			previewFrame = [previewSubview frame];
+		NSRect			targetPreviewFrame = previewFrame;
+		targetPreviewFrame.origin.x = NSMaxX(winBounds);
+		NSDictionary	*previewAnimDict = @{
+			NSViewAnimationTargetKey: previewSubview,
+			NSViewAnimationEndFrameKey: [NSValue valueWithRect:targetPreviewFrame]
+		};
+		//	start an animation growing the session subview
+		NSRect			sessionVisFrame = [sessionSubview visibleRect];
+		NSRect			targetSessionVisFrame = winBounds;
+		NSDictionary	*sessionAnimDict = @{
+			NSViewAnimationTargetKey: sessionSubview,
+			NSViewAnimationEndFrameKey: [NSValue valueWithRect:targetSessionVisFrame]
+		};
+	
+		self.previewAnimation = [[NSViewAnimation alloc] initWithViewAnimations:@[ previewAnimDict, sessionAnimDict ]];
+		[self.previewAnimation setDelegate:self];
+		[self.previewAnimation setDuration:0.25];
+		[self.previewAnimation startAnimation];
+	}
 }
-- (CGFloat)splitView:(NSSplitView *)sv constrainMaxCoordinate:(CGFloat)proposedMax ofSubviewAt:(NSInteger)divIndex	{
-	//NSLog(@"%s ... %0.2f, %d",__func__,proposedMax,divIndex);
-	//return proposedMax;
-	return [splitView frame].size.width - [previewSubview frame].size.width - [splitView dividerThickness];
-}
-- (CGFloat)splitView:(NSSplitView *)sv constrainMinCoordinate:(CGFloat)proposedMin ofSubviewAt:(NSInteger)divIndex	{
-	//NSLog(@"%s ... %0.2f, %d",__func__,proposedMin,divIndex);
-	//return proposedMin;
-	return [splitView frame].size.width - [previewSubview frame].size.width - [splitView dividerThickness];
-}
-
 
 
 @end

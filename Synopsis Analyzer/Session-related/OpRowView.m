@@ -88,6 +88,22 @@
 	case OpStatus_Cleanup:
 		[tabView selectTabViewItemAtIndex:1];
 		[progressIndicator setDoubleValue:(self.op.job==nil) ? 0.0 : [self.op.job jobProgress]];
+		double			rawSecondsRemaining = self.op.job.jobTimeRemaining;
+		long			secondsRemaining = rawSecondsRemaining;
+		
+		long			minutesRemaining = secondsRemaining/60;
+		secondsRemaining -= (minutesRemaining * 60);
+		
+		long			hoursRemaining = minutesRemaining/60;
+		minutesRemaining -= (hoursRemaining * 60);
+		
+		if (hoursRemaining > 0)
+			[timeRemainingField setStringValue:[NSString stringWithFormat:@"%ld:%0.2ld:%0.2ld Remaining",hoursRemaining,minutesRemaining,secondsRemaining]];
+		else if (minutesRemaining > 0)
+			[timeRemainingField setStringValue:[NSString stringWithFormat:@"%0.2ld:%0.2ld Remaining",minutesRemaining,secondsRemaining]];
+		else
+			[timeRemainingField setStringValue:[NSString stringWithFormat:@":%0.2ld Remaining",secondsRemaining]];
+		
 		statusField.toolTip = nil;
 		break;
 	}

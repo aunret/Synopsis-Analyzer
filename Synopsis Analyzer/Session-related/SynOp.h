@@ -76,6 +76,8 @@ case OpStatus_Err:
 
 @property (atomic,weak,nullable) SynSession *session;
 
+@property (atomic,strong,readonly) NSUUID * dragUUID;	//	literally only used for drag-and-drop.
+
 - (NSString *) createStatusString;
 - (NSAttributedString *) createAttributedStatusString;
 

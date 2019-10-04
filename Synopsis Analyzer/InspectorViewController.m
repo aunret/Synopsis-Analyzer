@@ -81,27 +81,30 @@ static InspectorViewController		*globalInspectorViewController = nil;
 	//NSLog(@"%s",__func__);
 }
 - (void) transitionToViewController:(NSViewController *)inVC	{
+	//NSLog(@"%s ... %@",__func__,inVC);
 	NSViewControllerTransitionOptions		opt = NSViewControllerTransitionSlideRight;
 	
-	if (self.currentViewController == inVC)
+	NSViewController		*oldVC = self.currentViewController;
+	NSViewController		*newVC = inVC;
+	if (oldVC == newVC)
 		return;
 	
-	[self addChildViewController:inVC];
+	self.currentViewController = newVC;
 	
-	[inVC.view setFrame:self.currentViewController.view.bounds];
-	
+	[self addChildViewController:newVC];
+	[newVC.view setFrame:oldVC.view.bounds];
 	[self
-		transitionFromViewController:self.currentViewController
-		toViewController:inVC
+		transitionFromViewController:oldVC
+		toViewController:newVC
 		options:opt
 		completionHandler:^{
-			[self.currentViewController removeFromParentViewController];
-			self.currentViewController = inVC;
+			[oldVC removeFromParentViewController];
 		}];
 }
 
 
 - (void) inspectSession:(SynSession *)n	{
+	//NSLog(@"%s ... %@",__func__,n);
 	if (![NSThread isMainThread])	{
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self inspectSession:n];
@@ -118,6 +121,7 @@ static InspectorViewController		*globalInspectorViewController = nil;
 	}
 }
 - (void) inspectOp:(SynOp *)n	{
+	//NSLog(@"%s ... %@",__func__,n);
 	if (![NSThread isMainThread])	{
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self inspectOp:n];
@@ -134,6 +138,7 @@ static InspectorViewController		*globalInspectorViewController = nil;
 	}
 }
 - (void) inspectItem:(id)n	{
+	//NSLog(@"%s ... %@",__func__,n);
 	if (![NSThread isMainThread])	{
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self inspectItem:n];
@@ -159,6 +164,7 @@ static InspectorViewController		*globalInspectorViewController = nil;
 	}
 }
 - (void) uninspectAll	{
+	//NSLog(@"%s",__func__);
 	if (![NSThread isMainThread])	{
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self uninspectAll];
@@ -174,8 +180,25 @@ static InspectorViewController		*globalInspectorViewController = nil;
 		[self transitionToViewController:self.emptyInspectorViewController];
 	}
 }
+- (void) uninspectItem:(id)n	{
+	//NSLog(@"%s ... %@",__func__,n);
+	if (n == nil)
+		return;
+	if ([n isKindOfClass:[SynSession class]])	{
+		SynSession		*recastSession = (SynSession *)n;
+		if (self.sessionInspectorViewController.inspectedObject == recastSession || self.sessionInspectorViewController.inspectedObject == nil)	{
+			[self uninspectAll];
+		}
+	}
+	else if ([n isKindOfClass:[SynOp class]])	{
+		SynOp			*recastOp = (SynOp *)n;
+		if (self.opInspectorViewController.inspectedObject == recastOp || self.opInspectorViewController.inspectedObject == nil)	{
+			[self uninspectAll];
+		}
+	}
+}
 - (void) reloadInspectorIfInspected:(id)n	{
-	NSLog(@"ERR: INCOMPLETE, %s",__func__);
+	//NSLog(@"%s ... %@",__func__,n);
 	if (n == nil)	{
 		[self uninspectAll];
 		return;
@@ -194,6 +217,7 @@ static InspectorViewController		*globalInspectorViewController = nil;
 	}
 }
 - (void) reloadRowForItem:(id)n	{
+	//NSLog(@"%s ... %@",__func__,n);
 	if (n == nil)
 		return;
 	[[SessionController global] reloadRowForItem:n];

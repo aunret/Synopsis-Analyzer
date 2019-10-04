@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) inspectOp:(SynOp *)n;
 - (void) inspectItem:(id)n;
 - (void) uninspectAll;
+//	if this item is inspected, it will be uninspected.  if it's not inspected, nothing will happen (called when item is freed)
+- (void) uninspectItem:(id)n;
 
 //	call this if a change was made in the outline view, and we need to propagate the change to the inspector
 - (void) reloadInspectorIfInspected:(id)n;
