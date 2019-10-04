@@ -42,6 +42,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 @property (strong) NSMutableArray<SynOp*> * opsInProgress;
 @property (atomic,readwrite) BOOL running;
 @property (strong,readwrite,atomic) NSMutableDictionary * expandStateDict;
+
+@property (atomic,strong,readwrite,nullable) id appNapToken;
+
 //- (void) startAnOp;
 - (NSArray<SynOp*> *) getOpsToStart:(NSUInteger)numOpsToGet;
 - (int) maxOpCount;
@@ -74,6 +77,10 @@ static NSString						*localFileDragType = @"localFileDragType";
 	self.opsInProgress = [[NSMutableArray alloc] init];
 	self.running = NO;
 	self.expandStateDict = [NSMutableDictionary dictionaryWithCapacity:0];
+	
+	//	make an app nap token right away- we can't nap b/c we're either transcoding/analyzing, or potentially watching a directory for changes to its files!
+	self.appNapToken = [[NSProcessInfo processInfo] beginActivityWithOptions:NSActivityUserInitiated | NSActivityLatencyCritical reason:@"Analyzing"];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 	//[self window];
