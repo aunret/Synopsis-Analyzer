@@ -97,9 +97,47 @@ static NSString						*localFileDragType = @"localFileDragType";
 
 
 - (void) applicationDidFinishLaunching:(NSNotification *)note	{
-	
+	//NSLog(@"%s",__func__);
+	@synchronized (self)	{
+		NSUserDefaults		*def = [NSUserDefaults standardUserDefaults];
+		NSData				*tmpData = [def objectForKey:@"sessions"];
+		if (tmpData != nil && [tmpData isKindOfClass:[NSData class]])	{
+			NSArray				*tmpArray = [NSKeyedUnarchiver unarchiveObjectWithData:tmpData];
+			if (tmpArray != nil && [tmpArray isKindOfClass:[NSArray class]] && [tmpArray count] > 0)	{
+				for (SynSession		*tmpSession in tmpArray)	{
+					if ([tmpSession isKindOfClass:[SynSession class]])	{
+						[self.sessions addObject:tmpSession];
+						if (tmpSession.type == SessionType_List)
+							self.expandStateDict[tmpSession.dragUUID.UUIDString] = @YES;
+					}
+				}
+				[self reloadData];
+			}
+		}
+	}
 }
 - (void) applicationWillTerminate:(NSNotification *)note	{
+	//NSLog(@"%s",__func__);
+	@synchronized (self)	{
+		NSData				*encodedSessions = nil;
+		NSMutableArray		*sessionsToSave = [NSMutableArray arrayWithCapacity:0];
+		for (SynSession *session in self.sessions)	{
+			if ([session opsToSave] != nil || session.type == SessionType_Dir)	{
+				[sessionsToSave addObject:session];
+			}
+		}
+		if (sessionsToSave != nil && [sessionsToSave count] > 0)	{
+			encodedSessions = [NSKeyedArchiver archivedDataWithRootObject:sessionsToSave];
+			if (encodedSessions != nil)	{
+			}
+		}
+		NSUserDefaults		*def = [NSUserDefaults standardUserDefaults];
+		if (encodedSessions != nil)
+			[def setObject:encodedSessions forKey:@"sessions"];
+		else
+			[def removeObjectForKey:@"sessions"];
+		[def synchronize];
+	}
 }
 
 

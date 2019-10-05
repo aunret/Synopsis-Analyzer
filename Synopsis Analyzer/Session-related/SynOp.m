@@ -14,6 +14,12 @@
 #import <AVFoundation/AVFoundation.h>
 #import <HapInAVFoundation/HapInAVFoundation.h>
 #import "InspectorViewController.h"
+#import <QuickLook/QuickLook.h>
+
+
+
+
+static dispatch_queue_t		iconGeneratorQueue = NULL;
 
 
 
@@ -37,6 +43,12 @@
 
 
 #pragma mark - NSCoding protocol
+
+
++ (void) initialize	{
+	if (iconGeneratorQueue == NULL)
+		iconGeneratorQueue = dispatch_queue_create("info.synopsis.icongenqueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_CONCURRENT, DISPATCH_QUEUE_PRIORITY_HIGH, -1));
+}
 
 
 - (instancetype) initWithSrcURL:(NSURL *)inSrc	{
@@ -96,7 +108,8 @@
 			//else
 			//	self.type = (OpType)[coder decodeIntForKey:@"type"];
 			[self _populateTypeProperty];
-			self.status = (![coder containsValueForKey:@"status"]) ? OpStatus_Pending : (OpStatus)[coder decodeInt64ForKey:@"status"];
+			//self.status = (![coder containsValueForKey:@"status"]) ? OpStatus_Pending : (OpStatus)[coder decodeInt64ForKey:@"status"];
+			self.status = OpStatus_Pending;
 			self.errString = nil;
 			self.job = nil;
 			self.delegate = [SessionController global];
@@ -116,7 +129,7 @@
 		if (self.dst != nil)
 			[coder encodeObject:self.dst forKey:@"dst"];
 		//	don't encode the 'type' property
-		[coder encodeInt64:(NSInteger)self.status forKey:@"status"];
+		//[coder encodeInt64:(NSInteger)self.status forKey:@"status"];
 	}
 }
 - (void) dealloc	{
@@ -130,12 +143,32 @@
 - (NSString *) description	{
 	return [NSString stringWithFormat:@"<SynOp: %@, %@>",self.src.lastPathComponent,[self createStatusString]];
 }
-//	synthesize using a different name so we avoid recursion (we're overriding the setter/getter so we only populate the thumb when appropriate)
+/*
+@synthesize thumb=myThumb;
+- (void) setThumb:(NSImage *)n	{
+	myThumb = n;
+}
+- (NSImage *) thumb	{
+	if (myThumb == nil && self.session != nil && self.session.type == SessionType_List)	{
+		//[self _populateThumb];
+		//	generate thumbs on an async concurrent queue
+		dispatch_async(iconGeneratorQueue, ^{
+			[self _populateThumb];
+		});
+	}
+	return myThumb;
+}
+*/
 @synthesize session=mySession;
 - (void) setSession:(SynSession *)n	{
 	mySession = n;
-	if (self.session.type == SessionType_List)
-		[self _populateThumb];
+	if (self.session.type == SessionType_List)	{
+		//[self _populateThumb];
+		//	generate thumbs on an async concurrent queue
+		dispatch_async(iconGeneratorQueue, ^{
+			[self _populateThumb];
+		});
+	}
 }
 - (SynSession *) session	{
 	return mySession;
@@ -172,22 +205,45 @@
 	
 }
 - (void) _populateThumb	{
-	//NSLog(@"%s",__func__);
+	//NSLog(@"%s ... %@",__func__,self);
 	if (self.type == OpType_AVFFile)	{
-		AVAsset			*asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:self.src]];
+		NSURL			*srcURL = [NSURL fileURLWithPath:self.src];
+		AVAsset			*asset = [AVAsset assetWithURL:srcURL];
 		if (asset == nil)	{
-			//	do nothing- don't make a thumb for a non-avf asset
+			//	non-avf asset: use finder icon
+			NSWorkspace		*ws = [NSWorkspace sharedWorkspace];
+			NSImage			*img = [ws iconForFile:self.src];
+			self.thumb = img;
 		}
 		else	{
 			if ([asset isReadable])	{
-				AVAssetImageGenerator		*gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-                gen.appliesPreferredTrackTransform = YES;
-                gen.maximumSize = CGSizeMake(320, 240);
-				NSError				*nsErr = nil;
-				//CMTime				time = CMTimeMake(1,60);
-				CGImageRef			imgRef = [gen copyCGImageAtTime:CMTimeMake(1,60) actualTime:NULL error:&nsErr];
-				NSImage				*img = (imgRef==NULL) ? nil : [[NSImage alloc] initWithCGImage:imgRef size:NSMakeSize(CGImageGetWidth(imgRef),CGImageGetHeight(imgRef))];
-				self.thumb = img;
+				/*
+				CGImageRef		cgImg = QLThumbnailImageCreate(
+					kCFAllocatorDefault,
+					(__bridge CFURLRef)srcURL,
+					CGSizeMake(43,24),	//	this is the size of the NSImageView in the outline view's row
+					(__bridge CFDictionaryRef)@{ (NSString*)kQLThumbnailOptionIconModeKey: @NO }
+				);
+				NSBitmapImageRep	*imgRep = (cgImg==NULL) ? nil : [[NSBitmapImageRep alloc] initWithCGImage:cgImg];
+				if (imgRep != nil)	{
+					NSImage				*img = [[NSImage alloc] initWithSize:[imgRep size]];
+					[img addRepresentation:imgRep];
+					self.thumb = img;
+				}
+				else	{
+				*/
+					AVAssetImageGenerator		*gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+					gen.appliesPreferredTrackTransform = YES;
+					gen.maximumSize = CGSizeMake(320, 240);
+					NSError				*nsErr = nil;
+					//CMTime				time = CMTimeMake(1,60);
+					CGImageRef			imgRef = [gen copyCGImageAtTime:CMTimeMake(1,60) actualTime:NULL error:&nsErr];
+					//NSImage				*img = (imgRef==NULL) ? nil : [[NSImage alloc] initWithCGImage:imgRef size:NSMakeSize(CGImageGetWidth(imgRef),CGImageGetHeight(imgRef))];
+					NSBitmapImageRep	*imgRep = [[NSBitmapImageRep alloc] initWithCGImage:imgRef];
+					NSImage				*img = [[NSImage alloc] initWithSize:[imgRep size]];
+					[img addRepresentation:imgRep];
+					self.thumb = img;
+				//}
 			}
 			else if ([asset containsHapVideoTrack])	{
 				NSArray				*assetHapTracks = [asset hapVideoTracks];
@@ -224,12 +280,22 @@
 				}
 			}
 			else	{
-				//	do nothing: the asset is neither playable, nor hap
+				//	the asset is neither playable, nor hap: use a finder icon
+				NSWorkspace		*ws = [NSWorkspace sharedWorkspace];
+				NSImage			*img = [ws iconForFile:self.src];
+				self.thumb = img;
 			}
 		}
 	}
 	else if (self.type == OpType_Other)	{
 		//	do nothing- don't make a thumb for a non-avf asset
+	}
+	
+	//	if we successfully generated a thumb, we want to update any rows that are displaying me...
+	if (self.thumb != nil)	{
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[[SessionController global] reloadRowForItem:self];
+		});
 	}
 }
 

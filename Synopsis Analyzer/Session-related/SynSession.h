@@ -52,6 +52,8 @@ typedef NS_ENUM(NSUInteger, SessionType)	{
 - (double) calculateProgress;
 
 - (SynOp *) getOpWithSrcFile:(NSString *)n;
+//	returns an array of the ops that should be saved/encoded (only ops that are pending or have errored out)
+- (NSMutableArray *) opsToSave;
 
 @end
 

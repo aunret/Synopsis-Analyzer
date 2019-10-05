@@ -57,6 +57,7 @@
 - (void) pause;
 - (void) resume;
 - (void) stop;
+@property (atomic,readonly) BOOL running;
 
 @end
 

@@ -160,11 +160,26 @@
 
 	
 }
-
-- (void) applicationWillTerminate:(NSNotification *)notification
-{
-	
+- (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender	{
+	NSLog(@"%s",__func__);
+	//	if we're currently processing files, pop a modal alert asking if we really want to quit
+	if ([[SessionController global] running])	{
+		NSAlert			*quitAlert = [[NSAlert alloc] init];
+		quitAlert.messageText = @"You are analyzing files- are you sure you want to quit?";
+		[quitAlert addButtonWithTitle:@"Quit"];
+		[quitAlert addButtonWithTitle:@"Don't Quit"];
+		NSModalResponse		response = [quitAlert runModal];
+		if (response == NSAlertFirstButtonReturn)
+			return NSTerminateNow;
+		else
+			return NSTerminateCancel;
+	}
+	return NSTerminateNow;
 }
+/*
+- (void) applicationWillTerminate:(NSNotification *)notification	{
+}
+*/
 
 - (void) application:(NSApplication *)sender openURLs:(NSArray<NSURL *> *)urls	{
 	//	when dropping multiple files onto the dock, this method gets called twice: first with a single URL, and then again with the remainder, so we have to coalesce these calls...

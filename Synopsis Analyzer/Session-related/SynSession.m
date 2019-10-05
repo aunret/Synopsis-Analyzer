@@ -163,6 +163,14 @@
 				? YES
 				: [coder decodeBoolForKey:@"enabled"];
 			
+			self.srcDir = (![coder containsValueForKey:@"srcDir"])
+				? nil
+				: [coder decodeObjectForKey:@"srcDir"];
+			
+			self.title = (![coder containsValueForKey:@"title"])
+				? ((self.srcDir == nil) ? @"Files" : [NSString stringWithFormat:@"Folder: %@",self.srcDir.lastPathComponent])
+				: [coder decodeObjectForKey:@"title"];
+			
 			self.outputDir = (![coder containsValueForKey:@"outputDir"])
 				? ([pc outputFolderEnabled] && [pc outputFolder]!=nil) ? [pc outputFolder] : nil
 				: [coder decodeObjectForKey:@"outputDir"];
@@ -211,10 +219,21 @@
 }
 - (void) encodeWithCoder:(NSCoder *)coder	{
 	if ([coder allowsKeyedCoding])	{
-		if (self.ops!=nil && [self.ops count]>0)
-			[coder encodeObject:self.ops forKey:@"ops"];
+		if (self.ops!=nil && [self.ops count]>0)	{
+			//[coder encodeObject:self.ops forKey:@"ops"];
+			//	we don't want to encode all the ops, just the ones that are pending/errors
+			NSArray			*opsToSave = [self opsToSave];
+			if (opsToSave != nil)
+				[coder encodeObject:opsToSave forKey:@"ops"];
+		}
 		
 		[coder encodeBool:self.enabled forKey:@"enabled"];
+		
+		if (self.srcDir != nil)
+			[coder encodeObject:self.srcDir forKey:@"srcDir"];
+		
+		if (self.title != nil)
+			[coder encodeObject:self.title forKey:@"title"];
 		
 		if (self.outputDir != nil)
 			[coder encodeObject:self.outputDir forKey:@"outputDir"];
@@ -237,6 +256,19 @@
 		[coder encodeBool:self.copyNonMediaFiles forKey:@"copyNonMediaFiles"];
 		[coder encodeBool:self.watchFolder forKey:@"watchFolder"];
 	}
+}
+- (NSMutableArray *) opsToSave;	{
+	NSMutableArray		   *returnMe = [NSMutableArray arrayWithCapacity:0];
+	
+	for (SynOp *op in self.ops)	{
+		if (op.status == OpStatus_Pending || op.status == OpStatus_PreflightErr || op.status == OpStatus_Err)
+			[returnMe addObject:op];
+	}
+	
+	if (returnMe != nil && [returnMe count] < 1)
+		returnMe = nil;
+	
+	return returnMe;
 }
 
 
