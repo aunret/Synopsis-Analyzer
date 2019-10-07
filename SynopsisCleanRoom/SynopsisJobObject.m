@@ -11,6 +11,7 @@
 #import <Metal/Metal.h>
 #import <HapInAVFoundation/HapInAVFoundation.h>
 #import <pthread.h>
+#include <sys/xattr.h>
 
 
 
@@ -122,6 +123,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 - (void) _finishWritingAndCleanUp;
 - (void) _cancelAndCleanUp;
 - (void) _cleanUp;
+
+- (BOOL) file:(NSURL *)fileURL xattrSetPlist:(id)plist forKey:(NSString *)key;
 
 @end
 
@@ -810,6 +813,58 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 						return;
 					}
 				}
+				//	else if it's a metadata track....
+				else if (trackMediaType!=nil && [trackMediaType isEqualToString:AVMediaTypeMetadata])	{
+					BOOL			isSynopsisTrack = NO;
+					NSArray			*formatDescriptions = [track formatDescriptions];
+					for (int i=0; i<formatDescriptions.count; ++i)	{
+						CMFormatDescriptionRef		desc = (__bridge CMFormatDescriptionRef)formatDescriptions[i];
+						
+						NSArray				*identifiers = CMMetadataFormatDescriptionGetIdentifiers(desc);
+						if (identifiers!=nil && identifiers.count>0)	{
+							NSString			*identifier = identifiers[0];
+							if ([identifier isKindOfClass:[NSString class]] && [identifier isEqualToString:kSynopsisMetadataIdentifier])	{
+								isSynopsisTrack = YES;
+								break;
+							}
+						}
+						
+						//	if it's a synopsis track, we want to trash it (and replace it with our new synopsis data)
+						if (isSynopsisTrack)	{
+							[readerVideoPassthruOutputs addObject:[NSNull null]];
+							[readerVideoAnalysisOutputs addObject:[NSNull null]];
+							[readerAudioPassthruOutputs addObject:[NSNull null]];
+							[readerAudioAnalysisOutputs addObject:[NSNull null]];
+							[readerMiscPassthruOutputs addObject:[NSNull null]];
+							
+							[writerVideoInputs addObject:[NSNull null]];
+							[writerAudioInputs addObject:[NSNull null]];
+							[writerMiscInputs addObject:[NSNull null]];
+							[writerMetadataInputs addObject:[NSNull null]];
+							[writerMetadataInputAdapters addObject:[NSNull null]];
+						}
+						//	else it's not a synopsis track- pass it through unaltered
+						else	{
+							[readerVideoPassthruOutputs addObject:[NSNull null]];
+							[readerVideoAnalysisOutputs addObject:[NSNull null]];
+							[readerAudioPassthruOutputs addObject:[NSNull null]];
+							[readerAudioAnalysisOutputs addObject:[NSNull null]];
+							AVAssetReaderTrackOutput		*tmpOutput = [[AVAssetReaderTrackOutput alloc] initWithTrack:track outputSettings:nil];
+							[tmpOutput setAlwaysCopiesSampleData:NO];
+							[readerMiscPassthruOutputs addObject:tmpOutput];
+							
+							[writerVideoInputs addObject:[NSNull null]];
+							[writerAudioInputs addObject:[NSNull null]];
+							AVAssetWriterInput			*tmpInput = [AVAssetWriterInput assetWriterInputWithMediaType:[track mediaType] outputSettings:nil];
+							[tmpInput setExpectsMediaDataInRealTime:NO];
+							[writerMiscInputs addObject:tmpInput];
+							[writerMetadataInputs addObject:[NSNull null]];
+							[writerMetadataInputAdapters addObject:[NSNull null]];
+						}
+						
+					}
+					
+				}
 				//	else it's any other track type- just pass it through unmodified
 				else	{
 					[readerVideoPassthruOutputs addObject:[NSNull null]];
@@ -1484,6 +1539,12 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		
 		NSArray				*mdItems = @[ newMDItem ];
 		[mov setMetadata:mdItems];
+	
+		//	export the sidecare file (if appropriate)
+		if (synopsisEncoder != nil && synopsisEncoder.exportOption != SynopsisMetadataEncoderExportOptionNone)	{
+			NSURL			*sidecarURL = [[self.dstFile URLByDeletingPathExtension] URLByAppendingPathExtension:@"json"];
+			[synopsisEncoder exportToURL:sidecarURL];
+		}
 		
 		if (![mov
 			writeMovieHeaderToURL:targetURL
@@ -1500,12 +1561,26 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			[self _cleanUp];
 			return;
 		}
-	}
-	
-	//	export the sidecare file (if appropriate)
-	if (synopsisEncoder != nil && synopsisEncoder.exportOption != SynopsisMetadataEncoderExportOptionNone)	{
-		NSURL			*sidecarURL = [[self.dstFile URLByDeletingPathExtension] URLByAppendingPathExtension:@"json"];
-		[synopsisEncoder exportToURL:sidecarURL];
+		
+		//	update the xattrs so spotlight has an easier time finding this file...
+		
+		NSDictionary		*standardOutputs = self.globalMetadata[kSynopsisStandardMetadataDictKey];
+		NSArray				*descriptionTags = standardOutputs[kSynopsisStandardMetadataDescriptionDictKey];
+		if (![self file:targetURL xattrSetPlist:descriptionTags forKey:kSynopsisMetadataHFSAttributeDescriptorKey])	{
+			self.jobStatus = JOStatus_Err;
+			self.jobErr = JOErr_File;
+			self.jobErrString = @"Error updating xattr metadata for file";
+			[self _cleanUp];
+			return;
+		}
+		NSArray				*mdVersion = @( synopsisEncoder.version );
+		if (![self file:targetURL xattrSetPlist:mdVersion forKey:kSynopsisMetadataHFSAttributeVersionKey])	{
+			self.jobStatus = JOStatus_Err;
+			self.jobErr = JOErr_File;
+			self.jobErrString = @"Error updating xattr metadata for file";
+			[self _cleanUp];
+			return;
+		}
 	}
 	
 	//	clean up
@@ -1601,6 +1676,33 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	id<BaseJobObjectDelegate>		localDelegate = self.delegate;
 	if (localDelegate != nil)
 		[localDelegate finishedJob:self];
+}
+- (BOOL) file:(NSURL *)fileURL xattrSetPlist:(id)plist forKey:(NSString *)key	{
+	NSLog(@"%s ... %@: %@",__func__,plist,key);
+	if (plist==nil || key==nil || fileURL==nil)
+		return NO;
+	if ([NSPropertyListSerialization propertyList:plist isValidForFormat:NSPropertyListBinaryFormat_v1_0])	{
+		NSError				*nsErr = nil;
+		NSData				*plistData = [NSPropertyListSerialization
+			dataWithPropertyList:plist
+			format:NSPropertyListBinaryFormat_v1_0
+			options:0
+			error:&nsErr];
+		if (plistData != nil)	{
+			int					tmpErr = setxattr(
+				[fileURL fileSystemRepresentation],
+				[[@"com.apple.metadata:" stringByAppendingString:key] UTF8String],
+				plistData.bytes,
+				plistData.length,
+				0,
+				XATTR_NOFOLLOW);
+			if (tmpErr != 0)	{
+				return NO;
+			}
+			return YES;
+		}
+	}
+	return NO;
 }
 
 
