@@ -19,7 +19,8 @@
 
 
 
-static dispatch_queue_t		iconGeneratorQueue = NULL;
+
+static NSImage				*genericMovieImage = nil;
 
 
 
@@ -33,7 +34,6 @@ static dispatch_queue_t		iconGeneratorQueue = NULL;
 - (void) _beginJob;
 - (void) _beginCleanup;
 - (void) _populateTypeProperty;
-- (void) _populateThumb;
 @end
 
 
@@ -45,9 +45,8 @@ static dispatch_queue_t		iconGeneratorQueue = NULL;
 #pragma mark - NSCoding protocol
 
 
-+ (void) initialize	{
-	if (iconGeneratorQueue == NULL)
-		iconGeneratorQueue = dispatch_queue_create("info.synopsis.icongenqueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_CONCURRENT, DISPATCH_QUEUE_PRIORITY_HIGH, -1));
++ (NSImage *) genericMovieThumbnail	{
+	return genericMovieImage;
 }
 
 
@@ -164,10 +163,12 @@ static dispatch_queue_t		iconGeneratorQueue = NULL;
 	mySession = n;
 	if (self.session.type == SessionType_List)	{
 		//[self _populateThumb];
+		/*
 		//	generate thumbs on an async concurrent queue
 		dispatch_async(iconGeneratorQueue, ^{
 			[self _populateThumb];
 		});
+		*/
 	}
 }
 - (SynSession *) session	{
@@ -191,10 +192,22 @@ static dispatch_queue_t		iconGeneratorQueue = NULL;
 			//	if it's a simple AVF asset...
 			if ([asset isPlayable])	{
 				self.type = OpType_AVFFile;
+				//	if we haven't created the generic movie thumb yet, do so now
+				if (genericMovieImage == nil)	{
+					NSWorkspace		*ws = [NSWorkspace sharedWorkspace];
+					NSImage			*img = [ws iconForFile:self.src];
+					genericMovieImage = img;
+				}
 			}
 			//	else if the AVF asset has a hap track...
 			else if ([asset containsHapVideoTrack])	{
 				self.type = OpType_AVFFile;
+				//	if we haven't created the generic movie thumb yet, do so now
+				if (genericMovieImage == nil)	{
+					NSWorkspace		*ws = [NSWorkspace sharedWorkspace];
+					NSImage			*img = [ws iconForFile:self.src];
+					genericMovieImage = img;
+				}
 			}
 			//	else it's not recognizable as an AVF asset (even though you could make an AVAsset from it)
 			else	{
@@ -204,7 +217,7 @@ static dispatch_queue_t		iconGeneratorQueue = NULL;
 	}
 	
 }
-- (void) _populateThumb	{
+- (void) populateThumb	{
 	//NSLog(@"%s ... %@",__func__,self);
 	if (self.type == OpType_AVFFile)	{
 		NSURL			*srcURL = [NSURL fileURLWithPath:self.src];
@@ -217,33 +230,17 @@ static dispatch_queue_t		iconGeneratorQueue = NULL;
 		}
 		else	{
 			if ([asset isReadable])	{
-				/*
-				CGImageRef		cgImg = QLThumbnailImageCreate(
-					kCFAllocatorDefault,
-					(__bridge CFURLRef)srcURL,
-					CGSizeMake(43,24),	//	this is the size of the NSImageView in the outline view's row
-					(__bridge CFDictionaryRef)@{ (NSString*)kQLThumbnailOptionIconModeKey: @NO }
-				);
-				NSBitmapImageRep	*imgRep = (cgImg==NULL) ? nil : [[NSBitmapImageRep alloc] initWithCGImage:cgImg];
-				if (imgRep != nil)	{
-					NSImage				*img = [[NSImage alloc] initWithSize:[imgRep size]];
-					[img addRepresentation:imgRep];
-					self.thumb = img;
-				}
-				else	{
-				*/
-					AVAssetImageGenerator		*gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-					gen.appliesPreferredTrackTransform = YES;
-					gen.maximumSize = CGSizeMake(320, 240);
-					NSError				*nsErr = nil;
-					//CMTime				time = CMTimeMake(1,60);
-					CGImageRef			imgRef = [gen copyCGImageAtTime:CMTimeMake(1,60) actualTime:NULL error:&nsErr];
-					//NSImage				*img = (imgRef==NULL) ? nil : [[NSImage alloc] initWithCGImage:imgRef size:NSMakeSize(CGImageGetWidth(imgRef),CGImageGetHeight(imgRef))];
-					NSBitmapImageRep	*imgRep = [[NSBitmapImageRep alloc] initWithCGImage:imgRef];
-					NSImage				*img = [[NSImage alloc] initWithSize:[imgRep size]];
-					[img addRepresentation:imgRep];
-					self.thumb = img;
-				//}
+				AVAssetImageGenerator		*gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+				gen.appliesPreferredTrackTransform = YES;
+				gen.maximumSize = CGSizeMake(320, 240);
+				NSError				*nsErr = nil;
+				//CMTime				time = CMTimeMake(1,60);
+				CGImageRef			imgRef = [gen copyCGImageAtTime:CMTimeMake(1,60) actualTime:NULL error:&nsErr];
+				//NSImage				*img = (imgRef==NULL) ? nil : [[NSImage alloc] initWithCGImage:imgRef size:NSMakeSize(CGImageGetWidth(imgRef),CGImageGetHeight(imgRef))];
+				NSBitmapImageRep	*imgRep = [[NSBitmapImageRep alloc] initWithCGImage:imgRef];
+				NSImage				*img = [[NSImage alloc] initWithSize:[imgRep size]];
+				[img addRepresentation:imgRep];
+				self.thumb = img;
 			}
 			else if ([asset containsHapVideoTrack])	{
 				NSArray				*assetHapTracks = [asset hapVideoTracks];
@@ -547,6 +544,21 @@ static dispatch_queue_t		iconGeneratorQueue = NULL;
 				});
 				return;
 			}
+			
+			//	if a file already exists at the tmp path, delete it
+			if ([fm fileExistsAtPath:self.tmpFile isDirectory:NULL])	{
+				NSError			*nsErr = nil;
+				if (![fm removeItemAtPath:self.tmpFile error:&nsErr])	{
+					self.status = OpStatus_PreflightErr;
+					self.errString = [NSString stringWithFormat:@"Tmp file already exists, and cannot be deleted: %@",[nsErr localizedDescription]];
+					dispatch_async(dispatch_get_main_queue(), ^{
+						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+						if (tmpDelegate != nil)
+							[tmpDelegate synOpStatusFinished:bss];
+					});
+					return;
+				}
+			}
 		}
 	
 		//	if there's no dstFile...
@@ -599,6 +611,21 @@ static dispatch_queue_t		iconGeneratorQueue = NULL;
 						[tmpDelegate synOpStatusFinished:bss];
 				});
 				return;
+			}
+			
+			//	if a file already exists at the dst path, delete it
+			if ([fm fileExistsAtPath:self.dst isDirectory:NULL])	{
+				NSError			*nsErr = nil;
+				if (![fm removeItemAtPath:self.dst error:&nsErr])	{
+					self.status = OpStatus_PreflightErr;
+					self.errString = [NSString stringWithFormat:@"Destination file already exists, and cannot be deleted: %@",[nsErr localizedDescription]];
+					dispatch_async(dispatch_get_main_queue(), ^{
+						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+						if (tmpDelegate != nil)
+							[tmpDelegate synOpStatusFinished:bss];
+					});
+					return;
+				}
 			}
 		}
 	

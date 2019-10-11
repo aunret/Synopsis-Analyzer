@@ -85,11 +85,6 @@
 	return self;
 }
 
-- (void) awakeFromNib
-{
-	
-}
-
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification	{
 	
 	// Load our plugins

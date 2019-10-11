@@ -270,6 +270,10 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 }
 
 
+- (NSString *) description	{
+	return [NSString stringWithFormat:@"<SynopsisJobObject: %@>",self.srcFile.lastPathComponent];
+}
+
 - (NSTimeInterval) jobTimeElapsed	{
 	if (self.jobStartDate == nil)
 		return 0.0;
@@ -447,11 +451,11 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	NSArray<AVAssetTrack*>		*tracks = [asset tracks];
 	//	these dicts describe the standard reader output format if i need to transcode (or analyze!) video or audio
 	NSMutableDictionary			*videoReadNormalizedOutputSettings = [@{
-		//(NSString *)kCVPixelBufferPixelFormatTypeKey: [NSNumber numberWithInteger:kCVPixelFormatType_32BGRA],	//	BGRA/RGBA stops working sometime at or before 8k resolution!
-		(NSString *)kCVPixelBufferPixelFormatTypeKey: [NSNumber numberWithInteger:kCVPixelFormatType_32ARGB],
+		(NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32BGRA ),	//	BGRA/RGBA stops working sometime at or before 8k resolution!
+		//(NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32ARGB ),
 		(NSString *)kCVPixelBufferMetalCompatibilityKey: @YES,
-		//(NSString *)kCVPixelBufferOpenGLCompatibilityKey: @YES,
-		//(NSString *)kCVPixelBufferIOSurfacePropertiesKey: @YES
+		(NSString *)kCVPixelBufferOpenGLCompatibilityKey: @YES,
+		(NSString *)kCVPixelBufferIOSurfacePropertiesKey: @{}
 	} mutableCopy];
 	NSMutableDictionary			*audioReadNormalizedOutputSettings = [@{
 		AVFormatIDKey: [NSNumber numberWithInteger:kAudioFormatLinearPCM],
@@ -1507,7 +1511,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			options:nil
 			error:&nsErr];
 		if (mov == nil || nsErr != nil)	{
-			NSLog(@"ERR: couldnt append global metadata to output movie");
+			NSLog(@"ERR: couldnt append global metadata to output movie, %@",self);
 			self.jobStatus = JOStatus_Err;
 			self.jobErr = JOErr_AVFErr;
 			self.jobErrString = @"Couldn't append global metadata to output movie";
@@ -1678,7 +1682,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		[localDelegate finishedJob:self];
 }
 - (BOOL) file:(NSURL *)fileURL xattrSetPlist:(id)plist forKey:(NSString *)key	{
-	NSLog(@"%s ... %@: %@",__func__,plist,key);
+	//NSLog(@"%s ... %@: %@",__func__,plist,key);
 	if (plist==nil || key==nil || fileURL==nil)
 		return NO;
 	if ([NSPropertyListSerialization propertyList:plist isValidForFormat:NSPropertyListBinaryFormat_v1_0])	{

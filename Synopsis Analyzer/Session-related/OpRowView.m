@@ -13,6 +13,13 @@
 
 
 
+static dispatch_queue_t		iconGenQueue = NULL;
+static dispatch_semaphore_t		iconGenSem = NULL;
+static NSMutableArray		*iconGenArray = nil;
+
+
+
+
 @interface OpRowView ()
 - (void) generalInit;
 @end
@@ -21,6 +28,44 @@
 
 
 @implementation OpRowView
+
+
++ (void) initialize	{
+	@synchronized (self)	{
+		if (iconGenQueue == NULL)	{
+			iconGenQueue = dispatch_queue_create("info.synopsis.icongenqueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_CONCURRENT, DISPATCH_QUEUE_PRIORITY_HIGH, -1));
+			iconGenSem = dispatch_semaphore_create(12);
+			iconGenArray = [[NSMutableArray alloc] init];
+		}
+	}
+}
++ (void) addOpToIconGenQueue:(SynOp *)n	{
+	//	add the op we just requested to the top of the queue
+	@synchronized (iconGenArray)	{
+		[iconGenArray removeObjectIdenticalTo:n];
+		[iconGenArray insertObject:n atIndex:0];
+	}
+	
+	dispatch_async(iconGenQueue, ^{
+		//	wait for the concurrency semaphore to signal we're free to process
+		dispatch_semaphore_wait(iconGenSem, DISPATCH_TIME_FOREVER);
+		
+		//	pull the first op out of the array (the most recently-added op to the array, not necessarily the one we just requested)
+		SynOp			*opToGen = nil;
+		@synchronized (iconGenArray)	{
+			if ([iconGenArray count]>0)	{
+				opToGen = [iconGenArray objectAtIndex:0];
+				[iconGenArray removeObjectAtIndex:0];
+			}
+		}
+		//	populate it
+		if (opToGen != nil)
+			[opToGen populateThumb];
+		
+		//	signal the concurrency semaphore that we're done, and another op may begin
+		dispatch_semaphore_signal(iconGenSem);
+	});
+}
 
 
 - (instancetype) initWithFrame:(NSRect)n	{
@@ -56,7 +101,13 @@
 	}
 	
 	//[enableToggle setIntValue:NSOnState];
-	[preview setImage:self.op.thumb];
+	if (self.op.thumb == nil)	{
+		[OpRowView addOpToIconGenQueue:self.op];
+		[preview setImage:[SynOp genericMovieThumbnail]];
+	}
+	else	{
+		[preview setImage:self.op.thumb];
+	}
 	[nameField setStringValue:self.op.src.lastPathComponent.stringByDeletingPathExtension];
 	//NSLog(@"op is %@",self.op);
 	//NSLog(@"op src is %@",self.op.src);

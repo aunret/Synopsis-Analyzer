@@ -61,6 +61,8 @@ case OpStatus_Err:
 
 @interface SynOp : NSObject <NSCoding>
 
++ (NSImage *) genericMovieThumbnail;
+
 - (instancetype) initWithSrcURL:(NSURL *)inSrc;
 - (instancetype) initWithSrcPath:(NSString *)inSrc;
 
@@ -80,6 +82,7 @@ case OpStatus_Err:
 
 - (NSString *) createStatusString;
 - (NSAttributedString *) createAttributedStatusString;
+- (void) populateThumb;
 
 - (void) start;
 - (void) pause;

@@ -45,6 +45,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 
 @property (atomic,strong,readwrite,nullable) id appNapToken;
 
+@property (atomic,readwrite) BOOL wokeUpOnce;	//	'awakeFromNib' is called every time we pull a view out of the table- we only want to call its contents once...
+
 //- (void) startAnOp;
 - (NSArray<SynOp*> *) getOpsToStart:(NSUInteger)numOpsToGet;
 - (int) maxOpCount;
@@ -81,18 +83,25 @@ static NSString						*localFileDragType = @"localFileDragType";
 	//	make an app nap token right away- we can't nap b/c we're either transcoding/analyzing, or potentially watching a directory for changes to its files!
 	self.appNapToken = [[NSProcessInfo processInfo] beginActivityWithOptions:NSActivityUserInitiated | NSActivityLatencyCritical reason:@"Analyzing"];
 	
+	self.wokeUpOnce = NO;
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 	//[self window];
 }
 - (void) awakeFromNib	{
-	//[dropView setDragDelegate:self];
-	outlineView.outlineTableColumn = theColumn;
-	[stopButton setEnabled:NO];
+	//NSLog(@"%s",__func__);
+	if (!self.wokeUpOnce)	{
+		//[dropView setDragDelegate:self];
+		outlineView.outlineTableColumn = theColumn;
+		[stopButton setEnabled:NO];
 	
-	[outlineView registerForDraggedTypes:@[ NSPasteboardTypeFileURL, localFileDragType ]];
-	//[outlineView setDraggingSourceOperationMask:NSDragOperationLink forLocal:NO];
-	[outlineView setDraggingSourceOperationMask:NSDragOperationGeneric forLocal:YES];
+		[outlineView registerForDraggedTypes:@[ NSPasteboardTypeFileURL, localFileDragType ]];
+		//[outlineView setDraggingSourceOperationMask:NSDragOperationLink forLocal:NO];
+		[outlineView setDraggingSourceOperationMask:NSDragOperationGeneric forLocal:YES];
+		
+		self.wokeUpOnce = YES;
+	}
 }
 
 
