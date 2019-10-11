@@ -440,6 +440,7 @@
 			case OpStatus_Pending:
 				maxVal += 1.0;
 				break;
+			case OpStatus_Preflight:
 			case OpStatus_Analyze:
 			case OpStatus_Cleanup:
 				hideProgressBar = NO;

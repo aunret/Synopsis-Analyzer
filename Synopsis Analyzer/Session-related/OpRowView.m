@@ -117,6 +117,13 @@ static NSMutableArray		*iconGenArray = nil;
 		[statusField setStringValue:[self.op createStatusString]];
 		statusField.toolTip = nil;
 		break;
+	case OpStatus_Preflight:
+		[tabView selectTabViewItemAtIndex:0];
+		//[statusField setStringValue:[self.op createStatusString]];
+		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
+		//statusField.toolTip = self.op.job.jobErrString;
+		statusField.toolTip = self.op.errString;
+		break;
 	case OpStatus_PreflightErr:
 		[tabView selectTabViewItemAtIndex:0];
 		//[statusField setStringValue:[self.op createStatusString]];

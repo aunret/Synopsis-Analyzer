@@ -315,6 +315,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 				case OpStatus_Pending:
 					[returnMe addObject:op];
 					break;
+				case OpStatus_Preflight:
 				case OpStatus_PreflightErr:
 				case OpStatus_Analyze:
 				case OpStatus_Cleanup:

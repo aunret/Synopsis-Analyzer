@@ -120,6 +120,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 @property (atomic, strong) NSMutableArray * availableAnalyzers;
 @property (atomic, strong) NSMutableDictionary * globalMetadata;
 
+//- (void) _checkIfActuallyFinished:(int)inCheckCount;
 - (void) _finishWritingAndCleanUp;
 - (void) _cancelAndCleanUp;
 - (void) _cleanUp;
@@ -1148,11 +1149,22 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 							maxNumberOfNonNullInputsOrOutputsPerSubArray = nonNSNullCount;
 					}
 					if (maxNumberOfInputsOrOutputsPerSubArray == 0 || maxNumberOfNonNullInputsOrOutputsPerSubArray == 0)	{
-						[writer finishWritingWithCompletionHandler:^{
-							//NSLog(@"finished writing!");
-							bss.jobStatus = JOStatus_Complete;
-							[bss _finishWritingAndCleanUp];
-						}];
+						//dispatch_async(dispatch_get_main_queue(), ^{
+							[self->writer finishWritingWithCompletionHandler:^{
+								//NSLog(@"finished writing!");
+								//	sometimes we're unable to create an AVMovie from the file in this handler, 
+								//	so we can't just finish writing and clean up immediately.  instead, we 
+								//	check to make sure the movie actually exists before we finish and clean up.
+								
+								bss.jobStatus = JOStatus_Complete;
+								[bss _finishWritingAndCleanUp];
+								
+								
+								/*
+								[self _checkIfActuallyFinished:0];
+								*/
+							}];
+						//});
 					}
 				}
 				pthread_mutex_unlock(&theLock);
@@ -1452,6 +1464,29 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 }
 
 
+/*
+- (void) _checkIfActuallyFinished:(int)inCheckCount	{
+	//NSURL				*targetURL = (self.tmpFile != nil) ? self.tmpFile : self.dstFile;
+	NSURL				*targetURL = self.dstFile;
+	NSError				*nsErr = nil;
+	AVMutableMovie		*mov = [[AVMutableMovie alloc]
+		initWithURL:targetURL
+		options:nil
+		error:&nsErr];
+	if ((inCheckCount < 4) && (mov == nil || nsErr != nil))	{
+		NSLog(@"check failed!  count is %d, job is %@",inCheckCount,self);
+		NSLog(@"\t\tAVMutableMovie error is %@",nsErr);
+		NSLog(@"\t\tasset writer status is %ld, error is %@",[writer status],[writer error]);
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5*NSEC_PER_SEC), videoWriterQueue, ^{
+			[self _checkIfActuallyFinished:inCheckCount + 1];
+		});
+	}
+	else	{
+		self.jobStatus = JOStatus_Complete;
+		[self _finishWritingAndCleanUp];
+	}
+}
+*/
 - (void) _finishWritingAndCleanUp	{
 	//NSLog(@"%s",__func__);
 	//	shut down the reader and the various outputs
@@ -1593,7 +1628,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//NSLog(@"total time: %0.2f seconds",[self jobTimeElapsed]);
 }
 - (void) _cancelAndCleanUp	{
-	//NSLog(@"%s",__func__);
+	NSLog(@"%s",__func__);
 	pthread_mutex_lock(&theLock);
 	{
 		if (writer != nil)	{

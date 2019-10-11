@@ -301,6 +301,8 @@ static NSImage				*genericMovieImage = nil;
 	switch (self.status)	{
 	case OpStatus_Pending:
 		return @"Pending";
+	case OpStatus_Preflight:
+		return @"Preflight";
 	case OpStatus_PreflightErr:
 		return @"Preflight Err";
 	case OpStatus_Analyze:
@@ -320,6 +322,9 @@ static NSImage				*genericMovieImage = nil;
 	switch (self.status)	{
 	case OpStatus_Pending:
 		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Pending"];
+		break;
+	case OpStatus_Preflight:
+		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Preflight"];
 		break;
 	case OpStatus_PreflightErr:
 		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Preflight Err"];
@@ -356,9 +361,12 @@ static NSImage				*genericMovieImage = nil;
 	//NSLog(@"%s ... %@",__func__,self);
 	@synchronized (self)	{
 		self.paused = NO;
-		dispatch_async(dispatch_get_main_queue(), ^{
+		//dispatch_async(dispatch_get_main_queue(), ^{
+			
+			//	do not call this async- or if you do, make sure you set the initial status to something other than 'pending'
 			[self _beginPreflight];
-		});
+			
+		//});
 	}
 }
 - (void) pause	{
@@ -368,6 +376,9 @@ static NSImage				*genericMovieImage = nil;
 		switch (self.status)	{
 		case OpStatus_Pending:
 			//	do nothing
+			break;
+		case OpStatus_Preflight:
+			//	do nothing- but check 'paused' property before beginning job
 			break;
 		case OpStatus_PreflightErr:
 			//	do nothing
@@ -396,6 +407,13 @@ static NSImage				*genericMovieImage = nil;
 			{
 				dispatch_async(dispatch_get_main_queue(), ^{
 					[self _beginPreflight];
+				});
+			}
+			break;
+		case OpStatus_Preflight:
+			{
+				dispatch_async(dispatch_get_main_queue(), ^{
+					[self _beginJob];
 				});
 			}
 			break;
@@ -432,6 +450,8 @@ static NSImage				*genericMovieImage = nil;
 			});
 			return;
 		}
+		
+		self.status = OpStatus_Preflight;
 	
 		//	first collect some vals we're going to need for all of these permutations...
 		NSFileManager		*fm = [NSFileManager defaultManager];
@@ -634,12 +654,15 @@ static NSImage				*genericMovieImage = nil;
 	
 	
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self _beginJob];
+			@synchronized (self)	{
+				if (!self.paused)
+					[self _beginJob];
+			}
 		});
 	}
 }
 - (void) _beginJob	{
-	//NSLog(@"%s",__func__);
+	NSLog(@"%s ... %@",__func__,self);
 	
 	@synchronized (self)	{
 		//	if this isn't an AVF file, proceed directly to cleanup
@@ -726,7 +749,7 @@ static NSImage				*genericMovieImage = nil;
 }
 
 - (void) _beginCleanup	{
-	//NSLog(@"%s ... %@",__func__,self);
+	NSLog(@"%s ... %@",__func__,self);
 	@synchronized (self)	{
 		NSFileManager			*fm = [NSFileManager defaultManager];
 		NSError					*nsErr = nil;
@@ -738,6 +761,7 @@ static NSImage				*genericMovieImage = nil;
 			// force dealloc of our expensive job object
 			self.job = nil;
 			
+			NSLog(@"op %@ errored, tmpFile is %@, dstFile is %@",self,self.tmpFile.lastPathComponent,self.dst.lastPathComponent);
 			//	move tmp file to trash
 			if (self.tmpFile != nil)	{
 				//[fm trashItemAtURL:[NSURL fileURLWithPath:self.tmpFile isDirectory:NO] resultingItemURL:nil error:&nsErr];

@@ -39,6 +39,7 @@ typedef NS_ENUM(NSUInteger, OpType)	{
 
 typedef NS_ENUM(NSUInteger, OpStatus)	{
 	OpStatus_Pending = 0,	//	hasn't been started yet
+	OpStatus_Preflight,	//	preflight has begun
 	OpStatus_PreflightErr,	//	err encountered before starting (won't be started)
 	OpStatus_Analyze,	//	analyzing
 	OpStatus_Cleanup,	//	cleaning up (copying/moving files, executing scripts)
