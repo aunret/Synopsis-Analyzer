@@ -76,7 +76,7 @@ extern NSString * const kSynopsisAnalysisSettingsKey;
 	// Key whose value is an NSDictionary of key value pairs of Encoder class names and an array of NSStrings modules enabled.
 	extern NSString * const kSynopsisAnalysisSettingsEnabledPluginModulesKey;
 
-	//	optional- val is NSNumber/bool indicating whether metadata should be exported as sidecar file (?)
+	//	optional- val is unsigned integer value describing how the JSON sidecar export option should be handled (SynopsisMetadataEncoderExportOption)
 	extern NSString * const kSynopsisAnalyzedMetadataExportOptionKey;
 
 
@@ -119,6 +119,7 @@ extern NSString * const kSynopsisStripTrackKey;
 @property (atomic, strong) NSDate * jobStartDate;
 - (NSTimeInterval) jobTimeElapsed;
 - (NSTimeInterval) jobTimeRemaining;
+- (BOOL) exportingToJSON;
 
 - (void) start;
 - (void) cancel;

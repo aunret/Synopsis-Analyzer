@@ -283,6 +283,12 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 - (NSTimeInterval) jobTimeRemaining	{
 	return [self.jobStartDate timeIntervalSinceNow] * -1.0 / self.jobProgress * (1.0 - self.jobProgress);
 }
+- (BOOL) exportingToJSON	{
+	SynopsisMetadataEncoderExportOption		exportOption = SynopsisMetadataEncoderExportOptionNone;
+	if (self.synopsisOpts != nil && self.synopsisOpts[kSynopsisAnalyzedMetadataExportOptionKey] != nil)
+		exportOption = [self.synopsisOpts[kSynopsisAnalyzedMetadataExportOptionKey] unsignedIntegerValue];
+	return (exportOption > SynopsisMetadataEncoderExportOptionNone);
+}
 
 
 - (void) start	{

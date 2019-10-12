@@ -786,6 +786,8 @@ static NSImage				*genericMovieImage = nil;
 		self.status = OpStatus_Cleanup;
 		
 		
+		//	was our job object exporting a metadata sidecar file?
+		BOOL			exportedSidecarFile = self.job.exportingToJSON;
 		// force dealloc of our expensive job object
 		self.job = nil;
 		
@@ -819,29 +821,32 @@ static NSImage				*genericMovieImage = nil;
 					return;
 				}
 				
-				//	copy the tmp json file to the dst location
-				if (![fm copyItemAtPath:[self.tmpFile.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] toPath:[self.dst.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] error:&nsErr])	{
-					self.status = OpStatus_Err;
-					self.errString = [NSString stringWithFormat:@"Couldn't copy tmp JSON file to destination (%@)",nsErr.localizedDescription];
-					dispatch_async(dispatch_get_main_queue(), ^{
-						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
-						if (tmpDelegate != nil)
-							[tmpDelegate synOpStatusFinished:bss];
-					});
-					return;
-				}
-				//	move the tmp json file to the trash
-				if (![fm removeItemAtURL:[NSURL fileURLWithPath:[self.tmpFile.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] isDirectory:NO] error:&nsErr])
-				{
-					self.status = OpStatus_Err;
-					self.errString = [NSString stringWithFormat:@"Couldn't trash tmp JSON file (%@)",nsErr.localizedDescription];
-					dispatch_async(dispatch_get_main_queue(), ^{
-						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
-						if (tmpDelegate != nil)
-							[tmpDelegate synOpStatusFinished:bss];
+				//	if we're exporting a sidecar metadata file...
+				if (exportedSidecarFile)	{
+					//	copy the tmp json file to the dst location
+					if (![fm copyItemAtPath:[self.tmpFile.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] toPath:[self.dst.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] error:&nsErr])	{
+						self.status = OpStatus_Err;
+						self.errString = [NSString stringWithFormat:@"Couldn't copy tmp JSON file to destination (%@)",nsErr.localizedDescription];
+						dispatch_async(dispatch_get_main_queue(), ^{
+							NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+							if (tmpDelegate != nil)
+								[tmpDelegate synOpStatusFinished:bss];
+						});
+						return;
+					}
+					//	move the tmp json file to the trash
+					if (![fm removeItemAtURL:[NSURL fileURLWithPath:[self.tmpFile.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] isDirectory:NO] error:&nsErr])
+					{
+						self.status = OpStatus_Err;
+						self.errString = [NSString stringWithFormat:@"Couldn't trash tmp JSON file (%@)",nsErr.localizedDescription];
+						dispatch_async(dispatch_get_main_queue(), ^{
+							NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+							if (tmpDelegate != nil)
+								[tmpDelegate synOpStatusFinished:bss];
 
-                    });
-					return;
+						});
+						return;
+					}
 				}
 			}
 		
