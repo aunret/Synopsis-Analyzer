@@ -168,6 +168,10 @@ static NSString						*localFileDragType = @"localFileDragType";
 		[removeItem setEnabled:NO];
 		[clearItem setEnabled:NO];
 		
+		//	deselect everything in the outline view
+		[outlineView deselectAll:nil];
+		[self outlineViewSelectionDidChange:nil];
+		
 		//	hide the preview
 		[appDelegate hidePreview];
 		
