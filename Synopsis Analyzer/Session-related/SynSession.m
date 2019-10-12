@@ -172,19 +172,19 @@
 				: [coder decodeObjectForKey:@"title"];
 			
 			self.outputDir = (![coder containsValueForKey:@"outputDir"])
-				? ([pc outputFolderEnabled] && [pc outputFolder]!=nil) ? [pc outputFolder] : nil
+				? nil
 				: [coder decodeObjectForKey:@"outputDir"];
 			
 			self.tempDir = (![coder containsValueForKey:@"tempDir"])
-				? ([pc tempFolderEnabled] && [pc tempFolder]!=nil) ? [pc tempFolder] : nil
+				? nil
 				: [coder decodeObjectForKey:@"tempDir"];
 			
 			self.opScript = (![coder containsValueForKey:@"opScript"])
-				? [pc opScript]
+				? nil
 				: [coder decodeObjectForKey:@"opScript"];
 			
 			self.sessionScript = (![coder containsValueForKey:@"sessionScript"])
-				? [pc sessionScript]
+				? nil
 				: [coder decodeObjectForKey:@"sessionScript"];
 			
 			self.preset = (![coder containsValueForKey:@"preset"])
