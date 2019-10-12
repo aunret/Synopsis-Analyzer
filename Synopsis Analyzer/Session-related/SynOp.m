@@ -662,7 +662,7 @@ static NSImage				*genericMovieImage = nil;
 	}
 }
 - (void) _beginJob	{
-	NSLog(@"%s ... %@",__func__,self);
+	//NSLog(@"%s ... %@",__func__,self);
 	
 	@synchronized (self)	{
 		//	if this isn't an AVF file, proceed directly to cleanup
@@ -749,7 +749,7 @@ static NSImage				*genericMovieImage = nil;
 }
 
 - (void) _beginCleanup	{
-	NSLog(@"%s ... %@",__func__,self);
+	//NSLog(@"%s ... %@",__func__,self);
 	@synchronized (self)	{
 		NSFileManager			*fm = [NSFileManager defaultManager];
 		NSError					*nsErr = nil;

@@ -407,7 +407,12 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//	prep some synopsis stuff
 	static int						roundRobin = 0;
 	NSArray<id<MTLDevice>>			*allDevices = MTLCopyAllDevices();
-	id<MTLDevice>					device = allDevices[roundRobin];
+	id<MTLDevice>					device = nil;
+	@synchronized ([self class])	{
+		device = allDevices[roundRobin];
+		++roundRobin;
+		roundRobin = roundRobin % allDevices.count;
+	}
 	SynopsisAnalysisQualityHint		analysisQualityHint = (self.synopsisOpts == nil) ? SynopsisAnalysisQualityHintOriginal : [self.synopsisOpts[kSynopsisAnalysisSettingsQualityHintKey] unsignedIntegerValue];
 	NSArray							*requestedAnalyzers = (self.synopsisOpts == nil) ? nil : self.synopsisOpts[kSynopsisAnalysisSettingsEnabledPluginsKey];
 	self.availableAnalyzers = [[NSMutableArray alloc] init];
