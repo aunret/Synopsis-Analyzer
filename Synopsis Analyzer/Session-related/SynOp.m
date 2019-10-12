@@ -818,6 +818,31 @@ static NSImage				*genericMovieImage = nil;
                     });
 					return;
 				}
+				
+				//	copy the tmp json file to the dst location
+				if (![fm copyItemAtPath:[self.tmpFile.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] toPath:[self.dst.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] error:&nsErr])	{
+					self.status = OpStatus_Err;
+					self.errString = [NSString stringWithFormat:@"Couldn't copy tmp JSON file to destination (%@)",nsErr.localizedDescription];
+					dispatch_async(dispatch_get_main_queue(), ^{
+						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+						if (tmpDelegate != nil)
+							[tmpDelegate synOpStatusFinished:bss];
+					});
+					return;
+				}
+				//	move the tmp json file to the trash
+				if (![fm removeItemAtURL:[NSURL fileURLWithPath:[self.tmpFile.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] isDirectory:NO] error:&nsErr])
+				{
+					self.status = OpStatus_Err;
+					self.errString = [NSString stringWithFormat:@"Couldn't trash tmp JSON file (%@)",nsErr.localizedDescription];
+					dispatch_async(dispatch_get_main_queue(), ^{
+						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+						if (tmpDelegate != nil)
+							[tmpDelegate synOpStatusFinished:bss];
+
+                    });
+					return;
+				}
 			}
 		
 			//	if there's a script, run it on the dst file
