@@ -120,6 +120,7 @@ extern NSString * const kSynopsisStripTrackKey;
 - (NSTimeInterval) jobTimeElapsed;
 - (NSTimeInterval) jobTimeRemaining;
 - (BOOL) exportingToJSON;
+- (void) checkForHang;
 
 - (void) start;
 - (void) cancel;

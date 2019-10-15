@@ -688,7 +688,7 @@ static NSImage				*genericMovieImage = nil;
 	
 		//PrefsController		*pc = [PrefsController global];
 		//NSURL				*tempFolderURL = [pc tempFolderURL];
-		NSDictionary			*synopsisOpts = @{
+		NSDictionary			*synopsisOpts = (!sessionPreset.useAnalysis) ? nil : @{
 			kSynopsisAnalysisSettingsQualityHintKey : @( SynopsisAnalysisQualityHintMedium ),
 			kSynopsisAnalysisSettingsEnabledPluginsKey : @[ @"StandardAnalyzerPlugin" ],
 			kSynopsisAnalysisSettingsEnableConcurrencyKey : @YES,
@@ -893,6 +893,12 @@ static NSImage				*genericMovieImage = nil;
 - (void) running	{
 }
 */
+- (void) checkForHang	{
+	@synchronized (self)	{
+		if (self.job != nil)
+			[self.job checkForHang];
+	}
+}
 
 
 #pragma mark - NSObject protocol

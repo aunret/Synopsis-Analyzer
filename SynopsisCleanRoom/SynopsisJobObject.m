@@ -120,6 +120,11 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 @property (atomic, strong) NSMutableArray * availableAnalyzers;
 @property (atomic, strong) NSMutableDictionary * globalMetadata;
 
+//	sometimes, under some specific circumstances, calling -[AVAssetReaderTrackOutput copyNextSampleBuffer] will hang, 
+//	and just...not return.  we store the date of the last successfully-retrieved normalized video buffer here, and if 
+//	it's ever non-nil AND longer than 10 seconds from now, we assume the job has hung and needs to be errored out.
+@property (atomic,strong,readwrite,nullable) NSDate * dateOfLastCopiedNormalizedVideoBuffer;
+
 //- (void) _checkIfActuallyFinished:(int)inCheckCount;
 - (void) _finishWritingAndCleanUp;
 - (void) _cancelAndCleanUp;
@@ -261,7 +266,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		self.audioTransOpts = (inAudioTransOpts==nil || inAudioTransOpts.count<1) ? nil : [inAudioTransOpts mutableCopy];
 		self.synopsisOpts = (inSynopsisOpts==nil) ? nil : [inSynopsisOpts mutableCopy];
 		self.availableAnalyzers = [[NSMutableArray alloc] init];
-		self.globalMetadata = [[NSMutableDictionary alloc] init];
+		self.globalMetadata = (inSynopsisOpts==nil) ? nil : [[NSMutableDictionary alloc] init];
+		self.dateOfLastCopiedNormalizedVideoBuffer = nil;
 	}
 	return self;
 }
@@ -288,6 +294,50 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	if (self.synopsisOpts != nil && self.synopsisOpts[kSynopsisAnalyzedMetadataExportOptionKey] != nil)
 		exportOption = [self.synopsisOpts[kSynopsisAnalyzedMetadataExportOptionKey] unsignedIntegerValue];
 	return (exportOption > SynopsisMetadataEncoderExportOptionNone);
+}
+- (void) checkForHang	{
+	//	assume we're not hung if we're not processing...
+	switch (self.jobStatus)	{
+	case JOStatus_Unknown:
+	case JOStatus_NotStarted:
+	case JOStatus_Err:
+	case JOStatus_Complete:
+	case JOStatus_Cancel:
+	case JOStatus_Paused:
+		return;
+	case JOStatus_InProgress:
+		break;
+	}
+	
+	//	assume we're not hung if we're paused...
+	if (self.paused)
+		return;
+	
+	//	assume we're not hung if we aren't writing video...
+	BOOL			foundAVideoWriter = NO;
+	@synchronized (self)	{
+		for (NSObject *tmpObj in writerVideoInputs)	{
+			if (tmpObj != [NSNull null])	{
+				foundAVideoWriter = YES;
+				break;
+			}
+		}
+	}
+	if (!foundAVideoWriter)
+		return;
+	
+	//	assume we're not hung if we've processed a normalized video buffer in the last 10 seconds
+	NSDate		*tmpDate = self.dateOfLastCopiedNormalizedVideoBuffer;
+	if (tmpDate == nil)
+		return;
+	
+	//	if we hung, cancel and clean up...
+	if ([tmpDate timeIntervalSinceNow] < -10.0)	{
+		self.jobStatus = JOStatus_Err;
+		self.jobErr = JOErr_AVFErr;
+		self.jobErrString = @"Error: AVF hung processing the file";
+		[self _cancelAndCleanUp];
+	}
 }
 
 
@@ -358,8 +408,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	if (self.synopsisOpts != nil && self.synopsisOpts[kSynopsisAnalyzedMetadataExportOptionKey] != nil)
 		exportOption = [self.synopsisOpts[kSynopsisAnalyzedMetadataExportOptionKey] unsignedIntegerValue];
 	//NSLog(@"exportOption is %d",exportOption);
-	synopsisEncoder = [[SynopsisMetadataEncoder alloc] initWithVersion:kSynopsisMetadataVersionValue exportOption:exportOption];
-	if (synopsisEncoder == nil)	{
+	synopsisEncoder = (self.synopsisOpts==nil) ? nil : [[SynopsisMetadataEncoder alloc] initWithVersion:kSynopsisMetadataVersionValue exportOption:exportOption];
+	if (synopsisEncoder == nil && self.synopsisOpts != nil)	{
 		self.jobStatus = JOStatus_Err;
 		self.jobErr = JOErr_Analysis;
 		self.jobErrString = @"Can't create metadata encoder";
@@ -1106,7 +1156,15 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		[localInput respondToEachPassDescriptionOnQueue:localQueue usingBlock:^{
 			//NSLog(@"respondToEachPassDescriptionOnQueue:, AVAssetMediaType is %@",[localInput mediaType]);
 			__block NSUInteger			skippedBufferCount = 0;
-			__block NSUInteger			renderedVideoFrameCount = 0;
+			__block NSInteger			retrievedSampleBufferCount = 0;	//	the # of samples retrieved from the reader output corresponding to this writer input
+			__block NSInteger			analyzedSampleBufferCount = 0;	//	the # of samples retrieved from the normalized/analysis output corresponding to this writer input
+			//	if this is a passthru out and there's no corresponding analysis out, set 'analyzedSampleBufferCount' to -1 b/c we're not using it to verify that every sample has been analyzed
+			if ((vidReadPassthruOut != nil && vidReadPassthruOut != [NSNull null]) && (vidReadAnalysisOut == nil || vidReadAnalysisOut == [NSNull null]))
+				analyzedSampleBufferCount = -1;
+			else if ((audReadPassthruOut != nil && audReadPassthruOut != [NSNull null]) && (audReadAnalysisOut == nil || audReadAnalysisOut == [NSNull null]))
+				analyzedSampleBufferCount = -1;
+			
+			
 			__block NSUInteger			inputPassIndex = 0;
 			AVAssetWriterInputPassDescription		*tmpDesc = [localInput currentPassDescription];
 			//NSLog(@"\t\tcurrentPassDescription is %@",tmpDesc);
@@ -1249,16 +1307,29 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 								
 								//	if this is a video writer, we need to get an analysis samplbe buffer
 								if (isVideoWriter || isMetadataWriter)	{
+									if (isVideoWriter)
+										retrievedSampleBufferCount += CMSampleBufferGetNumSamples(localSB);
+									
 									//	if this was a passthru input...
 									if (writerIsPassthru)	{
 										//	(...the sample buffer's image buffer is NOT usable for analysis)
 										//	copy a sample from the reader video analysis output that corresponds to this writer input
 										analysisSB = (vidReadAnalysisOut==NULL || vidReadAnalysisOut==(AVAssetReaderOutput*)[NSNull null]) ? NULL : [vidReadAnalysisOut copyNextSampleBuffer];
+										if (analysisSB != NULL)	{
+											analyzedSampleBufferCount += CMSampleBufferGetNumSamples(analysisSB);
+											//	update the date at which we last successfully copied a normalized video buffer
+											self.dateOfLastCopiedNormalizedVideoBuffer = [NSDate date];
+										}
 									}
 									//	else this was a non-passthru input...
 									else	{
+										//	update the date at which we last successfully copied a normalized video buffer
+										if (isVideoWriter)
+											self.dateOfLastCopiedNormalizedVideoBuffer = [NSDate date];
 										//	(...the sample buffer from the local output is usable for analysis)
 										analysisSB = CFRetain(localSB);
+										if (isVideoWriter)
+											analyzedSampleBufferCount += CMSampleBufferGetNumSamples(analysisSB);
 									}
 									
 									
@@ -1341,8 +1412,6 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 									//	append the sample buffer from the local output to the local input
 								}
 								skippedBufferCount = 0;
-								if (isVideoWriter || isMetadataWriter)
-									++renderedVideoFrameCount;
 								if (isVideoWriter || isAudioWriter || isMiscWriter)
 									[localInput appendSampleBuffer:localSB];
 								CFRelease(localSB);
@@ -1388,7 +1457,9 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 								if (skippedBufferCount >4)	{
 									[localInput markCurrentPassAsFinished];
 									//	if this was a video track, and it didn't render any video frames, something went wrong
-									if ((isVideoWriter || isMetadataWriter) && renderedVideoFrameCount==0)	{
+									if ((isVideoWriter && retrievedSampleBufferCount==0)	||
+									(analyzedSampleBufferCount >= 0 && retrievedSampleBufferCount != analyzedSampleBufferCount))	{
+										//NSLog(@"\t\tretrieved vs analyzed count is %ld - %ld for job %@",retrievedSampleBufferCount,analyzedSampleBufferCount,self);
 										//unexpectedErr = YES;
 										bss.jobStatus = JOStatus_Err;
 										bss.jobErr = JOErr_AVFErr;
@@ -1453,6 +1524,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 				dispatch_suspend(analysisQueue);
 		}
 		else	{
+			if (self.dateOfLastCopiedNormalizedVideoBuffer != nil)
+				self.dateOfLastCopiedNormalizedVideoBuffer = [NSDate date];
 			if (videoWriterQueue != NULL)
 				dispatch_resume(videoWriterQueue);
 			if (audioWriterQueue != NULL)
@@ -1545,7 +1618,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		timeRange:CMTimeRangeMake(kCMTimeZero, asset.duration)];
 	
 	//	write the finalized metadata to the appropriate file
-	{
+	if (self.synopsisOpts != nil)	{
 		NSURL			*targetURL = /*(self.tmpFile != nil) ? self.tmpFile :*/ self.dstFile;
 		//NSString		*targetPathExt = (targetURL==nil) ? nil : [targetURL pathExtension];
 		AVFileType		exportFileType = AVFileTypeQuickTimeMovie;
@@ -1719,6 +1792,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		}
 		*/
 	}
+	
+	self.availableAnalyzers = nil;
 	
 	if (self.completionBlock != nil)
 		self.completionBlock(self);

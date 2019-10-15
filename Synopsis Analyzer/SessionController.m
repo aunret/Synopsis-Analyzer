@@ -412,6 +412,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 			if (tmpView != nil)
 				[tmpView refreshUI];
 		}
+		
+		//	tell the op in progress to check for hangs!
+		[op checkForHang];
 	}
 	
 	for (SynSession *session in sessionsInProgress)	{
