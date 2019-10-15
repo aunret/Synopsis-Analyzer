@@ -12,7 +12,7 @@
 #import <HapInAVFoundation/HapInAVFoundation.h>
 #import <pthread.h>
 #include <sys/xattr.h>
-
+#include <VideoToolbox/VideoToolbox.h>
 
 
 
@@ -457,11 +457,20 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//	prep some synopsis stuff
 	static int						roundRobin = 0;
 	NSArray<id<MTLDevice>>			*allDevices = MTLCopyAllDevices();
+    NSMutableArray<id<MTLDevice>>   *viableDevices = [NSMutableArray new];
+    
+    // Ignore low po
+    for (id<MTLDevice> device in allDevices) {
+        if ( !device.isLowPower) {
+            [viableDevices addObject:device];
+        }
+    }
+    
 	id<MTLDevice>					device = nil;
 	@synchronized ([self class])	{
-		device = allDevices[roundRobin];
+		device = viableDevices[roundRobin];
 		++roundRobin;
-		roundRobin = roundRobin % allDevices.count;
+		roundRobin = roundRobin % viableDevices.count;
 	}
     
         if (@available(macOS 10.15, *)) {
@@ -521,13 +530,34 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//	first, some basic vars: tracks, dicts that describe normalized audio/video output settings, synopsis-related vars
 	NSArray<AVAssetTrack*>		*tracks = [asset tracks];
 	//	these dicts describe the standard reader output format if i need to transcode (or analyze!) video or audio
-	NSMutableDictionary			*videoReadNormalizedOutputSettings = [@{
-		(NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32BGRA ),	//	BGRA/RGBA stops working sometime at or before 8k resolution!
-		//(NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32ARGB ),
-		(NSString *)kCVPixelBufferMetalCompatibilityKey: @YES,
-		(NSString *)kCVPixelBufferOpenGLCompatibilityKey: @YES,
-		(NSString *)kCVPixelBufferIOSurfacePropertiesKey: @{}
-	} mutableCopy];
+    NSMutableDictionary			*videoReadNormalizedOutputSettings = nil;
+    
+    if ( @available(macOS 10.15, *) ) {
+        videoReadNormalizedOutputSettings = [@{
+                  (NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32BGRA ),    //    BGRA/RGBA stops working sometime at or before 8k resolution!
+                  //(NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32ARGB ),
+                  (NSString *)kCVPixelBufferMetalCompatibilityKey: @YES,
+                  (NSString *)kCVPixelBufferOpenGLCompatibilityKey: @YES,
+                  (NSString *)kCVPixelBufferIOSurfacePropertiesKey: @{},
+                  AVVideoDecompressionPropertiesKey: @{
+                          
+                          (NSString *)kVTVideoDecoderSpecification_PreferredDecoderGPURegistryID: @(device.registryID),
+                  },
+                  
+              } mutableCopy];
+    }
+    else {
+        videoReadNormalizedOutputSettings =  [@{
+                  (NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32BGRA ),    //    BGRA/RGBA stops working sometime at or before 8k resolution!
+                  //(NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32ARGB ),
+                  (NSString *)kCVPixelBufferMetalCompatibilityKey: @YES,
+                  (NSString *)kCVPixelBufferOpenGLCompatibilityKey: @YES,
+                  (NSString *)kCVPixelBufferIOSurfacePropertiesKey: @{}
+              } mutableCopy];
+    }
+  
+    
+    
 	NSMutableDictionary			*audioReadNormalizedOutputSettings = [@{
 		AVFormatIDKey: [NSNumber numberWithInteger:kAudioFormatLinearPCM],
 		AVLinearPCMBitDepthKey: @32,
@@ -626,6 +656,10 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 						localTransOpts[AVVideoWidthKey] = [NSNumber numberWithInteger:exportSize.width];
 						localTransOpts[AVVideoHeightKey] = [NSNumber numberWithInteger:exportSize.height];
 					}
+                    
+                    if (@available(macOS 10.15, *)) {
+                        localTransOpts[AVVideoEncoderSpecificationKey] = @{ (NSString *) kVTVideoEncoderSpecification_PreferredEncoderGPURegistryID : @(device.registryID) };
+                    }
 					
 					//	wrap the input-/output-creation stuff in an exception handler so we can recover gracefully with an error message
 					@try	{
