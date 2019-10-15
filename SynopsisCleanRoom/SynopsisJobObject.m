@@ -413,6 +413,15 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		++roundRobin;
 		roundRobin = roundRobin % allDevices.count;
 	}
+    
+        if (@available(macOS 10.15, *)) {
+            NSLog(@"using Metal Device %@, is low power: %i, maxTransferRate: %llu", device.name, device.lowPower, device.maxTransferRate);
+
+        } else {
+            NSLog(@"using Metal Device %@, is low power: %i", device.name, device.lowPower);
+        }
+    
+    
 	SynopsisAnalysisQualityHint		analysisQualityHint = (self.synopsisOpts == nil) ? SynopsisAnalysisQualityHintOriginal : [self.synopsisOpts[kSynopsisAnalysisSettingsQualityHintKey] unsignedIntegerValue];
 	NSArray							*requestedAnalyzers = (self.synopsisOpts == nil) ? nil : self.synopsisOpts[kSynopsisAnalysisSettingsEnabledPluginsKey];
 	self.availableAnalyzers = [[NSMutableArray alloc] init];
