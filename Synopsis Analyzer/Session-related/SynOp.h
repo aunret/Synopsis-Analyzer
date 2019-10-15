@@ -90,6 +90,7 @@ case OpStatus_Err:
 - (void) resume;
 - (void) stop;
 //- (void) running;
+- (void) checkForHang;
 
 @end
 
