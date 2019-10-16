@@ -16,7 +16,7 @@
 #import "InspectorViewController.h"
 #import <QuickLook/QuickLook.h>
 
-
+#import "GPULoadBalancer.h"
 
 
 
@@ -50,7 +50,7 @@ static NSImage				*genericMovieImage = nil;
 }
 
 
-- (instancetype) initWithSrcURL:(NSURL *)inSrc	{
+- (instancetype) initWithSrcURL:(NSURL *)inSrc {
 	//NSLog(@"%s ... %@",__func__,inSrc.path);
 	self = [super init];
 	if (self != nil)	{
@@ -72,7 +72,7 @@ static NSImage				*genericMovieImage = nil;
 	}
 	return self;
 }
-- (instancetype) initWithSrcPath:(NSString *)inSrc	{
+- (instancetype) initWithSrcPath:(NSString *)inSrc  {
 	//NSLog(@"%s ... %@",__func__,inSrc);
 	self = [super init];
 	if (self != nil)	{
@@ -708,42 +708,50 @@ static NSImage				*genericMovieImage = nil;
 	
 		self.status = OpStatus_Analyze;
 	
-		self.job = [[SynopsisJobObject alloc]
-			initWithSrcFile:(self.src==nil) ? nil : [NSURL fileURLWithPath:self.src]
-			dstFile:(self.tmpFile!=nil) ? [NSURL fileURLWithPath:self.tmpFile] : [NSURL fileURLWithPath:self.dst]
-			videoTransOpts:videoOpts
-			audioTransOpts:audioOpts
-			synopsisOpts:synopsisOpts
-			completionBlock:^(SynopsisJobObject *finished)	{
-				//NSLog(@"\tjob finished, status is %@",[SynopsisJobObject stringForStatus:finished.jobStatus]);
-				//NSLog(@"\tjob err is %@",[SynopsisJobObject stringForErrorType:finished.jobErr]);
-				//NSLog(@"\tjob err string is %@",finished.jobErrString);
-				switch (finished.jobStatus)	{
-				case JOStatus_Unknown:
-				case JOStatus_NotStarted:
-				case JOStatus_InProgress:
-				case JOStatus_Paused:
-					break;
-				case JOStatus_Err:
-					bss.status = OpStatus_Err;
-					//bss.errString = [SynopsisJobObject stringForErrorType:finished.jobErr];
-					bss.errString = finished.jobErrString;
-					break;
-				case JOStatus_Complete:
-					//	intentionally blank- fall through, we want to run cleanup next
-					break;
-				case JOStatus_Cancel:
-					bss.status = OpStatus_Pending;
-					bss.errString = nil;
-					break;
-				}
-			
-				//	this block gets executed even if you cancel
-				dispatch_async(dispatch_get_main_queue(), ^{
-					[bss _beginCleanup];
-				});
-			}];
+        id<MTLDevice>device = [[GPULoadBalancer sharedBalancer] nextAvailableDevice];
+        
+        self.job = [[SynopsisJobObject alloc]
+                    initWithSrcFile:(self.src==nil) ? nil : [NSURL fileURLWithPath:self.src]
+                    dstFile:(self.tmpFile!=nil) ? [NSURL fileURLWithPath:self.tmpFile] : [NSURL fileURLWithPath:self.dst]
+                    videoTransOpts:videoOpts
+                    audioTransOpts:audioOpts
+                    synopsisOpts:synopsisOpts
+                    device:device
+                    completionBlock:^(SynopsisJobObject *finished)	{
+            //NSLog(@"\tjob finished, status is %@",[SynopsisJobObject stringForStatus:finished.jobStatus]);
+            //NSLog(@"\tjob err is %@",[SynopsisJobObject stringForErrorType:finished.jobErr]);
+            //NSLog(@"\tjob err string is %@",finished.jobErrString);
+            switch (finished.jobStatus)	{
+                case JOStatus_Unknown:
+                case JOStatus_NotStarted:
+                case JOStatus_InProgress:
+                case JOStatus_Paused:
+                    break;
+                case JOStatus_Err:
+                    bss.status = OpStatus_Err;
+                    //bss.errString = [SynopsisJobObject stringForErrorType:finished.jobErr];
+                    bss.errString = finished.jobErrString;
+                    break;
+                case JOStatus_Complete:
+                    //	intentionally blank- fall through, we want to run cleanup next
+                    break;
+                case JOStatus_Cancel:
+                    bss.status = OpStatus_Pending;
+                    bss.errString = nil;
+                    break;
+                    
+            }
+            
+            [[GPULoadBalancer sharedBalancer] returnGPU:device from:finished];
+            
+            //	this block gets executed even if you cancel
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [bss _beginCleanup];
+            });
+        }];
 	
+        [[GPULoadBalancer sharedBalancer] checkoutGPU:device forJob:self.job];
+        
 		[self.job start];
 	}
 }

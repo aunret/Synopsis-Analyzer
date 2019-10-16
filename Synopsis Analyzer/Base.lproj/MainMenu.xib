@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -682,41 +683,41 @@
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="870" height="482"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="3840" height="2137"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
             <value key="minSize" type="size" width="870" height="482"/>
             <view key="contentView" id="noG-i8-QPA">
                 <rect key="frame" x="0.0" y="0.0" width="870" height="482"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
-                    <customView id="FPB-T1-KiW" customClass="CustomBackgroundView">
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FPB-T1-KiW" customClass="CustomBackgroundView">
                         <rect key="frame" x="0.0" y="0.0" width="870" height="482"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <customView id="Cfw-9g-Xai">
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cfw-9g-Xai">
                                 <rect key="frame" x="485" y="0.0" width="385" height="482"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                             </customView>
-                            <customView id="Maz-lY-xhg">
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Maz-lY-xhg">
                                 <rect key="frame" x="0.0" y="0.0" width="485" height="482"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <scrollView autohidesScrollers="YES" horizontalLineScroll="32" horizontalPageScroll="10" verticalLineScroll="32" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="HGk-2T-NQf">
+                                    <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="32" horizontalPageScroll="10" verticalLineScroll="32" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HGk-2T-NQf">
                                         <rect key="frame" x="0.0" y="0.0" width="477" height="482"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" id="nZk-qI-CUx">
+                                        <clipView key="contentView" ambiguous="YES" id="nZk-qI-CUx">
                                             <rect key="frame" x="1" y="1" width="475" height="480"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="30" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="LJK-3l-D3k" id="1Z6-MB-YhT">
+                                                <outlineView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="30" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="LJK-3l-D3k" id="1Z6-MB-YhT">
                                                     <rect key="frame" x="0.0" y="0.0" width="475" height="480"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
                                                         <tableColumn width="472" minWidth="40" maxWidth="1000" id="LJK-3l-D3k">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
-                                                                <font key="font" metaFont="smallSystem"/>
+                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
@@ -731,23 +732,23 @@
                                                                     <rect key="frame" x="1" y="1" width="472" height="30"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="oHq-NC-6Ha">
+                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oHq-NC-6Ha">
                                                                             <rect key="frame" x="9" y="3" width="43" height="24"/>
                                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ic_local_movies_white" id="AbP-MY-p9d"/>
                                                                         </imageView>
-                                                                        <tabView type="noTabsNoBorder" id="ocf-k4-S7J">
+                                                                        <tabView fixedFrame="YES" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="ocf-k4-S7J">
                                                                             <rect key="frame" x="351" y="0.0" width="122" height="30"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                             <font key="font" metaFont="system"/>
                                                                             <tabViewItems>
                                                                                 <tabViewItem label="not_running" identifier="" id="NZl-bJ-5P8">
-                                                                                    <view key="view" id="GO6-yx-EfN">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="114" height="30"/>
+                                                                                    <view key="view" ambiguous="YES" id="GO6-yx-EfN">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="122" height="30"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <subviews>
-                                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Oet-Hh-iTh">
-                                                                                                <rect key="frame" x="-2" y="6" width="118" height="17"/>
+                                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Oet-Hh-iTh">
+                                                                                                <rect key="frame" x="-2" y="6" width="126" height="17"/>
                                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Ready" id="OX6-R5-DNB">
                                                                                                     <font key="font" metaFont="system"/>
@@ -763,15 +764,15 @@
                                                                                         <rect key="frame" x="0.0" y="0.0" width="122" height="30"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <subviews>
-                                                                                            <progressIndicator wantsLayer="YES" maxValue="1" style="bar" id="foS-ZF-ETO">
+                                                                                            <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="foS-ZF-ETO">
                                                                                                 <rect key="frame" x="0.0" y="5" width="5" height="20"/>
                                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                                             </progressIndicator>
-                                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="n9o-Tc-1TP">
+                                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n9o-Tc-1TP">
                                                                                                 <rect key="frame" x="11" y="8" width="113" height="14"/>
                                                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                                                                                 <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Label" id="GYO-C6-9y1">
-                                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                                    <font key="font" metaFont="message" size="11"/>
                                                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                                 </textFieldCell>
@@ -781,7 +782,7 @@
                                                                                 </tabViewItem>
                                                                             </tabViewItems>
                                                                         </tabView>
-                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="6s6-Qy-nGc">
+                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6s6-Qy-nGc">
                                                                             <rect key="frame" x="58" y="6" width="291" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                                             <textFieldCell key="cell" lineBreakMode="truncatingMiddle" title="filename.mov" id="dkj-he-ptA">
@@ -804,7 +805,7 @@
                                                                     <rect key="frame" x="1" y="33" width="472" height="30"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="yFE-pC-ttU">
+                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yFE-pC-ttU">
                                                                             <rect key="frame" x="58" y="6" width="191" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES"/>
                                                                             <textFieldCell key="cell" lineBreakMode="clipping" selectable="YES" editable="YES" title="Session name" id="IAY-UM-DgF">
@@ -816,21 +817,21 @@
                                                                                 <action selector="nameFieldUsed:" target="omP-Y0-DVG" id="RdS-7U-Zgi"/>
                                                                             </connections>
                                                                         </textField>
-                                                                        <tabView type="noTabsNoBorder" id="NvK-9G-cxt">
+                                                                        <tabView fixedFrame="YES" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="NvK-9G-cxt">
                                                                             <rect key="frame" x="285" y="0.0" width="180" height="30"/>
                                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                                                             <font key="font" metaFont="system"/>
                                                                             <tabViewItems>
                                                                                 <tabViewItem label="not_running" identifier="" id="uM5-kv-Lzw">
-                                                                                    <view key="view" id="lfv-u6-zVA">
+                                                                                    <view key="view" ambiguous="YES" id="lfv-u6-zVA">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="180" height="30"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <subviews>
-                                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="o01-tB-r3J">
+                                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o01-tB-r3J">
                                                                                                 <rect key="frame" x="-28" y="8" width="208" height="14"/>
                                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                                                                 <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="(XXX files, XXX files to analyze)" id="9zF-hP-dLw">
-                                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                                    <font key="font" metaFont="message" size="11"/>
                                                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                                 </textFieldCell>
@@ -843,7 +844,7 @@
                                                                                         <rect key="frame" x="0.0" y="0.0" width="180" height="30"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <subviews>
-                                                                                            <progressIndicator wantsLayer="YES" maxValue="1" style="bar" id="ce3-O2-drg">
+                                                                                            <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="ce3-O2-drg">
                                                                                                 <rect key="frame" x="0.0" y="5" width="180" height="20"/>
                                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                                             </progressIndicator>
@@ -852,7 +853,7 @@
                                                                                 </tabViewItem>
                                                                             </tabViewItems>
                                                                         </tabView>
-                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="f40-GB-Ydx">
+                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f40-GB-Ydx">
                                                                             <rect key="frame" x="9" y="3" width="43" height="24"/>
                                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ic_local_movies_white" id="9tm-HY-Fmg"/>

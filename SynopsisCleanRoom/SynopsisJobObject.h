@@ -107,8 +107,8 @@ extern NSString * const kSynopsisStripTrackKey;
 + (NSString *) stringForStatus:(JOStatus)inStatus;
 + (NSString *) stringForErrorType:(JOErr)inErr;
 
-+ (instancetype) createWithJobJSONString:(NSString *)inJSONStr completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock;
-- (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock;
++ (instancetype) createWithJobJSONString:(NSString *)inJSONStr device:(id<MTLDevice>)device completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock;
+- (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts device:(id<MTLDevice>)device completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock;
 
 @property (atomic, readwrite, weak, nullable) id<BaseJobObjectDelegate> delegate;
 @property (atomic, readwrite) JOStatus jobStatus;

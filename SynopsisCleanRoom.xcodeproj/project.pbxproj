@@ -71,6 +71,7 @@
 		1AEE2F822334032E009193CD /* PrefsPathAbstraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F812334032E009193CD /* PrefsPathAbstraction.m */; };
 		1AEE2F85233448E0009193CD /* PathAbstraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F84233448E0009193CD /* PathAbstraction.m */; };
 		1AFDD45F2316F3C400D7862F /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
+		1B454BF523567D1600F3D4A8 /* GPULoadBalancer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B454BF423567D1600F3D4A8 /* GPULoadBalancer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -306,6 +307,8 @@
 		1AEE2F84233448E0009193CD /* PathAbstraction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PathAbstraction.m; sourceTree = "<group>"; };
 		1AFDD45D2316F3C400D7862F /* SynopsisJobObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynopsisJobObject.h; sourceTree = "<group>"; };
 		1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SynopsisJobObject.m; sourceTree = "<group>"; };
+		1B454BF323567D1600F3D4A8 /* GPULoadBalancer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GPULoadBalancer.h; sourceTree = "<group>"; };
+		1B454BF423567D1600F3D4A8 /* GPULoadBalancer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPULoadBalancer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -372,6 +375,8 @@
 		1A10936F233002E200791BDA /* Session-related */ = {
 			isa = PBXGroup;
 			children = (
+				1B454BF323567D1600F3D4A8 /* GPULoadBalancer.h */,
+				1B454BF423567D1600F3D4A8 /* GPULoadBalancer.m */,
 				1AC1029223328DB300510548 /* SynSession.h */,
 				1AC1029323328DB300510548 /* SynSession.m */,
 				1A10936C233002D800791BDA /* SynOp.h */,
@@ -790,6 +795,7 @@
 				1A1093772330205100791BDA /* SessionRowView.m in Sources */,
 				1A9B1EBE23314B73007D414A /* PrefsController.m in Sources */,
 				1AD845A6232C1E3900416F5C /* main.m in Sources */,
+				1B454BF523567D1600F3D4A8 /* GPULoadBalancer.m in Sources */,
 				1AD6237123395C4B0025703E /* SynopsisJobObject.m in Sources */,
 				1AEE2F822334032E009193CD /* PrefsPathAbstraction.m in Sources */,
 				1A55FD7F2343F78E007CA355 /* PresetSettingsUIController.m in Sources */,

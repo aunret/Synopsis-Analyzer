@@ -109,6 +109,9 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 }
 @property (atomic, strong) NSURL * srcFile;
 @property (atomic, strong) NSURL * dstFile;
+
+@property (atomic, strong) id<MTLDevice> device;
+
 //@property (atomic, strong) NSURL * tmpDirectory;
 //@property (atomic, strong) NSURL * tmpFile;
 @property (atomic, copy) void (^completionBlock)(SynopsisJobObject *theJob);
@@ -173,7 +176,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 }
 
 
-+ (instancetype) createWithJobJSONString:(NSString *)inJSONStr completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock	{
++ (instancetype) createWithJobJSONString:(NSString *)inJSONStr device:(id<MTLDevice>)device completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock	{
 	//NSLog(@"%s",__func__);
 	//	if we were passed a nil JSON object, bail and return nil
 	if (inJSONStr == nil)	{
@@ -209,9 +212,10 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		videoTransOpts:tmpVideoDict
 		audioTransOpts:tmpAudioDict
 		synopsisOpts:tmpSynopsisDict
+        device:device
 		completionBlock:inCompletionBlock];
 }
-- (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock	{
+- (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts device:(id<MTLDevice>)device completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock	{
 	//NSLog(@"%s",__func__);
 	if (inSrcFile==nil || inDstFile==nil)	{
 		NSLog(@"ERR: bailing, missing prereq, %s",__func__);
@@ -224,6 +228,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		self.jobStatus = JOStatus_NotStarted;
 		self.jobErr = JOErr_NoErr;
 		self.jobErrString = @"";
+        
+        self.device = device;
 		
 		self.jobProgress = 0.0;
 		self.jobStartDate = [NSDate date];
@@ -453,32 +459,6 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			self.videoTransOpts = nil;
 	}
 	
-	
-	//	prep some synopsis stuff
-	static int						roundRobin = 0;
-	NSArray<id<MTLDevice>>			*allDevices = MTLCopyAllDevices();
-    NSMutableArray<id<MTLDevice>>   *viableDevices = [NSMutableArray new];
-    
-    // Ignore low po
-    for (id<MTLDevice> device in allDevices) {
-        if ( !device.isLowPower) {
-            [viableDevices addObject:device];
-        }
-    }
-    
-	id<MTLDevice>					device = nil;
-	@synchronized ([self class])	{
-		device = viableDevices[roundRobin];
-		++roundRobin;
-		roundRobin = roundRobin % viableDevices.count;
-	}
-    
-        if (@available(macOS 10.15, *)) {
-            NSLog(@"using Metal Device %@, is low power: %i, maxTransferRate: %llu", device.name, device.lowPower, device.maxTransferRate);
-
-        } else {
-            NSLog(@"using Metal Device %@, is low power: %i", device.name, device.lowPower);
-        }
     
     
 	SynopsisAnalysisQualityHint		analysisQualityHint = (self.synopsisOpts == nil) ? SynopsisAnalysisQualityHintOriginal : [self.synopsisOpts[kSynopsisAnalysisSettingsQualityHintKey] unsignedIntegerValue];
@@ -510,12 +490,12 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//	create the video frame conform session from the required specifiers
 	SynopsisVideoFrameConformSession		*videoConformSession = ([requiredSpecifiers count] < 1) ? nil : [[SynopsisVideoFrameConformSession alloc]
 		initWithRequiredFormatSpecifiers:requiredSpecifiers
-		device:device
+		device:self.device
 		inFlightBuffers:3
 		frameSkipStride:0];
 	//	finally, tell the analyzers to begin an analysis session (preps necessary resources in backend)
 	for (id<AnalyzerPluginProtocol> analyzer in self.availableAnalyzers)	{
-		[analyzer beginMetadataAnalysisSessionWithQuality:analysisQualityHint device:device];
+		[analyzer beginMetadataAnalysisSessionWithQuality:analysisQualityHint device:self.device];
 	}
 	
 	
@@ -541,7 +521,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
                   (NSString *)kCVPixelBufferIOSurfacePropertiesKey: @{},
                   AVVideoDecompressionPropertiesKey: @{
                           
-                          (NSString *)kVTVideoDecoderSpecification_PreferredDecoderGPURegistryID: @(device.registryID),
+                          (NSString *)kVTVideoDecoderSpecification_PreferredDecoderGPURegistryID: @(self.device.registryID),
                   },
                   
               } mutableCopy];
@@ -658,7 +638,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 					}
                     
                     if (@available(macOS 10.15, *)) {
-                        localTransOpts[AVVideoEncoderSpecificationKey] = @{ (NSString *) kVTVideoEncoderSpecification_PreferredEncoderGPURegistryID : @(device.registryID) };
+                        localTransOpts[AVVideoEncoderSpecificationKey] = @{ (NSString *) kVTVideoEncoderSpecification_PreferredEncoderGPURegistryID : @(self.device.registryID) };
                     }
 					
 					//	wrap the input-/output-creation stuff in an exception handler so we can recover gracefully with an error message
@@ -1838,6 +1818,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	
 	self.availableAnalyzers = nil;
 	
+    self.device = nil;
+    
 	if (self.completionBlock != nil)
 		self.completionBlock(self);
 	
