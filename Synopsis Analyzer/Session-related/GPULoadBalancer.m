@@ -218,7 +218,7 @@
 
 - (void) rebuildViableDeviceListFromDevices:(NSArray<id<MTLDevice>>*)devices
 {
-    dispatch_async(self.deviceQueue, ^{
+    dispatch_sync(self.deviceQueue, ^{
         self.viableDevices = [NSMutableArray new];
         
         for (id<MTLDevice> device in devices)
