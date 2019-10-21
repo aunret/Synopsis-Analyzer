@@ -33,6 +33,7 @@
 		1A34044D23283EFA004A434D /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
 		1A34044E23283F0C004A434D /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
 		1A55FD7F2343F78E007CA355 /* PresetSettingsUIController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A55FD7E2343F78E007CA355 /* PresetSettingsUIController.m */; };
+		1A58E28E235E1255003B6A6F /* VVLogger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1A58E28D235E1254003B6A6F /* VVLogger.mm */; };
 		1A62613D231476CF00DC2B06 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A62613C231476CF00DC2B06 /* AppDelegate.m */; };
 		1A62613F231476D000DC2B06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A62613E231476D000DC2B06 /* Assets.xcassets */; };
 		1A626142231476D000DC2B06 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A626140231476D000DC2B06 /* MainMenu.xib */; };
@@ -252,6 +253,8 @@
 		1A34044123283C25004A434D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1A55FD7D2343F78E007CA355 /* PresetSettingsUIController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetSettingsUIController.h; sourceTree = "<group>"; };
 		1A55FD7E2343F78E007CA355 /* PresetSettingsUIController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetSettingsUIController.m; sourceTree = "<group>"; };
+		1A58E286235E1254003B6A6F /* VVLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VVLogger.h; path = "Synopsis Analyzer/VVLogger.h"; sourceTree = SOURCE_ROOT; };
+		1A58E28D235E1254003B6A6F /* VVLogger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = VVLogger.mm; path = "Synopsis Analyzer/VVLogger.mm"; sourceTree = SOURCE_ROOT; };
 		1A626138231476CF00DC2B06 /* SynopsisCleanRoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SynopsisCleanRoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A62613B231476CF00DC2B06 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1A62613C231476CF00DC2B06 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -293,8 +296,8 @@
 		1AD845A4232C1E3900416F5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AD845A5232C1E3900416F5C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1AD845A7232C1E3900416F5C /* Synopsis_Analyzer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Synopsis_Analyzer.entitlements; sourceTree = "<group>"; };
-		1ADA765F23426A9A0072EB10 /* FSDirectoryWatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FSDirectoryWatcher.h; path = misc/FSDirectoryWatcher.h; sourceTree = "<group>"; };
-		1ADA766023426A9A0072EB10 /* FSDirectoryWatcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FSDirectoryWatcher.m; path = misc/FSDirectoryWatcher.m; sourceTree = "<group>"; };
+		1ADA765F23426A9A0072EB10 /* FSDirectoryWatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDirectoryWatcher.h; sourceTree = "<group>"; };
+		1ADA766023426A9A0072EB10 /* FSDirectoryWatcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FSDirectoryWatcher.m; sourceTree = "<group>"; };
 		1AEC50FC233553840053C1B0 /* NSPopUpButtonAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSPopUpButtonAdditions.h; sourceTree = "<group>"; };
 		1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSPopUpButtonAdditions.m; sourceTree = "<group>"; };
 		1AEC510D2335556C0053C1B0 /* NSMenuAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSMenuAdditions.h; sourceTree = "<group>"; };
@@ -413,6 +416,10 @@
 				1A85F570233EDE5A00541CFB /* NSStringAdditions.m */,
 				1AA77B0B233FC5400049DEC4 /* FlippedClipView.h */,
 				1AA77B0C233FC5400049DEC4 /* FlippedClipView.m */,
+				1A58E286235E1254003B6A6F /* VVLogger.h */,
+				1A58E28D235E1254003B6A6F /* VVLogger.mm */,
+				1ADA765F23426A9A0072EB10 /* FSDirectoryWatcher.h */,
+				1ADA766023426A9A0072EB10 /* FSDirectoryWatcher.m */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -534,8 +541,6 @@
 				1A1093432330012900791BDA /* LogController.m */,
 				1A9B1EC223314C1C007D414A /* LogController.xib */,
 				1A109370233002FD00791BDA /* misc */,
-				1ADA765F23426A9A0072EB10 /* FSDirectoryWatcher.h */,
-				1ADA766023426A9A0072EB10 /* FSDirectoryWatcher.m */,
 			);
 			path = "Synopsis Analyzer";
 			sourceTree = "<group>";
@@ -793,6 +798,7 @@
 				1AA3C04F233C1425009F6821 /* SessionInspectorViewController.m in Sources */,
 				1A1093472330016D00791BDA /* DropFilesView.m in Sources */,
 				1A1093772330205100791BDA /* SessionRowView.m in Sources */,
+				1A58E28E235E1255003B6A6F /* VVLogger.mm in Sources */,
 				1A9B1EBE23314B73007D414A /* PrefsController.m in Sources */,
 				1AD845A6232C1E3900416F5C /* main.m in Sources */,
 				1B454BF523567D1600F3D4A8 /* GPULoadBalancer.m in Sources */,

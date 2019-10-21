@@ -153,75 +153,90 @@ typedef enum : NSUInteger {
 	return [string stringByAppendingString:[NSString stringWithCharacters:&newLine length:1]];
 }
 
-- (void) appendLog:(NSString*)log//, ... NS_FORMAT_FUNCTION(1,2)
++ (void) appendLog:(NSString*)log//, ... NS_FORMAT_FUNCTION(1,2)
 {
-	if(self.logLevel >= LogLevelNormal)
+	LogController		*gl = [LogController global];
+	if (gl == nil)
+		return;
+	if(gl.logLevel >= LogLevelNormal)
 	{
-		NSAttributedString* logString = [[NSAttributedString alloc] initWithString:[self appendLine:log] attributes:self.logStyle];
-		NSMutableAttributedString* verboseString = [self logString];
+		NSAttributedString* logString = [[NSAttributedString alloc] initWithString:[gl appendLine:log] attributes:gl.logStyle];
+		NSMutableAttributedString* verboseString = [gl logString];
 		[verboseString appendAttributedString:logString];
 		
 		dispatch_async(dispatch_get_main_queue(), ^ {
-			[self.logTextField.textStorage appendAttributedString:verboseString];
+			[gl.logTextField.textStorage appendAttributedString:verboseString];
 		});
 	}
 }
 
-- (void) appendVerboseLog:(NSString*)log//, ... NS_FORMAT_FUNCTION(1,2)
++ (void) appendVerboseLog:(NSString*)log//, ... NS_FORMAT_FUNCTION(1,2)
 {
-	if(self.logLevel >= LogLevelVerbose)
+	LogController		*gl = [LogController global];
+	if (gl == nil)
+		return;
+	if(gl.logLevel >= LogLevelVerbose)
 	{
-		NSAttributedString* logString = [[NSAttributedString alloc] initWithString:[self appendLine:log] attributes:self.verboseStyle];
-		NSMutableAttributedString* verboseString = [self verboseString];
+		NSAttributedString* logString = [[NSAttributedString alloc] initWithString:[gl appendLine:log] attributes:gl.verboseStyle];
+		NSMutableAttributedString* verboseString = [gl verboseString];
 		[verboseString appendAttributedString:logString];
 		
 		dispatch_async(dispatch_get_main_queue(), ^ {
-			[self.logTextField.textStorage appendAttributedString:verboseString];
+			[gl.logTextField.textStorage appendAttributedString:verboseString];
 		});
 	}
 }
 
-- (void) appendWarningLog:(NSString*)log//, ... NS_FORMAT_FUNCTION(1,2)
++ (void) appendWarningLog:(NSString*)log//, ... NS_FORMAT_FUNCTION(1,2)
 {
+	LogController		*gl = [LogController global];
+	if (gl == nil)
+		return;
 	// Always Log Warnings
 	NSLog(@" [WARNING] %@", log);
-//	  if(self.logLevel >= LogLevelWarning)
+//	  if(gl.logLevel >= LogLevelWarning)
 	{
-		NSAttributedString* logString = [[NSAttributedString alloc] initWithString:[self appendLine:log] attributes:self.logStyle];
+		NSAttributedString* logString = [[NSAttributedString alloc] initWithString:[gl appendLine:log] attributes:gl.logStyle];
 		
-		NSMutableAttributedString* warningString = [self warningString];
+		NSMutableAttributedString* warningString = [gl warningString];
 		[warningString appendAttributedString:logString];
 		
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self.logTextField.textStorage appendAttributedString:warningString];
+			[gl.logTextField.textStorage appendAttributedString:warningString];
 		});
 	}
 }
 
-- (void) appendErrorLog:(NSString*)log//, ... NS_FORMAT_FUNCTION(1,2)
++ (void) appendErrorLog:(NSString*)log//, ... NS_FORMAT_FUNCTION(1,2)
 {
+	LogController		*gl = [LogController global];
+	if (gl == nil)
+		return;
 	// Always Log Errors
 	NSLog(@" [ERROR] %@", log);
-	NSAttributedString* logString = [[NSAttributedString alloc] initWithString:[self appendLine:log] attributes:self.logStyle];
+	NSAttributedString* logString = [[NSAttributedString alloc] initWithString:[gl appendLine:log] attributes:gl.logStyle];
    
-	NSMutableAttributedString* errorString = [self errorString];
+	NSMutableAttributedString* errorString = [gl errorString];
 	[errorString appendAttributedString:logString];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.logTextField.textStorage appendAttributedString:errorString];
+		[gl.logTextField.textStorage appendAttributedString:errorString];
 	});
 }
 
-- (void) appendSuccessLog:(NSString*)log//, ... NS_FORMAT_FUNCTION(1,2)
++ (void) appendSuccessLog:(NSString*)log//, ... NS_FORMAT_FUNCTION(1,2)
 {
-	NSAttributedString* logString = [[NSAttributedString alloc] initWithString:[self appendLine:log] attributes:self.logStyle];
+	LogController		*gl = [LogController global];
+	if (gl == nil)
+		return;
+	NSAttributedString* logString = [[NSAttributedString alloc] initWithString:[gl appendLine:log] attributes:gl.logStyle];
 	
-	NSMutableAttributedString* successString = [self successString];
+	NSMutableAttributedString* successString = [gl successString];
 	[successString appendAttributedString:logString];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
 		
-		[self.logTextField.textStorage appendAttributedString:successString];
+		[gl.logTextField.textStorage appendAttributedString:successString];
 	});
 
 }

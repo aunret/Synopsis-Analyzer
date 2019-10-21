@@ -160,6 +160,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 		if (self.running)
 			return;
 		
+		[LogController appendVerboseLog:@"Starting analysis globally..."];
+		
 		//	update the relevant toolbar items
 		[runPauseButton setLabel:@"Pause"];
 		[runPauseButton setImage:[NSImage imageNamed:@"ic_pause_circle_filled"]];
@@ -183,6 +185,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 		NSArray<SynOp*>		*opsToStart = [self getOpsToStart:[self maxOpCount]];
 		for (SynOp * op in opsToStart)	{
 			[self.opsInProgress addObject:op];
+			[LogController appendVerboseLog:[NSString stringWithFormat:@"Starting analysis on %@",op.src.lastPathComponent]];
 			[op start];
 		}
 		
@@ -207,6 +210,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 	@synchronized (self)	{
 		if (self.paused)
 			return;
+		
+		[LogController appendVerboseLog:@"Pausing analysis globally..."];
 		
 		//	update the relevant toolbar items
 		[runPauseButton setLabel:@"Resume"];
@@ -233,6 +238,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 	@synchronized (self)	{
 		if (!self.paused)
 			return;
+		
+		[LogController appendVerboseLog:@"Resuming analysis globally..."];
 		
 		//	update the relevant toolbar items
 		[runPauseButton setLabel:@"Pause"];
@@ -277,6 +284,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 		//	if we're already stopped, something went wrong- bail
 		if (!self.running)
 			return;
+		
+		[LogController appendVerboseLog:@"Stopping analysis globally..."];
 		
 		//	update the relevant toolbar items
 		[runPauseButton setLabel:@"Start"];
@@ -518,7 +527,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 
 - (IBAction) revealLog:(id)sender	{
 	//[self revealHelper:self.logWindow sender:sender];
-	NSLog(@"should be opening log window here");
+	[[[LogController global] window] makeKeyAndOrderFront:nil];
 }
 
 - (IBAction) revealPreferences:(id)sender	{
@@ -657,6 +666,22 @@ static NSString						*localFileDragType = @"localFileDragType";
 	BOOL			startAnotherOp = NO;
  	@synchronized (self)	{
 		
+		switch (n.status)	{
+		case OpStatus_Pending:
+		case OpStatus_Analyze:
+		case OpStatus_Cleanup:
+			//	intentionally blank, should probably never occur
+			break;
+		case OpStatus_PreflightErr:
+			[LogController appendErrorLog:[NSString stringWithFormat:@"Pre-flight error on file %@: %@",n.src.lastPathComponent,n.errString]];
+			break;
+		case OpStatus_Complete:
+			[LogController appendSuccessLog:[NSString stringWithFormat:@"Finished processing file %@",n.src.lastPathComponent]];
+			break;
+		case OpStatus_Err:
+			[LogController appendErrorLog:[NSString stringWithFormat:@"Error processing file %@: %@",n.src.lastPathComponent,n.errString]];
+			break;
+		}
 		//NSLog(@"\tbefore, opsInProgress was %@",self.opsInProgress);
 		[self.opsInProgress removeObjectIdenticalTo:n];
 		//NSLog(@"\tafter, opsInProgress was %@",self.opsInProgress);
@@ -673,6 +698,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 				NSArray<SynOp*>		*opsToStart = [self getOpsToStart:1];
 				for (SynOp * op in opsToStart)	{
 					[self.opsInProgress addObject:op];
+					[LogController appendVerboseLog:[NSString stringWithFormat:@"Starting analysis on %@",op.src.lastPathComponent]];
 					[op start];
 				}
 			}

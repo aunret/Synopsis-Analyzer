@@ -7,6 +7,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="LogController">
             <connections>
+                <outlet property="logLevelPopUpButton" destination="X0v-MV-TGp" id="rR7-zu-tRW"/>
+                <outlet property="logTextField" destination="usP-hg-6zJ" id="2ZZ-Or-PUW"/>
                 <outlet property="window" destination="xqU-Ab-eQK" id="wrQ-D2-MGi"/>
             </connections>
         </customObject>
@@ -16,7 +18,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="480" height="270"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="3840" height="2137"/>
             <view key="contentView" id="ZK8-Xp-btg" customClass="CustomBackgroundView">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -25,15 +27,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="II2-EO-McR">
-                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <rect key="frame" x="0.0" y="0.0" width="465" height="270"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView ambiguous="YES" editable="NO" drawsBackground="NO" importsGraphics="NO" verticallyResizable="YES" findStyle="bar" id="usP-hg-6zJ" userLabel="Log Text Field">
-                                    <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="465" height="270"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <size key="minSize" width="480" height="270"/>
+                                    <size key="minSize" width="465" height="270"/>
                                     <size key="maxSize" width="480" height="10000000"/>
                                     <color key="insertionPointColor" white="0.0" alpha="0.27000000000000002" colorSpace="calibratedWhite"/>
                                 </textView>
@@ -44,17 +46,17 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="IZC-OT-wQv">
-                            <rect key="frame" x="464" y="0.0" width="16" height="270"/>
+                            <rect key="frame" x="465" y="0.0" width="15" height="270"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
                 </subviews>
             </view>
-            <toolbar key="toolbar" implicitIdentifier="1BAF803D-528E-4E32-877F-2271B4336FA7" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="Gee-Zc-qHb">
+            <toolbar key="toolbar" implicitIdentifier="1BAF803D-528E-4E32-877F-2271B4336FA7" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconOnly" sizeMode="regular" id="Gee-Zc-qHb">
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="Sst-yZ-bwB"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="x4b-xx-pM5"/>
-                    <toolbarItem implicitItemIdentifier="56329AB6-3137-4EAB-A699-12BD8042F71B" label="Custom View" paletteLabel="Custom View" sizingBehavior="auto" id="rtn-eX-2Au">
+                    <toolbarItem implicitItemIdentifier="56329AB6-3137-4EAB-A699-12BD8042F71B" label="Log Level" paletteLabel="Log Level" sizingBehavior="auto" id="rtn-eX-2Au">
                         <nil key="toolTip"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="X0v-MV-TGp">
                             <rect key="frame" x="0.0" y="14" width="100" height="16"/>
@@ -64,9 +66,21 @@
                                 <font key="font" metaFont="miniSystem"/>
                                 <menu key="menu" id="OpC-yx-PMg">
                                     <items>
-                                        <menuItem title="Errors Only" state="on" id="xm8-1n-Cpk"/>
-                                        <menuItem title="Warnings" id="Eab-ky-ZN0"/>
-                                        <menuItem title="Verbose" id="eZ0-Po-XRP"/>
+                                        <menuItem title="Errors Only" state="on" id="xm8-1n-Cpk">
+                                            <connections>
+                                                <action selector="changeLogLevel:" target="-2" id="uhL-fw-wb5"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Warnings" tag="1" id="Eab-ky-ZN0">
+                                            <connections>
+                                                <action selector="changeLogLevel:" target="-2" id="5wc-kr-m5D"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Verbose" tag="2" id="eZ0-Po-XRP">
+                                            <connections>
+                                                <action selector="changeLogLevel:" target="-2" id="2nB-9M-9mq"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </popUpButtonCell>

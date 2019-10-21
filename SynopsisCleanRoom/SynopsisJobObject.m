@@ -352,6 +352,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	
 	self.jobStartDate = [NSDate date];
 	
+	self.dateOfLastCopiedNormalizedVideoBuffer = [NSDate date];
+	
 	self.globalMetadata = [NSMutableDictionary new];
 	
 	//	make sure we know where to read from and where to write to, bail if we don't
@@ -1537,6 +1539,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	if (paused != n)	{
 		paused = n;
 		if (paused)	{
+			self.dateOfLastCopiedNormalizedVideoBuffer = [NSDate date];
 			if (videoWriterQueue != NULL)
 				dispatch_suspend(videoWriterQueue);
 			if (audioWriterQueue != NULL)
@@ -1547,8 +1550,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 				dispatch_suspend(analysisQueue);
 		}
 		else	{
-			if (self.dateOfLastCopiedNormalizedVideoBuffer != nil)
-				self.dateOfLastCopiedNormalizedVideoBuffer = [NSDate date];
+			self.dateOfLastCopiedNormalizedVideoBuffer = [NSDate date];
 			if (videoWriterQueue != NULL)
 				dispatch_resume(videoWriterQueue);
 			if (audioWriterQueue != NULL)

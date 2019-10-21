@@ -22,6 +22,7 @@
 #import "SessionController.h"
 #import "PreferencesViewController.h"
 #import "PresetObject.h"
+#import "VVLogger.h"
 
 
 
@@ -47,6 +48,12 @@
 
 @implementation AppDelegate
 
++ (void) initialize	{
+#if !DEBUG
+	[[VVLogger alloc] initWithFolderName:nil maxNumLogs:20];
+	[[VVLogger globalLogger] redirectLogs];
+#endif
+}
 - (id) init
 {
 	self = [super init];
@@ -118,7 +125,7 @@
 							//[self.analyzerPlugins addObject:classString];
 							NSLog(@"should be adding plugin name %@ to an array here",classString);
 							NSLog(@"\tloaded plugin %@",classString);
-							[[LogController global] appendSuccessLog:[NSString stringWithFormat:@"Loaded Plugin: %@", classString, nil]];
+							[LogController appendSuccessLog:[NSString stringWithFormat:@"Loaded Plugin: %@", classString, nil]];
 							
 							//[self.prefsAnalyzerArrayController addObject:[[pluginClass alloc] init]];
 							NSLog(@"should be adding plugin instance to an array here");
@@ -126,17 +133,17 @@
 					}
 					else
 					{
-						[[LogController global] appendErrorLog:[NSString stringWithFormat:@"Error Loading Plugin : %@ : %@ %@", possiblePlugin, pluginsPath, loadError.description, nil]];
+						[LogController appendErrorLog:[NSString stringWithFormat:@"Error Loading Plugin : %@ : %@ %@", possiblePlugin, pluginsPath, loadError.description, nil]];
 					}
 				}
 				else
 				{
-					[[LogController global] appendErrorLog:[NSString stringWithFormat:@"Error Preflighting Plugin : %@ : %@ %@ %@", possiblePlugin, pluginsPath,  pluginBundle, loadError.description, nil]];
+					[LogController appendErrorLog:[NSString stringWithFormat:@"Error Preflighting Plugin : %@ : %@ %@ %@", possiblePlugin, pluginsPath,  pluginBundle, loadError.description, nil]];
 				}
 			}
 			else
 			{
-				[[LogController global] appendErrorLog:[NSString stringWithFormat:@"Error Creating Plugin : %@ : %@ %@", possiblePlugin, pluginsPath,	pluginBundle, nil]];
+				[LogController appendErrorLog:[NSString stringWithFormat:@"Error Creating Plugin : %@ : %@ %@", possiblePlugin, pluginsPath,	pluginBundle, nil]];
 			}
 		}
 	}

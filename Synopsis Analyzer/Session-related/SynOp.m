@@ -30,6 +30,7 @@ static NSImage				*genericMovieImage = nil;
 @property (assign,readwrite,atomic) BOOL paused;
 @property (atomic,readwrite,strong,nullable) NSString * tmpFile;
 @property (atomic,strong,readwrite) NSUUID * dragUUID;	//	literally only used for drag-and-drop.
+@property (atomic,strong,readwrite) SynopsisRemoteFileHelper * remoteFileHelper;
 - (void) _beginPreflight;
 - (void) _beginJob;
 - (void) _beginCleanup;
@@ -65,6 +66,7 @@ static NSImage				*genericMovieImage = nil;
 		self.job = nil;
 		self.delegate = [SessionController global];
 		self.dragUUID = [NSUUID UUID];
+		self.remoteFileHelper = [[SynopsisRemoteFileHelper alloc] init];
 		NSFileManager		*fm = [NSFileManager defaultManager];
 		BOOL				isDir = NO;
 		if (![fm fileExistsAtPath:[inSrc path] isDirectory:&isDir] || isDir)
@@ -87,6 +89,7 @@ static NSImage				*genericMovieImage = nil;
 		self.job = nil;
 		self.delegate = [SessionController global];
 		self.dragUUID = [NSUUID UUID];
+		self.remoteFileHelper = [[SynopsisRemoteFileHelper alloc] init];
 		NSFileManager		*fm = [NSFileManager defaultManager];
 		BOOL				isDir = NO;
 		if (![fm fileExistsAtPath:inSrc isDirectory:&isDir] || isDir)
@@ -113,6 +116,7 @@ static NSImage				*genericMovieImage = nil;
 			self.job = nil;
 			self.delegate = [SessionController global];
 			self.dragUUID = [NSUUID UUID];
+			self.remoteFileHelper = [[SynopsisRemoteFileHelper alloc] init];
 			NSFileManager		*fm = [NSFileManager defaultManager];
 			BOOL				isDir = NO;
 			if (![fm fileExistsAtPath:self.src isDirectory:&isDir] || isDir)
@@ -801,67 +805,106 @@ static NSImage				*genericMovieImage = nil;
 		
 		//	if this is an AVF file...
 		if (self.type == OpType_AVFFile)	{
-			//	if there's a temp file, copy it to the dest file and then move the tmp file to the trash
+			//	if there's a temp file, move it to the dest file
 			if (self.tmpFile != nil)	{
-				//	copy the tmp file to the dst location
-				if (![fm copyItemAtPath:self.tmpFile toPath:self.dst error:&nsErr])	{
-					self.status = OpStatus_Err;
-					self.errString = [NSString stringWithFormat:@"Couldn't copy tmp file to destination (%@)",nsErr.localizedDescription];
-					dispatch_async(dispatch_get_main_queue(), ^{
-						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
-						if (tmpDelegate != nil)
-							[tmpDelegate synOpStatusFinished:bss];
-					});
-					return;
-				}
-				//	move the tmp file to the trash
-				//if (![fm trashItemAtURL:[NSURL fileURLWithPath:self.tmpFile isDirectory:NO] resultingItemURL:nil error:&nsErr])
-				if (![fm removeItemAtURL:[NSURL fileURLWithPath:self.tmpFile isDirectory:NO] error:&nsErr])
-				{
-					self.status = OpStatus_Err;
-					self.errString = [NSString stringWithFormat:@"Couldn't trash tmp file (%@)",nsErr.localizedDescription];
-					dispatch_async(dispatch_get_main_queue(), ^{
-						NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
-						if (tmpDelegate != nil)
-							[tmpDelegate synOpStatusFinished:bss];
+				NSURL			*tmpFileURL = [NSURL fileURLWithPath:self.tmpFile isDirectory:NO];
+				NSURL			*dstFileURL = [NSURL fileURLWithPath:self.dst isDirectory:NO];
+				BOOL			useRemotePath = [self.remoteFileHelper fileURLIsRemote:tmpFileURL] || [self.remoteFileHelper fileURLIsRemote:dstFileURL];
+				//	if we're dealing with a remote file (network drive)
+				if (useRemotePath)	{
+					//	copy the tmp file to the dst location
+					if (![self.remoteFileHelper safelyCopyFileURLOnRemoteFileSystem:tmpFileURL toURL:dstFileURL error:&nsErr])	{
+						self.status = OpStatus_Err;
+						self.errString = [NSString stringWithFormat:@"Couldn't copy tmp file to remote destination (%@)",nsErr.localizedDescription];
+						dispatch_async(dispatch_get_main_queue(), ^{
+							NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+							if (tmpDelegate != nil)
+								[tmpDelegate synOpStatusFinished:bss];
+						});
+						return;
+					}
+					//	delete the tmp file
+					if (![fm removeItemAtURL:tmpFileURL error:&nsErr])
+					{
+						self.status = OpStatus_Err;
+						self.errString = [NSString stringWithFormat:@"Couldn't trash tmp file (%@)",nsErr.localizedDescription];
+						dispatch_async(dispatch_get_main_queue(), ^{
+							NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+							if (tmpDelegate != nil)
+								[tmpDelegate synOpStatusFinished:bss];
 
-                    });
-					return;
+						});
+						return;
+					}
+				}
+				//	else we're not dealing with a remote file- we're going to move the file instead of copying it...
+				else	{
+					//	move the tmp file to the dst location
+					if (![fm moveItemAtPath:self.tmpFile toPath:self.dst error:&nsErr])	{
+						self.status = OpStatus_Err;
+						self.errString = [NSString stringWithFormat:@"Couldn't move tmp file to destination (%@)",nsErr.localizedDescription];
+						dispatch_async(dispatch_get_main_queue(), ^{
+							NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+							if (tmpDelegate != nil)
+								[tmpDelegate synOpStatusFinished:bss];
+						});
+						return;
+					}
 				}
 				
 				//	if we're exporting a sidecar metadata file...
 				if (exportedSidecarFile)	{
-					//	copy the tmp json file to the dst location
-					if (![fm copyItemAtPath:[self.tmpFile.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] toPath:[self.dst.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] error:&nsErr])	{
-						self.status = OpStatus_Err;
-						self.errString = [NSString stringWithFormat:@"Couldn't copy tmp JSON file to destination (%@)",nsErr.localizedDescription];
-						dispatch_async(dispatch_get_main_queue(), ^{
-							NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
-							if (tmpDelegate != nil)
-								[tmpDelegate synOpStatusFinished:bss];
-						});
-						return;
-					}
-					//	move the tmp json file to the trash
-					if (![fm removeItemAtURL:[NSURL fileURLWithPath:[self.tmpFile.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] isDirectory:NO] error:&nsErr])
-					{
-						self.status = OpStatus_Err;
-						self.errString = [NSString stringWithFormat:@"Couldn't trash tmp JSON file (%@)",nsErr.localizedDescription];
-						dispatch_async(dispatch_get_main_queue(), ^{
-							NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
-							if (tmpDelegate != nil)
-								[tmpDelegate synOpStatusFinished:bss];
+					NSURL			*tmpJSONFileURL = [NSURL fileURLWithPath:[self.tmpFile.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] isDirectory:NO];
+					NSURL			*dstJSONFileURL = [NSURL fileURLWithPath:[self.dst.stringByDeletingPathExtension stringByAppendingPathExtension:@"json"] isDirectory:NO];
+					//	if we're dealing with a remote file (network drive)
+					if (useRemotePath)	{
+						//	copy the tmp json file to the dst location
+						if (![self.remoteFileHelper safelyCopyFileURLOnRemoteFileSystem:tmpJSONFileURL toURL:dstJSONFileURL error:&nsErr])	{
+							self.status = OpStatus_Err;
+							self.errString = [NSString stringWithFormat:@"Couldn't copy tmp JSON file to remote destination (%@)",nsErr.localizedDescription];
+							dispatch_async(dispatch_get_main_queue(), ^{
+								NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+								if (tmpDelegate != nil)
+									[tmpDelegate synOpStatusFinished:bss];
+							});
+							return;
+						}
+						//	delete the tmp json file
+						if (![fm removeItemAtURL:tmpJSONFileURL error:&nsErr])
+						{
+							self.status = OpStatus_Err;
+							self.errString = [NSString stringWithFormat:@"Couldn't trash tmp JSON file (%@)",nsErr.localizedDescription];
+							dispatch_async(dispatch_get_main_queue(), ^{
+								NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+								if (tmpDelegate != nil)
+									[tmpDelegate synOpStatusFinished:bss];
 
-						});
-						return;
+							});
+							return;
+						}
+					}
+					//	else we're not dealing with a remote file- we're going to move the file instead of copying it...
+					else	{
+						//	move the tmp json file to the dst location
+						if (![fm moveItemAtPath:tmpJSONFileURL.path toPath:dstJSONFileURL.path error:&nsErr])	{
+							self.status = OpStatus_Err;
+							self.errString = [NSString stringWithFormat:@"Couldn't move tmp JSON file to destination (%@)",nsErr.localizedDescription];
+							dispatch_async(dispatch_get_main_queue(), ^{
+								NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+								if (tmpDelegate != nil)
+									[tmpDelegate synOpStatusFinished:bss];
+							});
+							return;
+						}
 					}
 				}
 			}
-		
+			
 			//	if there's a script, run it on the dst file
 			if (self.session.opScript != nil)	{
 				NSLog(@"SHOULD BE RUNNING PYTHON SCRIPT HERE");
 			}
+			
 		}
 		//	else it's not an AVF file...
 		else	{
