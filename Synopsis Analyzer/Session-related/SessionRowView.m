@@ -68,7 +68,12 @@
 	[nameField setStringValue:self.session.title];
 	if (self.session.type == SessionType_Dir)	{
 		[nameField setEditable:NO];
-		[iconView setImage:[NSImage imageNamed:@"ic_folder_white"]];
+		if (self.session.watchFolder)	{
+			[iconView setImage:[NSImage imageNamed:@"WatchFolder"]];
+		}
+		else	{
+			[iconView setImage:[NSImage imageNamed:@"ic_folder_white"]];
+		}
 	}
 	else	{
 		[nameField setEditable:YES];
