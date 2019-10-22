@@ -71,6 +71,7 @@
 		self.dragUUID = [NSUUID UUID];
 		
 		self.type = SessionType_List;
+		self.state = SessionState_Inactive;
 		
 		//	make ops from the passed files, add them to my array
 		for (NSURL *tmpURL in n)	{
@@ -116,7 +117,7 @@
 		self.dragUUID = [NSUUID UUID];
 		
 		self.type = SessionType_Dir;
-		
+		self.state = SessionState_Inactive;
 		
 		//	run through the passed dir recursively, creating ops for the passed files
 		NSFileManager			*fm = [NSFileManager defaultManager];
@@ -195,6 +196,8 @@
 			self.type = (![coder containsValueForKey:@"type"])
 				? SessionType_List
 				: (SessionType)[coder decodeInt64ForKey:@"type"];
+			
+			self.state = SessionState_Inactive;
 			
 			self.copyNonMediaFiles = (![coder containsValueForKey:@"copyNonMediaFiles"])
 				? NO
@@ -488,6 +491,7 @@
 					
 					//	run through the URLs (they may be files or folders, we don't know at this point)
 					NSFileManager			*fm = [NSFileManager defaultManager];
+					BOOL					needsToStart = NO;
 					for (NSString *changedPath in changedPaths)	{
 						BOOL			isDir = NO;
 						//	if the file doesn't exist at this path, try to remove any ops with this as a src
@@ -508,6 +512,8 @@
 						}
 						//	else if the file exists and it isn't a directory, make an op for it and add it to this session
 						else if (!isDir)	{
+							needsToStart = YES;
+							
 							SynOp		*newOp = [bss createOpForSrcURL:[NSURL fileURLWithPath:changedPath]];
 							if (newOp != nil)
 								[bss.ops addObject:newOp];
@@ -517,8 +523,10 @@
 					//	now that my ops have been updated, i need to reload my row in the outline view
 					[[SessionController global] reloadRowForItem:bss];
 					
-					//	it's a watch folder, so start the session!
-					[[SessionController global] start];
+					//	if we added ops we need to start...
+					if (needsToStart)	{
+						[[SessionController global] startButDontChangeSessionStates];
+					}
 				}];
 			
 		}

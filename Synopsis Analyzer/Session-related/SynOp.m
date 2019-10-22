@@ -940,10 +940,6 @@ static NSImage				*genericMovieImage = nil;
 		[self.job cancel];
 	}
 }
-/*
-- (void) running	{
-}
-*/
 - (void) checkForHang	{
 	@synchronized (self)	{
 		if (self.job != nil)

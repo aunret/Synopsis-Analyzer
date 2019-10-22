@@ -55,10 +55,13 @@
 - (void) reloadRowForItem:(id)n;
 
 - (void) start;
+- (void) startButDontChangeSessionStates;
 - (void) pause;
 - (void) resume;
 - (void) stop;
-@property (atomic,readonly) BOOL running;
+
+- (BOOL) processingFiles;
+- (BOOL) processingFilesFromSession:(SynSession *)n;
 
 @end
 

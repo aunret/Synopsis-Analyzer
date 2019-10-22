@@ -20,6 +20,12 @@ typedef NS_ENUM(NSUInteger, SessionType)	{
 	SessionType_List
 };
 
+//	session state is only really considered if the session is NOT a watch folder (watch folders are basically "always active")
+typedef NS_ENUM(NSUInteger, SessionState)	{
+	SessionState_Inactive = 0,	//	ops from inactive sessions will not be processed
+	SessionState_Active	//	ops from active sessions will be processed
+};
+
 
 
 @interface SynSession : NSObject <NSCoding>	{
@@ -42,6 +48,7 @@ typedef NS_ENUM(NSUInteger, SessionType)	{
 @property (atomic,readwrite) BOOL watchFolder;
 
 @property (atomic,readwrite) SessionType type;
+@property (atomic,readwrite) SessionState state;
 
 @property (atomic,strong,readonly) NSUUID * dragUUID;	//	literally only used for drag-and-drop.
 

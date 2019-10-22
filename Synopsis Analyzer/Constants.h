@@ -19,16 +19,6 @@
 
 
 
-typedef enum : NSUInteger {
-    SessionStateUnknown = 0,
-    SessionStatePending,
-    SessionStateRunning,
-    SessionStateCancelled,
-    SessionStateFailed,
-    SessionStateSuccess,
-} SessionState;
-
-
 /*
 // Support various types of Analysis file handling
 // This might seem verbose, but its helpful for edge cases...

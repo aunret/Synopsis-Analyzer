@@ -166,7 +166,7 @@
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender	{
 	//NSLog(@"%s",__func__);
 	//	if we're currently processing files, pop a modal alert asking if we really want to quit
-	if ([[SessionController global] running])	{
+	if ([[SessionController global] processingFiles])	{
 		NSAlert			*quitAlert = [[NSAlert alloc] init];
 		quitAlert.messageText = @"You are analyzing files- are you sure you want to quit?";
 		[quitAlert addButtonWithTitle:@"Quit"];
