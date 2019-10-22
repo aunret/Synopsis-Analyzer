@@ -1737,7 +1737,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//NSLog(@"total time: %0.2f seconds",[self jobTimeElapsed]);
 }
 - (void) _cancelAndCleanUp	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	pthread_mutex_lock(&theLock);
 	{
 		if (writer != nil)	{

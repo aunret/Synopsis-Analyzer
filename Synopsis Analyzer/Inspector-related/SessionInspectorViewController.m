@@ -272,13 +272,12 @@
 	}
 	
 	//	populate the UI items that reside in the box that's only visible if it's a dir-type session
-	if (self.inspectedObject.type == SessionType_Dir)	{
-		[sessionDirBox setHidden:NO];
+	if (self.inspectedObject.type == SessionType_Dir && self.inspectedObject.watchFolder)	{
+		[sessionWatchDirBox setHidden:NO];
 		[copyNonMediaToggle setIntValue:(self.inspectedObject.copyNonMediaFiles) ? NSControlStateValueOn : NSControlStateValueOff];
-		[watchFolderToggle setIntValue:(self.inspectedObject.watchFolder) ? NSControlStateValueOn : NSControlStateValueOff];
 	}
 	else	{
-		[sessionDirBox setHidden:YES];
+		[sessionWatchDirBox setHidden:YES];
 	}
 }
 
@@ -303,15 +302,6 @@
 		self.inspectedObject.copyNonMediaFiles = YES;
 	else
 		self.inspectedObject.copyNonMediaFiles = NO;
-}
-- (IBAction) watchFolderToggleUsed:(id)sender	{
-	if (self.inspectedObject == nil || sender == nil)
-		return;
-	
-	if ([sender intValue] == NSControlStateValueOn)
-		self.inspectedObject.watchFolder = YES;
-	else
-		self.inspectedObject.watchFolder = NO;
 }
 
 

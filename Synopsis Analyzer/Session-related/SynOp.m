@@ -233,20 +233,7 @@ static NSImage				*genericMovieImage = nil;
 			self.thumb = img;
 		}
 		else	{
-			if ([asset isReadable])	{
-				AVAssetImageGenerator		*gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-				gen.appliesPreferredTrackTransform = YES;
-				gen.maximumSize = CGSizeMake(320, 240);
-				NSError				*nsErr = nil;
-				//CMTime				time = CMTimeMake(1,60);
-				CGImageRef			imgRef = [gen copyCGImageAtTime:CMTimeMake(1,60) actualTime:NULL error:&nsErr];
-				//NSImage				*img = (imgRef==NULL) ? nil : [[NSImage alloc] initWithCGImage:imgRef size:NSMakeSize(CGImageGetWidth(imgRef),CGImageGetHeight(imgRef))];
-				NSBitmapImageRep	*imgRep = [[NSBitmapImageRep alloc] initWithCGImage:imgRef];
-				NSImage				*img = [[NSImage alloc] initWithSize:[imgRep size]];
-				[img addRepresentation:imgRep];
-				self.thumb = img;
-			}
-			else if ([asset containsHapVideoTrack])	{
+			if ([asset containsHapVideoTrack])	{
 				NSArray				*assetHapTracks = [asset hapVideoTracks];
 				AVAssetTrack		*hapTrack = assetHapTracks[0];
 				//	make a hap output item- doesn't actually need a player...
@@ -279,6 +266,19 @@ static NSImage				*genericMovieImage = nil;
 					[tmpImg addRepresentation:bitRep];
 					self.thumb = tmpImg;
 				}
+			}
+			else if ([asset isReadable])	{
+				AVAssetImageGenerator		*gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+				gen.appliesPreferredTrackTransform = YES;
+				gen.maximumSize = CGSizeMake(320, 240);
+				NSError				*nsErr = nil;
+				//CMTime				time = CMTimeMake(1,60);
+				CGImageRef			imgRef = [gen copyCGImageAtTime:CMTimeMake(1,60) actualTime:NULL error:&nsErr];
+				//NSImage				*img = (imgRef==NULL) ? nil : [[NSImage alloc] initWithCGImage:imgRef size:NSMakeSize(CGImageGetWidth(imgRef),CGImageGetHeight(imgRef))];
+				NSBitmapImageRep	*imgRep = [[NSBitmapImageRep alloc] initWithCGImage:imgRef];
+				NSImage				*img = [[NSImage alloc] initWithSize:[imgRep size]];
+				[img addRepresentation:imgRep];
+				self.thumb = img;
 			}
 			else	{
 				//	the asset is neither playable, nor hap: use a finder icon

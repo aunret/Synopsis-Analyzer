@@ -25,16 +25,14 @@ NS_ASSUME_NONNULL_BEGIN
 	IBOutlet PathAbstraction		*opScriptPathAbs;
 	IBOutlet PathAbstraction		*sessionScriptPathAbs;
 	
-	IBOutlet NSBox					*sessionDirBox;
+	IBOutlet NSBox					*sessionWatchDirBox;
 	IBOutlet NSButton				*copyNonMediaToggle;
-	IBOutlet NSButton				*watchFolderToggle;
 }
 
 - (void) inspectSession:(nullable SynSession *)n;
 
 - (IBAction) presetsPUBItemSelected:(id)sender;
 - (IBAction) copyNonMediaToggleUsed:(id)sender;
-- (IBAction) watchFolderToggleUsed:(id)sender;
 
 //	should be nil unless inspector is currently active
 @property (readwrite,atomic,weak,nullable) SynSession * inspectedObject;

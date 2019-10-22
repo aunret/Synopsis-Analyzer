@@ -23,6 +23,7 @@
 #import "PreferencesViewController.h"
 #import "PresetObject.h"
 #import "VVLogger.h"
+#import "SynSession.h"
 
 
 
@@ -163,7 +164,7 @@
 	
 }
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	//	if we're currently processing files, pop a modal alert asking if we really want to quit
 	if ([[SessionController global] running])	{
 		NSAlert			*quitAlert = [[NSAlert alloc] init];
@@ -249,6 +250,28 @@
 }
 - (IBAction) openPreferences:(id)sender	{
 	[[SessionController global] revealPreferences:sender];
+}
+- (IBAction) addWatchFolder:(id)sender	{
+	NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+	[openPanel setAllowsMultipleSelection:NO];
+	[openPanel setCanChooseDirectories:YES];
+	[openPanel setCanChooseFiles:NO];
+	[openPanel setMessage:@"Select a folder to be watched"];
+	
+	[openPanel beginSheetModalForWindow:window completionHandler:^(NSInteger result)	{
+		if (result == NSModalResponseOK)	{
+			//	make a 'watch folder' session
+			NSURL				*watchFolderURL = [openPanel URL];
+			BOOL				isDir = NO;
+			NSFileManager		*fm = [NSFileManager defaultManager];
+			if (![fm fileExistsAtPath:[watchFolderURL path] isDirectory:&isDir] || !isDir)
+				return;
+			
+			SynSession			*watchFolderSession = [SynSession createWithDir:watchFolderURL recursively:NO];
+			[watchFolderSession setWatchFolder:YES];
+			[[SessionController global] appendWatchFolderSessions:@[ watchFolderSession ]];
+		}
+	}];
 }
 
 

@@ -219,8 +219,8 @@
 }
 - (void) encodeWithCoder:(NSCoder *)coder	{
 	if ([coder allowsKeyedCoding])	{
-		if (self.ops!=nil && [self.ops count]>0)	{
-			//[coder encodeObject:self.ops forKey:@"ops"];
+		//	IMPORTANT: ONLY SAVE OPS IF WE ARE ***NOT*** A WATCH FOLDER
+		if (!self.watchFolder && self.ops!=nil && [self.ops count]>0)	{
 			//	we don't want to encode all the ops, just the ones that are pending/errors
 			NSArray			*opsToSave = [self opsToSave];
 			if (opsToSave != nil)
@@ -276,7 +276,10 @@
 
 
 - (NSString *) description	{
+	if (self.watchFolder)
+		return [NSString stringWithFormat:@"<SynSession, WF %@>",self.srcDir.lastPathComponent];
 	return [NSString stringWithFormat:@"<SynSession, %ld SynOps>",(unsigned long)self.ops.count];
+	//return [NSString stringWithFormat:@"<SynSession, %@>",self.dragUUID.UUIDString];
 }
 
 

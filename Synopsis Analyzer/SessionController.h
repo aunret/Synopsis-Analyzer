@@ -49,6 +49,7 @@
 - (NSArray<SynSession*> *) createSessionsWithFiles:(NSArray<NSURL*> *)n;
 - (void) createAndAppendSessionsWithFiles:(NSArray<NSURL*> *)n;
 //- (void) newSessionWithDir:(NSURL *)n recursively:(BOOL)isRecursive;
+- (void) appendWatchFolderSessions:(NSArray<SynSession*> *)n;
 
 - (void) reloadData;
 - (void) reloadRowForItem:(id)n;

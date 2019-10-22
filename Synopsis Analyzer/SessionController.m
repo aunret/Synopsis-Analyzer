@@ -36,12 +36,14 @@ static NSString						*localFileDragType = @"localFileDragType";
 @interface SessionController ()
 - (void) generalInit;
 @property (assign,readwrite,atomic) BOOL paused;
+@property (strong) NSMutableArray<SynSession*> * watchFolderSessions;
 @property (strong) NSMutableArray<SynSession*> * sessions;
 
 @property (strong,nullable) NSTimer * progressRefreshTimer;
 @property (strong) NSMutableArray<SynOp*> * opsInProgress;
 @property (atomic,readwrite) BOOL running;
 @property (strong,readwrite,atomic) NSMutableDictionary * expandStateDict;
+@property (atomic,readwrite) BOOL dragInProgress;	//	when the drag's in progress, we don't modify changes to 'expandStateDict'
 
 @property (atomic,strong,readwrite,nullable) id appNapToken;
 
@@ -74,11 +76,13 @@ static NSString						*localFileDragType = @"localFileDragType";
 	return self;
 }
 - (void) generalInit	{
+	self.watchFolderSessions = [[NSMutableArray alloc] init];
 	self.sessions = [[NSMutableArray alloc] init];
 	//self.sessionsInProgress = [[NSMutableArray alloc] init];
 	self.opsInProgress = [[NSMutableArray alloc] init];
 	self.running = NO;
 	self.expandStateDict = [NSMutableDictionary dictionaryWithCapacity:0];
+	self.dragInProgress = NO;
 	
 	//	make an app nap token right away- we can't nap b/c we're either transcoding/analyzing, or potentially watching a directory for changes to its files!
 	self.appNapToken = [[NSProcessInfo processInfo] beginActivityWithOptions:NSActivityUserInitiated | NSActivityLatencyCritical reason:@"Analyzing"];
@@ -109,7 +113,23 @@ static NSString						*localFileDragType = @"localFileDragType";
 	//NSLog(@"%s",__func__);
 	@synchronized (self)	{
 		NSUserDefaults		*def = [NSUserDefaults standardUserDefaults];
-		NSData				*tmpData = [def objectForKey:@"sessions"];
+		NSData				*tmpData = nil;
+		
+		tmpData = [def objectForKey:@"watchFolderSessions"];
+		if (tmpData != nil && [tmpData isKindOfClass:[NSData class]])	{
+			NSArray				*tmpArray = [NSKeyedUnarchiver unarchiveObjectWithData:tmpData];
+			if (tmpArray != nil && [tmpArray isKindOfClass:[NSArray class]] && [tmpArray count] > 0)	{
+				for (SynSession *tmpSession in tmpArray)	{
+					if ([tmpSession isKindOfClass:[SynSession class]] && tmpSession.type == SessionType_Dir && tmpSession.watchFolder)	{
+						[self.watchFolderSessions addObject:tmpSession];
+						//self.expandStateDict[tmpSession.dragUUID.UUIDString] = @YES;
+					}
+				}
+				[self reloadData];
+			}
+		}
+		
+		tmpData = [def objectForKey:@"sessions"];
 		if (tmpData != nil && [tmpData isKindOfClass:[NSData class]])	{
 			NSArray				*tmpArray = [NSKeyedUnarchiver unarchiveObjectWithData:tmpData];
 			if (tmpArray != nil && [tmpArray isKindOfClass:[NSArray class]] && [tmpArray count] > 0)	{
@@ -128,23 +148,45 @@ static NSString						*localFileDragType = @"localFileDragType";
 - (void) applicationWillTerminate:(NSNotification *)note	{
 	//NSLog(@"%s",__func__);
 	@synchronized (self)	{
+		NSUserDefaults		*def = [NSUserDefaults standardUserDefaults];
 		NSData				*encodedSessions = nil;
+		
+		NSMutableArray		*watchFolderSessionsToSave = [NSMutableArray arrayWithCapacity:0];
+		for (SynSession *session in self.watchFolderSessions)	{
+			[watchFolderSessionsToSave addObject:session];
+		}
+		
+		if (watchFolderSessionsToSave != nil && [watchFolderSessionsToSave count] > 0)	{
+			encodedSessions = [NSKeyedArchiver archivedDataWithRootObject:watchFolderSessionsToSave];
+		}
+		else
+			encodedSessions = nil;
+		
+		if (encodedSessions != nil)
+			[def setObject:encodedSessions forKey:@"watchFolderSessions"];
+		else
+			[def removeObjectForKey:@"watchFolderSessions"];
+		
+		
 		NSMutableArray		*sessionsToSave = [NSMutableArray arrayWithCapacity:0];
 		for (SynSession *session in self.sessions)	{
 			if ([session opsToSave] != nil || session.type == SessionType_Dir)	{
 				[sessionsToSave addObject:session];
 			}
 		}
+		
 		if (sessionsToSave != nil && [sessionsToSave count] > 0)	{
 			encodedSessions = [NSKeyedArchiver archivedDataWithRootObject:sessionsToSave];
-			if (encodedSessions != nil)	{
-			}
 		}
-		NSUserDefaults		*def = [NSUserDefaults standardUserDefaults];
+		else
+			encodedSessions = nil;
+		
 		if (encodedSessions != nil)
 			[def setObject:encodedSessions forKey:@"sessions"];
 		else
 			[def removeObjectForKey:@"sessions"];
+		
+		
 		[def synchronize];
 	}
 }
@@ -322,22 +364,26 @@ static NSString						*localFileDragType = @"localFileDragType";
 		NSMutableArray		*returnMe = [NSMutableArray arrayWithCapacity:0];
 		if ([returnMe count] == numOpsToGet)
 			return returnMe;
-		for (SynSession * session in self.sessions)	{
-			for (SynOp * op in session.ops)	{
-				switch (op.status)	{
-				case OpStatus_Pending:
-					[returnMe addObject:op];
-					break;
-				case OpStatus_Preflight:
-				case OpStatus_PreflightErr:
-				case OpStatus_Analyze:
-				case OpStatus_Cleanup:
-				case OpStatus_Complete:
-				case OpStatus_Err:
-					break;
+		
+		NSArray				*allSessionArrays = @[ self.watchFolderSessions, self.sessions ];
+		for (NSArray * sessionArray in allSessionArrays)	{
+			for (SynSession *session in sessionArray)	{
+				for (SynOp * op in session.ops)	{
+					switch (op.status)	{
+					case OpStatus_Pending:
+						[returnMe addObject:op];
+						break;
+					case OpStatus_Preflight:
+					case OpStatus_PreflightErr:
+					case OpStatus_Analyze:
+					case OpStatus_Cleanup:
+					case OpStatus_Complete:
+					case OpStatus_Err:
+						break;
+					}
+					if ([returnMe count] == numOpsToGet)
+						return returnMe;
 				}
-				if ([returnMe count] == numOpsToGet)
-					return returnMe;
 			}
 		}
 		return returnMe;
@@ -389,15 +435,18 @@ static NSString						*localFileDragType = @"localFileDragType";
 		return nil;
 	id				returnMe = nil;
 	@synchronized (self)	{
-		for (SynSession *session in self.sessions)	{
-			if ([session.dragUUID isEqual:n])	{
-				returnMe = session;
-				break;
-			}
-			for (SynOp *op in session.ops)	{
-				if ([op.dragUUID isEqual:n])	{
-					returnMe = op;
+		NSArray			*allSessionArrays = @[ self.watchFolderSessions, self.sessions ];
+		for (NSArray *sessionArray in allSessionArrays)	{
+			for (SynSession *session in sessionArray)	{
+				if ([session.dragUUID isEqual:n])	{
+					returnMe = session;
 					break;
+				}
+				for (SynOp *op in session.ops)	{
+					if ([op.dragUUID isEqual:n])	{
+						returnMe = op;
+						break;
+					}
 				}
 			}
 		}
@@ -483,6 +532,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 	[openPanel setAllowsMultipleSelection:YES];
 	[openPanel setCanChooseDirectories:YES];
 	[openPanel setAllowedFileTypes:SynopsisSupportedFileTypes()];
+	[openPanel setMessage:@"Select one or more files to import"];
 	
 	[openPanel beginSheetModalForWindow:window completionHandler:^(NSInteger result)	{
 		if (result == NSModalResponseOK)	{
@@ -504,6 +554,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 		//NSLog(@"\t\tshould be removing %@",selItem);
 		if ([selItem isKindOfClass:[SynSession class]])	{
 			SynSession		*tmpSession = (SynSession *)selItem;
+			[self.watchFolderSessions removeObjectIdenticalTo:tmpSession];
 			[self.sessions removeObjectIdenticalTo:tmpSession];
 			[self reloadData];
 		}
@@ -581,36 +632,22 @@ static NSString						*localFileDragType = @"localFileDragType";
 		return;
 	SynSession		*filesSession = nil;
 	for (SynSession *newSession in newSessions)	{
-		if (filesSession == nil && newSession.type == SessionType_List)
-			filesSession = newSession;
+		if (newSession.type == SessionType_List)
+			self.expandStateDict[newSession.dragUUID.UUIDString] = @YES;
 		[self.sessions addObject:newSession];
 	}
 	
 	//	reload the table view
 	[self reloadData];
-	//	expand the item for the session we just created
-	if (filesSession != nil)
-		[outlineView expandItem:filesSession expandChildren:YES];
 }
-/*
-- (void) newSessionWithDir:(NSURL *)n recursively:(BOOL)isRecursive	{
-	if (n == nil)
+- (void) appendWatchFolderSessions:(NSArray<SynSession*> *)n	{
+	if (n == nil || [n count]<1)
 		return;
-	//	make a session
-	SynSession			*newSession = [SynSession createWithDir:n recursively:isRecursive];
-	if (newSession == nil)
-		return;
-	//newSession.delegate = self;
-	//	add the session to our list of sessions
-	@synchronized (self)	{
-		[self.sessions addObject:newSession];
-	}
+	[self.watchFolderSessions addObjectsFromArray:n];
+	
 	//	reload the table view
 	[self reloadData];
-	//	expand the item for the session we just created
-	[outlineView expandItem:newSession expandChildren:YES];
 }
-*/
 
 
 - (void) reloadData	{
@@ -708,15 +745,25 @@ static NSString						*localFileDragType = @"localFileDragType";
 	//	if we have no more ops, stop!
 	if (self.opsInProgress.count < 1)
 		[self stop];
-	//	else just refresh the UI for the op that completed
+	//	else we have more ops in progress...
 	else	{
-		NSInteger			rowIndex = [outlineView rowForItem:n];
+		//	refresh the UI for the op that completed
+		NSInteger			rowIndex;
+		rowIndex = [outlineView rowForItem:n];
 		if (rowIndex >= 0)	{
 			OpRowView			*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
 			//NSLog(@"\top row view is %@",tmpView);
 			if (tmpView != nil)
 				[tmpView refreshUI];
 		}
+		//	refresh the UI for the session that owns the op that completed
+		rowIndex = (n.session==nil) ? -1 : [outlineView rowForItem:n.session];
+		if (rowIndex >= 0)	{
+			SessionRowView		*tmpView = [outlineView viewAtColumn:0 row:rowIndex makeIfNecessary:NO];
+			if (tmpView != nil)
+				[tmpView refreshUI];
+		}
+		
 	}
 }
 
@@ -741,9 +788,15 @@ static NSString						*localFileDragType = @"localFileDragType";
 	return returnMe;
 }
 */
+
+//	these macros make it slightly easier to work with two arrays that, combined, populate the single outline view
+#define WATCH_SESSIONS_COUNT (self.watchFolderSessions.count)
+#define SESSIONS_COUNT (self.sessions.count)
+#define TOTAL_SESSIONS_COUNT (WATCH_SESSIONS_COUNT + SESSIONS_COUNT)
+
 - (NSInteger) outlineView:(NSOutlineView *)ov numberOfChildrenOfItem:(id)item	{
 	if (item == nil)	{
-		return self.sessions.count;
+		return TOTAL_SESSIONS_COUNT;
 	}
 	
 	if ([item isKindOfClass:[SynSession class]])	{
@@ -755,8 +808,12 @@ static NSString						*localFileDragType = @"localFileDragType";
 - (id) outlineView:(NSOutlineView *)ov child:(NSInteger)index ofItem:(id)item	{
 	//NSLog(@"%s ... %d, %@",__func__,index,item);
 	if (item == nil)	{
-		if (index>=0 && index<[self.sessions count])
-			return self.sessions[index];
+		if (index>=0 && index<TOTAL_SESSIONS_COUNT)	{
+			if (index < WATCH_SESSIONS_COUNT)
+				return self.watchFolderSessions[index];
+			else
+				return self.sessions[index - WATCH_SESSIONS_COUNT];
+		}
 	}
 	
 	if ([item isKindOfClass:[SynSession class]])	{
@@ -772,9 +829,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 		return YES;
 	if ([item isKindOfClass:[SynSession class]])	{
 		SynSession		*recast = (SynSession *)item;
-		if (recast.type == SessionType_Dir)
-			return NO;
-		else
+		//if (recast.type == SessionType_Dir)
+		//	return NO;
+		//else
 			return YES;
 	}
 	return NO;
@@ -811,23 +868,23 @@ static NSString						*localFileDragType = @"localFileDragType";
 	}
 }
 - (BOOL)outlineView:(NSOutlineView *)ov shouldExpandItem:(id)item	{
-	//NSLog(@"%s ... %@",__func__,item);
-	
-	if (item!=nil && [item isKindOfClass:[SynSession class]])	{
-		SynSession		*tmpSession = (SynSession *)item;
-		if (tmpSession.dragUUID != nil)
-			self.expandStateDict[tmpSession.dragUUID.UUIDString] = @YES;
+	if (!self.dragInProgress)	{
+		if (item!=nil && [item isKindOfClass:[SynSession class]])	{
+			SynSession		*tmpSession = (SynSession *)item;
+			if (tmpSession.dragUUID != nil)
+				self.expandStateDict[tmpSession.dragUUID.UUIDString] = @YES;
+		}
 	}
 	
 	return YES;
 }
 - (BOOL)outlineView:(NSOutlineView *)ov shouldCollapseItem:(id)item	{
-	//NSLog(@"%s ... %@",__func__,item);
-	
-	if (item!=nil && [item isKindOfClass:[SynSession class]])	{
-		SynSession		*tmpSession = (SynSession *)item;
-		if (tmpSession.dragUUID != nil)
-			[self.expandStateDict removeObjectForKey:tmpSession.dragUUID.UUIDString];
+	if (!self.dragInProgress)	{
+		if (item!=nil && [item isKindOfClass:[SynSession class]])	{
+			SynSession		*tmpSession = (SynSession *)item;
+			if (tmpSession.dragUUID != nil)
+				[self.expandStateDict removeObjectForKey:tmpSession.dragUUID.UUIDString];
+		}
 	}
 	
 	return YES;
@@ -845,45 +902,83 @@ static NSString						*localFileDragType = @"localFileDragType";
 	if (items==nil || [items count]!=1)
 		return NO;
 	id				tmpItem = items[0];
-	SynOp			*recast = (SynOp*)tmpItem;
-	[pboard setString:recast.dragUUID.UUIDString forType:localFileDragType];
+	if ([tmpItem isKindOfClass:[SynSession class]])	{
+		SynSession		*recast = (SynSession*)tmpItem;
+		[pboard setString:recast.dragUUID.UUIDString forType:localFileDragType];
+	}
+	else if ([tmpItem isKindOfClass:[SynOp class]])	{
+		SynOp			*recast = (SynOp*)tmpItem;
+		//	prevent the drag if the op's parent is a dir-type session...
+		if (recast.session.type == SessionType_Dir)
+			return NO;
+		
+		[pboard setString:recast.dragUUID.UUIDString forType:localFileDragType];
+	}
 	
 	return YES;
 }
 - (NSDragOperation) outlineView:(NSOutlineView *)ov validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)rawDropItem proposedChildIndex:(int)dropIndex	{
-	//NSLog(@"%s ... %@, %d",__func__,rawDropItem,dropIndex);
 	NSPasteboard		*pboard = [info draggingPasteboard];
+	
+	self.dragInProgress = YES;
 	
 	//	if it's a drag from the finder...
 	if ([pboard availableTypeFromArray:@[ NSPasteboardTypeFileURL ]])	{
 		//	nil item means dropping into an unspecified session...
 		if (rawDropItem == nil)	{
+			if (dropIndex < WATCH_SESSIONS_COUNT)
+				[ov setDropItem:nil dropChildIndex:WATCH_SESSIONS_COUNT];
 			return NSDragOperationGeneric;
 		}
 		//	if we're dropping on a session at a given index...
 		else if ([rawDropItem isKindOfClass:[SynSession class]])	{
-			//	if it's a dir-type session then we can't target it!
 			SynSession		*tmpSession = (SynSession *)rawDropItem;
-			if (tmpSession.type == SessionType_Dir)
-				[ov setDropItem:nil dropChildIndex:-1];
-			else
+			if (tmpSession.watchFolder)	{
+				[ov setDropItem:nil dropChildIndex:WATCH_SESSIONS_COUNT];
 				return NSDragOperationGeneric;
+			}
+			else if (tmpSession.type == SessionType_Dir)	{
+				//	retarget to one after the index of this session
+				NSInteger			dropItemIndex = [self.sessions indexOfObjectIdenticalTo:tmpSession];
+				if (dropItemIndex == NSNotFound || dropItemIndex < 0)
+					dropItemIndex = -1;
+				else
+					dropItemIndex = dropItemIndex + 1 + WATCH_SESSIONS_COUNT;
+				[ov setDropItem:nil dropChildIndex:dropItemIndex];
+				return NSDragOperationGeneric;
+			}
+			else	{
+				return NSDragOperationGeneric;
+			}
 		}
 		//	else if we're dropping on an op...
 		else if ([rawDropItem isKindOfClass:[SynOp class]])	{
-			//	change the drop target to the op's parent session, right after the op
 			SynSession		*parentSession = [(SynOp *)rawDropItem session];
-			if (parentSession == nil)	{
-				[ov setDropItem:nil dropChildIndex:-1];
+			//	if the parent session is a watch folder, retarget
+			if (parentSession.watchFolder)	{
+				[ov setDropItem:nil dropChildIndex:WATCH_SESSIONS_COUNT];
 				return NSDragOperationGeneric;
 			}
-			NSInteger		targetIndexWithinSession = [[parentSession ops] indexOfObjectIdenticalTo:rawDropItem];
-			if (targetIndexWithinSession == NSNotFound)
-				targetIndexWithinSession = 0;
-			else
-				++targetIndexWithinSession;
-			[ov setDropItem:parentSession dropChildIndex:targetIndexWithinSession];
-			return NSDragOperationGeneric;
+			//	else if the parent session is a dir-typ session, retarget
+			else if (parentSession.type == SessionType_Dir)	{
+				NSInteger			dropItemIndex = [self.sessions indexOfObjectIdenticalTo:parentSession];
+				if (dropItemIndex == NSNotFound || dropItemIndex < 0)
+					dropItemIndex = -1;
+				else
+					dropItemIndex = dropItemIndex + 1 + WATCH_SESSIONS_COUNT;
+				[ov setDropItem:nil dropChildIndex:dropItemIndex];
+				return NSDragOperationGeneric;
+			}
+			//	else we're dropping on an op in a session we can add to
+			else	{
+				NSInteger			dropItemIndex = [[parentSession ops] indexOfObjectIdenticalTo:rawDropItem];
+				if (dropItemIndex == NSNotFound || dropItemIndex < 0)
+					dropItemIndex = -1;
+				else
+					dropItemIndex = dropItemIndex + 1;
+				[ov setDropItem:parentSession dropChildIndex:dropItemIndex];
+				return NSDragOperationGeneric;
+			}
 		}
 	}
 	//	else if it's a drag from within the outline view (re-ordering)...
@@ -895,58 +990,184 @@ static NSString						*localFileDragType = @"localFileDragType";
 		if (rawDragItem == nil)
 			return NSDragOperationNone;
 		else if ([rawDragItem isKindOfClass:[SynSession class]])	{
-			//SynSession		*dragItem = (SynSession *)rawDragItem;
-			//	if 'rawDropItem' is nil we're dropping onto the master list of sessions
-			if (rawDropItem == nil)	{
-				return NSDragOperationGeneric;
+			SynSession		*dragItem = (SynSession *)rawDragItem;
+			//	if the drag item is a watch folder session, we need to restrict its drop to within the list of watch folders
+			if (dragItem.watchFolder)	{
+				//	if 'rawDropItem' is nil we're dropping onto the master list of sessions
+				if (rawDropItem == nil)	{
+					//	make sure we aren't dragging past the last want index...
+					if (dropIndex > WATCH_SESSIONS_COUNT)
+						[ov setDropItem:nil dropChildIndex:WATCH_SESSIONS_COUNT];
+					return NSDragOperationGeneric;
+				}
+				//	else if we're trying to drag into a session...
+				else if ([rawDropItem isKindOfClass:[SynSession class]])	{
+					SynSession			*dropItem = (SynSession *)rawDropItem;
+					//	change the drop target to one index after the drop item's index (we can't drag a session into another session)
+					//	...note that we're only checking for the drop item in the array of watch folders (watch folders are pinned to the top of the list)
+					NSInteger			dropItemIndex = [self.watchFolderSessions indexOfObjectIdenticalTo:dropItem];
+					if (dropItemIndex == NSNotFound || dropItemIndex < 0)
+						dropItemIndex = WATCH_SESSIONS_COUNT;
+					else
+						++dropItemIndex;
+					[ov setDropItem:nil dropChildIndex:dropItemIndex];
+					return NSDragOperationGeneric;
+				}
+				//	else if we're trying to drag into an op...
+				else if ([rawDropItem isKindOfClass:[SynOp class]])	{
+					SynOp				*dropItem = (SynOp*)rawDropItem;
+					//	if the op belongs to a watch folder session, change the drop target to one after that session
+					if (dropItem.session != nil && dropItem.session.watchFolder)	{
+						NSInteger			parentSessionIndex = [self.watchFolderSessions indexOfObjectIdenticalTo:dropItem.session];
+						if (parentSessionIndex == NSNotFound || parentSessionIndex < 0)
+							parentSessionIndex = WATCH_SESSIONS_COUNT;
+						else
+							++parentSessionIndex;
+						[ov setDropItem:nil dropChildIndex:parentSessionIndex];
+						return NSDragOperationGeneric;
+					}
+					//	else the op doesn't belong to a watch folder session- change the drop target to the last watch folder session
+					else	{
+						[ov setDropItem:nil dropChildIndex:WATCH_SESSIONS_COUNT];
+						return NSDragOperationGeneric;
+					}
+				}
 			}
-			//	else we're trying to drag into a session...
-			else if ([rawDropItem isKindOfClass:[SynSession class]])	{
-				SynSession		*dropItem = (SynSession *)rawDropItem;
-				//	change the drop target to one index after the parent session's index (we can't drag a session into antoher session)
-				NSInteger		dropItemIndex = [self.sessions indexOfObjectIdenticalTo:dropItem];
-				if (dropItemIndex == NSNotFound || dropItemIndex < 0)
-					dropItemIndex = self.sessions.count;
-				[ov setDropItem:nil dropChildIndex:dropItemIndex];
-			}
-			//	else we're trying to drag into an op...
-			else if ([rawDropItem isKindOfClass:[SynOp class]])	{
-				SynOp			*dropItem = (SynOp *)rawDropItem;
-				//	change the drop target to one index after the parent session's index (we can't drag a session into antoher session)
-				SynSession		*dropSession = dropItem.session;
-				NSInteger		dropSessionIndex = [self.sessions indexOfObjectIdenticalTo:dropSession];
-				if (dropSessionIndex == NSNotFound || dropSessionIndex < 0)
-					dropSessionIndex = self.sessions.count;
-				[ov setDropItem:nil dropChildIndex:dropSessionIndex];
+			//	else the drag item is *not* a watch folder- we need to restrict its drop to within the list of non-watch folders
+			else	{
+				//	if 'rawDropItem' is nil we're dropping onto the master list of sessions
+				if (rawDropItem == nil)	{
+					//	if we're trying to drop somewhere in the list of watch folders, make sure we're dropping after the last watch folder
+					if (dropIndex < WATCH_SESSIONS_COUNT)	{
+						[ov setDropItem:nil dropChildIndex:WATCH_SESSIONS_COUNT];
+						return NSDragOperationGeneric;
+					}
+					else
+						return NSDragOperationGeneric;
+				}
+				//	else we're trying to drag into a session...
+				else if ([rawDropItem isKindOfClass:[SynSession class]])	{
+					SynSession		*dropItem = (SynSession *)rawDropItem;
+					//	if we're trying to drag into a watch-folder session
+					if (dropItem.watchFolder)	{
+						//	retarget to after the last watch folder session
+						[ov setDropItem:nil dropChildIndex:WATCH_SESSIONS_COUNT];
+						return NSDragOperationGeneric;
+					}
+					//	else...we're trying to drag into a dir-type or list-type session (basically, not a watch folder)
+					else	{
+						//	retarget to one after the session we're trying to drop onto
+						SynSession		*dropItem = (SynSession *)rawDropItem;
+						//	change the drop target to one index after the parent session's index (we can't drag a session into antoher session)
+						NSInteger		dropItemIndex = [self.sessions indexOfObjectIdenticalTo:dropItem];
+						if (dropItemIndex == NSNotFound || dropItemIndex < 0)
+							dropItemIndex = self.sessions.count;
+						else
+							++dropItemIndex;
+						[ov setDropItem:nil dropChildIndex:dropItemIndex + WATCH_SESSIONS_COUNT];
+						return NSDragOperationGeneric;
+					}
+				}
+				//	else we're trying to drag into an op...
+				else if ([rawDropItem isKindOfClass:[SynOp class]])	{
+					SynOp			*dropItem = (SynOp *)rawDropItem;
+					//	if the op's session is a watch folder...
+					if (dropItem.session != nil && dropItem.session.watchFolder)	{
+						//	retarget so the drop is right after the list of watch folders (between sessions)
+						[ov setDropItem:nil dropChildIndex:WATCH_SESSIONS_COUNT];
+						return NSDragOperationGeneric;
+					}
+					//	else if the op's session is any other kind of session (basically, not a watch folder)
+					else if (dropItem.session != nil)	{
+						//	retarget so the drop is right after the current drop target's parent session (between sessions)
+						NSInteger			dropItemParentSessionIndex = [self.sessions indexOfObjectIdenticalTo:dropItem.session];
+						if (dropItemParentSessionIndex == NSNotFound || dropItemParentSessionIndex < 0)
+							dropItemParentSessionIndex = -1;
+						else
+							dropItemParentSessionIndex = dropItemParentSessionIndex + 1 + WATCH_SESSIONS_COUNT;
+						[ov setDropItem:nil dropChildIndex:dropItemParentSessionIndex];
+						return NSDragOperationGeneric;
+					}
+					//	else...indeterminate
+					else	{
+					}
+				}
 			}
 		}
 		else if ([rawDragItem isKindOfClass:[SynOp class]])	{
 			//SynOp			*dragItem = (SynOp *)rawDragItem;
 			//	if 'rawDropItem is nil we're dropping onto the master list of sessions
 			if (rawDropItem == nil)	{
-				//	do nothing (this is how you create another session)
-				return NSDragOperationGeneric;
-				/*
-				//	set the drop target to drag item's index in drag item's parent session (no change)
-				NSInteger		dragItemIndex = [dragItem.session.ops indexOfObjectIdenticalTo:dragItem];
-				if (dragItemIndex == NSNotFound || dragItemIndex < 0)
-					dragItemIndex = dragItem.session.ops.count;
-				[ov setDropItem:dragItem.session dropChildIndex:dragItemIndex];
-				*/
+				//	if the drop index is somewhere upin the list of watch folders, change the drop target
+				if (dropIndex < WATCH_SESSIONS_COUNT)	{
+					[ov setDropItem:nil dropChildIndex:WATCH_SESSIONS_COUNT];
+					return NSDragOperationGeneric;
+				}
+				else	{
+					//	do nothing (this is how you create another session)
+					return NSDragOperationGeneric;
+				}
 			}
 			//	else we're trying to drag an op into a session...
 			else if ([rawDropItem isKindOfClass:[SynSession class]])	{
-				//	do nothing (we're good)
-				return NSDragOperationGeneric;
+				SynSession			*dropItem = (SynSession *)rawDropItem;
+				//	if we're trying to drop it onto a watch folder
+				if (dropItem.watchFolder)	{
+					//	retarget so the drop is right after the list of watch folders (between sessions)
+					[ov setDropItem:nil dropChildIndex:WATCH_SESSIONS_COUNT];
+					return NSDragOperationGeneric;
+				}
+				//	else if we're trying to drop it onto a dir-type session
+				else if (dropItem.type == SessionType_Dir)	{
+					//	retarget so the drop is right after the current drop target (between sessions)
+					NSInteger		dropSessionIndex = [self.sessions indexOfObjectIdenticalTo:dropItem];
+					if (dropSessionIndex == NSNotFound || dropSessionIndex < 0)
+						dropSessionIndex = -1;
+					else
+						dropSessionIndex = dropSessionIndex + 1 + WATCH_SESSIONS_COUNT;
+					[ov setDropItem:nil dropChildIndex:dropSessionIndex];
+					return NSDragOperationGeneric;
+				}
+				//	else...we're trying to drop it onto a file-type session
+				else	{
+					//	do nothing (we're good)
+					return NSDragOperationGeneric;
+				}
+				
 			}
 			//	else we're trying to drag an op into another op...
 			else if ([rawDropItem isKindOfClass:[SynOp class]])	{
-				SynOp			*dropItem = (SynOp *)rawDropItem;
-				SynSession		*dropItemSession = dropItem.session;
-				NSInteger		dropItemIndex = [dropItemSession.ops indexOfObjectIdenticalTo:dropItem];
-				if (dropItemIndex == NSNotFound || dropItemIndex < 0)
-					dropItemIndex = dropItemSession.ops.count;
-				[ov setDropItem:dropItemSession dropChildIndex:dropItemIndex];
+				SynOp				*dropItem = (SynOp*)rawDropItem;
+				//	if the op's session is a watch folder...
+				if (dropItem.session != nil && dropItem.session.watchFolder)	{
+					//	retarget so the drop is right after the list of watch folders (between sessions)
+					[ov setDropItem:nil dropChildIndex:WATCH_SESSIONS_COUNT];
+					return NSDragOperationGeneric;
+				}
+				//	else if the op's session is a dir-type folder...
+				else if (dropItem.session != nil && dropItem.session.type == SessionType_Dir)	{
+					//	retarget so the drop is right after the current drop target's parent session (between sessions)
+					NSInteger			dropItemParentSessionIndex = [self.sessions indexOfObjectIdenticalTo:dropItem.session];
+					if (dropItemParentSessionIndex == NSNotFound || dropItemParentSessionIndex < 0)
+						dropItemParentSessionIndex = -1;
+					else
+						dropItemParentSessionIndex = dropItemParentSessionIndex + 1 + WATCH_SESSIONS_COUNT;
+					[ov setDropItem:nil dropChildIndex:dropItemParentSessionIndex];
+					return NSDragOperationGeneric;
+				}
+				//	else if the op's session is a file-type folder
+				else if (dropItem.session != nil && dropItem.session.type == SessionType_List)	{
+					SynOp			*dropItem = (SynOp *)rawDropItem;
+					SynSession		*dropItemSession = dropItem.session;
+					NSInteger		dropItemIndex = [dropItemSession.ops indexOfObjectIdenticalTo:dropItem];
+					if (dropItemIndex == NSNotFound || dropItemIndex < 0)
+						dropItemIndex = dropItemSession.ops.count;
+					[ov setDropItem:dropItemSession dropChildIndex:dropItemIndex];
+					return NSDragOperationGeneric;
+				}
+				//	else...indeterminate
+				else	{
+				}
 			}
 		}
 		return NSDragOperationNone;
@@ -954,9 +1175,12 @@ static NSString						*localFileDragType = @"localFileDragType";
 	
 	return NSDragOperationNone;
 }
-- (BOOL) outlineView:(NSOutlineView *)ov acceptDrop:(id <NSDraggingInfo>)info item:(id)rawDropItem childIndex:(int)dropIndex	{
-	//NSLog(@"%s",__func__);
+- (BOOL) outlineView:(NSOutlineView *)ov acceptDrop:(id <NSDraggingInfo>)info item:(id)rawDropItem childIndex:(int)rawDropIndex	{
+	//NSLog(@"%s ... %@, %d",__func__,rawDropItem,rawDropIndex);
 	NSPasteboard		*pboard = [info draggingPasteboard];
+	
+	self.dragInProgress = NO;
+	
 	if ([pboard availableTypeFromArray:@[ NSPasteboardTypeFileURL ]])	{
 		//	assemble a list of URLs from the pasteboard
 		NSMutableArray		*fileURLs = [NSMutableArray arrayWithCapacity:0];
@@ -971,27 +1195,23 @@ static NSString						*localFileDragType = @"localFileDragType";
 		
 		//	if the drop target's nil, we're making a new session for these URLs
 		if (rawDropItem == nil)	{
-			//	if the dropIndex is -1, this is very simple
-			if (dropIndex == -1)	{
+			//	if the rawDropIndex is -1, this is very simple
+			if (rawDropIndex == -1)	{
 				[self createAndAppendSessionsWithFiles:fileURLs];
 				return YES;
 			}
 			//	...if we're here, we're inserting a drop into our list of sessions (not dropping inside a session, but into the list of sessions)
 			NSArray<SynSession*>	*newSessions = [self createSessionsWithFiles:fileURLs];
-			//	if the dropIndex is -1, we want to append to the end of all sessions
-			NSInteger				targetIndex = (dropIndex==-1) ? self.sessions.count : dropIndex;
-			SynSession				*filesSession = nil;
+			//	if the rawDropIndex is -1, we want to append to the end of all sessions
+			NSInteger				targetIndex = (rawDropIndex==-1) ? self.sessions.count : rawDropIndex - WATCH_SESSIONS_COUNT;
 			for (SynSession *newSession in newSessions)	{
-				if (filesSession == nil && newSession.type == SessionType_List)
-					filesSession = newSession;
+				if (newSession.type == SessionType_List)
+					self.expandStateDict[newSession.dragUUID.UUIDString] = @YES;
 				[self.sessions insertObject:newSession atIndex:targetIndex];
 				++targetIndex;
 			}
 			//	reload the outline view!
 			[self reloadData];
-			//	if we added a session with a bunch of loose files, open it
-			if (filesSession != nil)
-				[outlineView expandItem:filesSession expandChildren:YES];
 			//	re-evaluate the selection...
 			[self outlineViewSelectionDidChange:nil];
 			return YES;
@@ -999,12 +1219,13 @@ static NSString						*localFileDragType = @"localFileDragType";
 		//	else if we're dropping into an existing session (dropping inside a session)
 		else if ([rawDropItem isKindOfClass:[SynSession class]])	{
 			SynSession		*targetSession = (SynSession *)rawDropItem;
-			//	if the dropIndex is -1, we want to append to the end of the session's ops
-			NSInteger		targetIndex = (dropIndex==-1) ? targetSession.ops.count : dropIndex;
+			//	if the rawDropIndex is -1, we want to append to the end of the session's ops
+			NSInteger		targetIndex = (rawDropIndex==-1) ? targetSession.ops.count : rawDropIndex;
 			for (NSURL *fileURL in fileURLs)	{
 				SynOp			*tmpOp = [[SynOp alloc] initWithSrcURL:fileURL];
 				//	only insert the op if it's an AVF file OR its parent session is copying non-media files
 				if (tmpOp != nil && (tmpOp.type == OpType_AVFFile || targetSession.copyNonMediaFiles))	{
+					self.expandStateDict[targetSession.dragUUID.UUIDString] = @YES;
 					[targetSession.ops insertObject:tmpOp atIndex:targetIndex];
 					tmpOp.session = targetSession;
 					++targetIndex;
@@ -1034,8 +1255,32 @@ static NSString						*localFileDragType = @"localFileDragType";
 			return NO;
 		else if ([rawDragItem isKindOfClass:[SynSession class]])	{
 			SynSession		*dragItem = (SynSession *)rawDragItem;
-			NSInteger		dragItemOrigIndex = [self.sessions indexOfObjectIdenticalTo:dragItem];
-			if (rawDropItem != nil)	{
+			if (dragItem.watchFolder)	{
+				NSInteger		dragItemOrigIndex = [self.watchFolderSessions indexOfObjectIdenticalTo:dragItem];
+				NSInteger		dropIndex = rawDropIndex;
+				//	if the drop index hasn't changed, do nothing and return
+				if (dragItemOrigIndex == dropIndex)	{
+					//	intentionally blank (technically we could probably skip the reloadData but whatevs)
+				}
+				//	else if the drop index is > the orig index, insert first and then delete
+				else if (dropIndex > dragItemOrigIndex)	{
+					[self.watchFolderSessions insertObject:dragItem atIndex:dropIndex];
+					[self.watchFolderSessions removeObjectAtIndex:dragItemOrigIndex];
+				}
+				//	else the drop index is < the orig index, delete first then insert
+				else	{
+					[self.watchFolderSessions removeObjectAtIndex:dragItemOrigIndex];
+					[self.watchFolderSessions insertObject:dragItem atIndex:dropIndex];
+				}
+				//	reload the outline view
+				[self reloadData];
+				//	re-evaluate the selection...
+				[self outlineViewSelectionDidChange:nil];
+				return YES;
+			}
+			else	{
+				NSInteger		dragItemOrigIndex = [self.sessions indexOfObjectIdenticalTo:dragItem];
+				NSInteger		dropIndex = (rawDropIndex == -1) ? SESSIONS_COUNT : rawDropIndex - WATCH_SESSIONS_COUNT;
 				//	if the dropIndex == orig index, do nothing and return
 				if (dropIndex == dragItemOrigIndex)	{
 					//	intentionally blank (technically we could probably skip the reloadData but whatevs)
@@ -1070,7 +1315,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 				[newSession.ops addObject:dragItem];
 				[dragItem setSession:newSession];
 				[dragItemParent.ops removeObjectAtIndex:dragItemOrigIndex];
-				[self.sessions insertObject:newSession atIndex:(dropIndex==-1) ? self.sessions.count : dropIndex];
+				[self.sessions insertObject:newSession atIndex:(rawDropIndex==-1) ? SESSIONS_COUNT : rawDropIndex - WATCH_SESSIONS_COUNT];
 				
 				//	if the parent session is now empty, remove it
 				if (dragItemParent.ops.count < 1)
@@ -1088,28 +1333,28 @@ static NSString						*localFileDragType = @"localFileDragType";
 			else if ([rawDropItem isKindOfClass:[SynSession class]])	{
 				SynSession		*dropItem = (SynSession *)rawDropItem;
 				//	if the drop index == orig index...
-				if (dropIndex == dragItemOrigIndex)	{
+				if (rawDropIndex == dragItemOrigIndex)	{
 					//	if it's the same session, do nothing
 					if (dragItemParent == dropItem)	{
 						//	intentionally blank
 					}
 					//	else insert first, then delete
 					else	{
-						[dropItem.ops insertObject:dragItem atIndex:(dropIndex==-1) ? dropItem.ops.count : dropIndex];
+						[dropItem.ops insertObject:dragItem atIndex:(rawDropIndex==-1) ? dropItem.ops.count : rawDropIndex];
 						[dragItem setSession:dropItem];
 						[dragItemParent.ops removeObjectAtIndex:dragItemOrigIndex];
 					}
 				}
 				//	else if the drop index is > the orig index, insert first and then delete
-				else if (dropIndex > dragItemOrigIndex)	{
-					[dropItem.ops insertObject:dragItem atIndex:(dropIndex==-1) ? dropItem.ops.count : dropIndex];
+				else if (rawDropIndex > dragItemOrigIndex)	{
+					[dropItem.ops insertObject:dragItem atIndex:(rawDropIndex==-1) ? dropItem.ops.count : rawDropIndex];
 					[dragItem setSession:dropItem];
 					[dragItemParent.ops removeObjectAtIndex:dragItemOrigIndex];
 				}
 				//	else the drop index is < the orig index, delete first then insert
 				else	{
 					[dragItemParent.ops removeObjectAtIndex:dragItemOrigIndex];
-					[dropItem.ops insertObject:dragItem atIndex:(dropIndex==-1) ? dropItem.ops.count : dropIndex];
+					[dropItem.ops insertObject:dragItem atIndex:(rawDropIndex==-1) ? dropItem.ops.count : rawDropIndex];
 					[dragItem setSession:dropItem];
 				}
 				
@@ -1131,6 +1376,10 @@ static NSString						*localFileDragType = @"localFileDragType";
 	}
 	
 	return NO;
+}
+- (void) draggingExited:(id<NSDraggingInfo>)info	{
+	//NSLog(@"%s",__func__);
+	self.dragInProgress = NO;
 }
 
 

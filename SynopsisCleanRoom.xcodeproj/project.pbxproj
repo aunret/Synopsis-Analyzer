@@ -34,6 +34,7 @@
 		1A34044E23283F0C004A434D /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
 		1A55FD7F2343F78E007CA355 /* PresetSettingsUIController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A55FD7E2343F78E007CA355 /* PresetSettingsUIController.m */; };
 		1A58E28E235E1255003B6A6F /* VVLogger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1A58E28D235E1254003B6A6F /* VVLogger.mm */; };
+		1A58E2C0235F4021003B6A6F /* CustomOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A58E2BF235F4021003B6A6F /* CustomOutlineView.m */; };
 		1A62613D231476CF00DC2B06 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A62613C231476CF00DC2B06 /* AppDelegate.m */; };
 		1A62613F231476D000DC2B06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A62613E231476D000DC2B06 /* Assets.xcassets */; };
 		1A626142231476D000DC2B06 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A626140231476D000DC2B06 /* MainMenu.xib */; };
@@ -255,6 +256,8 @@
 		1A55FD7E2343F78E007CA355 /* PresetSettingsUIController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetSettingsUIController.m; sourceTree = "<group>"; };
 		1A58E286235E1254003B6A6F /* VVLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VVLogger.h; path = "Synopsis Analyzer/VVLogger.h"; sourceTree = SOURCE_ROOT; };
 		1A58E28D235E1254003B6A6F /* VVLogger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = VVLogger.mm; path = "Synopsis Analyzer/VVLogger.mm"; sourceTree = SOURCE_ROOT; };
+		1A58E2BE235F4021003B6A6F /* CustomOutlineView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomOutlineView.h; sourceTree = "<group>"; };
+		1A58E2BF235F4021003B6A6F /* CustomOutlineView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomOutlineView.m; sourceTree = "<group>"; };
 		1A626138231476CF00DC2B06 /* SynopsisCleanRoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SynopsisCleanRoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A62613B231476CF00DC2B06 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1A62613C231476CF00DC2B06 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -420,6 +423,8 @@
 				1A58E28D235E1254003B6A6F /* VVLogger.mm */,
 				1ADA765F23426A9A0072EB10 /* FSDirectoryWatcher.h */,
 				1ADA766023426A9A0072EB10 /* FSDirectoryWatcher.m */,
+				1A58E2BE235F4021003B6A6F /* CustomOutlineView.h */,
+				1A58E2BF235F4021003B6A6F /* CustomOutlineView.m */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -794,6 +799,7 @@
 				1A1093542330024A00791BDA /* PreferencesGeneralViewController.m in Sources */,
 				1A85F571233EDE5A00541CFB /* NSStringAdditions.m in Sources */,
 				1A1093592330025500791BDA /* PreferencesFileViewController.m in Sources */,
+				1A58E2C0235F4021003B6A6F /* CustomOutlineView.m in Sources */,
 				1A1093672330027600791BDA /* PresetObject.m in Sources */,
 				1AA3C04F233C1425009F6821 /* SessionInspectorViewController.m in Sources */,
 				1A1093472330016D00791BDA /* DropFilesView.m in Sources */,

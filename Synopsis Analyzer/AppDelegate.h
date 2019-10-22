@@ -28,6 +28,8 @@
 - (IBAction) openMovies:(id)sender;
 - (IBAction) openPreferences:(id)sender;
 
+- (IBAction) addWatchFolder:(id)sender;
+
 @end
 
 

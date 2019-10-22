@@ -12,11 +12,10 @@
                 <outlet property="outputFolderPathAbs" destination="qnn-nE-DuA" id="KGt-5L-tMF"/>
                 <outlet property="presetDescriptionField" destination="BqU-ft-Liq" id="RCR-dY-vWZ"/>
                 <outlet property="presetsPUB" destination="Dh4-UO-h7n" id="VuX-qm-E9h"/>
-                <outlet property="sessionDirBox" destination="jLL-ia-E90" id="RcB-MS-iCY"/>
                 <outlet property="sessionScriptPathAbs" destination="oDr-2M-UcV" id="xFq-Vo-EBu"/>
+                <outlet property="sessionWatchDirBox" destination="jLL-ia-E90" id="Hyx-Og-GhF"/>
                 <outlet property="tempFolderPathAbs" destination="9ii-mB-ZE0" id="B8F-yX-XZl"/>
                 <outlet property="view" destination="Aib-os-nkP" id="jvP-cl-sef"/>
-                <outlet property="watchFolderToggle" destination="FTF-wL-d0W" id="Mf4-aC-s6d"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
@@ -29,18 +28,18 @@
             </connections>
         </customObject>
         <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="Aib-os-nkP">
-            <rect key="frame" x="0.0" y="0.0" width="385" height="814"/>
+            <rect key="frame" x="0.0" y="0.0" width="385" height="705"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="vLG-Ld-Pu0">
-                <rect key="frame" x="1" y="1" width="368" height="812"/>
+                <rect key="frame" x="1" y="1" width="368" height="703"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <view fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cl6-5p-djE">
-                        <rect key="frame" x="0.0" y="113" width="362" height="812"/>
+                        <rect key="frame" x="0.0" y="4" width="362" height="703"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <subviews>
                             <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="0dM-LD-4N7">
-                                <rect key="frame" x="2" y="434" width="363" height="228"/>
+                                <rect key="frame" x="2" y="325" width="363" height="228"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <view key="contentView" ambiguous="YES" id="SoG-FB-7nX">
                                     <rect key="frame" x="3" y="3" width="357" height="222"/>
@@ -169,7 +168,7 @@
                                 </view>
                             </box>
                             <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Default Preset" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="2nA-b5-bNV">
-                                <rect key="frame" x="2" y="664" width="363" height="144"/>
+                                <rect key="frame" x="2" y="555" width="363" height="144"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="Z21-to-x0G">
                                     <rect key="frame" x="3" y="3" width="357" height="138"/>
@@ -215,34 +214,14 @@
                                 </view>
                             </box>
                             <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="jLL-ia-E90">
-                                <rect key="frame" x="2" y="252" width="363" height="180"/>
+                                <rect key="frame" x="2" y="246" width="363" height="77"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <view key="contentView" ambiguous="YES" id="O52-z4-J9X">
-                                    <rect key="frame" x="3" y="3" width="357" height="174"/>
+                                    <rect key="frame" x="3" y="3" width="357" height="71"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kfs-Jf-EVD">
-                                            <rect key="frame" x="21" y="87" width="318" height="42"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Any supported media added to any sub-directory of this folder will be automatically analyzed with the selected preset." id="zm7-yW-cMC">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FTF-wL-d0W">
-                                            <rect key="frame" x="19" y="135" width="116" height="20"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Watch Folder" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="1PL-hs-b6T">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="smallSystem"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="watchFolderToggleUsed:" target="-2" id="RAY-Em-A01"/>
-                                            </connections>
-                                        </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uHZ-HF-fPo">
-                                            <rect key="frame" x="17" y="41" width="322" height="20"/>
+                                            <rect key="frame" x="17" y="33" width="322" height="20"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Xgf-V0-0PE">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -253,7 +232,7 @@
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bow-9n-WTd">
-                                            <rect key="frame" x="42" y="31" width="296" height="28"/>
+                                            <rect key="frame" x="42" y="23" width="296" height="28"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" selectable="YES" title="Copy 'Non media' documents and media to output folder." id="U64-3P-vAY">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -265,7 +244,7 @@
                                 </view>
                             </box>
                             <box hidden="YES" fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="G5u-Br-mJn">
-                                <rect key="frame" x="2" y="16" width="363" height="234"/>
+                                <rect key="frame" x="2" y="10" width="363" height="234"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <view key="contentView" ambiguous="YES" id="9DI-j4-gFU">
                                     <rect key="frame" x="3" y="3" width="357" height="228"/>
@@ -402,10 +381,10 @@
                 <autoresizingMask key="autoresizingMask"/>
             </scroller>
             <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="eJ0-h7-hMy">
-                <rect key="frame" x="369" y="1" width="15" height="812"/>
+                <rect key="frame" x="369" y="1" width="15" height="703"/>
                 <autoresizingMask key="autoresizingMask"/>
             </scroller>
-            <point key="canvasLocation" x="367.5" y="491"/>
+            <point key="canvasLocation" x="367.5" y="545.5"/>
         </scrollView>
         <customObject id="9ii-mB-ZE0" customClass="PathAbstraction">
             <connections>
