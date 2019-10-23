@@ -32,6 +32,7 @@
 		1A34044C23283EFA004A434D /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
 		1A34044D23283EFA004A434D /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
 		1A34044E23283F0C004A434D /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
+		1A3EBFAB235F8E03007AB5B1 /* ProgressButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3EBFAA235F8E03007AB5B1 /* ProgressButton.m */; };
 		1A55FD7F2343F78E007CA355 /* PresetSettingsUIController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A55FD7E2343F78E007CA355 /* PresetSettingsUIController.m */; };
 		1A58E28E235E1255003B6A6F /* VVLogger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1A58E28D235E1254003B6A6F /* VVLogger.mm */; };
 		1A58E2C0235F4021003B6A6F /* CustomOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A58E2BF235F4021003B6A6F /* CustomOutlineView.m */; };
@@ -253,6 +254,8 @@
 		1A10937B2330205800791BDA /* OpRowView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpRowView.xib; sourceTree = "<group>"; };
 		1A34043F23283C25004A434D /* synopsis_cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = synopsis_cli; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A34044123283C25004A434D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1A3EBFA3235F8E03007AB5B1 /* ProgressButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressButton.h; sourceTree = "<group>"; };
+		1A3EBFAA235F8E03007AB5B1 /* ProgressButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressButton.m; sourceTree = "<group>"; };
 		1A55FD7D2343F78E007CA355 /* PresetSettingsUIController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetSettingsUIController.h; sourceTree = "<group>"; };
 		1A55FD7E2343F78E007CA355 /* PresetSettingsUIController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetSettingsUIController.m; sourceTree = "<group>"; };
 		1A58E286235E1254003B6A6F /* VVLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VVLogger.h; path = "Synopsis Analyzer/VVLogger.h"; sourceTree = SOURCE_ROOT; };
@@ -430,6 +433,8 @@
 				1A58E2BF235F4021003B6A6F /* CustomOutlineView.m */,
 				1A58E2C7235F75EA003B6A6F /* ITProgressIndicator.h */,
 				1A58E2C8235F75EA003B6A6F /* ITProgressIndicator.m */,
+				1A3EBFA3235F8E03007AB5B1 /* ProgressButton.h */,
+				1A3EBFAA235F8E03007AB5B1 /* ProgressButton.m */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -806,6 +811,7 @@
 				1A85F571233EDE5A00541CFB /* NSStringAdditions.m in Sources */,
 				1A1093592330025500791BDA /* PreferencesFileViewController.m in Sources */,
 				1A58E2C0235F4021003B6A6F /* CustomOutlineView.m in Sources */,
+				1A3EBFAB235F8E03007AB5B1 /* ProgressButton.m in Sources */,
 				1A1093672330027600791BDA /* PresetObject.m in Sources */,
 				1AA3C04F233C1425009F6821 /* SessionInspectorViewController.m in Sources */,
 				1A1093472330016D00791BDA /* DropFilesView.m in Sources */,

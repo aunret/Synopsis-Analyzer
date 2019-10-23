@@ -42,6 +42,7 @@
 	return self;
 }
 - (void) generalInit	{
+	[self setWantsLayer:YES];
 }
 - (void) awakeFromNib	{
 	PrefsController		*pc = [PrefsController global];

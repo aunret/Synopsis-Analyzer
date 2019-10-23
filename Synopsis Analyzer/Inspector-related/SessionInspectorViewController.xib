@@ -380,7 +380,7 @@
                 <rect key="frame" x="-100" y="-100" width="368" height="15"/>
                 <autoresizingMask key="autoresizingMask"/>
             </scroller>
-            <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="eJ0-h7-hMy">
+            <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="eJ0-h7-hMy">
                 <rect key="frame" x="369" y="1" width="15" height="703"/>
                 <autoresizingMask key="autoresizingMask"/>
             </scroller>
