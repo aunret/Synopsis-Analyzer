@@ -229,6 +229,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 		//	run through my sessions, change their states to 'active'
 		for (SynSession *session in self.sessions)	{
 			session.state = SessionState_Active;
+			//	we don't want to reloadData right now (would change scroll pos) so just update the relevant rows...
+			[self reloadRowForItem:session];
 		}
 		
 		//	do stuff with ops
@@ -392,6 +394,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 		//	run through my sessions, change their states to 'inactive'
 		for (SynSession *session in self.sessions)	{
 			session.state = SessionState_Inactive;
+			//	we don't want to reloadData right now (would change scroll pos) so just update the relevant rows...
+			[self reloadRowForItem:session];
 		}
 		
 		//	do stuff with ops
