@@ -136,8 +136,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 				for (SynSession		*tmpSession in tmpArray)	{
 					if ([tmpSession isKindOfClass:[SynSession class]])	{
 						[self.sessions addObject:tmpSession];
-						if (tmpSession.type == SessionType_List)
-							self.expandStateDict[tmpSession.dragUUID.UUIDString] = @YES;
+						//if (tmpSession.type == SessionType_List)
+						//	self.expandStateDict[tmpSession.dragUUID.UUIDString] = @YES;
 					}
 				}
 				[self reloadData];
@@ -229,12 +229,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 		}
 		
 		//	do stuff with ops
-		NSArray<SynOp*>		*opsToStart = [self getOpsToStart:[self maxOpCount]];
-		for (SynOp * op in opsToStart)	{
-			[self.opsInProgress addObject:op];
-			[LogController appendVerboseLog:[NSString stringWithFormat:@"Starting analysis on %@",op.src.lastPathComponent]];
-			[op start];
-		}
+		[self makeSureRunningMaxPossibleOps];
 		
 		//	if we weren't able to start any jobs, we're effectively stopped, so....stop it officially.
 		if (self.opsInProgress.count < 1)
@@ -281,12 +276,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 		self.paused = NO;
 		
 		//	do stuff with ops
-		NSArray<SynOp*>		*opsToStart = [self getOpsToStart:[self maxOpCount]];
-		for (SynOp * op in opsToStart)	{
-			[self.opsInProgress addObject:op];
-			[LogController appendVerboseLog:[NSString stringWithFormat:@"Starting analysis on %@",op.src.lastPathComponent]];
-			[op start];
-		}
+		[self makeSureRunningMaxPossibleOps];
 		
 		//	if we weren't able to start any jobs, we're effectively stopped, so....stop it officially.
 		if (self.opsInProgress.count < 1)
@@ -353,12 +343,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 			[op resume];
 		}
 		//	it's possible that an op state change occurred juuust as pausing, and as such we may have fewer jobs than we should...
-		if (self.opsInProgress.count < self.maxOpCount)	{
-			NSArray<SynOp*>		*opsToStart = [self getOpsToStart:(self.maxOpCount - self.opsInProgress.count)];
-			for (SynOp *opToStart in opsToStart)	{
-				[opToStart start];
-			}
-		}
+		[self makeSureRunningMaxPossibleOps];
 		
 		//	it's also possible that the user paused juuuust as jobs were finishing, and there are now no more jobs to process...
 		if (self.opsInProgress.count < 1)
@@ -401,6 +386,11 @@ static NSString						*localFileDragType = @"localFileDragType";
 		self.running = NO;
 		self.paused = NO;
 		
+		//	run through my sessions, change their states to 'inactive'
+		for (SynSession *session in self.sessions)	{
+			session.state = SessionState_Inactive;
+		}
+		
 		//	do stuff with ops
 		for (SynOp *op in self.opsInProgress)	{
 			[op stop];
@@ -437,7 +427,23 @@ static NSString						*localFileDragType = @"localFileDragType";
 	}
 	return returnMe;
 }
+- (void) makeSureRunningMaxPossibleOps	{
+	@synchronized (self)	{
+		//	it's possible that an op state change occurred juuust as pausing, and as such we may have fewer jobs than we should...
+		NSArray<SynOp*>		*opsToStart = [self getOpsToStart:(self.maxOpCount - self.opsInProgress.count)];
+		for (SynOp *opToStart in opsToStart)	{
+			[self.opsInProgress addObject:opToStart];
+			[LogController appendVerboseLog:[NSString stringWithFormat:@"Starting analysis on %@",opToStart.src.lastPathComponent]];
+			[opToStart start];
+		}
+	}
+}
+
+
 - (NSArray<SynOp*> *) getOpsToStart:(NSUInteger)numOpsToGet	{
+	if (numOpsToGet <= 0)
+		return @[];
+	
 	@synchronized (self)	{
 		NSMutableArray		*returnMe = [NSMutableArray arrayWithCapacity:0];
 		if ([returnMe count] == numOpsToGet)
@@ -813,12 +819,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 		if (startAnotherOp)	{
 			//	only start another op if we're not paused!
 			if (!self.paused)	{
-				NSArray<SynOp*>		*opsToStart = [self getOpsToStart:1];
-				for (SynOp * op in opsToStart)	{
-					[self.opsInProgress addObject:op];
-					[LogController appendVerboseLog:[NSString stringWithFormat:@"Starting analysis on %@",op.src.lastPathComponent]];
-					[op start];
-				}
+				//NSArray<SynOp*>		*opsToStart = [self getOpsToStart:1];
+				[self makeSureRunningMaxPossibleOps];
 			}
 		}
 	}

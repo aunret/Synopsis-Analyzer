@@ -14,22 +14,21 @@
 
 
 @interface OpRowView : NSTableCellView	{
-	IBOutlet NSButton		*enableToggle;
 	IBOutlet NSImageView	*preview;
 	IBOutlet NSTextField	*nameField;
-	
-	IBOutlet NSTabView		*tabView;
 	
 	IBOutlet NSTextField	*statusField;
 	
 	IBOutlet NSProgressIndicator		*progressIndicator;
+	
+	IBOutlet NSTextField	*pathField;
 	IBOutlet NSTextField	*timeRemainingField;
 }
 
 - (void) refreshWithOp:(SynOp *)n;
 - (void) refreshUI;
 
-- (IBAction) enableToggleUsed:(id)sender;
+- (IBAction) showFileClicked:(id)sender;
 
 @property (atomic,weak) SynOp * op;
 

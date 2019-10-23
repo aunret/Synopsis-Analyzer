@@ -57,6 +57,9 @@ typedef NS_ENUM(NSUInteger, SessionState)	{
 
 //	returns -1 if session isn't being processed yet, for any reason (disabled, all pending, all complete/err, etc)
 - (double) calculateProgress;
+//	returns a YES only if all ops have been processed (all ops' states are either an err or complete)
+- (BOOL) processedAllOps;
+- (BOOL) processedAllOpsSuccessfully;
 
 - (SynOp *) getOpWithSrcFile:(NSString *)n;
 //	returns an array of the ops that should be saved/encoded (only ops that are pending or have errored out)

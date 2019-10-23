@@ -490,6 +490,7 @@
 					NSLog(@"watched paths changed! %@",changedPaths);
 					
 					//	run through the URLs (they may be files or folders, we don't know at this point)
+					SessionController		*sc = [SessionController global];
 					NSFileManager			*fm = [NSFileManager defaultManager];
 					BOOL					needsToStart = NO;
 					for (NSString *changedPath in changedPaths)	{
@@ -521,16 +522,63 @@
 					}
 					
 					//	now that my ops have been updated, i need to reload my row in the outline view
-					[[SessionController global] reloadRowForItem:bss];
+					//[sc reloadRowForItem:bss];
+					//	...actually, i need to reload data entirely, as the outline view may need to display new rows for the new ops!
+					[sc reloadData];
 					
 					//	if we added ops we need to start...
 					if (needsToStart)	{
-						[[SessionController global] startButDontChangeSessionStates];
+						if ([sc processingFiles])
+							[sc makeSureRunningMaxPossibleOps];
+						else
+							[sc startButDontChangeSessionStates];
 					}
 				}];
 			
 		}
 	}
+}
+- (BOOL) processedAllOps	{
+	BOOL			returnMe = YES;
+	@synchronized (self)	{
+		for (SynOp *op in self.ops)	{
+			switch (op.status)	{
+			case OpStatus_Pending:
+			case OpStatus_Analyze:
+			case OpStatus_Cleanup:
+				returnMe = NO;
+				break;
+			case OpStatus_PreflightErr:
+			case OpStatus_Complete:
+			case OpStatus_Err:
+				break;
+			}
+			if (!returnMe)
+				break;
+		}
+	}
+	return returnMe;
+}
+- (BOOL) processedAllOpsSuccessfully	{
+	BOOL			returnMe = YES;
+	@synchronized (self)	{
+		for (SynOp *op in self.ops)	{
+			switch (op.status)	{
+			case OpStatus_Pending:
+			case OpStatus_Analyze:
+			case OpStatus_Cleanup:
+			case OpStatus_PreflightErr:
+			case OpStatus_Err:
+				returnMe = NO;
+				break;
+			case OpStatus_Complete:
+				break;
+			}
+			if (!returnMe)
+				break;
+		}
+	}
+	return returnMe;
 }
 - (void) destroyDirectoryWatcher	{
 	@synchronized (self)	{

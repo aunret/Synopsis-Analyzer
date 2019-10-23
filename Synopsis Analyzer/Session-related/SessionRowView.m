@@ -14,6 +14,9 @@
 #import "NSPopUpButtonAdditions.h"
 #import "InspectorViewController.h"
 
+#import "ProgressButton.h"
+#import "SessionController.h"
+
 
 
 
@@ -45,8 +48,6 @@
 	[self setWantsLayer:YES];
 }
 - (void) awakeFromNib	{
-	PrefsController		*pc = [PrefsController global];
-	[pc populatePopUpButtonWithPresets:presetPUB];
 }
 
 
@@ -57,16 +58,17 @@
 - (void) refreshUI	{
 	//NSLog(@"%s",__func__);
 	if (self.session == nil)	{
-		[enableToggle setIntValue:NSControlStateValueOff];
 		[nameField setStringValue:@""];
-		[presetPUB selectItemWithRepresentedObject:nil andOutput:NO];
-		[tabView selectTabViewItemAtIndex:0];
 		[descriptionField setStringValue:@"XXX"];
+		[progressIndicator setDoubleValue:0.0];
+		[progressButton setState:ProgressButtonState_CompletedSuccessfully];
 		return;
 	}
 	
-	[enableToggle setIntValue:(self.session.enabled) ? NSControlStateValueOn : NSControlStateValueOff];
+	
+	//	populate the name field and icon view
 	[nameField setStringValue:self.session.title];
+	//	if it's a directory-type session
 	if (self.session.type == SessionType_Dir)	{
 		[nameField setEditable:NO];
 		if (self.session.watchFolder)	{
@@ -76,40 +78,66 @@
 			[iconView setImage:[NSImage imageNamed:@"ic_folder_white"]];
 		}
 	}
+	//	else it's a list-type session
 	else	{
 		[nameField setEditable:YES];
 		[iconView setImage:[NSImage imageNamed:@"ic_insert_drive_file_white"]];
 	}
-	[presetPUB selectItemWithRepresentedObject:self.session.preset andOutput:NO];
 	
-	double			tmpProgress = [self.session calculateProgress];
-	//NSLog(@"\ttmpProgress is %0.2f",tmpProgress);
-	if (tmpProgress < 0.0)	{
-		[tabView selectTabViewItemAtIndex:0];
-		[descriptionField setStringValue:[self.session createDescriptionString]];
+	//	populate the description field
+	[descriptionField setStringValue:[self.session createDescriptionString]];
+	
+	//	populate the progress button
+	if (self.session.watchFolder)	{
+		[progressButton setState:ProgressButtonState_Spinning];
+	}
+	//	else it's not a watch folder...
+	else	{
+		if ([self.session processedAllOps])	{
+			if ([self.session processedAllOpsSuccessfully])
+				[progressButton setState:ProgressButtonState_CompletedSuccessfully];
+			else
+				[progressButton setState:ProgressButtonState_CompletedError];
+		}
+		else	{
+			[progressButton setState:(self.session.state == SessionState_Active) ? ProgressButtonState_Active : ProgressButtonState_Inactive];
+		}
+	}
+	
+	//	populate the progress indicator
+	if ([self.session processedAllOps])	{
+		[progressIndicator setDoubleValue:0.0];
 	}
 	else	{
-		[tabView selectTabViewItemAtIndex:1];
+		double			tmpProgress = [self.session calculateProgress];
 		[progressIndicator setDoubleValue:tmpProgress];
 	}
 }
 
 
-- (IBAction) enableToggleUsed:(id)sender	{
-	if (self.session == nil)	{
-		[self refreshUI];
+
+- (IBAction) progressButtonUsed:(id)sender	{
+	switch (progressButton.state)	{
+	case ProgressButtonState_Inactive:
+		//	make the session inactive, but don't kill any in-progress jobs
+		self.session.state = SessionState_Inactive;
+		break;
+	case ProgressButtonState_Active:
+		{
+			//	make the session active, start the session controller if it isn't running
+			self.session.state = SessionState_Active;
+			SessionController		*sc = [SessionController global];
+			if (![sc processingFiles])	{
+				[sc startButDontChangeSessionStates];
+			}
+			[sc makeSureRunningMaxPossibleOps];
+		}
+		break;
+	case ProgressButtonState_Spinning:
+	case ProgressButtonState_CompletedSuccessfully:
+	case ProgressButtonState_CompletedError:
 		return;
 	}
-	self.session.enabled = ([sender intValue]==NSControlStateValueOn) ? YES : NO;
-}
-- (IBAction) presetPUBItemSelected:(id)sender	{
-	//NSLog(@"%s ... %@",__func__,[(NSMenuItem *)sender representedObject]);
-	PresetObject		*newPreset = (sender==nil || ![sender isKindOfClass:[NSMenuItem class]]) ? nil : [(NSMenuItem*)sender representedObject];
-	if (newPreset != nil && ![newPreset isKindOfClass:[PresetObject class]])
-		newPreset = nil;
-	self.session.preset = newPreset;
-	
-	[[InspectorViewController global] reloadInspectorIfInspected:self.session];
 }
 - (IBAction) nameFieldUsed:(id)sender	{
 	if (self.session == nil)

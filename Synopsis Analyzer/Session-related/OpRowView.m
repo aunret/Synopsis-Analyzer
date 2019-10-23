@@ -92,15 +92,16 @@ static NSMutableArray		*iconGenArray = nil;
 }
 - (void) refreshUI	{
 	if (self.op == nil)	{
-		[enableToggle setIntValue:NSControlStateValueOff];
 		[preview setImage:nil];
 		[nameField setStringValue:@""];
-		[tabView selectTabViewItemAtIndex:0];
 		[statusField setStringValue:@"XXX"];
+		[progressIndicator setDoubleValue:0.0];
+		[pathField setStringValue:@"XXX"];
+		[pathField sizeToFit];
+		[timeRemainingField setStringValue:@"XXX"];
 		return;
 	}
 	
-	//[enableToggle setIntValue:NSOnState];
 	if (self.op.thumb == nil)	{
 		[OpRowView addOpToIconGenQueue:self.op];
 		[preview setImage:[SynOp genericMovieThumbnail]];
@@ -109,44 +110,52 @@ static NSMutableArray		*iconGenArray = nil;
 		[preview setImage:self.op.thumb];
 	}
 	[nameField setStringValue:self.op.src.lastPathComponent.stringByDeletingPathExtension];
+	[pathField setStringValue:self.op.src];
+	[pathField sizeToFit];
 	//NSLog(@"op is %@",self.op);
 	//NSLog(@"op src is %@",self.op.src);
 	switch (self.op.status)	{
 	case OpStatus_Pending:
-		[tabView selectTabViewItemAtIndex:0];
-		[statusField setStringValue:[self.op createStatusString]];
-		statusField.toolTip = nil;
+		//[statusField setStringValue:[self.op createStatusString]];
+		//statusField.toolTip = nil;
+		[statusField setHidden:YES];
+		[progressIndicator setDoubleValue:0.0];
+		[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_Preflight:
-		[tabView selectTabViewItemAtIndex:0];
 		//[statusField setStringValue:[self.op createStatusString]];
-		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
-		//statusField.toolTip = self.op.job.jobErrString;
-		statusField.toolTip = self.op.errString;
+		//[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
+		//statusField.toolTip = self.op.errString;
+		[statusField setHidden:YES];
+		[progressIndicator setDoubleValue:0.0];
+		[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_PreflightErr:
-		[tabView selectTabViewItemAtIndex:0];
 		//[statusField setStringValue:[self.op createStatusString]];
 		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
-		//statusField.toolTip = self.op.job.jobErrString;
 		statusField.toolTip = self.op.errString;
+		[statusField setHidden:NO];
+		[progressIndicator setDoubleValue:0.0];
+		[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_Complete:
-		[tabView selectTabViewItemAtIndex:0];
 		//[statusField setStringValue:[self.op createStatusString]];
 		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
 		statusField.toolTip = nil;
+		[statusField setHidden:NO];
+		[progressIndicator setDoubleValue:1.0];
+		[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_Err:
-		[tabView selectTabViewItemAtIndex:0];
 		//[statusField setStringValue:[self.op createStatusString]];
 		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
-		//statusField.toolTip = self.op.job.jobErrString;
 		statusField.toolTip = self.op.errString;
+		[statusField setHidden:NO];
+		[progressIndicator setDoubleValue:0.0];
+		[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_Analyze:
 	case OpStatus_Cleanup:
-		[tabView selectTabViewItemAtIndex:1];
 		[progressIndicator setDoubleValue:(self.op.job==nil) ? 0.0 : [self.op.job jobProgress]];
 		double			rawSecondsRemaining = self.op.job.jobTimeRemaining;
 		long			secondsRemaining = rawSecondsRemaining;
@@ -163,14 +172,46 @@ static NSMutableArray		*iconGenArray = nil;
 			[timeRemainingField setStringValue:[NSString stringWithFormat:@"%0.2ld:%0.2ld Remaining",minutesRemaining,secondsRemaining]];
 		else
 			[timeRemainingField setStringValue:[NSString stringWithFormat:@":%0.2ld Remaining",secondsRemaining]];
+		[timeRemainingField sizeToFit];
+		[timeRemainingField setHidden:NO];
 		
-		statusField.toolTip = nil;
+		//statusField.toolTip = nil;
+		[statusField setHidden:YES];
 		break;
 	}
 }
 
-- (IBAction) enableToggleUsed:(id)sender	{
+- (IBAction) showFileClicked:(id)sender	{
+	NSLog(@"%s",__func__);
+	if (self.op == nil)
+		return;
+	NSWorkspace			*ws = [NSWorkspace sharedWorkspace];
+	NSURL				*tmpURL = nil;
+	switch (self.op.status)	{
+	case OpStatus_Pending:
+	case OpStatus_Preflight:
+	case OpStatus_PreflightErr:
+	case OpStatus_Err:
+	case OpStatus_Analyze:
+	case OpStatus_Cleanup:
+		tmpURL = [NSURL fileURLWithPath:self.op.src isDirectory:NO];
+		break;
+	case OpStatus_Complete:
+		tmpURL = [NSURL fileURLWithPath:self.op.dst isDirectory:NO];
+		break;
+	}
+	
+	if (tmpURL == nil)
+		return;
+	
+	[ws activateFileViewerSelectingURLs:@[ tmpURL ]];
 }
 
 
 @end
+
+
+
+
+
+

@@ -47,7 +47,7 @@
 	self.progressIndicator = nil;
 	
 	self.buttonLayer = [[CALayer alloc] init];
-	self.buttonLayer.backgroundColor = [[NSColor lightGrayColor] CGColor];
+	//self.buttonLayer.backgroundColor = [[NSColor lightGrayColor] CGColor];
 	self.buttonLayer.frame = self.layer.bounds;
 	self.buttonLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
 	self.buttonLayer.mask = [[CALayer alloc] init];
@@ -56,8 +56,8 @@
 	
 	[self.layer addSublayer:self.buttonLayer];
 	
-	self.state = NSControlStateValueOff;
-	//self.state = NSControlStateValueOn;
+	self.state = ProgressButtonState_Inactive;
+	//self.state = ProgressButtonState_Active;
 	
 	[self _updateResources];
 	
@@ -68,7 +68,19 @@
 - (void) mouseDown:(NSEvent *)e	{
 	@synchronized (self)	{
 		self.mouseIsDown = YES;
-		self.state = (self.state == NSControlStateValueOn) ? NSControlStateValueOff : NSControlStateValueOn;
+		
+		switch (self.state)	{
+		case ProgressButtonState_Inactive:
+			self.state = ProgressButtonState_Active;
+			break;
+		case ProgressButtonState_Active:
+			self.state = ProgressButtonState_Inactive;
+			break;
+		case ProgressButtonState_Spinning:
+		case ProgressButtonState_CompletedSuccessfully:
+		case ProgressButtonState_CompletedError:
+			return;
+		}
 	}
 	
 	[self.target performSelector:self.action withObject:self];
@@ -133,14 +145,15 @@
 			self.progressIndicator = nil;
 		}
 		
-		
-		if (self.state == NSControlStateValueOn)	{
-			//self.buttonLayer.contents = [NSImage imageNamed:@"StopButton"];
-			//self.buttonLayer.mask = [[CALayer alloc] init];
-			//self.buttonLayer.mask.frame = self.bounds;
-			self.buttonLayer.mask.contents = [NSImage imageNamed:@"StopButton"];
-			//self.buttonLayer.frame = self.bounds;
-			
+		//	configure the spinner
+		switch (self.state)	{
+		case ProgressButtonState_Inactive:
+		case ProgressButtonState_CompletedSuccessfully:
+		case ProgressButtonState_CompletedError:
+			//	do nothing (leave the progress indicator nil)
+			break;
+		case ProgressButtonState_Active:
+		case ProgressButtonState_Spinning:
 			self.progressIndicator = [[ITProgressIndicator alloc] initWithFrame:[self bounds]];
 			self.progressIndicator.isIndeterminate = YES;
 			self.progressIndicator.animates = YES;
@@ -157,14 +170,32 @@
 			self.progressIndicator.lengthOfLine = tmpLength;
 			self.progressIndicator.innerMargin = tmpMargin;
 			self.progressIndicator.widthOfLine = 4.0;
+			break;
 		}
-		else	{
-			//self.buttonLayer.contents = [NSImage imageNamed:@"PlayButton"];
-			//self.buttonLayer.mask = [[CALayer alloc] init];
-			//self.buttonLayer.mask.frame = self.bounds;
+		
+		//	configure the button layer
+		switch (self.state)	{
+		case ProgressButtonState_Inactive:
 			self.buttonLayer.mask.contents = [NSImage imageNamed:@"PlayButton"];
-			//self.buttonLayer.frame = self.bounds;
+			self.buttonLayer.backgroundColor = [[NSColor lightGrayColor] CGColor];
+			self.buttonLayer.mask.hidden = NO;
+			break;
+		case ProgressButtonState_Active:
+			self.buttonLayer.mask.contents = [NSImage imageNamed:@"StopButton"];
+			self.buttonLayer.backgroundColor = [[NSColor lightGrayColor] CGColor];
+			self.buttonLayer.mask.hidden = NO;
+			break;
+		case ProgressButtonState_Spinning:
+		case ProgressButtonState_CompletedSuccessfully:
+			self.buttonLayer.mask.hidden = YES;
+			break;
+		case ProgressButtonState_CompletedError:
+			self.buttonLayer.mask.contents = [NSImage imageNamed:@"ic_error_outline"];
+			self.buttonLayer.backgroundColor = [[NSColor redColor] CGColor];
+			self.buttonLayer.mask.hidden = NO;
+			break;
 		}
+		
 	}
 }
 

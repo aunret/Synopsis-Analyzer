@@ -10,8 +10,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+
+
+typedef NS_ENUM(NSUInteger, ProgressButtonState)	{
+	ProgressButtonState_Inactive,	//	no spinner + play button
+	ProgressButtonState_Active,	//	spinning + stop button
+	ProgressButtonState_Spinning,	//	just the spinner (for watch folders)
+	ProgressButtonState_CompletedSuccessfully,
+	ProgressButtonState_CompletedError
+};
+
+
+
+
 @interface ProgressButton : NSControl <CALayerDelegate>
-@property (atomic,readwrite) NSControlStateValue state;
+@property (atomic,readwrite) ProgressButtonState state;
 @end
 
 NS_ASSUME_NONNULL_END

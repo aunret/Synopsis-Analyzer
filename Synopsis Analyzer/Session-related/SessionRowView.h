@@ -9,28 +9,28 @@
 #import <Cocoa/Cocoa.h>
 
 @class SynSession;
+@class ProgressButton;
 
 
 
 
 @interface SessionRowView : NSTableCellView	{
-	IBOutlet NSButton		*enableToggle;
 	IBOutlet NSImageView	*iconView;
 	IBOutlet NSTextField	*nameField;
-	IBOutlet NSPopUpButton	*presetPUB;
-	
-	IBOutlet NSTabView		*tabView;
+	//IBOutlet NSPopUpButton	*presetPUB;
 	
 	IBOutlet NSTextField	*descriptionField;
 	
 	IBOutlet NSProgressIndicator		*progressIndicator;
+	IBOutlet ProgressButton				*progressButton;
 }
 
 - (void) refreshWithSession:(SynSession *)n;
 - (void) refreshUI;
 
-- (IBAction) enableToggleUsed:(id)sender;
-- (IBAction) presetPUBItemSelected:(id)sender;
+//- (IBAction) enableToggleUsed:(id)sender;
+//- (IBAction) presetPUBItemSelected:(id)sender;
+- (IBAction) progressButtonUsed:(id)sender;
 - (IBAction) nameFieldUsed:(id)sender;
 
 @property (atomic,weak) SynSession * session;

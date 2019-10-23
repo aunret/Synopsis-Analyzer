@@ -62,6 +62,7 @@
 
 - (BOOL) processingFiles;
 - (BOOL) processingFilesFromSession:(SynSession *)n;
+- (void) makeSureRunningMaxPossibleOps;
 
 @end
 
