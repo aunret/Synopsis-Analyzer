@@ -92,6 +92,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 	//[self window];
+	
+	//	register to receive notifications that the concurrency settings have changed...
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(concurrencyChanged:) name:kSynopsisAnalyzerConcurrentJobAnalysisDidChangeNotification object:nil];
 }
 - (void) awakeFromNib	{
 	//NSLog(@"%s",__func__);
@@ -572,6 +575,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 				[tmpView refreshUI];
 		}
 	}
+}
+- (void) concurrencyChanged:(NSNotification *)note	{
+	[self makeSureRunningMaxPossibleOps];
 }
 
 
