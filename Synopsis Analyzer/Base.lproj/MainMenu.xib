@@ -853,7 +853,7 @@
                                                                             </constraints>
                                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ic_local_movies_white" id="9tm-HY-Fmg"/>
                                                                         </imageView>
-                                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="Su0-Eh-XuA" customClass="ProgressButton">
+                                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="Su0-Eh-XuA" customClass="SessionStateButton">
                                                                             <rect key="frame" x="427" y="3" width="42" height="42"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="42" id="U8a-my-BGe"/>

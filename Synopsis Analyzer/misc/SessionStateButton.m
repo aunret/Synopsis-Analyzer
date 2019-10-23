@@ -1,18 +1,18 @@
 //
-//  ProgressButton.m
+//  SessionStateButton.m
 //  ITProgressIndicator
 //
 //  Created by testAdmin on 10/22/19.
 //  Copyright © 2019 Ilija Tovilo. All rights reserved.
 //
 
-#import "ProgressButton.h"
+#import "SessionStateButton.h"
 #import "ITProgressIndicator.h"
 
 
 
 
-@interface ProgressButton ()
+@interface SessionStateButton ()
 - (void) generalInit;
 - (void) _updateResources;
 @property (strong,readwrite) ITProgressIndicator * progressIndicator;
@@ -23,7 +23,7 @@
 
 
 
-@implementation ProgressButton
+@implementation SessionStateButton
 
 - (id) initWithCoder:(NSCoder *)c	{
 	self = [super initWithCoder:c];
@@ -56,8 +56,8 @@
 	
 	[self.layer addSublayer:self.buttonLayer];
 	
-	self.state = ProgressButtonState_Inactive;
-	//self.state = ProgressButtonState_Active;
+	self.state = SSBState_Inactive;
+	//self.state = SSBState_Active;
 	
 	[self _updateResources];
 	
@@ -70,15 +70,15 @@
 		self.mouseIsDown = YES;
 		
 		switch (self.state)	{
-		case ProgressButtonState_Inactive:
-			self.state = ProgressButtonState_Active;
+		case SSBState_Inactive:
+			self.state = SSBState_Active;
 			break;
-		case ProgressButtonState_Active:
-			self.state = ProgressButtonState_Inactive;
+		case SSBState_Active:
+			self.state = SSBState_Inactive;
 			break;
-		case ProgressButtonState_Spinning:
-		case ProgressButtonState_CompletedSuccessfully:
-		case ProgressButtonState_CompletedError:
+		case SSBState_Spinning:
+		case SSBState_CompletedSuccessfully:
+		case SSBState_CompletedError:
 			return;
 		}
 	}
@@ -147,13 +147,13 @@
 		
 		//	configure the spinner
 		switch (self.state)	{
-		case ProgressButtonState_Inactive:
-		case ProgressButtonState_CompletedSuccessfully:
-		case ProgressButtonState_CompletedError:
+		case SSBState_Inactive:
+		case SSBState_CompletedSuccessfully:
+		case SSBState_CompletedError:
 			//	do nothing (leave the progress indicator nil)
 			break;
-		case ProgressButtonState_Active:
-		case ProgressButtonState_Spinning:
+		case SSBState_Active:
+		case SSBState_Spinning:
 			self.progressIndicator = [[ITProgressIndicator alloc] initWithFrame:[self bounds]];
 			self.progressIndicator.isIndeterminate = YES;
 			self.progressIndicator.animates = YES;
@@ -175,21 +175,21 @@
 		
 		//	configure the button layer
 		switch (self.state)	{
-		case ProgressButtonState_Inactive:
+		case SSBState_Inactive:
 			self.buttonLayer.mask.contents = [NSImage imageNamed:@"PlayButton"];
 			self.buttonLayer.backgroundColor = [[NSColor lightGrayColor] CGColor];
 			self.buttonLayer.mask.hidden = NO;
 			break;
-		case ProgressButtonState_Active:
+		case SSBState_Active:
 			self.buttonLayer.mask.contents = [NSImage imageNamed:@"StopButton"];
 			self.buttonLayer.backgroundColor = [[NSColor lightGrayColor] CGColor];
 			self.buttonLayer.mask.hidden = NO;
 			break;
-		case ProgressButtonState_Spinning:
-		case ProgressButtonState_CompletedSuccessfully:
+		case SSBState_Spinning:
+		case SSBState_CompletedSuccessfully:
 			self.buttonLayer.mask.hidden = YES;
 			break;
-		case ProgressButtonState_CompletedError:
+		case SSBState_CompletedError:
 			self.buttonLayer.mask.contents = [NSImage imageNamed:@"ic_error_outline"];
 			self.buttonLayer.backgroundColor = [[NSColor redColor] CGColor];
 			self.buttonLayer.mask.hidden = NO;

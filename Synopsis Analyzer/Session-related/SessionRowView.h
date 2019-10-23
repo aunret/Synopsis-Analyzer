@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class SynSession;
-@class ProgressButton;
+@class SessionStateButton;
 
 
 
@@ -22,7 +22,7 @@
 	IBOutlet NSTextField	*descriptionField;
 	
 	IBOutlet NSProgressIndicator		*progressIndicator;
-	IBOutlet ProgressButton				*progressButton;
+	IBOutlet SessionStateButton				*progressButton;
 }
 
 - (void) refreshWithSession:(SynSession *)n;
