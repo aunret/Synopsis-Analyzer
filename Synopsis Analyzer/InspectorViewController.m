@@ -81,7 +81,6 @@ static InspectorViewController		*globalInspectorViewController = nil;
 	//NSLog(@"%s",__func__);
 }
 - (void) transitionToViewController:(NSViewController *)inVC	{
-	//NSLog(@"%s ... %@",__func__,inVC);
 	NSViewControllerTransitionOptions		opt = NSViewControllerTransitionSlideRight;
 	
 	NSViewController		*oldVC = self.currentViewController;
@@ -92,13 +91,15 @@ static InspectorViewController		*globalInspectorViewController = nil;
 	self.currentViewController = newVC;
 	
 	[self addChildViewController:newVC];
-	[newVC.view setFrame:oldVC.view.bounds];
+	//[newVC.view setFrame:oldVC.view.bounds];
+	
 	[self
 		transitionFromViewController:oldVC
 		toViewController:newVC
 		options:opt
 		completionHandler:^{
 			[oldVC removeFromParentViewController];
+			[self.currentViewController.view setFrame:self.view.bounds];
 		}];
 }
 

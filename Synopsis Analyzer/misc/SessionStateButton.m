@@ -40,7 +40,7 @@
 	return self;
 }
 - (void) generalInit	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	[self setWantsLayer:YES];
 	self.layer.delegate = self;
 	
@@ -91,7 +91,7 @@
 
 /*
 - (void) drawRect:(NSRect)r	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	//[super drawRect:r];
 	[[NSColor redColor] set];
 	NSRectFill(self.bounds);

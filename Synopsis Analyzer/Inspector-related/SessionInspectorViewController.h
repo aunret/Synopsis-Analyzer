@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface SessionInspectorViewController : NSViewController	{
+	IBOutlet NSTabView				*sessionStateTabView;
+	
 	IBOutlet NSPopUpButton			*presetsPUB;
 	IBOutlet NSTextField			*presetDescriptionField;
 	

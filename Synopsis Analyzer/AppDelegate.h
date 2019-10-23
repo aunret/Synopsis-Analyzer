@@ -22,8 +22,8 @@
 	IBOutlet NSView					*previewSubview;
 }
 
-- (void) showPreview;
-- (void) hidePreview;
+//- (void) showPreview;
+//- (void) hidePreview;
 
 - (IBAction) openMovies:(id)sender;
 - (IBAction) openPreferences:(id)sender;

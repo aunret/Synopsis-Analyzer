@@ -216,11 +216,11 @@ static NSString						*localFileDragType = @"localFileDragType";
 		[clearItem setEnabled:NO];
 		
 		//	deselect everything in the outline view
-		[outlineView deselectAll:nil];
-		[self outlineViewSelectionDidChange:nil];
+		//[outlineView deselectAll:nil];
+		//[self outlineViewSelectionDidChange:nil];
 		
 		//	hide the preview
-		[appDelegate hidePreview];
+		//[appDelegate hidePreview];
 		
 		//	update ivars
 		self.running = YES;
@@ -268,11 +268,11 @@ static NSString						*localFileDragType = @"localFileDragType";
 		[clearItem setEnabled:NO];
 		
 		//	deselect everything in the outline view
-		[outlineView deselectAll:nil];
-		[self outlineViewSelectionDidChange:nil];
+		//[outlineView deselectAll:nil];
+		//[self outlineViewSelectionDidChange:nil];
 		
 		//	hide the preview
-		[appDelegate hidePreview];
+		//[appDelegate hidePreview];
 		
 		//	update ivars
 		self.running = YES;
@@ -383,7 +383,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 		[clearItem setEnabled:YES];
 		
 		//	show the preview
-		[appDelegate showPreview];
+		//[appDelegate showPreview];
 		
 		//	update ivars
 		self.running = NO;
@@ -432,12 +432,18 @@ static NSString						*localFileDragType = @"localFileDragType";
 }
 - (void) makeSureRunningMaxPossibleOps	{
 	@synchronized (self)	{
-		//	it's possible that an op state change occurred juuust as pausing, and as such we may have fewer jobs than we should...
 		NSArray<SynOp*>		*opsToStart = [self getOpsToStart:(self.maxOpCount - self.opsInProgress.count)];
+		NSMutableArray		*sessionsToReInspect = [NSMutableArray arrayWithCapacity:0];
 		for (SynOp *opToStart in opsToStart)	{
+			if (opToStart.session != nil && [sessionsToReInspect indexOfObjectIdenticalTo:opToStart.session] == NSNotFound)
+				[sessionsToReInspect addObject:opToStart.session];
 			[self.opsInProgress addObject:opToStart];
 			[LogController appendVerboseLog:[NSString stringWithFormat:@"Starting analysis on %@",opToStart.src.lastPathComponent]];
 			[opToStart start];
+		}
+		//	run through the sessions of the ops we just started, update the inspector if any of them are inspected
+		for (SynSession *session in sessionsToReInspect)	{
+			[[InspectorViewController global] reloadInspectorIfInspected:session];
 		}
 	}
 }
@@ -744,8 +750,19 @@ static NSString						*localFileDragType = @"localFileDragType";
 
 
 - (void) reloadData	{
+	NSInteger		selectedRow = [outlineView selectedRow];
+	id				tmpObj = (selectedRow==NSNotFound || selectedRow<0) ? nil : [outlineView itemAtRow:selectedRow];
+	
 	[outlineView reloadData];
 	[self restoreExpandStates];
+	
+	if (tmpObj != nil)	{
+		NSInteger		newSelectedRow = [outlineView rowForItem:tmpObj];
+		if (newSelectedRow != NSNotFound && newSelectedRow >= 0)
+			[outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:newSelectedRow] byExtendingSelection:NO];
+	}
+	
+	[self outlineViewSelectionDidChange:nil];
 }
 - (void) reloadRowForItem:(id)n	{
 	if (n == nil)
@@ -854,6 +871,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 		}
 		
 	}
+	
+	//	if the session that owns this op is inspected, we may need to reload the inspector now...
+	[[InspectorViewController global] reloadInspectorIfInspected:n.session];
 }
 
 
@@ -979,8 +999,24 @@ static NSString						*localFileDragType = @"localFileDragType";
 	return YES;
 }
 - (BOOL) outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item	{
-	if (self.running)
-		return NO;
+	//NSLog(@"%s ... %@",__func__,item);
+	
+	//if (self.running)
+	//	return NO;
+	
+	/*
+	if ([item isKindOfClass:[SynOp class]])
+		return YES;
+	
+	//	don't allow the user to inspect any sessions that are currently running any jobs
+	if ([item isKindOfClass:[SynSession class]])	{
+		SynSession		*recast = (SynSession *)item;
+		if ([self processingFilesFromSession:recast])
+			return NO;
+		return YES;
+	}
+	*/
+	
 	return YES;
 }
 

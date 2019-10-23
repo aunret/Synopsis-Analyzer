@@ -12,6 +12,7 @@
 #import "PrefsController.h"
 #import "NSPopUpButtonAdditions.h"
 #import "InspectorViewController.h"
+#import "SessionController.h"
 
 
 
@@ -217,6 +218,13 @@
 	if (self.inspectedObject == nil)	{
 		return;
 	}
+	
+	if ([[SessionController global] processingFilesFromSession:self.inspectedObject])	{
+		[sessionStateTabView selectTabViewItemAtIndex:1];
+		return;
+	}
+	
+	[sessionStateTabView selectTabViewItemAtIndex:0];
 	
 	//	populate the presets PUB
 	if (self.inspectedObject.preset != nil)	{

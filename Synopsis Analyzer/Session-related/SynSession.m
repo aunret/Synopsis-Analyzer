@@ -440,7 +440,7 @@
 	@synchronized (self.ops)	{
 		double		maxVal = 0.0;
 		double		currentVal = 0.0;
-		BOOL		hideProgressBar = YES;
+		//BOOL		hideProgressBar = YES;
 		for (SynOp *op in self.ops)	{
 			switch (op.status)	{
 			case OpStatus_Pending:
@@ -449,7 +449,7 @@
 			case OpStatus_Preflight:
 			case OpStatus_Analyze:
 			case OpStatus_Cleanup:
-				hideProgressBar = NO;
+				//hideProgressBar = NO;
 				if (op.job != nil)
 					currentVal += op.job.jobProgress;
 				maxVal += 1.0;
@@ -463,8 +463,8 @@
 			}
 		}
 		returnMe = currentVal/maxVal;
-		if (hideProgressBar)
-			returnMe = -1.0;
+		//if (hideProgressBar)
+		//	returnMe = -1.0;
 	}
 	return returnMe;
 }
@@ -539,9 +539,11 @@
 	}
 }
 - (BOOL) processedAllOps	{
+	//NSLog(@"%s",__func__);
 	BOOL			returnMe = YES;
 	@synchronized (self)	{
 		for (SynOp *op in self.ops)	{
+			//NSLog(@"\top %@ has status %ld",op,op.status);
 			switch (op.status)	{
 			case OpStatus_Pending:
 			case OpStatus_Analyze:

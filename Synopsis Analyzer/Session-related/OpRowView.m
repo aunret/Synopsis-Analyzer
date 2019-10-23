@@ -182,7 +182,7 @@ static NSMutableArray		*iconGenArray = nil;
 }
 
 - (IBAction) showFileClicked:(id)sender	{
-	NSLog(@"%s",__func__);
+	//NSLog(@"%s",__func__);
 	if (self.op == nil)
 		return;
 	NSWorkspace			*ws = [NSWorkspace sharedWorkspace];

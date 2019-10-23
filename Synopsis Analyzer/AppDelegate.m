@@ -330,7 +330,7 @@
 
 #pragma mark - NSViewAnimationDelegate & related
 
-
+/*
 - (void) animationDidEnd:(NSAnimation *)animation	{
 	@synchronized (self)	{
 		self.previewAnimation = nil;
@@ -397,6 +397,6 @@
 		[self.previewAnimation startAnimation];
 	}
 }
-
+*/
 
 @end

@@ -55,7 +55,6 @@ typedef NS_ENUM(NSUInteger, SessionState)	{
 - (SynOp *) createOpForSrcURL:(NSURL *_Nonnull)n;
 - (NSString *_Nonnull) createDescriptionString;
 
-//	returns -1 if session isn't being processed yet, for any reason (disabled, all pending, all complete/err, etc)
 - (double) calculateProgress;
 //	returns a YES only if all ops have been processed (all ops' states are either an err or complete)
 - (BOOL) processedAllOps;
