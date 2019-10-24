@@ -51,7 +51,8 @@
 	self.buttonLayer.frame = self.layer.bounds;
 	self.buttonLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
 	self.buttonLayer.mask = [[CALayer alloc] init];
-	self.buttonLayer.mask.frame = NSInsetRect(self.buttonLayer.bounds, 12.0, 12.0);
+	double			insetAmount = self.buttonLayer.bounds.size.width * 0.72;
+	self.buttonLayer.mask.frame = NSInsetRect(self.buttonLayer.bounds, insetAmount, insetAmount);
 	self.buttonLayer.mask.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
 	
 	[self.layer addSublayer:self.buttonLayer];
@@ -136,6 +137,15 @@
 	[self _updateResources];
 }
 */
+- (void) updateConstraints	{
+	//NSLog(@"%s",__func__);
+	[super updateConstraints];
+	[self _updateResources];
+}
+- (void) drawRect:(NSRect)r	{
+	if (self.progressIndicator == nil)
+		[self _updateResources];
+}
 
 
 - (void) _updateResources	{
@@ -145,31 +155,43 @@
 			self.progressIndicator = nil;
 		}
 		
+		//	update the button layer dims
+		double			insetAmount = self.buttonLayer.bounds.size.width * 0.72;
+		self.buttonLayer.mask.frame = NSInsetRect(self.buttonLayer.bounds, insetAmount, insetAmount);
+		
 		//	configure the spinner
 		switch (self.state)	{
 		case SSBState_Inactive:
 		case SSBState_CompletedSuccessfully:
 		case SSBState_CompletedError:
-			//	do nothing (leave the progress indicator nil)
+			//	don't leave the progress indicator nil, but don't add it to the hierarchy
+			self.progressIndicator = [[ITProgressIndicator alloc] initWithFrame:NSMakeRect(0,0,4,4)];
 			break;
 		case SSBState_Active:
 		case SSBState_Spinning:
-			self.progressIndicator = [[ITProgressIndicator alloc] initWithFrame:[self bounds]];
-			self.progressIndicator.isIndeterminate = YES;
-			self.progressIndicator.animates = YES;
-			self.progressIndicator.color = [NSColor lightGrayColor];
-	
-			self.progressIndicator.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-	
-			[self addSubview:self.progressIndicator];
-	
-			NSRect			tmpRect = self.progressIndicator.frame;
-			double			tmpDimension = (tmpRect.size.width < tmpRect.size.height) ? tmpRect.size.width/2.0 : tmpRect.size.height/2.0;
-			double			tmpMargin = tmpDimension * 0.5;
-			double			tmpLength = tmpDimension * 0.3;
-			self.progressIndicator.lengthOfLine = tmpLength;
-			self.progressIndicator.innerMargin = tmpMargin;
-			self.progressIndicator.widthOfLine = 4.0;
+			{
+				NSRect		tmpRect = [self bounds];
+				if (tmpRect.size.width<1 || tmpRect.size.height < 1)	{
+					//NSLog(@"ERR: bounds %@ in %s",NSStringFromRect(tmpRect),__func__);
+					return;
+				}
+				self.progressIndicator = [[ITProgressIndicator alloc] initWithFrame:[self bounds]];
+				self.progressIndicator.isIndeterminate = YES;
+				self.progressIndicator.animates = YES;
+				self.progressIndicator.color = [NSColor lightGrayColor];
+		
+				self.progressIndicator.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+		
+				[self addSubview:self.progressIndicator];
+		
+				tmpRect = self.progressIndicator.frame;
+				double			tmpDimension = (tmpRect.size.width < tmpRect.size.height) ? tmpRect.size.width/2.0 : tmpRect.size.height/2.0;
+				double			tmpMargin = tmpDimension * 0.5;
+				double			tmpLength = tmpDimension * 0.3;
+				self.progressIndicator.lengthOfLine = tmpLength;
+				self.progressIndicator.innerMargin = tmpMargin;
+				self.progressIndicator.widthOfLine = 4.0;
+			}
 			break;
 		}
 		

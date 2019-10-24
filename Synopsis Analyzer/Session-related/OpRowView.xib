@@ -30,7 +30,7 @@
                     <rect key="frame" x="58" y="13" width="406" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </progressIndicator>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f7a-h7-Auc">
+                <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f7a-h7-Auc">
                     <rect key="frame" x="433" y="2" width="33" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Label" id="ptA-5G-MGu">
@@ -40,10 +40,10 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nnz-sN-VxZ">
-                    <rect key="frame" x="352" y="30" width="114" height="17"/>
+                    <rect key="frame" x="352" y="30" width="114" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Ready" id="shm-LA-jPZ">
-                        <font key="font" metaFont="system"/>
+                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Ready" id="shm-LA-jPZ">
+                        <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>

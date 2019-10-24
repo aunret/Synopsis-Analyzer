@@ -13,7 +13,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7JJ-i2-0KU">
-                    <rect key="frame" x="56" y="30" width="365" height="17"/>
+                    <rect key="frame" x="56" y="30" width="201" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" selectable="YES" editable="YES" title="Session name" id="544-LP-MKk">
                         <font key="font" metaFont="system"/>
@@ -41,7 +41,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </progressIndicator>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vMV-7z-YUd">
-                    <rect key="frame" x="213" y="3" width="208" height="11"/>
+                    <rect key="frame" x="261" y="33" width="160" height="11"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="right" title="(XXX files, XXX files to analyze)" id="yXQ-fB-1M3">
                         <font key="font" metaFont="miniSystem"/>

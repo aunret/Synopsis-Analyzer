@@ -336,6 +336,48 @@
 	return returnMe;
 }
 - (NSString *) createDescriptionString	{
+	int			toBeAnalyzedCount = 0;
+	int			doneAnalyzingCount = 0;
+	
+	@synchronized (self)	{
+		for (SynOp *op in self.ops)	{
+			if (op.type == OpType_AVFFile)	{
+				++toBeAnalyzedCount;
+				switch (op.status)	{
+				case OpStatus_Pending:
+				case OpStatus_Cleanup:
+				case OpStatus_Analyze:
+					break;
+				case OpStatus_PreflightErr:
+				case OpStatus_Complete:
+				case OpStatus_Err:
+					++doneAnalyzingCount;
+					break;
+				}
+			}
+		}
+	}
+	int			analyzeCount = toBeAnalyzedCount - doneAnalyzingCount;
+	if (toBeAnalyzedCount == 0)
+		return [NSString stringWithFormat:@"(No files)"];
+	if (toBeAnalyzedCount == 1)	{
+		if (analyzeCount == 0)
+			return @"(1 file, 0 files to analyze)";
+		else
+			return @"(1 file, 1 files to analyze)";
+	}
+	else	{
+		if (analyzeCount == 0)
+			return [NSString stringWithFormat:@"(%d files, 0 files to analyze)",toBeAnalyzedCount];
+		else if (analyzeCount == 1)
+			return [NSString stringWithFormat:@"(%d files, 1 file to analyze)",toBeAnalyzedCount];
+		else
+			return [NSString stringWithFormat:@"(%d files, %d files to analyze)",toBeAnalyzedCount,analyzeCount];
+	}
+	
+	
+	
+	/*
 	int				totalCount = 0;
 	int				analyzeCount = 0;
 	@synchronized (self)	{
@@ -361,6 +403,7 @@
 		else
 			return [NSString stringWithFormat:@"(%d files, %d files to analyze)",totalCount,analyzeCount];
 	}
+	*/
 }
 
 @synthesize copyNonMediaFiles=myCopyNonMediaFiles;

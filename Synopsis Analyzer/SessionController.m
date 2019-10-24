@@ -104,7 +104,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 		
 		[outlineView registerNib:[[NSNib alloc] initWithNibNamed:@"SessionRowView" bundle:[NSBundle mainBundle]] forIdentifier:@"SessionRowView"];
 		[outlineView registerNib:[[NSNib alloc] initWithNibNamed:@"OpRowView" bundle:[NSBundle mainBundle]] forIdentifier:@"OpRowView"];
-		[outlineView setRowHeight:48.0];
+		[outlineView setRowHeight:64.0];
 		
 		[stopButton setEnabled:NO];
 	

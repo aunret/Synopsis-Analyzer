@@ -72,13 +72,13 @@
 	[progressIndicator.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
 	[progressIndicator.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-3.0].active = true;
 	
-	//	name field sprouts off the progress bar
+	//	name field sprouts off the progress bar, limited by width of description field
 	[nameField.leadingAnchor constraintEqualToAnchor:iconView.trailingAnchor constant:3.0].active = true;
-	[nameField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:1.0].active = true;
+	[nameField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:0.0].active = true;
 	[nameField.trailingAnchor constraintEqualToAnchor:descriptionField.leadingAnchor constant:-8.0].active = true;
 	
 	//	description field sprouts off the progress bar
-	[descriptionField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:1.0].active = true;
+	[descriptionField.centerYAnchor constraintEqualToAnchor:nameField.centerYAnchor constant:0.0].active = true;
 	[descriptionField.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-3.0].active = true;
 	
 }
@@ -154,6 +154,10 @@
 	case SSBState_Inactive:
 		//	make the session inactive, but don't kill any in-progress jobs
 		self.session.state = SessionState_Inactive;
+		//	tell the session controller to update the UI on the various op rows i have (they need to display "Pending")
+		for (SynOp *op in self.session.ops)	{
+			[[SessionController global] reloadRowForItem:op];
+		}
 		break;
 	case SSBState_Active:
 		{
@@ -164,6 +168,10 @@
 				[sc startButDontChangeSessionStates];
 			}
 			[sc makeSureRunningMaxPossibleOps];
+			//	tell the session controller to update the UI on the various op rows i have (they need to display "Pending")
+			for (SynOp *op in self.session.ops)	{
+				[sc reloadRowForItem:op];
+			}
 		}
 		break;
 	case SSBState_Spinning:

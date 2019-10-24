@@ -9,6 +9,7 @@
 #import "OpRowView.h"
 
 #import "SynOp.h"
+#import "SynSession.h"
 
 
 
@@ -91,7 +92,7 @@ static NSMutableArray		*iconGenArray = nil;
 	[progressIndicator setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[pathField setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[showFileButton setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[timeRemainingField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	//[timeRemainingField setTranslatesAutoresizingMaskIntoConstraints:NO];
 	
 	//	preview pinned to the left
 	[preview.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3.0].active = true;
@@ -109,23 +110,26 @@ static NSMutableArray		*iconGenArray = nil;
 	[nameField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:1.0].active = true;
 	[nameField.trailingAnchor constraintEqualToAnchor:statusField.leadingAnchor constant:-8.0].active = true;
 	
-	//	status field sprouts off the progress bar
+	//	status field sprouts off the progress bar, is limited to width of superview
 	[statusField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:1.0].active = true;
 	[statusField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3.0].active = true;
 	
+	//	time remaining field sprouts off the progress bar
+	//[timeRemainingField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3.0].active = true;
+	//[timeRemainingField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:-1.0].active = true;
+	
 	//	path field sprouts off the progress bar
 	[pathField.leadingAnchor constraintEqualToAnchor:nameField.leadingAnchor constant:0.0].active = true;
+	//[pathField.centerYAnchor constraintEqualToAnchor:timeRemainingField.centerYAnchor constant:0.0].active = true;
 	[pathField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:-1.0].active = true;
 	
 	//	show file button sprouts off the path field
 	[showFileButton.leadingAnchor constraintEqualToAnchor:pathField.trailingAnchor constant:3.0].active = true;
 	[showFileButton.centerYAnchor constraintEqualToAnchor:pathField.centerYAnchor constant:0.0].active = true;
+	[showFileButton.trailingAnchor constraintLessThanOrEqualToAnchor:self.trailingAnchor constant:0.0].active = true;
+	//[showFileButton.trailingAnchor constraintLessThanOrEqualToAnchor:timeRemainingField.leadingAnchor constant:-3.0].active = true;
 	[showFileButton.widthAnchor constraintEqualToConstant:20].active = true;
 	[showFileButton.heightAnchor constraintEqualToConstant:15].active = true;
-	
-	//	time remaining field sprouts off the progress bar
-	[timeRemainingField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3.0].active = true;
-	[timeRemainingField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:-1.0].active = true;
 }
 
 
@@ -134,6 +138,7 @@ static NSMutableArray		*iconGenArray = nil;
 	[self refreshUI];
 }
 - (void) refreshUI	{
+	//NSLog(@"%s ... %@",__func__,self.op);
 	if (self.op == nil)	{
 		[preview setImage:nil];
 		[nameField setStringValue:@""];
@@ -141,7 +146,7 @@ static NSMutableArray		*iconGenArray = nil;
 		[progressIndicator setDoubleValue:0.0];
 		[pathField setStringValue:@"XXX"];
 		[pathField sizeToFit];
-		[timeRemainingField setStringValue:@"XXX"];
+		//[timeRemainingField setStringValue:@"XXX"];
 		return;
 	}
 	
@@ -159,11 +164,16 @@ static NSMutableArray		*iconGenArray = nil;
 	//NSLog(@"op src is %@",self.op.src);
 	switch (self.op.status)	{
 	case OpStatus_Pending:
-		//[statusField setStringValue:[self.op createStatusString]];
-		//statusField.toolTip = nil;
-		[statusField setHidden:YES];
+		if (self.op.session.state == SessionState_Active)	{
+			[statusField setStringValue:[self.op createStatusString]];
+			//statusField.toolTip = nil;
+			[statusField sizeToFit];
+			[statusField setHidden:NO];
+		}
+		else
+			[statusField setHidden:YES];
 		[progressIndicator setDoubleValue:0.0];
-		[timeRemainingField setHidden:YES];
+		//[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_Preflight:
 		//[statusField setStringValue:[self.op createStatusString]];
@@ -171,23 +181,25 @@ static NSMutableArray		*iconGenArray = nil;
 		//statusField.toolTip = self.op.errString;
 		[statusField setHidden:YES];
 		[progressIndicator setDoubleValue:0.0];
-		[timeRemainingField setHidden:YES];
+		//[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_PreflightErr:
 		//[statusField setStringValue:[self.op createStatusString]];
 		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
 		statusField.toolTip = self.op.errString;
+		[statusField sizeToFit];
 		[statusField setHidden:NO];
 		[progressIndicator setDoubleValue:0.0];
-		[timeRemainingField setHidden:YES];
+		//[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_Complete:
 		//[statusField setStringValue:[self.op createStatusString]];
 		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
 		statusField.toolTip = nil;
+		[statusField sizeToFit];
 		[statusField setHidden:NO];
 		[progressIndicator setDoubleValue:1.0];
-		[timeRemainingField setHidden:YES];
+		//[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_Err:
 		//[statusField setStringValue:[self.op createStatusString]];
@@ -195,7 +207,7 @@ static NSMutableArray		*iconGenArray = nil;
 		statusField.toolTip = self.op.errString;
 		[statusField setHidden:NO];
 		[progressIndicator setDoubleValue:0.0];
-		[timeRemainingField setHidden:YES];
+		//[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_Analyze:
 	case OpStatus_Cleanup:
@@ -210,6 +222,16 @@ static NSMutableArray		*iconGenArray = nil;
 		minutesRemaining -= (hoursRemaining * 60);
 		
 		if (hoursRemaining > 0)
+			[statusField setStringValue:[NSString stringWithFormat:@"%ld:%0.2ld:%0.2ld Remaining",hoursRemaining,minutesRemaining,secondsRemaining]];
+		else if (minutesRemaining > 0)
+			[statusField setStringValue:[NSString stringWithFormat:@"%0.2ld:%0.2ld Remaining",minutesRemaining,secondsRemaining]];
+		else
+			[statusField setStringValue:[NSString stringWithFormat:@":%0.2ld Remaining",secondsRemaining]];
+		[statusField sizeToFit];
+		[statusField setHidden:NO];
+		
+		/*
+		if (hoursRemaining > 0)
 			[timeRemainingField setStringValue:[NSString stringWithFormat:@"%ld:%0.2ld:%0.2ld Remaining",hoursRemaining,minutesRemaining,secondsRemaining]];
 		else if (minutesRemaining > 0)
 			[timeRemainingField setStringValue:[NSString stringWithFormat:@"%0.2ld:%0.2ld Remaining",minutesRemaining,secondsRemaining]];
@@ -217,9 +239,10 @@ static NSMutableArray		*iconGenArray = nil;
 			[timeRemainingField setStringValue:[NSString stringWithFormat:@":%0.2ld Remaining",secondsRemaining]];
 		[timeRemainingField sizeToFit];
 		[timeRemainingField setHidden:NO];
+		*/
 		
 		//statusField.toolTip = nil;
-		[statusField setHidden:YES];
+		//[statusField setHidden:YES];
 		break;
 	}
 }
