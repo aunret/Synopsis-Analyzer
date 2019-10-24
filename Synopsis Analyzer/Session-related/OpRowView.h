@@ -22,6 +22,7 @@
 	IBOutlet NSProgressIndicator		*progressIndicator;
 	
 	IBOutlet NSTextField	*pathField;
+	IBOutlet NSButton		*showFileButton;
 	IBOutlet NSTextField	*timeRemainingField;
 }
 

@@ -101,6 +101,11 @@ static NSString						*localFileDragType = @"localFileDragType";
 	if (!self.wokeUpOnce)	{
 		//[dropView setDragDelegate:self];
 		outlineView.outlineTableColumn = theColumn;
+		
+		[outlineView registerNib:[[NSNib alloc] initWithNibNamed:@"SessionRowView" bundle:[NSBundle mainBundle]] forIdentifier:@"SessionRowView"];
+		[outlineView registerNib:[[NSNib alloc] initWithNibNamed:@"OpRowView" bundle:[NSBundle mainBundle]] forIdentifier:@"OpRowView"];
+		[outlineView setRowHeight:48.0];
+		
 		[stopButton setEnabled:NO];
 	
 		[outlineView registerForDraggedTypes:@[ NSPasteboardTypeFileURL, localFileDragType ]];

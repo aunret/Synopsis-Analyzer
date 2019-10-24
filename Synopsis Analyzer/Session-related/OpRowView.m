@@ -84,6 +84,49 @@ static NSMutableArray		*iconGenArray = nil;
 }
 - (void) generalInit	{
 }
+- (void) awakeFromNib	{
+	[preview setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[nameField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[statusField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[progressIndicator setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[pathField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[showFileButton setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[timeRemainingField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	
+	//	preview pinned to the left
+	[preview.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3.0].active = true;
+	[preview.topAnchor constraintEqualToAnchor:self.topAnchor constant:3.0].active = true;
+	[preview.heightAnchor constraintEqualToAnchor:self.heightAnchor multiplier:1.0 constant:-6.0].active = true;
+	[preview.widthAnchor constraintEqualToAnchor:preview.heightAnchor multiplier:1.0 constant:0.0].active = true;
+	
+	//	progress bar centered vertically
+	[progressIndicator.leadingAnchor constraintEqualToAnchor:nameField.leadingAnchor constant:0.0].active = true;
+	[progressIndicator.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:1.0].active = true;
+	[progressIndicator.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3.0].active = true;
+	
+	//	name field sprouts off the progress bar, limited to the width of the status field
+	[nameField.leadingAnchor constraintEqualToAnchor:preview.trailingAnchor constant:3.0].active = true;
+	[nameField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:1.0].active = true;
+	[nameField.trailingAnchor constraintEqualToAnchor:statusField.leadingAnchor constant:-8.0].active = true;
+	
+	//	status field sprouts off the progress bar
+	[statusField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:1.0].active = true;
+	[statusField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3.0].active = true;
+	
+	//	path field sprouts off the progress bar
+	[pathField.leadingAnchor constraintEqualToAnchor:nameField.leadingAnchor constant:0.0].active = true;
+	[pathField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:-1.0].active = true;
+	
+	//	show file button sprouts off the path field
+	[showFileButton.leadingAnchor constraintEqualToAnchor:pathField.trailingAnchor constant:3.0].active = true;
+	[showFileButton.centerYAnchor constraintEqualToAnchor:pathField.centerYAnchor constant:0.0].active = true;
+	[showFileButton.widthAnchor constraintEqualToConstant:20].active = true;
+	[showFileButton.heightAnchor constraintEqualToConstant:15].active = true;
+	
+	//	time remaining field sprouts off the progress bar
+	[timeRemainingField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3.0].active = true;
+	[timeRemainingField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:-1.0].active = true;
+}
 
 
 - (void) refreshWithOp:(SynOp *)n	{

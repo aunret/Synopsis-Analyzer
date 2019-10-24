@@ -48,6 +48,39 @@
 	[self setWantsLayer:YES];
 }
 - (void) awakeFromNib	{
+	
+	[iconView setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[nameField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[descriptionField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[progressIndicator setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[progressButton setTranslatesAutoresizingMaskIntoConstraints:NO];
+	
+	//	button pinned to the right
+	[progressButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3.0].active = true;
+	[progressButton.topAnchor constraintEqualToAnchor:self.topAnchor constant:3.0].active = true;
+	[progressButton.heightAnchor constraintEqualToAnchor:self.heightAnchor multiplier:1.0 constant:-6.0].active = true;
+	[progressButton.widthAnchor constraintEqualToAnchor:progressButton.heightAnchor multiplier:1.0 constant:0.0].active = true;
+	
+	//	icon pinned to the left
+	[iconView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3.0].active = true;
+	[iconView.topAnchor constraintEqualToAnchor:self.topAnchor constant:3.0].active = true;
+	[iconView.heightAnchor constraintEqualToAnchor:self.heightAnchor multiplier:1.0 constant:-6.0].active = true;
+	[iconView.widthAnchor constraintEqualToAnchor:iconView.heightAnchor multiplier:1.0 constant:0.0].active = true;
+	
+	//	progress bar centered vertically
+	[progressIndicator.leadingAnchor constraintEqualToAnchor:iconView.trailingAnchor constant:3.0].active = true;
+	[progressIndicator.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
+	[progressIndicator.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-3.0].active = true;
+	
+	//	name field sprouts off the progress bar
+	[nameField.leadingAnchor constraintEqualToAnchor:iconView.trailingAnchor constant:3.0].active = true;
+	[nameField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:1.0].active = true;
+	[nameField.trailingAnchor constraintEqualToAnchor:descriptionField.leadingAnchor constant:-8.0].active = true;
+	
+	//	description field sprouts off the progress bar
+	[descriptionField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:1.0].active = true;
+	[descriptionField.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-3.0].active = true;
+	
 }
 
 
