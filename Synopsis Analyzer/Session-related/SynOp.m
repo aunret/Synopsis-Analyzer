@@ -246,19 +246,19 @@ static NSImage				*genericMovieImage = nil;
 				unsigned char		*rgbPixels = (unsigned char *)[decodedFrame rgbData];
 				size_t				rgbPixelsLength = [decodedFrame rgbDataSize];
 				NSSize				rgbPixelsSize = [decodedFrame rgbImgSize];
-				NSBitmapImageRep	*bitRep = [[NSBitmapImageRep alloc]
-					initWithBitmapDataPlanes:&rgbPixels
-					pixelsWide:rgbPixelsSize.width
-					pixelsHigh:rgbPixelsSize.height
-					bitsPerSample:8
-					samplesPerPixel:4
-					hasAlpha:YES
-					isPlanar:NO
-					colorSpaceName:NSDeviceRGBColorSpace
-					//bitmapFormat:0	//	premultiplied, but alpha is last
-					bitmapFormat:NSAlphaNonpremultipliedBitmapFormat	//	can't use this- graphics contexts cant use non-premultiplied bitmap reps as a backing
-					bytesPerRow:rgbPixelsLength/rgbPixelsSize.height
-					bitsPerPixel:32];	
+                NSBitmapImageRep	*bitRep = [[NSBitmapImageRep alloc]
+                                               initWithBitmapDataPlanes:&rgbPixels
+                                               pixelsWide:rgbPixelsSize.width
+                                               pixelsHigh:rgbPixelsSize.height
+                                               bitsPerSample:8
+                                               samplesPerPixel:4
+                                               hasAlpha:YES
+                                               isPlanar:NO
+                                               colorSpaceName:NSDeviceRGBColorSpace
+                                               //bitmapFormat:0	//	premultiplied, but alpha is last
+                                               bitmapFormat:NSBitmapFormatAlphaNonpremultiplied	//	can't use this- graphics contexts cant use non-premultiplied bitmap reps as a backing
+                                               bytesPerRow:rgbPixelsLength/rgbPixelsSize.height
+                                               bitsPerPixel:32];
 				if (bitRep==nil)
 					NSLog(@"\t\terr: couldn't make bitmap rep, %s, asset was %@",__func__,asset);
 				else	{
