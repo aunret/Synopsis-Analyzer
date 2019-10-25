@@ -847,7 +847,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 					double					trackSampleRate = trackDescription->mSampleRate;
 					if (localTransOpts != nil)	{
 						//	if there's no sample rate key, add the track's sample rate to the dict
-						if (localTransOpts[AVSampleRateKey] == nil)
+						if (localTransOpts[AVSampleRateKey] == nil || localTransOpts[AVSampleRateKey] == [NSNull null])
 							localTransOpts[AVSampleRateKey] = [NSNumber numberWithDouble:trackSampleRate];
 						//	check to see if the sample rate key in the transcode dict matches the track sample rate
 						if (localTransOpts[AVSampleRateKey]!=nil	&&
