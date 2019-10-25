@@ -44,42 +44,47 @@
 	}
 	return self;
 }
+
 - (void) generalInit	{
 	[self setWantsLayer:YES];
 }
+
 - (void) awakeFromNib	{
 	
-	[iconView setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[nameField setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[descriptionField setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[progressIndicator setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[progressButton setTranslatesAutoresizingMaskIntoConstraints:NO];
-	
+    CGFloat padding = 4.0;
+    CGFloat twoPadding = padding * 2.0;
+
+
+    //    icon pinned to the left
+    [iconView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [iconView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:padding].active = true;
+    [iconView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0].active = true;
+    [iconView.heightAnchor constraintEqualToConstant:36].active = true;
+    [iconView.widthAnchor constraintEqualToConstant:36].active = true;
+
+    //    progress bar centered vertically
+    [progressIndicator setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [progressIndicator.leadingAnchor constraintEqualToAnchor:iconView.trailingAnchor constant:twoPadding].active = true;
+    [progressIndicator.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
+    [progressIndicator.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-twoPadding].active = true;
+
+    //    name field sprouts off the progress bar, limited by width of description field - add 2 point optical alignment factor
+    [nameField setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [nameField.leadingAnchor constraintEqualToAnchor:progressIndicator.leadingAnchor constant:2].active = true;
+    [nameField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:0].active = true;
+    [nameField.trailingAnchor constraintEqualToAnchor:descriptionField.leadingAnchor constant:-twoPadding].active = true;
+    
 	//	button pinned to the right
-	[progressButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3.0].active = true;
-	[progressButton.topAnchor constraintEqualToAnchor:self.topAnchor constant:3.0].active = true;
-	[progressButton.heightAnchor constraintEqualToAnchor:self.heightAnchor multiplier:1.0 constant:-6.0].active = true;
-	[progressButton.widthAnchor constraintEqualToAnchor:progressButton.heightAnchor multiplier:1.0 constant:0.0].active = true;
-	
-	//	icon pinned to the left
-	[iconView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3.0].active = true;
-	[iconView.topAnchor constraintEqualToAnchor:self.topAnchor constant:3.0].active = true;
-	[iconView.heightAnchor constraintEqualToAnchor:self.heightAnchor multiplier:1.0 constant:-6.0].active = true;
-	[iconView.widthAnchor constraintEqualToAnchor:iconView.heightAnchor multiplier:1.0 constant:0.0].active = true;
-	
-	//	progress bar centered vertically
-	[progressIndicator.leadingAnchor constraintEqualToAnchor:iconView.trailingAnchor constant:3.0].active = true;
-	[progressIndicator.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
-	[progressIndicator.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-3.0].active = true;
-	
-	//	name field sprouts off the progress bar, limited by width of description field
-	[nameField.leadingAnchor constraintEqualToAnchor:iconView.trailingAnchor constant:3.0].active = true;
-	[nameField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:0.0].active = true;
-	[nameField.trailingAnchor constraintEqualToAnchor:descriptionField.leadingAnchor constant:-8.0].active = true;
-	
-	//	description field sprouts off the progress bar
-	[descriptionField.centerYAnchor constraintEqualToAnchor:nameField.centerYAnchor constant:0.0].active = true;
-	[descriptionField.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-3.0].active = true;
+    [progressButton setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [progressButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-twoPadding].active = true;
+	[progressButton.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
+    [progressButton.heightAnchor constraintEqualToConstant:48].active = true;
+    [progressButton.widthAnchor constraintEqualToConstant:48].active = true;
+
+	//	description field sprouts off the progress bar - add 2 point optical alignment factor
+    [descriptionField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[descriptionField.firstBaselineAnchor constraintEqualToAnchor:nameField.firstBaselineAnchor constant:0.0].active = true;
+	[descriptionField.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-(twoPadding + 2.0)].active = true;
 	
 }
 

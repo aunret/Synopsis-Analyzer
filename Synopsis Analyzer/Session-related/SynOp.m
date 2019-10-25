@@ -17,7 +17,7 @@
 #import <QuickLook/QuickLook.h>
 
 #import "GPULoadBalancer.h"
-
+#import "NSColor+SynopsisStatusColors.h"
 
 
 static NSImage				*genericMovieImage = nil;
@@ -332,7 +332,7 @@ static NSImage				*genericMovieImage = nil;
 		break;
 	case OpStatus_PreflightErr:
 		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Preflight Err"];
-		[returnMe addAttribute:NSForegroundColorAttributeName value:[NSColor redColor] range:NSMakeRange(0,returnMe.length)];
+		[returnMe addAttribute:NSForegroundColorAttributeName value:[NSColor synopsisErrorColor] range:NSMakeRange(0,returnMe.length)];
 		break;
 	case OpStatus_Analyze:
 		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Analyzing"];
@@ -342,11 +342,11 @@ static NSImage				*genericMovieImage = nil;
 		break;
 	case OpStatus_Complete:
 		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Completed"];
-		[returnMe addAttribute:NSForegroundColorAttributeName value:[NSColor greenColor] range:NSMakeRange(0,returnMe.length)];
+		[returnMe addAttribute:NSForegroundColorAttributeName value:[NSColor synopsisSuccessColor] range:NSMakeRange(0,returnMe.length)];
 		break;
 	case OpStatus_Err:
 		returnMe = [[NSMutableAttributedString alloc] initWithString:@"Error"];
-		[returnMe addAttribute:NSForegroundColorAttributeName value:[NSColor redColor] range:NSMakeRange(0,returnMe.length)];
+		[returnMe addAttribute:NSForegroundColorAttributeName value:[NSColor synopsisErrorColor] range:NSMakeRange(0,returnMe.length)];
 		break;
 	}
 	if (returnMe == nil)

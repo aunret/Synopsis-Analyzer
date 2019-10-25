@@ -86,50 +86,57 @@ static NSMutableArray		*iconGenArray = nil;
 - (void) generalInit	{
 }
 - (void) awakeFromNib	{
-	[preview setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[nameField setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[statusField setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[progressIndicator setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[pathField setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[showFileButton setTranslatesAutoresizingMaskIntoConstraints:NO];
-	//[timeRemainingField setTranslatesAutoresizingMaskIntoConstraints:NO];
 	
+    CGFloat padding = 4.0;
+    CGFloat twoPadding = padding * 2.0;
+    
 	//	preview pinned to the left
-	[preview.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3.0].active = true;
-	[preview.topAnchor constraintEqualToAnchor:self.topAnchor constant:3.0].active = true;
-	[preview.heightAnchor constraintEqualToAnchor:self.heightAnchor multiplier:1.0 constant:-6.0].active = true;
-	[preview.widthAnchor constraintEqualToAnchor:preview.heightAnchor multiplier:1.0 constant:0.0].active = true;
-	
+    [preview setWantsLayer:YES];
+    preview.layer.cornerRadius = 2.0;
+    preview.layer.backgroundColor = [NSColor  blackColor].CGColor;
+    [preview setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [preview.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:padding].active = true;
+    [preview.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0].active = true;
+    [preview.heightAnchor constraintEqualToConstant:36].active = true;
+    [preview.widthAnchor constraintEqualToConstant:36].active = true;
+
 	//	progress bar centered vertically
-	[progressIndicator.leadingAnchor constraintEqualToAnchor:nameField.leadingAnchor constant:0.0].active = true;
-	[progressIndicator.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:1.0].active = true;
-	[progressIndicator.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3.0].active = true;
+    [progressIndicator setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [progressIndicator setControlTint:NSGraphiteControlTint];
+
+    [progressIndicator.leadingAnchor constraintEqualToAnchor:preview.trailingAnchor constant:twoPadding].active = true;
+	[progressIndicator.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
+	[progressIndicator.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-twoPadding].active = true;
 	
-	//	name field sprouts off the progress bar, limited to the width of the status field
-	[nameField.leadingAnchor constraintEqualToAnchor:preview.trailingAnchor constant:3.0].active = true;
-	[nameField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:1.0].active = true;
-	[nameField.trailingAnchor constraintEqualToAnchor:statusField.leadingAnchor constant:-8.0].active = true;
+	//	name field sprouts off the progress bar, limited to the width of the status field - add 2 point optical alignment factor
+    [nameField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[nameField.leadingAnchor constraintEqualToAnchor:progressIndicator.leadingAnchor constant:2.0].active = true;
+	[nameField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:0.0].active = true;
+	[nameField.trailingAnchor constraintEqualToAnchor:progressIndicator.trailingAnchor constant:0].active = true;
 	
-	//	status field sprouts off the progress bar, is limited to width of superview
-	[statusField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:1.0].active = true;
-	[statusField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3.0].active = true;
+	//	status field sprouts off the progress bar, is limited to width of superview - add 2 point optical alignment factor
+    [statusField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[statusField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:0.0].active = true;
+	[statusField.trailingAnchor constraintEqualToAnchor:progressIndicator.trailingAnchor constant:-2.0].active = true;
 	
 	//	time remaining field sprouts off the progress bar
-	//[timeRemainingField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3.0].active = true;
-	//[timeRemainingField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:-1.0].active = true;
+//    [timeRemainingField setTranslatesAutoresizingMaskIntoConstraints:NO];
+//	[timeRemainingField.trailingAnchor constraintEqualToAnchor:progressIndicator.trailingAnchor constant:0].active = true;
+//	[timeRemainingField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:0.0].active = true;
 	
 	//	path field sprouts off the progress bar
+    [pathField setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[pathField.leadingAnchor constraintEqualToAnchor:nameField.leadingAnchor constant:0.0].active = true;
-	//[pathField.centerYAnchor constraintEqualToAnchor:timeRemainingField.centerYAnchor constant:0.0].active = true;
-	[pathField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:-1.0].active = true;
+	[pathField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:0.0].active = true;
 	
 	//	show file button sprouts off the path field
-	[showFileButton.leadingAnchor constraintEqualToAnchor:pathField.trailingAnchor constant:3.0].active = true;
+    [showFileButton setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[showFileButton.leadingAnchor constraintEqualToAnchor:pathField.trailingAnchor constant:twoPadding].active = true;
 	[showFileButton.centerYAnchor constraintEqualToAnchor:pathField.centerYAnchor constant:0.0].active = true;
-	[showFileButton.trailingAnchor constraintLessThanOrEqualToAnchor:self.trailingAnchor constant:0.0].active = true;
-	//[showFileButton.trailingAnchor constraintLessThanOrEqualToAnchor:timeRemainingField.leadingAnchor constant:-3.0].active = true;
-	[showFileButton.widthAnchor constraintEqualToConstant:20].active = true;
-	[showFileButton.heightAnchor constraintEqualToConstant:15].active = true;
+	[showFileButton.trailingAnchor constraintLessThanOrEqualToAnchor:self.trailingAnchor constant:twoPadding].active = true;
+    
+	[showFileButton.widthAnchor constraintEqualToConstant:11].active = true;
+	[showFileButton.heightAnchor constraintEqualToConstant:11].active = true;
 }
 
 

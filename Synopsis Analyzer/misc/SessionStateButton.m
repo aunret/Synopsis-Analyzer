@@ -39,6 +39,9 @@
 	}
 	return self;
 }
+
+const CGFloat insetFactor = 0.75;
+
 - (void) generalInit	{
 	//NSLog(@"%s",__func__);
 	[self setWantsLayer:YES];
@@ -51,7 +54,7 @@
 	self.buttonLayer.frame = self.layer.bounds;
 	self.buttonLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
 	self.buttonLayer.mask = [[CALayer alloc] init];
-	double			insetAmount = self.buttonLayer.bounds.size.width * 0.72;
+	double			insetAmount = self.buttonLayer.bounds.size.width * insetFactor;
 	self.buttonLayer.mask.frame = NSInsetRect(self.buttonLayer.bounds, insetAmount, insetAmount);
 	self.buttonLayer.mask.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
 	
@@ -156,7 +159,7 @@
 		}
 		
 		//	update the button layer dims
-		double			insetAmount = self.buttonLayer.bounds.size.width * 0.72;
+		double			insetAmount = self.buttonLayer.bounds.size.width * insetFactor;
 		self.buttonLayer.mask.frame = NSInsetRect(self.buttonLayer.bounds, insetAmount, insetAmount);
 		
 		//	configure the spinner

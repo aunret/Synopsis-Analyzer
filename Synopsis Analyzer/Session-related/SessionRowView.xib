@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,11 +25,6 @@
                         <action selector="nameFieldUsed:" target="0p7-Kq-R2z" id="jZ6-7J-3vx"/>
                     </connections>
                 </textField>
-                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dug-rU-fOy">
-                    <rect key="frame" x="8" y="3" width="42" height="42"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ic_local_movies_white" id="W7r-VV-h97"/>
-                </imageView>
                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vsg-ka-ahK" customClass="SessionStateButton">
                     <rect key="frame" x="427" y="3" width="42" height="42"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -44,11 +40,16 @@
                     <rect key="frame" x="261" y="33" width="160" height="11"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="right" title="(XXX files, XXX files to analyze)" id="yXQ-fB-1M3">
-                        <font key="font" metaFont="miniSystem"/>
+                        <font key="font" metaFont="label" size="9"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dug-rU-fOy">
+                    <rect key="frame" x="15" y="13" width="24" height="24"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="ic_local_movies_white" id="W7r-VV-h97"/>
+                </imageView>
             </subviews>
             <connections>
                 <outlet property="descriptionField" destination="vMV-7z-YUd" id="CkG-Bu-Wlp"/>
@@ -57,6 +58,7 @@
                 <outlet property="progressButton" destination="Vsg-ka-ahK" id="f7O-q7-UVf"/>
                 <outlet property="progressIndicator" destination="O9D-vY-Mbe" id="nyb-Mi-Nhq"/>
             </connections>
+            <point key="canvasLocation" x="139" y="154"/>
         </tableCellView>
     </objects>
     <resources>
