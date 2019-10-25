@@ -15,18 +15,21 @@
 
 + (NSColor*) synopsisErrorColor
 {
-    return [NSColor colorWithCalibratedRed:0.8 green:0 blue:0 alpha:1.0];
+    return [NSColor systemRedColor];
+//    return [NSColor colorWithCalibratedRed:0.8 green:0 blue:0 alpha:1.0];
 }
 
 + (NSColor*) synopsisSuccessColor
 {
-    return [NSColor colorWithCalibratedRed:0.0 green:0.8 blue:0 alpha:1.0];
+    return [NSColor controlTextColor];
 
+//    return [NSColor colorWithCalibratedRed:0.0 green:0.8 blue:0 alpha:1.0];
 }
 
 + (NSColor*) synopsisWarningColor
 {
-    return [NSColor colorWithCalibratedRed:0.8 green:0.8 blue:0 alpha:1.0];
+    return [NSColor systemRedColor];
+//    return [NSColor colorWithCalibratedRed:0.8 green:0.8 blue:0 alpha:1.0];
 }
 
 @end
