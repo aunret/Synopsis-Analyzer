@@ -18,6 +18,7 @@
 @property (strong,readwrite) ITProgressIndicator * progressIndicator;
 @property (strong,readwrite) CALayer * buttonLayer;
 @property (atomic,readwrite) BOOL mouseIsDown;
+@property (atomic,readwrite) NSRect lastBounds;
 @end
 
 
@@ -46,6 +47,7 @@ const CGFloat insetFactor = 0.75;
 	//NSLog(@"%s",__func__);
 	[self setWantsLayer:YES];
 	self.layer.delegate = self;
+	self.lastBounds = NSZeroRect;
 	
 	self.progressIndicator = nil;
 	
@@ -111,7 +113,8 @@ const CGFloat insetFactor = 0.75;
 	self.buttonLayer.frame = origFrame;
 	//self.buttonLayer.frame = tmpRect;
 	*/
-	[self _updateResources];
+	if (!NSEqualRects(self.lastBounds, self.bounds))
+		[self _updateResources];
 	
 }
 
@@ -126,15 +129,17 @@ const CGFloat insetFactor = 0.75;
 - (NSControlStateValue) state	{
 	return myState;
 }
-/*
 - (void) setFrameSize:(NSSize)n	{
 	[super setFrameSize:n];
-	[self _updateResources];
+	if (!NSEqualRects(self.lastBounds, self.bounds))
+		[self _updateResources];
 }
 - (void) setBoundsSize:(NSSize)n	{
 	[super setBoundsSize:n];
-	[self _updateResources];
+	if (!NSEqualRects(self.lastBounds, self.bounds))
+		[self _updateResources];
 }
+/*
 - (void) setFrame:(NSRect)n	{
 	[super setFrame:n];
 	[self _updateResources];
@@ -143,10 +148,11 @@ const CGFloat insetFactor = 0.75;
 - (void) updateConstraints	{
 	//NSLog(@"%s",__func__);
 	[super updateConstraints];
-	[self _updateResources];
+	if (!NSEqualRects(self.lastBounds, self.bounds))
+		[self _updateResources];
 }
 - (void) drawRect:(NSRect)r	{
-	if (self.progressIndicator == nil)
+	if (self.progressIndicator == nil || !NSEqualRects(self.lastBounds, self.bounds))
 		[self _updateResources];
 }
 
@@ -168,7 +174,8 @@ const CGFloat insetFactor = 0.75;
 		case SSBState_CompletedSuccessfully:
 		case SSBState_CompletedError:
 			//	don't leave the progress indicator nil, but don't add it to the hierarchy
-			self.progressIndicator = [[ITProgressIndicator alloc] initWithFrame:NSMakeRect(0,0,4,4)];
+			//self.progressIndicator = [[ITProgressIndicator alloc] initWithFrame:NSMakeRect(0,0,4,4)];
+			self.progressIndicator = nil;
 			break;
 		case SSBState_Active:
 		case SSBState_Spinning:
@@ -221,6 +228,7 @@ const CGFloat insetFactor = 0.75;
 			break;
 		}
 		
+		self.lastBounds = self.bounds;
 	}
 }
 
