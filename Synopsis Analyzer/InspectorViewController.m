@@ -200,6 +200,14 @@ static InspectorViewController		*globalInspectorViewController = nil;
 }
 - (void) reloadInspectorIfInspected:(id)n	{
 	//NSLog(@"%s ... %@",__func__,n);
+	
+	if (![NSThread isMainThread])	{
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self reloadInspectorIfInspected:n];
+		});
+		return;
+	}
+	
 	if (n == nil)	{
 		[self uninspectAll];
 		return;

@@ -98,7 +98,7 @@
 	if (self.session == nil)	{
 		[nameField setStringValue:@""];
 		[descriptionField setStringValue:@"XXX"];
-		[progressIndicator setDoubleValue:0.0];
+		[progressIndicator killAnimationSetDoubleValue:0.0];
 		[progressButton setState:SSBState_CompletedSuccessfully];
 		return;
 	}
@@ -144,11 +144,16 @@
 	
 	//	populate the progress indicator
 	if ([self.session processedAllOps])	{
-		[progressIndicator setDoubleValue:0.0];
+		[progressIndicator killAnimationSetDoubleValue:0.0];
 	}
 	else	{
 		double			tmpProgress = [self.session calculateProgress];
-		[progressIndicator setDoubleValue:tmpProgress];
+		if (tmpProgress == 0.0 || tmpProgress == 1.0)
+			[progressIndicator killAnimationSetDoubleValue:tmpProgress];
+		else
+			[progressIndicator animateToValue:tmpProgress];
+			//[progressIndicator killAnimationSetDoubleValue:tmpProgress];
+			//[progressIndicator setDoubleValue:tmpProgress];
 	}
 }
 

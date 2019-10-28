@@ -150,7 +150,7 @@ static NSMutableArray		*iconGenArray = nil;
 		[preview setImage:nil];
 		[nameField setStringValue:@""];
 		[statusField setStringValue:@"XXX"];
-		[progressIndicator setDoubleValue:0.0];
+		[progressIndicator killAnimationSetDoubleValue:0.0];
 		[pathField setStringValue:@"XXX"];
 		[pathField sizeToFit];
 		//[timeRemainingField setStringValue:@"XXX"];
@@ -179,7 +179,7 @@ static NSMutableArray		*iconGenArray = nil;
 		}
 		else
 			[statusField setHidden:YES];
-		[progressIndicator setDoubleValue:0.0];
+		[progressIndicator killAnimationSetDoubleValue:0.0];
 		//[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_Preflight:
@@ -187,7 +187,7 @@ static NSMutableArray		*iconGenArray = nil;
 		//[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
 		//statusField.toolTip = self.op.errString;
 		[statusField setHidden:YES];
-		[progressIndicator setDoubleValue:0.0];
+		[progressIndicator killAnimationSetDoubleValue:0.0];
 		//[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_PreflightErr:
@@ -196,7 +196,7 @@ static NSMutableArray		*iconGenArray = nil;
 		statusField.toolTip = self.op.errString;
 		[statusField sizeToFit];
 		[statusField setHidden:NO];
-		[progressIndicator setDoubleValue:0.0];
+		[progressIndicator killAnimationSetDoubleValue:0.0];
 		//[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_Complete:
@@ -205,7 +205,7 @@ static NSMutableArray		*iconGenArray = nil;
 		statusField.toolTip = nil;
 		[statusField sizeToFit];
 		[statusField setHidden:NO];
-		[progressIndicator setDoubleValue:1.0];
+		[progressIndicator killAnimationSetDoubleValue:1.0];
 		//[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_Err:
@@ -213,12 +213,16 @@ static NSMutableArray		*iconGenArray = nil;
 		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
 		statusField.toolTip = self.op.errString;
 		[statusField setHidden:NO];
-		[progressIndicator setDoubleValue:0.0];
+		[progressIndicator killAnimationSetDoubleValue:0.0];
 		//[timeRemainingField setHidden:YES];
 		break;
 	case OpStatus_Analyze:
 	case OpStatus_Cleanup:
-		[progressIndicator setDoubleValue:(self.op.job==nil) ? 0.0 : [self.op.job jobProgress]];
+		//[progressIndicator setDoubleValue:(self.op.job==nil) ? 0.0 : [self.op.job jobProgress]];
+		if (self.op.job == nil)
+			[progressIndicator killAnimationSetDoubleValue:0.0];
+		else
+			[progressIndicator animateToValue:[self.op.job jobProgress]];
 		double			rawSecondsRemaining = self.op.job.jobTimeRemaining;
 		long			secondsRemaining = rawSecondsRemaining;
 		

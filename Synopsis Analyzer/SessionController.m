@@ -38,6 +38,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 @property (assign,readwrite,atomic) BOOL paused;
 @property (strong) NSMutableArray<SynSession*> * watchFolderSessions;
 @property (strong) NSMutableArray<SynSession*> * sessions;
+@property (strong) dispatch_queue_t sessionQueue;
 
 @property (strong,nullable) NSTimer * progressRefreshTimer;
 @property (strong) NSMutableArray<SynOp*> * opsInProgress;
@@ -55,6 +56,14 @@ static NSString						*localFileDragType = @"localFileDragType";
 - (id) objectForUUID:(NSUUID *)n;
 - (void) restoreExpandStates;
 @end
+
+
+
+
+//	these macros make it slightly easier to work with two arrays that, combined, populate the single outline view
+#define WATCH_SESSIONS_COUNT (self.watchFolderSessions.count)
+#define SESSIONS_COUNT (self.sessions.count)
+#define TOTAL_SESSIONS_COUNT (WATCH_SESSIONS_COUNT + SESSIONS_COUNT)
 
 
 
@@ -78,6 +87,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 - (void) generalInit	{
 	self.watchFolderSessions = [[NSMutableArray alloc] init];
 	self.sessions = [[NSMutableArray alloc] init];
+	self.sessionQueue = dispatch_queue_create("sessionQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, DISPATCH_QUEUE_PRIORITY_HIGH, -1));
 	//self.sessionsInProgress = [[NSMutableArray alloc] init];
 	self.opsInProgress = [[NSMutableArray alloc] init];
 	self.running = NO;
@@ -400,7 +410,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 		for (SynSession *session in self.sessions)	{
 			session.state = SessionState_Inactive;
 			//	we don't want to reloadData right now (would change scroll pos) so just update the relevant rows...
-			[self reloadRowForItem:session];
+			//[self reloadRowForItem:session];
 		}
 		
 		//	do stuff with ops
@@ -440,6 +450,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 	return returnMe;
 }
 - (void) makeSureRunningMaxPossibleOps	{
+	//NSLog(@"%s",__func__);
 	@synchronized (self)	{
 		NSArray<SynOp*>		*opsToStart = [self getOpsToStart:(self.maxOpCount - self.opsInProgress.count)];
 		NSMutableArray		*sessionsToReInspect = [NSMutableArray arrayWithCapacity:0];
@@ -448,7 +459,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 				[sessionsToReInspect addObject:opToStart.session];
 			[self.opsInProgress addObject:opToStart];
 			[LogController appendVerboseLog:[NSString stringWithFormat:@"Starting analysis on %@",opToStart.src.lastPathComponent]];
-			[opToStart start];
+			dispatch_async(self.sessionQueue, ^{
+				[opToStart start];
+			});
 		}
 		//	run through the sessions of the ops we just started, update the inspector if any of them are inspected
 		for (SynSession *session in sessionsToReInspect)	{
@@ -662,17 +675,34 @@ static NSString						*localFileDragType = @"localFileDragType";
 		//NSLog(@"\t\tshould be removing %@",selItem);
 		if ([selItem isKindOfClass:[SynSession class]])	{
 			SynSession		*tmpSession = (SynSession *)selItem;
-			[self.watchFolderSessions removeObjectIdenticalTo:tmpSession];
-			[self.sessions removeObjectIdenticalTo:tmpSession];
-			[self reloadData];
+			NSInteger		tmpIndex;
+			tmpIndex = [self.watchFolderSessions indexOfObjectIdenticalTo:tmpSession];
+			if (tmpIndex != NSNotFound && tmpIndex >= 0)	{
+				[self.watchFolderSessions removeObjectIdenticalTo:tmpSession];
+				[outlineView removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:tmpIndex] inParent:nil withAnimation:NSTableViewAnimationSlideUp];
+			}
+			tmpIndex = [self.sessions indexOfObjectIdenticalTo:tmpSession];
+			if (tmpIndex != NSNotFound && tmpIndex >= 0)	{
+				[self.sessions removeObjectIdenticalTo:tmpSession];
+				[outlineView removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:WATCH_SESSIONS_COUNT + tmpIndex] inParent:nil withAnimation:NSTableViewAnimationSlideUp];
+			}
+			
+			//[self reloadData];
+			[self outlineViewSelectionDidChange:nil];
 		}
 		else if ([selItem isKindOfClass:[SynOp class]])	{
 			SynOp			*tmpTop = (SynOp *)selItem;
 			SynSession		*tmpSession = tmpTop.session;
 			if (tmpSession == nil)
 				return;
-			[tmpSession.ops removeObjectIdenticalTo:tmpTop];
-			[self reloadData];
+			
+			NSInteger		tmpIndex = [tmpSession.ops indexOfObjectIdenticalTo:tmpTop];
+			if (tmpIndex != NSNotFound && tmpIndex >= 0)	{
+				[tmpSession.ops removeObjectIdenticalTo:tmpTop];
+				[outlineView removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:tmpIndex] inParent:tmpSession withAnimation:NSTableViewAnimationSlideUp];
+			}
+			//[self reloadData];
+			[self outlineViewSelectionDidChange:nil];
 		}
 	}
 }
@@ -739,14 +769,20 @@ static NSString						*localFileDragType = @"localFileDragType";
 	if (newSessions==nil || [newSessions count]<1)
 		return;
 	SynSession		*filesSession = nil;
+	[outlineView beginUpdates];
 	for (SynSession *newSession in newSessions)	{
-		if (newSession.type == SessionType_List)
-			self.expandStateDict[newSession.dragUUID.UUIDString] = @YES;
+		[outlineView insertItemsAtIndexes:[NSIndexSet indexSetWithIndex:self.sessions.count + WATCH_SESSIONS_COUNT] inParent:nil withAnimation:NSTableViewAnimationSlideDown];
 		[self.sessions addObject:newSession];
+		
+		if (newSession.type == SessionType_List)	{
+			self.expandStateDict[newSession.dragUUID.UUIDString] = @YES;
+			[outlineView expandItem:newSession expandChildren:NO];
+		}
 	}
+	[outlineView endUpdates];
 	
 	//	reload the table view
-	[self reloadData];
+	//[self reloadData];
 }
 - (void) appendWatchFolderSessions:(NSArray<SynSession*> *)n	{
 	if (n == nil || [n count]<1)
@@ -906,11 +942,6 @@ static NSString						*localFileDragType = @"localFileDragType";
 	return returnMe;
 }
 */
-
-//	these macros make it slightly easier to work with two arrays that, combined, populate the single outline view
-#define WATCH_SESSIONS_COUNT (self.watchFolderSessions.count)
-#define SESSIONS_COUNT (self.sessions.count)
-#define TOTAL_SESSIONS_COUNT (WATCH_SESSIONS_COUNT + SESSIONS_COUNT)
 
 - (NSInteger) outlineView:(NSOutlineView *)ov numberOfChildrenOfItem:(id)item	{
 	if (item == nil)	{
@@ -1339,21 +1370,49 @@ static NSString						*localFileDragType = @"localFileDragType";
 			if (rawDropItem == nil)	{
 				//	if the rawDropIndex is -1, this is very simple
 				if (rawDropIndex == -1)	{
-					[self createAndAppendSessionsWithFiles:fileURLs];
+					//[self createAndAppendSessionsWithFiles:fileURLs];
+					NSArray			*newSessions = [self createSessionsWithFiles:fileURLs];
+					NSMutableIndexSet		*newIndexes = [[NSMutableIndexSet alloc] init];
+					for (SynSession *newSession in newSessions)	{
+						if (newSession.type == SessionType_List)
+							self.expandStateDict[newSession.dragUUID.UUIDString] = @YES;
+						[newIndexes addIndex:WATCH_SESSIONS_COUNT + self.sessions.count];
+						[self.sessions addObject:newSession];
+					}
+					[outlineView beginUpdates];
+					[outlineView insertItemsAtIndexes:newIndexes inParent:nil withAnimation:NSTableViewAnimationSlideDown];
+					[outlineView endUpdates];
+					
+					for (SynSession *newSession in newSessions)	{
+						if (newSession.type == SessionType_List)
+							[outlineView expandItem:newSession expandChildren:NO];
+					}
+					
 					return YES;
 				}
 				//	...if we're here, we're inserting a drop into our list of sessions (not dropping inside a session, but into the list of sessions)
 				NSArray<SynSession*>	*newSessions = [self createSessionsWithFiles:fileURLs];
+				NSMutableIndexSet		*newIndexes = [[NSMutableIndexSet alloc] init];
 				//	if the rawDropIndex is -1, we want to append to the end of all sessions
 				NSInteger				targetIndex = (rawDropIndex==-1) ? self.sessions.count : rawDropIndex - WATCH_SESSIONS_COUNT;
 				for (SynSession *newSession in newSessions)	{
 					if (newSession.type == SessionType_List)
 						self.expandStateDict[newSession.dragUUID.UUIDString] = @YES;
 					[self.sessions insertObject:newSession atIndex:targetIndex];
+					[newIndexes addIndex:WATCH_SESSIONS_COUNT + targetIndex];
 					++targetIndex;
 				}
+				[outlineView beginUpdates];
+				[outlineView insertItemsAtIndexes:newIndexes inParent:nil withAnimation:NSTableViewAnimationSlideDown];
+				[outlineView endUpdates];
+				
+				for (SynSession *newSession in newSessions)	{
+					if (newSession.type == SessionType_List)
+						[outlineView expandItem:newSession expandChildren:NO];
+				}
+				
 				//	reload the outline view!
-				[self reloadData];
+				//[self reloadData];
 				//	re-evaluate the selection...
 				[self outlineViewSelectionDidChange:nil];
 				return YES;
@@ -1370,6 +1429,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 					else
 						++targetSessionIndex;
 					NSArray			*newSessions = [self createSessionsWithFiles:fileURLs];
+					NSMutableIndexSet		*newIndexes = [[NSMutableIndexSet alloc] init];
 					for (SynSession *newSession in newSessions)	{
 						newSession.srcDir = targetSession.srcDir;
 						newSession.outputDir = targetSession.outputDir;
@@ -1381,12 +1441,23 @@ static NSString						*localFileDragType = @"localFileDragType";
 						newSession.type = targetSession.type;
 						newSession.state = targetSession.state;
 						[self.sessions insertObject:newSession atIndex:targetSessionIndex];
+						[newIndexes addIndex:WATCH_SESSIONS_COUNT + targetSessionIndex];
 						++targetSessionIndex;
-					
-						self.expandStateDict[newSession.dragUUID.UUIDString] = @YES;
+						
+						if (newSession.type == SessionType_List)
+							self.expandStateDict[newSession.dragUUID.UUIDString] = @YES;
 					}
+					[outlineView beginUpdates];
+					[outlineView insertItemsAtIndexes:newIndexes inParent:nil withAnimation:NSTableViewAnimationSlideDown];
+					[outlineView endUpdates];
+					
+					for (SynSession *newSession in newSessions)	{
+						if (newSession.type == SessionType_List)
+							[outlineView expandItem:newSession expandChildren:NO];
+					}
+					
 					//	reload the outline view!
-					[self reloadData];
+					//[self reloadData];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
 					return YES;
@@ -1394,6 +1465,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 				//	else the session we're dropping into isn't processing any ops- we're clear to add to it
 				else	{
 					//	if the rawDropIndex is -1, we want to append to the end of the session's ops
+					NSMutableIndexSet		*newOpIndexes = [[NSMutableIndexSet alloc] init];
+					NSMutableIndexSet		*newSessionIndexes = [[NSMutableIndexSet alloc] init];
 					NSInteger		targetIndex = (rawDropIndex==-1) ? targetSession.ops.count : rawDropIndex;
 					for (NSURL *fileURL in fileURLs)	{
 						SynOp			*tmpOp = [[SynOp alloc] initWithSrcURL:fileURL];
@@ -1401,6 +1474,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 						if (tmpOp != nil && (tmpOp.type == OpType_AVFFile || targetSession.copyNonMediaFiles))	{
 							self.expandStateDict[targetSession.dragUUID.UUIDString] = @YES;
 							[targetSession.ops insertObject:tmpOp atIndex:targetIndex];
+							[newOpIndexes addIndex:targetIndex];
 							tmpOp.session = targetSession;
 							++targetIndex;
 						}
@@ -1409,12 +1483,22 @@ static NSString						*localFileDragType = @"localFileDragType";
 							//	did we try to make an op from a directory (which should be a session)?
 							NSArray<SynSession*>	*tmpSessions = [self createSessionsWithFiles:@[fileURL]];
 							for (SynSession *tmpSession in tmpSessions)	{
+								[newSessionIndexes addIndex:WATCH_SESSIONS_COUNT + self.sessions.count];
 								[self.sessions addObject:tmpSession];
 							}
 						}
 					}
+					[outlineView beginUpdates];
+					if (newOpIndexes.count > 0)
+						[outlineView insertItemsAtIndexes:newOpIndexes inParent:targetSession withAnimation:NSTableViewAnimationSlideDown];
+					if (newSessionIndexes.count > 0)
+						[outlineView insertItemsAtIndexes:newSessionIndexes inParent:nil withAnimation:NSTableViewAnimationSlideDown];
+					[outlineView endUpdates];
+					
+					[outlineView expandItem:targetSession expandChildren:NO];
+					
 					//	reload the outline view!
-					[self reloadData];
+					//[self reloadData];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
 					return YES;
@@ -1433,12 +1517,14 @@ static NSString						*localFileDragType = @"localFileDragType";
 				if (dragItem.watchFolder)	{
 					NSInteger		dragItemOrigIndex = [self.watchFolderSessions indexOfObjectIdenticalTo:dragItem];
 					NSInteger		dropIndex = rawDropIndex;
+					NSInteger		viewDropIndex = dropIndex;
 					//	if the drop index hasn't changed, do nothing and return
 					if (dragItemOrigIndex == dropIndex)	{
 						//	intentionally blank (technically we could probably skip the reloadData but whatevs)
 					}
 					//	else if the drop index is > the orig index, insert first and then delete
 					else if (dropIndex > dragItemOrigIndex)	{
+						--viewDropIndex;
 						[self.watchFolderSessions insertObject:dragItem atIndex:dropIndex];
 						[self.watchFolderSessions removeObjectAtIndex:dragItemOrigIndex];
 					}
@@ -1447,8 +1533,11 @@ static NSString						*localFileDragType = @"localFileDragType";
 						[self.watchFolderSessions removeObjectAtIndex:dragItemOrigIndex];
 						[self.watchFolderSessions insertObject:dragItem atIndex:dropIndex];
 					}
+					[outlineView beginUpdates];
+					[outlineView moveItemAtIndex:dragItemOrigIndex inParent:nil toIndex:viewDropIndex inParent:nil];
+					[outlineView endUpdates];
 					//	reload the outline view
-					[self reloadData];
+					//[self reloadData];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
 					return YES;
@@ -1456,12 +1545,14 @@ static NSString						*localFileDragType = @"localFileDragType";
 				else	{
 					NSInteger		dragItemOrigIndex = [self.sessions indexOfObjectIdenticalTo:dragItem];
 					NSInteger		dropIndex = (rawDropIndex == -1) ? SESSIONS_COUNT : rawDropIndex - WATCH_SESSIONS_COUNT;
+					NSInteger		viewDropIndex = dropIndex;
 					//	if the dropIndex == orig index, do nothing and return
 					if (dropIndex == dragItemOrigIndex)	{
 						//	intentionally blank (technically we could probably skip the reloadData but whatevs)
 					}
 					//	else if the dropIndex is > the orig index, insert first and then delete
 					else if (dropIndex > dragItemOrigIndex)	{
+						--viewDropIndex;
 						[self.sessions insertObject:dragItem atIndex:dropIndex];
 						[self.sessions removeObjectAtIndex:dragItemOrigIndex];
 					}
@@ -1470,8 +1561,11 @@ static NSString						*localFileDragType = @"localFileDragType";
 						[self.sessions removeObjectAtIndex:dragItemOrigIndex];
 						[self.sessions insertObject:dragItem atIndex:dropIndex];
 					}
+					[outlineView beginUpdates];
+					[outlineView moveItemAtIndex:WATCH_SESSIONS_COUNT + dragItemOrigIndex inParent:nil toIndex:WATCH_SESSIONS_COUNT + viewDropIndex inParent:nil];
+					[outlineView endUpdates];
 					//	reload the outline view
-					[self reloadData];
+					//[self reloadData];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
 					return YES;
@@ -1485,21 +1579,43 @@ static NSString						*localFileDragType = @"localFileDragType";
 				NSInteger		dragItemOrigIndex = [dragItemParent.ops indexOfObjectIdenticalTo:dragItem];
 				//	if we're dropping the op into a nil item...
 				if (rawDropItem == nil)	{
+					[outlineView beginUpdates];
+					
 					//	create a new session, add the op to it, insert the session and the drop index
 					SynSession		*newSession = [SynSession createWithFiles:@[]];
+					NSInteger		dropIndex = (rawDropIndex==-1) ? SESSIONS_COUNT : rawDropIndex - WATCH_SESSIONS_COUNT;
 					[newSession.ops addObject:dragItem];
 					[dragItem setSession:newSession];
 					[dragItemParent.ops removeObjectAtIndex:dragItemOrigIndex];
-					[self.sessions insertObject:newSession atIndex:(rawDropIndex==-1) ? SESSIONS_COUNT : rawDropIndex - WATCH_SESSIONS_COUNT];
+					[self.sessions insertObject:newSession atIndex:dropIndex];
+					//	tell the outline view to insert a row for the new session...
+					[outlineView insertItemsAtIndexes:[NSIndexSet indexSetWithIndex:WATCH_SESSIONS_COUNT + dropIndex] inParent:nil withAnimation:NSTableViewAnimationSlideDown];
 				
 					//	if the parent session is now empty, remove it
-					if (dragItemParent.ops.count < 1)
+					if (dragItemParent.ops.count < 1)	{
+						NSInteger			origParentIndex = [self.sessions indexOfObjectIdenticalTo:dragItemParent];
 						[self.sessions removeObjectIdenticalTo:dragItemParent];
+						if (origParentIndex != NSNotFound && origParentIndex >= 0)	{
+							//	move the item out of the old session into the new session
+							[outlineView moveItemAtIndex:dragItemOrigIndex inParent:dragItemParent toIndex:0 inParent:newSession];
+							//	remove the row for the old session
+							[outlineView removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:WATCH_SESSIONS_COUNT + origParentIndex] inParent:nil withAnimation:NSTableViewAnimationSlideUp];
+						}
+					}
+					//	else we're moving the item from one parent to another
+					else	{
+						[outlineView moveItemAtIndex:dragItemOrigIndex inParent:dragItemParent toIndex:0 inParent:newSession];
+					}
 				
 					//	this will cause the session we just created to be expanded when the outline view is reloaded...
 					self.expandStateDict[newSession.dragUUID.UUIDString] = @YES;
+					
+					[outlineView endUpdates];
+					
+					[outlineView expandItem:newSession expandChildren:NO];
+					
 					//	reload the outline view...
-					[self reloadData];
+					//[self reloadData];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
 					return YES;
@@ -1511,7 +1627,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 					if ([self processingFilesFromSession:dropItem])	{
 						return NO;
 					}
-				
+					
+					NSInteger		actualDropIndex = (rawDropIndex==-1) ? dropItem.ops.count : rawDropIndex;
+					NSInteger		viewDropIndex = actualDropIndex;
 					//	if the drop index == orig index...
 					if (rawDropIndex == dragItemOrigIndex)	{
 						//	if it's the same session, do nothing
@@ -1520,30 +1638,41 @@ static NSString						*localFileDragType = @"localFileDragType";
 						}
 						//	else insert first, then delete
 						else	{
-							[dropItem.ops insertObject:dragItem atIndex:(rawDropIndex==-1) ? dropItem.ops.count : rawDropIndex];
+							[dropItem.ops insertObject:dragItem atIndex:actualDropIndex];
 							[dragItem setSession:dropItem];
 							[dragItemParent.ops removeObjectAtIndex:dragItemOrigIndex];
 						}
 					}
 					//	else if the drop index is > the orig index, insert first and then delete
 					else if (rawDropIndex > dragItemOrigIndex)	{
-						[dropItem.ops insertObject:dragItem atIndex:(rawDropIndex==-1) ? dropItem.ops.count : rawDropIndex];
+						if (dragItemParent == dropItem)
+							--viewDropIndex;
+						[dropItem.ops insertObject:dragItem atIndex:actualDropIndex];
 						[dragItem setSession:dropItem];
 						[dragItemParent.ops removeObjectAtIndex:dragItemOrigIndex];
 					}
 					//	else the drop index is < the orig index, delete first then insert
 					else	{
 						[dragItemParent.ops removeObjectAtIndex:dragItemOrigIndex];
-						[dropItem.ops insertObject:dragItem atIndex:(rawDropIndex==-1) ? dropItem.ops.count : rawDropIndex];
+						[dropItem.ops insertObject:dragItem atIndex:actualDropIndex];
 						[dragItem setSession:dropItem];
 					}
 				
+					[outlineView beginUpdates];
+					
+					[outlineView moveItemAtIndex:dragItemOrigIndex inParent:dragItemParent toIndex:viewDropIndex inParent:dropItem];
+					
 					//	if the parent session is now empty, remove it
-					if (dragItemParent.ops.count < 1)
+					if (dragItemParent.ops.count < 1)	{
+						NSInteger		viewRemoveIndex = [self.sessions indexOfObjectIdenticalTo:dragItemParent] + WATCH_SESSIONS_COUNT;
+						if (viewRemoveIndex != NSNotFound && viewRemoveIndex >= 0)
+							[outlineView removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:viewRemoveIndex] inParent:nil withAnimation:NSTableViewAnimationSlideUp];
 						[self.sessions removeObjectIdenticalTo:dragItemParent];
-				
+					}
+					
+					[outlineView endUpdates];
 					//	reload the outline view
-					[self reloadData];
+					//[self reloadData];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
 					return YES;

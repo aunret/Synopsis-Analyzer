@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "NSProgressIndicatorAnimated.h"
+
 @class SynSession;
 @class SessionStateButton;
 
@@ -21,7 +23,7 @@
 	
 	IBOutlet NSTextField	*descriptionField;
 	
-	IBOutlet NSProgressIndicator		*progressIndicator;
+	IBOutlet NSProgressIndicatorAnimated		*progressIndicator;
 	IBOutlet SessionStateButton				*progressButton;
 }
 

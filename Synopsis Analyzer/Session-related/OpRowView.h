@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "NSProgressIndicatorAnimated.h"
 
 @class SynOp;
 
@@ -19,7 +20,7 @@
 	
 	IBOutlet NSTextField	*statusField;
 	
-	IBOutlet NSProgressIndicator		*progressIndicator;
+	IBOutlet NSProgressIndicatorAnimated		*progressIndicator;
 	
 	IBOutlet NSTextField	*pathField;
 	IBOutlet NSButton		*showFileButton;

@@ -24,6 +24,7 @@ typedef void(^FSDirectoryWatcherCallbackBlock)(NSArray<NSString*>*);
 
 
 @interface FSDirectoryWatcher : NSObject
+//	callback block is executed on the main thread!
 - (instancetype) initWithDirectoryAtURL:(NSURL *)inDirURL notificationBlock:(FSDirectoryWatcherCallbackBlock)inCallbackBlock;
 - (instancetype) initWithDirectory:(NSString *)inDirPath notificationBlock:(FSDirectoryWatcherCallbackBlock)inCallbackBlock;
 @end
