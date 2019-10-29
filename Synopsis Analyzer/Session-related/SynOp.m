@@ -457,7 +457,8 @@ static NSImage				*genericMovieImage = nil;
 		//	first collect some vals we're going to need for all of these permutations...
 		NSFileManager		*fm = [NSFileManager defaultManager];
 		BOOL				isDir = NO;
-		NSString			*srcPathExtension = self.src.pathExtension;
+		//NSString			*srcPathExtension = self.src.pathExtension;
+		NSString			*srcPathExtension = @"mov";	//	this app only exports quicktime movies (AVFoundation is not capable of writing metadata to mp4s)
 		NSString			*srcFileName = [self.src.lastPathComponent stringByDeletingPathExtension];
 		NSString			*dstFilename = (self.type==OpType_AVFFile) ? [srcFileName stringByAppendingString:@"_analyzed"] : srcFileName;
 		NSString			*srcDir = [[[NSURL fileURLWithPath:self.src] URLByDeletingLastPathComponent] path];

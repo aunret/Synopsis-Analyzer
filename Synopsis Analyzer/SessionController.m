@@ -783,13 +783,15 @@ static NSString						*localFileDragType = @"localFileDragType";
 	for (SynSession *newSession in newSessions)	{
 		[outlineView insertItemsAtIndexes:[NSIndexSet indexSetWithIndex:self.sessions.count + WATCH_SESSIONS_COUNT] inParent:nil withAnimation:NSTableViewAnimationSlideDown];
 		[self.sessions addObject:newSession];
-		
+	}
+	[outlineView endUpdates];
+	
+	for (SynSession *newSession in newSessions)	{
 		if (newSession.type == SessionType_List)	{
 			self.expandStateDict[newSession.dragUUID.UUIDString] = @YES;
 			[outlineView expandItem:newSession expandChildren:NO];
 		}
 	}
-	[outlineView endUpdates];
 	
 	//	reload the table view
 	//[self reloadData];
