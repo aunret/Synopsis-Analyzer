@@ -365,12 +365,13 @@ static NSImage				*genericMovieImage = nil;
 	//NSLog(@"%s ... %@",__func__,self);
 	@synchronized (self)	{
 		self.paused = NO;
-		//dispatch_async(dispatch_get_main_queue(), ^{
+		self.status = OpStatus_Preflight;
+		
+		dispatch_async([[SessionController global] sessionQueue], ^{
 			
-			//	do not call this async- or if you do, make sure you set the initial status to something other than 'pending'
 			[self _beginPreflight];
 			
-		//});
+		});
 	}
 }
 - (void) pause	{
@@ -409,16 +410,12 @@ static NSImage				*genericMovieImage = nil;
 		switch (self.status)	{
 		case OpStatus_Pending:
 			{
-				//dispatch_async(dispatch_get_main_queue(), ^{
-					[self _beginPreflight];
-				//});
+				[self _beginPreflight];
 			}
 			break;
 		case OpStatus_Preflight:
 			{
-				//dispatch_async(dispatch_get_main_queue(), ^{
-					[self _beginJob];
-				//});
+				[self _beginJob];
 			}
 			break;
 		case OpStatus_PreflightErr:
@@ -657,12 +654,10 @@ static NSImage				*genericMovieImage = nil;
 		//	...if we're here, preflight checked out, everything's ready to go...
 	
 	
-		//dispatch_async(dispatch_get_main_queue(), ^{
-			@synchronized (self)	{
-				if (!self.paused)
-					[self _beginJob];
-			}
-		//});
+		@synchronized (self)	{
+			if (!self.paused)
+				[self _beginJob];
+		}
 	}
 }
 - (void) _beginJob	{
@@ -749,9 +744,7 @@ static NSImage				*genericMovieImage = nil;
             [[GPULoadBalancer sharedBalancer] returnGPU:device from:finished];
             
             //	this block gets executed even if you cancel
-            //dispatch_async(dispatch_get_main_queue(), ^{
-                [bss _beginCleanup];
-            //});
+			[bss _beginCleanup];
         }];
 	
         [[GPULoadBalancer sharedBalancer] checkoutGPU:device forJob:self.job];

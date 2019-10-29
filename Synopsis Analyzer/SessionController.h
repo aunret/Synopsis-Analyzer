@@ -64,6 +64,9 @@
 - (BOOL) processingFilesFromSession:(SynSession *)n;
 - (void) makeSureRunningMaxPossibleOps;
 
+//	jobs are created & started on this queue
+@property (strong) dispatch_queue_t sessionQueue;
+
 @end
 
 

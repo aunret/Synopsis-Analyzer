@@ -1243,22 +1243,20 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 							maxNumberOfNonNullInputsOrOutputsPerSubArray = nonNSNullCount;
 					}
 					if (maxNumberOfInputsOrOutputsPerSubArray == 0 || maxNumberOfNonNullInputsOrOutputsPerSubArray == 0)	{
-						//dispatch_async(dispatch_get_main_queue(), ^{
-							[self->writer finishWritingWithCompletionHandler:^{
-								//NSLog(@"finished writing!");
-								//	sometimes we're unable to create an AVMovie from the file in this handler, 
-								//	so we can't just finish writing and clean up immediately.  instead, we 
-								//	check to make sure the movie actually exists before we finish and clean up.
-								
-								bss.jobStatus = JOStatus_Complete;
-								[bss _finishWritingAndCleanUp];
-								
-								
-								/*
-								[self _checkIfActuallyFinished:0];
-								*/
-							}];
-						//});
+						[self->writer finishWritingWithCompletionHandler:^{
+							//NSLog(@"finished writing!");
+							//	sometimes we're unable to create an AVMovie from the file in this handler, 
+							//	so we can't just finish writing and clean up immediately.  instead, we 
+							//	check to make sure the movie actually exists before we finish and clean up.
+							
+							bss.jobStatus = JOStatus_Complete;
+							[bss _finishWritingAndCleanUp];
+							
+							
+							/*
+							[self _checkIfActuallyFinished:0];
+							*/
+						}];
 					}
 				}
 				pthread_mutex_unlock(&theLock);

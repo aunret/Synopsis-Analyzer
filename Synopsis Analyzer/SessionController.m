@@ -38,7 +38,6 @@ static NSString						*localFileDragType = @"localFileDragType";
 @property (assign,readwrite,atomic) BOOL paused;
 @property (strong) NSMutableArray<SynSession*> * watchFolderSessions;
 @property (strong) NSMutableArray<SynSession*> * sessions;
-@property (strong) dispatch_queue_t sessionQueue;
 
 @property (strong,nullable) NSTimer * progressRefreshTimer;
 @property (strong) NSMutableArray<SynOp*> * opsInProgress;
@@ -459,9 +458,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 				[sessionsToReInspect addObject:opToStart.session];
 			[self.opsInProgress addObject:opToStart];
 			[LogController appendVerboseLog:[NSString stringWithFormat:@"Starting analysis on %@",opToStart.src.lastPathComponent]];
-			dispatch_async(self.sessionQueue, ^{
-				[opToStart start];
-			});
+			[opToStart start];
 		}
 		//	run through the sessions of the ops we just started, update the inspector if any of them are inspected
 		for (SynSession *session in sessionsToReInspect)	{
