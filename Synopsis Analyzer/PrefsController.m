@@ -15,35 +15,41 @@
 
 
 
+PrefsController			*globalPrefsController = nil;
+
+
+
 
 @interface PrefsController ()
+- (void) generalInit;
 - (void) recursivelyPopulateMenu:(NSMenu *)inMenu withVals:(NSArray *)inVals forNSPUB:(NSPopUpButton *)inPUB;
 - (PresetObject *) recursiveCheckArray:(NSArray *)inArray forPresetWithUUID:(NSUUID *)inUUID;
 @end
 
 
+
+
 @implementation PrefsController
 
-+ (PrefsController *) global	{
-    
-    static PrefsController *globalPrefsController = nil;
-    static dispatch_once_t onceToken;
-  
-    dispatch_once(&onceToken, ^{
-        globalPrefsController = [[PrefsController alloc] init];
-    });
 
-    return globalPrefsController;
++ (PrefsController *) global	{
+	if (globalPrefsController == nil)
+		[[PrefsController alloc] init];
+	return globalPrefsController;
 }
 
 
 - (id) init	{
 	self = [super initWithWindowNibName:[NSString stringWithFormat:@"%@",[[self class] className]]];
 	if (self != nil)	{
+		globalPrefsController = self;
+		[self generalInit];
 	}
 	return self;
 }
-
+- (void) generalInit	{
+	[self window];
+}
 - (void)windowDidLoad {
 	//NSLog(@"%s",__func__);
     [super windowDidLoad];
