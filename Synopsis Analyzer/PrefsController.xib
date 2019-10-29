@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -13,32 +14,34 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="Nge-uY-kLL" userLabel="Prefs Window">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" resizable="YES"/>
+        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" appearanceType="darkAqua" frameAutosaveName="" animationBehavior="default" id="Nge-uY-kLL" userLabel="Prefs Window">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="600" height="500"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="3840" height="2137"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <value key="minSize" type="size" width="600" height="500"/>
+            <value key="maxSize" type="size" width="600" height="500"/>
             <view key="contentView" id="RK4-6L-tby" customClass="CustomBackgroundView">
                 <rect key="frame" x="0.0" y="0.0" width="600" height="500"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             </view>
             <toolbar key="toolbar" implicitIdentifier="F3BF19DA-E7CC-4C04-A5A1-8FA98644FD9C" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="YdB-2f-018">
                 <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="58DAD389-0E74-4C09-968B-3CA03D17D0B3" label="General" paletteLabel="General" tag="-1" image="ic_watch_later_white" id="8uD-BJ-IOp">
+                    <toolbarItem implicitItemIdentifier="58DAD389-0E74-4C09-968B-3CA03D17D0B3" label="General" paletteLabel="General" image="ic_watch_later_white" id="8uD-BJ-IOp">
                         <size key="minSize" width="24" height="24"/>
                         <size key="maxSize" width="24" height="24"/>
                         <connections>
                             <action selector="transitionToGeneral:" target="Bxq-7w-ged" id="ElF-Kb-eEf"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="33859DCF-F4B9-4B64-A17D-B9314FA4363C" label="FIles" paletteLabel="FIles" tag="-1" image="ic_folder_white" id="RG6-Go-X53">
+                    <toolbarItem implicitItemIdentifier="33859DCF-F4B9-4B64-A17D-B9314FA4363C" label="FIles" paletteLabel="FIles" tag="1" image="ic_folder_white" id="RG6-Go-X53">
                         <size key="minSize" width="24" height="24"/>
                         <size key="maxSize" width="24" height="24"/>
                         <connections>
                             <action selector="transitionToFile:" target="Bxq-7w-ged" id="qDM-Sg-X7V"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="209ED105-EACE-4885-BB5A-7F546E6A6C96" label="Presets" paletteLabel="Presets" tag="-1" image="ic_insert_drive_file_white" id="bg1-46-FsY">
+                    <toolbarItem implicitItemIdentifier="209ED105-EACE-4885-BB5A-7F546E6A6C96" label="Presets" paletteLabel="Presets" tag="2" image="ic_insert_drive_file_white" id="bg1-46-FsY">
                         <size key="minSize" width="24" height="24"/>
                         <size key="maxSize" width="24" height="24"/>
                         <connections>
@@ -46,7 +49,7 @@
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="dTW-Pd-i2e"/>
-                    <toolbarItem implicitItemIdentifier="5A215269-CE69-4A8F-AE30-266F9222010E" label="Advanced" paletteLabel="Advanced" tag="-1" image="ic_tune_white" id="0zJ-Ad-sJg">
+                    <toolbarItem implicitItemIdentifier="5A215269-CE69-4A8F-AE30-266F9222010E" label="Advanced" paletteLabel="Advanced" tag="3" image="ic_tune_white" id="0zJ-Ad-sJg">
                         <size key="minSize" width="24" height="24"/>
                         <size key="maxSize" width="24" height="24"/>
                         <connections>
@@ -66,6 +69,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="WZi-AI-nYc"/>
             </connections>
+            <point key="canvasLocation" x="139" y="119"/>
         </window>
         <customObject id="Bxq-7w-ged" customClass="PreferencesViewController">
             <connections>
