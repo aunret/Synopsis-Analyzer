@@ -693,11 +693,24 @@ static NSString						*localFileDragType = @"localFileDragType";
 			if (tmpSession == nil)
 				return;
 			
+			[outlineView beginUpdates];
+			
 			NSInteger		tmpIndex = [tmpSession.ops indexOfObjectIdenticalTo:tmpTop];
 			if (tmpIndex != NSNotFound && tmpIndex >= 0)	{
 				[tmpSession.ops removeObjectIdenticalTo:tmpTop];
 				[outlineView removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:tmpIndex] inParent:tmpSession withAnimation:NSTableViewAnimationSlideUp];
 			}
+			
+			//	if the session doesn't have any ops remaining, remove it as well
+			if (tmpSession.ops.count < 1)	{
+				tmpIndex = [self.sessions indexOfObjectIdenticalTo:tmpSession];
+				[self.sessions removeObjectIdenticalTo:tmpSession];
+				if (tmpIndex != NSNotFound && tmpIndex >= 0)
+					[outlineView removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:tmpIndex] inParent:nil withAnimation:NSTableViewAnimationSlideUp];
+			}
+			
+			[outlineView endUpdates];
+			
 			//[self reloadData];
 			[self outlineViewSelectionDidChange:nil];
 		}
