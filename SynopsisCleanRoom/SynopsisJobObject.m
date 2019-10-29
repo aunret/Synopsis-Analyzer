@@ -911,7 +911,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 					for (int i=0; i<formatDescriptions.count; ++i)	{
 						CMFormatDescriptionRef		desc = (__bridge CMFormatDescriptionRef)formatDescriptions[i];
 						
-						NSArray				*identifiers = CMMetadataFormatDescriptionGetIdentifiers(desc);
+						NSArray				*identifiers = (NSArray *)CMMetadataFormatDescriptionGetIdentifiers(desc);
 						if (identifiers!=nil && identifiers.count>0)	{
 							NSString			*identifier = identifiers[0];
 							if ([identifier isKindOfClass:[NSString class]] && [identifier isEqualToString:kSynopsisMetadataIdentifier])	{
@@ -1184,9 +1184,9 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			__block NSInteger			retrievedSampleBufferCount = 0;	//	the # of samples retrieved from the reader output corresponding to this writer input
 			__block NSInteger			analyzedSampleBufferCount = 0;	//	the # of samples retrieved from the normalized/analysis output corresponding to this writer input
 			//	if this is a passthru out and there's no corresponding analysis out, set 'analyzedSampleBufferCount' to -1 b/c we're not using it to verify that every sample has been analyzed
-			if ((vidReadPassthruOut != nil && vidReadPassthruOut != [NSNull null]) && (vidReadAnalysisOut == nil || vidReadAnalysisOut == [NSNull null]))
+			if ((vidReadPassthruOut != nil && (id)vidReadPassthruOut != (id)[NSNull null]) && (vidReadAnalysisOut == nil || (id)vidReadAnalysisOut == (id)[NSNull null]))
 				analyzedSampleBufferCount = -1;
-			else if ((audReadPassthruOut != nil && audReadPassthruOut != [NSNull null]) && (audReadAnalysisOut == nil || audReadAnalysisOut == [NSNull null]))
+			else if ((audReadPassthruOut != nil && (id)audReadPassthruOut != (id)[NSNull null]) && (audReadAnalysisOut == nil || (id)audReadAnalysisOut == (id)[NSNull null]))
 				analyzedSampleBufferCount = -1;
 			
 			
@@ -1719,7 +1719,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			[self _cleanUp];
 			return;
 		}
-		NSArray				*mdVersion = @( synopsisEncoder.version );
+		NSNumber			*mdVersion = @( synopsisEncoder.version );
 		if (![self file:targetURL xattrSetPlist:mdVersion forKey:kSynopsisMetadataHFSAttributeVersionKey])	{
 			self.jobStatus = JOStatus_Err;
 			self.jobErr = JOErr_File;

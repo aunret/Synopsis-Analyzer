@@ -14,6 +14,7 @@
 #import "FSDirectoryWatcher.h"
 #import "SessionController.h"
 #import "InspectorViewController.h"
+#import <UserNotifications/UserNotifications.h>
 
 
 
@@ -23,6 +24,7 @@
 - (instancetype) initWithDir:(NSURL *)n recursively:(BOOL)isRecursive;
 @property (strong,readwrite,nullable) FSDirectoryWatcher * watcher;
 @property (atomic,strong,readwrite) NSUUID * dragUUID;	//	literally only used for drag-and-drop.
+@property (atomic,readwrite) BOOL firedNotification;	//	whether or not the session fired a notification that it has completed all its files
 - (void) createDirectoryWatcher;
 - (void) destroyDirectoryWatcher;
 @end
@@ -69,6 +71,7 @@
 		self.watchFolder = NO;
 		self.watcher = nil;
 		self.dragUUID = [NSUUID UUID];
+		self.firedNotification = NO;
 		
 		self.type = SessionType_List;
 		self.state = SessionState_Inactive;
@@ -115,6 +118,7 @@
 		self.watchFolder = NO;
 		self.watcher = nil;
 		self.dragUUID = [NSUUID UUID];
+		self.firedNotification = NO;
 		
 		self.type = SessionType_Dir;
 		self.state = SessionState_Inactive;
@@ -208,6 +212,7 @@
 				: [coder decodeBoolForKey:@"watchFolder"];
 			
 			self.dragUUID = [NSUUID UUID];
+			self.firedNotification = NO;
 			
 			//	load the ops last so we can use self's properties to populate the op's properties
 			NSArray		*tmpArray = (![coder containsValueForKey:@"ops"]) ? [[NSMutableArray alloc] init] : [coder decodeObjectForKey:@"ops"];
@@ -344,6 +349,7 @@
 			if (op.type == OpType_AVFFile)	{
 				++toBeAnalyzedCount;
 				switch (op.status)	{
+				case OpStatus_Preflight:
 				case OpStatus_Pending:
 				case OpStatus_Cleanup:
 				case OpStatus_Analyze:
@@ -559,8 +565,12 @@
 							needsToStart = YES;
 							
 							SynOp		*newOp = [bss createOpForSrcURL:[NSURL fileURLWithPath:changedPath]];
-							if (newOp != nil)
-								[bss.ops addObject:newOp];
+							if (newOp != nil)	{
+								@synchronized (bss)	{
+									[bss.ops addObject:newOp];
+									bss.firedNotification = NO;
+								}
+							}
 						}
 					}
 					
@@ -591,6 +601,7 @@
 			case OpStatus_Pending:
 			case OpStatus_Analyze:
 			case OpStatus_Cleanup:
+			case OpStatus_Preflight:
 				returnMe = NO;
 				break;
 			case OpStatus_PreflightErr:
@@ -614,6 +625,7 @@
 			case OpStatus_Cleanup:
 			case OpStatus_PreflightErr:
 			case OpStatus_Err:
+			case OpStatus_Preflight:
 				returnMe = NO;
 				break;
 			case OpStatus_Complete:
@@ -624,6 +636,95 @@
 		}
 	}
 	return returnMe;
+}
+- (void) fireNotificationIfAppropriate	{
+	//NSLog(@"%s",__func__);
+	@synchronized (self)	{
+		
+		//	if we already fired the notification, bail immediately
+		if (self.firedNotification)
+			return;
+		
+		int			errorCount = 0;
+		int			successfulCount = 0;
+		int			unfinishedCount = 0;
+		for (SynOp *op in self.ops)	{
+			switch (op.status)	{
+			case OpStatus_Pending:
+			case OpStatus_Preflight:
+			case OpStatus_Analyze:
+			case OpStatus_Cleanup:
+				++unfinishedCount;
+				break;
+			case OpStatus_Complete:
+				++successfulCount;
+				break;
+			case OpStatus_PreflightErr:
+			case OpStatus_Err:
+				++errorCount;
+				break;
+			}
+		}
+		
+		//	if we haven't finished processing any files, bail immediately
+		if (unfinishedCount > 0)
+			return;
+		
+		//	assemble the content string
+		NSString					*contentString = nil;
+		
+		if (errorCount == 0)	{
+			if (successfulCount < 2)
+				contentString = [NSString stringWithFormat:@"Session %@ finished analyzing the file",self.title];
+			else
+				contentString = [NSString stringWithFormat:@"Session %@ finished analyzing %d files",self.title,successfulCount];
+		}
+		else if (successfulCount == 0)	{
+			if (errorCount < 2)
+				contentString = [NSString stringWithFormat:@"Session %@ finished analyzing the file, but it had an error",self.title];
+			else
+				contentString = [NSString stringWithFormat:@"Session %@ finished analyzing %d files, but they all had errors",self.title,errorCount];
+		}
+		else	{
+			contentString = [NSString stringWithFormat:@"Session %@ finished analyzing",self.title];
+			
+			if (successfulCount + errorCount < 2)
+				contentString = [contentString stringByAppendingString:@" a file, with"];
+			else
+				contentString = [contentString stringByAppendingFormat:@" %d files, with",successfulCount+errorCount];
+			
+			if (errorCount < 2)
+				contentString = [contentString stringByAppendingString:@" 1 error"];
+			else
+				contentString = [contentString stringByAppendingFormat:@" %d errors",errorCount];
+		}
+		
+		if (@available(macOS 10.14, *))	{
+			UNMutableNotificationContent		*content = [[UNMutableNotificationContent alloc] init];
+			content.title = @"Session Complete!";
+			content.body = contentString;
+			content.badge = nil;
+			content.sound = nil;
+			content.categoryIdentifier = @"SessionComplete";
+		
+			NSString			*requestID = [[NSUUID UUID] UUIDString];
+			UNNotificationRequest		*req = [UNNotificationRequest
+				requestWithIdentifier:requestID
+				content:content
+				trigger:nil];
+		
+			[[UNUserNotificationCenter currentNotificationCenter]
+				addNotificationRequest:req
+				withCompletionHandler:^(NSError *err)	{
+					//	close the notification automatically after 3 seconds
+					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3.0*NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+						[[UNUserNotificationCenter currentNotificationCenter] removeDeliveredNotificationsWithIdentifiers:@[requestID]];
+					});
+				}];
+		
+			self.firedNotification = YES;
+		}
+	}
 }
 - (void) destroyDirectoryWatcher	{
 	@synchronized (self)	{

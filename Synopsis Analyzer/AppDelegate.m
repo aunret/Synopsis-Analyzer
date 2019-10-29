@@ -10,6 +10,7 @@
 #import <Synopsis/Synopsis.h>
 #import <VideoToolbox/VTProfessionalVideoWorkflow.h>
 #import <MediaToolbox/MediaToolbox.h>
+#import <UserNotifications/UserNotifications.h>
 
 #import "DropFilesView.h"
 #import "LogController.h"
@@ -161,7 +162,22 @@
 	// force Standard Analyzer to be a plugin
 	//[self.analyzerPlugins addObject:NSStringFromClass([StandardAnalyzerPlugin class])];
 
-	
+	if (@available(macOS 10.14, *))	{
+		//	request permission to post notifications
+		UNUserNotificationCenter		*center = [UNUserNotificationCenter currentNotificationCenter];
+		[center
+			requestAuthorizationWithOptions:UNAuthorizationOptionAlert
+			completionHandler:^(BOOL granted, NSError *err)	{
+				if (granted)	{
+					UNNotificationCategory		*cat = [UNNotificationCategory
+						categoryWithIdentifier:@"SessionComplete"
+						actions:nil
+						intentIdentifiers:nil
+						options:UNNotificationCategoryOptionNone];
+					[[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[NSSet setWithObjects:cat,nil]];
+				}
+			}];
+	}
 }
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender	{
 	//NSLog(@"%s",__func__);

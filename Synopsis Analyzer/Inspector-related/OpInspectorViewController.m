@@ -444,7 +444,7 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 		
 		NSString						*tmpString = nil;
 		NSMutableAttributedString		*tmpAttrString = nil;
-		NSMutableParagraphStyle			*ps = nil;
+		//NSMutableParagraphStyle			*ps = nil;
 	
 		NSMutableAttributedString		*fileString = [[NSMutableAttributedString alloc] initWithString:@""];
 		NSMutableAttributedString		*videoString = [[NSMutableAttributedString alloc] initWithString:@""];

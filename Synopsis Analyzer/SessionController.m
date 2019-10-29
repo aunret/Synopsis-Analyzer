@@ -778,7 +778,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 	NSArray			*newSessions = [self createSessionsWithFiles:n];
 	if (newSessions==nil || [newSessions count]<1)
 		return;
-	SynSession		*filesSession = nil;
+	//SynSession		*filesSession = nil;
 	[outlineView beginUpdates];
 	for (SynSession *newSession in newSessions)	{
 		[outlineView insertItemsAtIndexes:[NSIndexSet indexSetWithIndex:self.sessions.count + WATCH_SESSIONS_COUNT] inParent:nil withAnimation:NSTableViewAnimationSlideDown];
@@ -874,6 +874,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 		case OpStatus_Pending:
 		case OpStatus_Analyze:
 		case OpStatus_Cleanup:
+		case OpStatus_Preflight:
 			//	intentionally blank, should probably never occur
 			break;
 		case OpStatus_PreflightErr:
@@ -904,6 +905,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 			}
 		}
 	}
+	
+	//	tell the session to post a notification if appropriate
+	[n.session fireNotificationIfAppropriate];
 	
 	//	if we have no more ops, stop!
 	if (self.opsInProgress.count < 1)

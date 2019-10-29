@@ -59,6 +59,8 @@ typedef NS_ENUM(NSUInteger, SessionState)	{
 //	returns a YES only if all ops have been processed (all ops' states are either an err or complete)
 - (BOOL) processedAllOps;
 - (BOOL) processedAllOpsSuccessfully;
+//	fires a notification center notification if it has finished all its ops (and hasn't yet fired its notification)
+- (void) fireNotificationIfAppropriate;
 
 - (SynOp *) getOpWithSrcFile:(NSString *)n;
 //	returns an array of the ops that should be saved/encoded (only ops that are pending or have errored out)

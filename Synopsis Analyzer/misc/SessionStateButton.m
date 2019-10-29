@@ -120,13 +120,13 @@ const CGFloat insetFactor = 0.75;
 
 
 @synthesize state=myState;
-- (void) setState:(NSControlStateValue)n	{
+- (void) setState:(SSBState)n	{
 	//	note: if we only update the state if it's changed then under some circumstances the button will
 	//	stop animating (happens if you scroll way down and then back up again)
 	myState = n;
 	[self _updateResources];
 }
-- (NSControlStateValue) state	{
+- (SSBState) state	{
 	return myState;
 }
 - (void) setFrameSize:(NSSize)n	{
