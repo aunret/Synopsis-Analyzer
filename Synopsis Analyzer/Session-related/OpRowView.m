@@ -141,7 +141,12 @@ static NSMutableArray		*iconGenArray = nil;
 
 
 - (void) refreshWithOp:(SynOp *)n	{
+	BOOL			changed = (self.op == n) ? NO : YES;
 	self.op = n;
+	if (changed)	{
+		[progressIndicator killAnimationSetDoubleValue:0.0];
+	}
+	
 	[self refreshUI];
 }
 - (void) refreshUI	{

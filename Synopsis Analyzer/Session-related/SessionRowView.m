@@ -90,7 +90,11 @@
 
 
 - (void) refreshWithSession:(SynSession *)n	{
+	BOOL			changed = (self.session == n) ? NO : YES;
 	self.session = n;
+	if (changed)	{
+		[progressIndicator killAnimationSetDoubleValue:0.0];
+	}
 	[self refreshUI];
 }
 - (void) refreshUI	{
@@ -151,8 +155,8 @@
 		if (tmpProgress == 0.0 || tmpProgress == 1.0)
 			[progressIndicator killAnimationSetDoubleValue:tmpProgress];
 		else
-			[progressIndicator animateToValue:tmpProgress];
-			//[progressIndicator killAnimationSetDoubleValue:tmpProgress];
+			//[progressIndicator animateToValue:tmpProgress];
+			[progressIndicator killAnimationSetDoubleValue:tmpProgress];
 			//[progressIndicator setDoubleValue:tmpProgress];
 	}
 }
