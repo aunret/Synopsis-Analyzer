@@ -21,9 +21,9 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customObject id="qnn-nE-DuA" customClass="PathAbstraction">
+        <customObject id="qnn-nE-DuA" customClass="PathPickerAbstraction">
             <connections>
-                <outlet property="enableToggle" destination="OVc-8W-HCx" id="qOQ-Mk-2nw"/>
+                <outlet property="pickerPUB" destination="gpw-4r-ye0" id="Tv6-go-3aj"/>
                 <outlet property="statusButton" destination="sWI-cB-pLk" id="Bvu-C6-Jlx"/>
                 <outlet property="statusTextField" destination="SZp-sr-38r" id="ZGp-Mi-kbE"/>
             </connections>
@@ -70,7 +70,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="siS-dA-chy">
                                                                     <font key="font" metaFont="smallSystem"/>
-                                                                    <string key="title">If enabled transcoded and analyzed files will be placed in the selected directory. By default new files are placed adjacent to their originals.</string>
+                                                                    <string key="title">Transcoded and anlyzed files will be placed in the selected directory.  By default, new files are placed adjacent to their originals.</string>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -92,28 +92,6 @@
                                                                 </buttonCell>
                                                                 <connections>
                                                                     <action selector="revealButtonUsed:" target="qnn-nE-DuA" id="7ln-6c-HqD"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVc-8W-HCx">
-                                                                <rect key="frame" x="19" y="182" width="119" height="20"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Use Output Folder" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="N2C-Lj-Ape">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="enableToggleUsed:" target="qnn-nE-DuA" id="4Dx-zD-mMz"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QYu-xU-PLH">
-                                                                <rect key="frame" x="144" y="183" width="125" height="19"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="roundTextured" title="Select Output Folder" bezelStyle="texturedRounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="RSJ-gt-JoI">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="selectButtonUsed:" target="qnn-nE-DuA" id="IJ1-qa-EJj"/>
                                                                 </connections>
                                                             </button>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FnN-sO-rQc">
@@ -153,28 +131,36 @@
                                                                     <action selector="revealButtonUsed:" target="9ii-mB-ZE0" id="7Gn-0Q-B20"/>
                                                                 </connections>
                                                             </button>
-                                                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rnh-OI-rOa">
-                                                                <rect key="frame" x="19" y="63" width="116" height="20"/>
+                                                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gpw-4r-ye0">
+                                                                <rect key="frame" x="17" y="181" width="196" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Use Temp Folder" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="scQ-b5-dux">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="nQ3-nj-eD9" id="sVD-6x-R0c">
+                                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="smallSystem"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="enableToggleUsed:" target="9ii-mB-ZE0" id="gf3-DP-rm7"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="340-9r-Knq">
-                                                                <rect key="frame" x="145" y="63" width="162" height="19"/>
+                                                                    <menu key="menu" id="K0Q-EH-P4X">
+                                                                        <items>
+                                                                            <menuItem title="Item 1" state="on" id="nQ3-nj-eD9"/>
+                                                                            <menuItem title="Item 2" id="XQ8-o5-phG"/>
+                                                                            <menuItem title="Item 3" id="23x-mf-hYq"/>
+                                                                        </items>
+                                                                    </menu>
+                                                                </popUpButtonCell>
+                                                            </popUpButton>
+                                                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HtO-Df-Tl2">
+                                                                <rect key="frame" x="17" y="62" width="196" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="roundTextured" title="Select Temporary File Folder" bezelStyle="texturedRounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="E92-Hq-tGz">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="6yN-I8-lkd" id="Z4A-RG-UE2">
+                                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="smallSystem"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="selectButtonUsed:" target="9ii-mB-ZE0" id="OGn-BU-zu1"/>
-                                                                </connections>
-                                                            </button>
+                                                                    <menu key="menu" id="zUj-l8-piQ">
+                                                                        <items>
+                                                                            <menuItem title="Item 1" state="on" id="6yN-I8-lkd"/>
+                                                                            <menuItem title="Item 2" id="qlb-UX-Aya"/>
+                                                                            <menuItem title="Item 3" id="OyK-QY-t75"/>
+                                                                        </items>
+                                                                    </menu>
+                                                                </popUpButtonCell>
+                                                            </popUpButton>
                                                         </subviews>
                                                     </view>
                                                 </box>
@@ -299,28 +285,6 @@
                                                                     <action selector="revealButtonUsed:" target="oDr-2M-UcV" id="YeN-Pz-Aq3"/>
                                                                 </connections>
                                                             </button>
-                                                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SOn-Mp-ok1">
-                                                                <rect key="frame" x="19" y="189" width="141" height="20"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Use per-session script" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="dot-9y-hOX">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="enableToggleUsed:" target="oDr-2M-UcV" id="mhS-ju-a5r"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mp7-Tf-4Vu">
-                                                                <rect key="frame" x="178" y="190" width="125" height="19"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="roundTextured" title="Select script" bezelStyle="texturedRounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Zx4-r5-nnN">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="selectButtonUsed:" target="oDr-2M-UcV" id="q11-Zz-SNg"/>
-                                                                </connections>
-                                                            </button>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z15-90-Upe">
                                                                 <rect key="frame" x="44" y="21" width="273" height="11"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -358,28 +322,36 @@
                                                                     <action selector="revealButtonUsed:" target="g4P-8I-Gzc" id="FkT-Oe-rYU"/>
                                                                 </connections>
                                                             </button>
-                                                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AsR-aP-ZXy">
-                                                                <rect key="frame" x="19" y="74" width="131" height="20"/>
+                                                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pr5-qW-N14">
+                                                                <rect key="frame" x="17" y="189" width="196" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="check" title="Use per-file script" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="cyW-iX-hXH">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9V3-v2-amK" id="M2M-yB-R3k">
+                                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="smallSystem"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="enableToggleUsed:" target="g4P-8I-Gzc" id="ljO-Gc-OEr"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qkp-VP-V6a">
-                                                                <rect key="frame" x="156" y="74" width="125" height="19"/>
+                                                                    <menu key="menu" id="ycO-Ol-Df7">
+                                                                        <items>
+                                                                            <menuItem title="Item 1" state="on" id="9V3-v2-amK"/>
+                                                                            <menuItem title="Item 2" id="Zvy-PP-I3w"/>
+                                                                            <menuItem title="Item 3" id="4Ag-7a-83a"/>
+                                                                        </items>
+                                                                    </menu>
+                                                                </popUpButtonCell>
+                                                            </popUpButton>
+                                                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HuG-nu-CUF">
+                                                                <rect key="frame" x="17" y="73" width="196" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <buttonCell key="cell" type="roundTextured" title="Select script" bezelStyle="texturedRounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8uK-yt-s8e">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="A0H-oX-rAs" id="t3i-RY-ggl">
+                                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="smallSystem"/>
-                                                                </buttonCell>
-                                                                <connections>
-                                                                    <action selector="selectButtonUsed:" target="g4P-8I-Gzc" id="7aU-eT-SSj"/>
-                                                                </connections>
-                                                            </button>
+                                                                    <menu key="menu" id="ew1-s8-2np">
+                                                                        <items>
+                                                                            <menuItem title="Item 1" state="on" id="A0H-oX-rAs"/>
+                                                                            <menuItem title="Item 2" id="DJc-1M-qxa"/>
+                                                                            <menuItem title="Item 3" id="VZG-tk-oRv"/>
+                                                                        </items>
+                                                                    </menu>
+                                                                </popUpButtonCell>
+                                                            </popUpButton>
                                                         </subviews>
                                                     </view>
                                                 </box>
@@ -419,23 +391,23 @@
             </scroller>
             <point key="canvasLocation" x="367.5" y="677"/>
         </scrollView>
-        <customObject id="9ii-mB-ZE0" customClass="PathAbstraction">
+        <customObject id="9ii-mB-ZE0" customClass="PathPickerAbstraction">
             <connections>
-                <outlet property="enableToggle" destination="Rnh-OI-rOa" id="7pN-13-EKT"/>
+                <outlet property="pickerPUB" destination="HtO-Df-Tl2" id="kTT-AM-N9c"/>
                 <outlet property="statusButton" destination="JWG-4N-PD2" id="eyF-Gk-cSx"/>
                 <outlet property="statusTextField" destination="FnN-sO-rQc" id="NWr-Zg-OqC"/>
             </connections>
         </customObject>
-        <customObject id="oDr-2M-UcV" customClass="PathAbstraction">
+        <customObject id="oDr-2M-UcV" customClass="PathPickerAbstraction">
             <connections>
-                <outlet property="enableToggle" destination="SOn-Mp-ok1" id="rK2-Oi-dUP"/>
+                <outlet property="pickerPUB" destination="Pr5-qW-N14" id="KST-9G-h6O"/>
                 <outlet property="statusButton" destination="gDz-O9-AfR" id="KAm-dN-kj3"/>
                 <outlet property="statusTextField" destination="dDK-3k-sK7" id="rva-GS-LIE"/>
             </connections>
         </customObject>
-        <customObject id="g4P-8I-Gzc" customClass="PathAbstraction">
+        <customObject id="g4P-8I-Gzc" customClass="PathPickerAbstraction">
             <connections>
-                <outlet property="enableToggle" destination="AsR-aP-ZXy" id="NND-dP-bz6"/>
+                <outlet property="pickerPUB" destination="HuG-nu-CUF" id="I1s-m1-M4M"/>
                 <outlet property="statusButton" destination="2Sh-69-TWa" id="4tq-cQ-jYi"/>
                 <outlet property="statusTextField" destination="z15-90-Upe" id="z4M-9X-yDF"/>
             </connections>

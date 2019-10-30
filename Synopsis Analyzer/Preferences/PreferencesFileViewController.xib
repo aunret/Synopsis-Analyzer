@@ -40,7 +40,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="Jmb-rJ-vxJ">
                                     <font key="font" metaFont="smallSystem"/>
-                                    <string key="title">If enabled transcoded and analyzed files will be placed in the selected directory. By default new files are placed adjacent to their originals.</string>
+                                    <string key="title">Transcoded and anlyzed files will be placed in the selected directory.  By default, new files are placed adjacent to their originals.</string>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -62,28 +62,6 @@
                                 </buttonCell>
                                 <connections>
                                     <action selector="revealButtonUsed:" target="6zj-mz-1O9" id="KIh-D3-4al"/>
-                                </connections>
-                            </button>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mLx-sD-Pd9">
-                                <rect key="frame" x="17" y="189" width="119" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Use Output Folder" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="t50-tc-1vl">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="enableToggleUsed:" target="6zj-mz-1O9" id="G3h-cJ-5FV"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A7C-ug-KYv">
-                                <rect key="frame" x="142" y="190" width="125" height="19"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="roundTextured" title="Select Output Folder" bezelStyle="texturedRounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="E8P-zA-dkB">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="selectButtonUsed:" target="6zj-mz-1O9" id="xcX-Qn-SqB"/>
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UGb-xk-trm">
@@ -123,28 +101,36 @@
                                     <action selector="revealButtonUsed:" target="KfN-0n-6l6" id="oBi-e3-bXE"/>
                                 </connections>
                             </button>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9jn-x9-gTb">
-                                <rect key="frame" x="17" y="87" width="116" height="20"/>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ziA-iS-Nqe">
+                                <rect key="frame" x="15" y="188" width="196" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Use Temp Folder" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="QNW-qW-MS0">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="wo5-84-3kn" id="Yrp-lH-4kG">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="enableToggleUsed:" target="KfN-0n-6l6" id="0YA-Yf-M5k"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nRa-Ju-IJ0">
-                                <rect key="frame" x="143" y="87" width="162" height="19"/>
+                                    <menu key="menu" id="Q8Q-3d-tud">
+                                        <items>
+                                            <menuItem title="Item 1" state="on" id="wo5-84-3kn"/>
+                                            <menuItem title="Item 2" id="YuH-d4-aof"/>
+                                            <menuItem title="Item 3" id="bmm-40-Hhr"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hZ8-0I-UqD">
+                                <rect key="frame" x="15" y="86" width="196" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="roundTextured" title="Select Temporary File Folder" bezelStyle="texturedRounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XoP-bi-Q7C">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="YTe-UZ-s5V" id="sCV-Kh-HrC">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="selectButtonUsed:" target="KfN-0n-6l6" id="XYw-y6-Unn"/>
-                                </connections>
-                            </button>
+                                    <menu key="menu" id="ELi-d1-Sq7">
+                                        <items>
+                                            <menuItem title="Item 1" state="on" id="YTe-UZ-s5V"/>
+                                            <menuItem title="Item 2" id="TQl-Lb-x17"/>
+                                            <menuItem title="Item 3" id="x3q-fD-KfB"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
                         </subviews>
                     </view>
                 </box>
@@ -172,16 +158,16 @@
             </subviews>
             <point key="canvasLocation" x="139" y="246"/>
         </customView>
-        <customObject id="6zj-mz-1O9" customClass="PrefsPathAbstraction">
+        <customObject id="6zj-mz-1O9" customClass="PrefsPathPickerAbstraction">
             <connections>
-                <outlet property="enableToggle" destination="mLx-sD-Pd9" id="ZHb-lc-cok"/>
+                <outlet property="pickerPUB" destination="ziA-iS-Nqe" id="wuR-6q-iUq"/>
                 <outlet property="statusButton" destination="tTZ-7e-W48" id="Hxh-uh-riu"/>
                 <outlet property="statusTextField" destination="Hil-L7-HW7" id="2CT-uZ-Qlu"/>
             </connections>
         </customObject>
-        <customObject id="KfN-0n-6l6" customClass="PrefsPathAbstraction">
+        <customObject id="KfN-0n-6l6" customClass="PrefsPathPickerAbstraction">
             <connections>
-                <outlet property="enableToggle" destination="9jn-x9-gTb" id="sOS-Qi-eZJ"/>
+                <outlet property="pickerPUB" destination="hZ8-0I-UqD" id="hh0-Hb-AcK"/>
                 <outlet property="statusButton" destination="xWv-NL-9Mx" id="HZo-vq-wyh"/>
                 <outlet property="statusTextField" destination="UGb-xk-trm" id="j18-IQ-5N2"/>
             </connections>

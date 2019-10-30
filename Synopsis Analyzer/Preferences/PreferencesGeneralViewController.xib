@@ -108,9 +108,6 @@
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
                                 </buttonCell>
-                                <connections>
-                                    <action selector="enableToggleUsed:" target="sN0-66-umG" id="pgW-Ww-dIE"/>
-                                </connections>
                             </button>
                             <button verticalHuggingPriority="750" id="H9L-vP-EDV">
                                 <rect key="frame" x="180" y="78" width="125" height="19"/>
@@ -119,9 +116,6 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
                                 </buttonCell>
-                                <connections>
-                                    <action selector="selectButtonUsed:" target="sN0-66-umG" id="TDz-ae-zzy"/>
-                                </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="6gG-tZ-7de">
                                 <rect key="frame" x="40" y="127" width="367" height="11"/>
@@ -168,9 +162,6 @@
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
                                 </buttonCell>
-                                <connections>
-                                    <action selector="enableToggleUsed:" target="xlU-sg-c5Q" id="eci-56-1Yj"/>
-                                </connections>
                             </button>
                             <button verticalHuggingPriority="750" id="LcY-qe-sex">
                                 <rect key="frame" x="182" y="181" width="125" height="19"/>
@@ -179,9 +170,6 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
                                 </buttonCell>
-                                <connections>
-                                    <action selector="selectButtonUsed:" target="xlU-sg-c5Q" id="zF4-Zj-3qY"/>
-                                </connections>
                             </button>
                         </subviews>
                     </view>
@@ -190,16 +178,14 @@
             <point key="canvasLocation" x="105" y="-32"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="qNL-dS-myo"/>
-        <customObject id="sN0-66-umG" customClass="PrefsPathAbstraction">
+        <customObject id="sN0-66-umG" customClass="PrefsPathPickerAbstraction">
             <connections>
-                <outlet property="enableToggle" destination="gKQ-NM-VMs" id="4e4-hX-hY4"/>
                 <outlet property="statusButton" destination="NX5-j1-GAc" id="bQu-RX-3Za"/>
                 <outlet property="statusTextField" destination="hOF-nH-wqj" id="atc-yT-axj"/>
             </connections>
         </customObject>
-        <customObject id="xlU-sg-c5Q" customClass="PrefsPathAbstraction">
+        <customObject id="xlU-sg-c5Q" customClass="PrefsPathPickerAbstraction">
             <connections>
-                <outlet property="enableToggle" destination="6Ux-72-hzF" id="1FY-I2-ug0"/>
                 <outlet property="statusButton" destination="Igj-W1-0Vs" id="AMD-qF-g2U"/>
                 <outlet property="statusTextField" destination="6gG-tZ-7de" id="1Mv-0X-Xtx"/>
             </connections>

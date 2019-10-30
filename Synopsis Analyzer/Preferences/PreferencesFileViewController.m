@@ -43,7 +43,7 @@
 	//NSLog(@"%s",__func__);
 	__weak PreferencesFileViewController		*bss = self;
 	[outputFolderAbs setUserDefaultsKey:kSynopsisAnalyzerOutputFolderURLKey];
-	[outputFolderAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
+	[outputFolderAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = YES;
 		openPanel.canCreateDirectories = YES;
@@ -62,7 +62,7 @@
 	}];
 	/*
 	[watchFolderAbs setUserDefaultsKey:kSynopsisAnalyzerWatchFolderURLKey];
-	[watchFolderAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
+	[watchFolderAbs setSelectButtonBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = YES;
 		openPanel.canCreateDirectories = YES;
@@ -81,12 +81,12 @@
 			}
 		}];
 	}];
-	[watchFolderAbs setEnableToggleBlock:^(PrefsPathAbstraction *inAbs)	{
+	[watchFolderAbs setEnableToggleBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		[bss initDirectoryWatcherIfNeeded];
 	}];
 	*/
 	[tempFolderAbs setUserDefaultsKey:kSynopsisAnalyzerTempFolderURLKey];
-	[tempFolderAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
+	[tempFolderAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = YES;
 		openPanel.canCreateDirectories = YES;

@@ -29,6 +29,7 @@
 		1A10937C2330205800791BDA /* OpRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A10937A2330205800791BDA /* OpRowView.m */; };
 		1A10937D2330205800791BDA /* OpRowView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A10937B2330205800791BDA /* OpRowView.xib */; };
 		1A2B9FC62368BF8E008D4F6A /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A2B9FBF2368BF8E008D4F6A /* UserNotifications.framework */; };
+		1A2BA002236A3AE7008D4F6A /* PrefsPathPickerAbstraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A2BA001236A3AE7008D4F6A /* PrefsPathPickerAbstraction.m */; };
 		1A34044223283C25004A434D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34044123283C25004A434D /* main.m */; };
 		1A34044C23283EFA004A434D /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
 		1A34044D23283EFA004A434D /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
@@ -74,8 +75,6 @@
 		1AEC50FE233553840053C1B0 /* NSPopUpButtonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */; };
 		1AEC510F2335556C0053C1B0 /* NSMenuAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC510E2335556C0053C1B0 /* NSMenuAdditions.m */; };
 		1AEE2F792333C917009193CD /* PresetSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F782333C917009193CD /* PresetSettings.m */; };
-		1AEE2F822334032E009193CD /* PrefsPathAbstraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F812334032E009193CD /* PrefsPathAbstraction.m */; };
-		1AEE2F85233448E0009193CD /* PathAbstraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F84233448E0009193CD /* PathAbstraction.m */; };
 		1AFDD45F2316F3C400D7862F /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
 		1B1FF1482363681400D281FB /* NSColor+SynopsisStatusColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B1FF1472363681400D281FB /* NSColor+SynopsisStatusColors.m */; };
 		1B454BF523567D1600F3D4A8 /* GPULoadBalancer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B454BF423567D1600F3D4A8 /* GPULoadBalancer.m */; };
@@ -256,6 +255,8 @@
 		1A10937A2330205800791BDA /* OpRowView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpRowView.m; sourceTree = "<group>"; };
 		1A10937B2330205800791BDA /* OpRowView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpRowView.xib; sourceTree = "<group>"; };
 		1A2B9FBF2368BF8E008D4F6A /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		1A2BA000236A3AE7008D4F6A /* PrefsPathPickerAbstraction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefsPathPickerAbstraction.h; sourceTree = "<group>"; };
+		1A2BA001236A3AE7008D4F6A /* PrefsPathPickerAbstraction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrefsPathPickerAbstraction.m; sourceTree = "<group>"; };
 		1A34043F23283C25004A434D /* synopsis_cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = synopsis_cli; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A34044123283C25004A434D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1A3EBFA3235F8E03007AB5B1 /* SessionStateButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionStateButton.h; sourceTree = "<group>"; };
@@ -319,10 +320,6 @@
 		1AEC510E2335556C0053C1B0 /* NSMenuAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSMenuAdditions.m; sourceTree = "<group>"; };
 		1AEE2F772333C917009193CD /* PresetSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetSettings.h; sourceTree = "<group>"; };
 		1AEE2F782333C917009193CD /* PresetSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetSettings.m; sourceTree = "<group>"; };
-		1AEE2F802334032E009193CD /* PrefsPathAbstraction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefsPathAbstraction.h; sourceTree = "<group>"; };
-		1AEE2F812334032E009193CD /* PrefsPathAbstraction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrefsPathAbstraction.m; sourceTree = "<group>"; };
-		1AEE2F83233448E0009193CD /* PathAbstraction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PathAbstraction.h; sourceTree = "<group>"; };
-		1AEE2F84233448E0009193CD /* PathAbstraction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PathAbstraction.m; sourceTree = "<group>"; };
 		1AFDD45D2316F3C400D7862F /* SynopsisJobObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynopsisJobObject.h; sourceTree = "<group>"; };
 		1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SynopsisJobObject.m; sourceTree = "<group>"; };
 		1B1FF1462363681400D281FB /* NSColor+SynopsisStatusColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSColor+SynopsisStatusColors.h"; sourceTree = "<group>"; };
@@ -422,10 +419,6 @@
 				1A109349233001A300791BDA /* CustomVisualEffectView.m */,
 				1A10934B233001AE00791BDA /* CustomBackgroundView.h */,
 				1A10934C233001AE00791BDA /* CustomBackgroundView.m */,
-				1AEE2F802334032E009193CD /* PrefsPathAbstraction.h */,
-				1AEE2F812334032E009193CD /* PrefsPathAbstraction.m */,
-				1AEE2F83233448E0009193CD /* PathAbstraction.h */,
-				1AEE2F84233448E0009193CD /* PathAbstraction.m */,
 				1AEC50FC233553840053C1B0 /* NSPopUpButtonAdditions.h */,
 				1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */,
 				1AEC510D2335556C0053C1B0 /* NSMenuAdditions.h */,
@@ -448,6 +441,8 @@
 				1B1FF1472363681400D281FB /* NSColor+SynopsisStatusColors.m */,
 				1AB8E30F23678C610056122B /* NSProgressIndicatorAnimated.h */,
 				1AB8E31023678C610056122B /* NSProgressIndicatorAnimated.m */,
+				1A2BA000236A3AE7008D4F6A /* PrefsPathPickerAbstraction.h */,
+				1A2BA001236A3AE7008D4F6A /* PrefsPathPickerAbstraction.m */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -831,17 +826,16 @@
 				1A1093472330016D00791BDA /* DropFilesView.m in Sources */,
 				1A1093772330205100791BDA /* SessionRowView.m in Sources */,
 				1A58E28E235E1255003B6A6F /* VVLogger.mm in Sources */,
+				1A2BA002236A3AE7008D4F6A /* PrefsPathPickerAbstraction.m in Sources */,
 				1A9B1EBE23314B73007D414A /* PrefsController.m in Sources */,
 				1AD845A6232C1E3900416F5C /* main.m in Sources */,
 				1B454BF523567D1600F3D4A8 /* GPULoadBalancer.m in Sources */,
 				1AD6237123395C4B0025703E /* SynopsisJobObject.m in Sources */,
-				1AEE2F822334032E009193CD /* PrefsPathAbstraction.m in Sources */,
 				1A55FD7F2343F78E007CA355 /* PresetSettingsUIController.m in Sources */,
 				1A1093382330011C00791BDA /* SessionController.m in Sources */,
 				1B1FF1482363681400D281FB /* NSColor+SynopsisStatusColors.m in Sources */,
 				1AA77B0D233FC5400049DEC4 /* FlippedClipView.m in Sources */,
 				1A1093442330012900791BDA /* LogController.m in Sources */,
-				1AEE2F85233448E0009193CD /* PathAbstraction.m in Sources */,
 				1A10936A2330027C00791BDA /* PresetGroup.m in Sources */,
 				1A10936E233002D800791BDA /* SynOp.m in Sources */,
 				1A1093632330026800791BDA /* PreferencesAdvancedViewController.m in Sources */,

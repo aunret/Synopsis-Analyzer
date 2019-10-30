@@ -32,7 +32,7 @@
 	__weak PreferencesGeneralViewController		*bss = self;
 	
 	[scriptAbs setUserDefaultsKey:kSynopsisAnalyzerOperationScriptKey];
-	[scriptAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
+	[scriptAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = NO;
 		openPanel.canCreateDirectories = NO;
@@ -49,7 +49,7 @@
 	}];
 	
 	[sessionScriptAbs setUserDefaultsKey:kSynopsisAnalyzerSessionScriptKey];
-	[sessionScriptAbs setSelectButtonBlock:^(PrefsPathAbstraction *inAbs)	{
+	[sessionScriptAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = NO;
 		openPanel.canCreateDirectories = NO;

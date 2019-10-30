@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "PathAbstraction.h"
+#import "PrefsPathPickerAbstraction.h"
 
 @class SynSession;
 
@@ -22,10 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
 	IBOutlet NSPopUpButton			*presetsPUB;
 	IBOutlet NSTextField			*presetDescriptionField;
 	
-	IBOutlet PathAbstraction		*outputFolderPathAbs;
-	IBOutlet PathAbstraction		*tempFolderPathAbs;
-	IBOutlet PathAbstraction		*opScriptPathAbs;
-	IBOutlet PathAbstraction		*sessionScriptPathAbs;
+	IBOutlet PathPickerAbstraction		*outputFolderPathAbs;
+	IBOutlet PathPickerAbstraction		*tempFolderPathAbs;
+	IBOutlet PathPickerAbstraction		*opScriptPathAbs;
+	IBOutlet PathPickerAbstraction		*sessionScriptPathAbs;
 	
 	IBOutlet NSBox					*sessionWatchDirBox;
 	IBOutlet NSButton				*copyNonMediaToggle;

@@ -52,7 +52,8 @@
 	[self _updatePresetsPUB];
 	
 	//	configure the output folder path UI items to update the selected object
-	[outputFolderPathAbs setSelectButtonBlock:^(PathAbstraction *inAbs)	{
+	[outputFolderPathAbs setUserDefaultsKey:kSynopsisAnalyzerOutputFolderURLKey];
+	[outputFolderPathAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = YES;
 		openPanel.canCreateDirectories = YES;
@@ -77,7 +78,7 @@
 			}
 		}];
 	}];
-	[outputFolderPathAbs setEnableToggleBlock:^(PathAbstraction *inAbs)	{
+	[outputFolderPathAbs setPathChangeBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		//	update the inspected object's output dir
 		dispatch_async(dispatch_get_main_queue(), ^{
 			if (bss.inspectedObject != nil)	{
@@ -90,7 +91,8 @@
 	}];
 	
 	//	configure the temp folder path UI items to update the selected object
-	[tempFolderPathAbs setSelectButtonBlock:^(PathAbstraction *inAbs)	{
+	[tempFolderPathAbs setUserDefaultsKey:kSynopsisAnalyzerTempFolderURLKey];
+	[tempFolderPathAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = YES;
 		openPanel.canCreateDirectories = YES;
@@ -115,7 +117,7 @@
 			}
 		}];
 	}];
-	[tempFolderPathAbs setEnableToggleBlock:^(PathAbstraction *inAbs)	{
+	[tempFolderPathAbs setPathChangeBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		//	update the inspected object's output dir
 		dispatch_async(dispatch_get_main_queue(), ^{
 			if (bss.inspectedObject != nil)	{
@@ -128,7 +130,8 @@
 	}];
 	
 	//	configure the file script folder path UI items to update the selected object
-	[opScriptPathAbs setSelectButtonBlock:^(PathAbstraction *inAbs)	{
+	[opScriptPathAbs setUserDefaultsKey:kSynopsisAnalyzerOperationScriptKey];
+	[opScriptPathAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = NO;
 		openPanel.canCreateDirectories = NO;
@@ -154,7 +157,7 @@
 			}
 		}];
 	}];
-	[opScriptPathAbs setEnableToggleBlock:^(PathAbstraction *inAbs)	{
+	[opScriptPathAbs setPathChangeBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		//	update the inspected object's output dir
 		dispatch_async(dispatch_get_main_queue(), ^{
 			if (bss.inspectedObject != nil)	{
@@ -167,7 +170,8 @@
 	}];
 	
 	//	configure the session script folder path UI items to update the selected object
-	[sessionScriptPathAbs setSelectButtonBlock:^(PathAbstraction *inAbs)	{
+	[sessionScriptPathAbs setUserDefaultsKey:kSynopsisAnalyzerSessionScriptKey];
+	[sessionScriptPathAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = NO;
 		openPanel.canCreateDirectories = NO;
@@ -193,7 +197,7 @@
 			}
 		}];
 	}];
-	[sessionScriptPathAbs setEnableToggleBlock:^(PathAbstraction *inAbs)	{
+	[sessionScriptPathAbs setPathChangeBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		//	update the inspected object's output dir
 		dispatch_async(dispatch_get_main_queue(), ^{
 			if (bss.inspectedObject != nil)	{

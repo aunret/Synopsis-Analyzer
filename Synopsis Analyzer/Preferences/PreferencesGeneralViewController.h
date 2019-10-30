@@ -8,14 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 #import "PresetObject.h"
-#import "PrefsPathAbstraction.h"
+#import "PrefsPathPickerAbstraction.h"
 
 
 
 
 @interface PreferencesGeneralViewController : NSViewController	{
-	IBOutlet PrefsPathAbstraction		*scriptAbs;
-	IBOutlet PrefsPathAbstraction		*sessionScriptAbs;
+	IBOutlet PrefsPathPickerAbstraction		*scriptAbs;
+	IBOutlet PrefsPathPickerAbstraction		*sessionScriptAbs;
 }
 
 @property (weak) IBOutlet NSPopUpButton* defaultPresetPopupButton;

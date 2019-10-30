@@ -7,15 +7,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "PrefsPathAbstraction.h"
+#import "PrefsPathPickerAbstraction.h"
 
 
 
 
 @interface PreferencesFileViewController : NSViewController	{
-	IBOutlet PrefsPathAbstraction		*outputFolderAbs;
-	//IBOutlet PrefsPathAbstraction		*watchFolderAbs;
-	IBOutlet PrefsPathAbstraction		*tempFolderAbs;
+	IBOutlet PrefsPathPickerAbstraction		*outputFolderAbs;
+	//IBOutlet PrefsPathPickerAbstraction		*watchFolderAbs;
+	IBOutlet PrefsPathPickerAbstraction		*tempFolderAbs;
 }
 
 - (BOOL) outputFolderEnabled;
