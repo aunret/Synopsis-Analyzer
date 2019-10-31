@@ -16,18 +16,18 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="426"/>
+            <rect key="frame" x="0.0" y="0.0" width="480" height="463"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="File Preferences" translatesAutoresizingMaskIntoConstraints="NO" id="cSn-KB-6yL">
-                    <rect key="frame" x="11" y="159" width="452" height="247"/>
+                    <rect key="frame" x="11" y="159" width="452" height="284"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <view key="contentView" id="JPi-xL-Fz6">
-                        <rect key="frame" x="3" y="3" width="446" height="229"/>
+                        <rect key="frame" x="3" y="3" width="446" height="266"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hil-L7-HW7">
-                                <rect key="frame" x="42" y="136" width="367" height="11"/>
+                                <rect key="frame" x="42" y="151" width="367" height="11"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Output Folder" id="EXa-Kx-OW0">
                                     <font key="font" metaFont="miniSystem"/>
@@ -36,7 +36,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vh5-2x-0O7">
-                                <rect key="frame" x="19" y="155" width="412" height="28"/>
+                                <rect key="frame" x="16" y="170" width="415" height="28"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="Jmb-rJ-vxJ">
                                     <font key="font" metaFont="smallSystem"/>
@@ -46,7 +46,7 @@
                                 </textFieldCell>
                             </textField>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tTZ-7e-W48">
-                                <rect key="frame" x="18" y="134" width="16" height="16"/>
+                                <rect key="frame" x="18" y="149" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStatusAvailable" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="rTj-jF-mYy">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -54,7 +54,7 @@
                                 </buttonCell>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CzV-rw-f84">
-                                <rect key="frame" x="415" y="135" width="14" height="14"/>
+                                <rect key="frame" x="415" y="150" width="14" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="vTG-Fz-uAB">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -65,7 +65,7 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UGb-xk-trm">
-                                <rect key="frame" x="42" y="34" width="367" height="11"/>
+                                <rect key="frame" x="42" y="29" width="367" height="11"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Temp Folder" id="L77-05-xnK">
                                     <font key="font" metaFont="miniSystem"/>
@@ -74,7 +74,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jjc-Ho-2WJ">
-                                <rect key="frame" x="19" y="53" width="412" height="28"/>
+                                <rect key="frame" x="16" y="48" width="415" height="28"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Temporary files and folders are stored within this folder." id="vyf-At-CRZ">
                                     <font key="font" metaFont="smallSystem"/>
@@ -83,7 +83,7 @@
                                 </textFieldCell>
                             </textField>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xWv-NL-9Mx">
-                                <rect key="frame" x="18" y="32" width="16" height="16"/>
+                                <rect key="frame" x="18" y="27" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStatusAvailable" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="5H8-Dh-ilJ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -91,7 +91,7 @@
                                 </buttonCell>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1ed-Pf-7WN">
-                                <rect key="frame" x="415" y="33" width="14" height="14"/>
+                                <rect key="frame" x="415" y="28" width="14" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="XQE-8F-JtS">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -102,7 +102,7 @@
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ziA-iS-Nqe">
-                                <rect key="frame" x="15" y="188" width="196" height="22"/>
+                                <rect key="frame" x="15" y="203" width="196" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="wo5-84-3kn" id="Yrp-lH-4kG">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -117,7 +117,7 @@
                                 </popUpButtonCell>
                             </popUpButton>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hZ8-0I-UqD">
-                                <rect key="frame" x="15" y="86" width="196" height="22"/>
+                                <rect key="frame" x="15" y="81" width="196" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="YTe-UZ-s5V" id="sCV-Kh-HrC">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -131,6 +131,24 @@
                                     </menu>
                                 </popUpButtonCell>
                             </popUpButton>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="csx-r2-RvS">
+                                <rect key="frame" x="16" y="232" width="83" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Output to:" id="vF6-2u-3rb">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qwa-mD-BgF">
+                                <rect key="frame" x="16" y="110" width="96" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Temporary Items:" id="JhD-TP-RtB">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                     </view>
                 </box>
@@ -156,7 +174,7 @@
                     </view>
                 </box>
             </subviews>
-            <point key="canvasLocation" x="139" y="246"/>
+            <point key="canvasLocation" x="139" y="264.5"/>
         </customView>
         <customObject id="6zj-mz-1O9" customClass="PrefsPathPickerAbstraction">
             <connections>
