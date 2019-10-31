@@ -23,6 +23,8 @@ static NSMutableArray		*iconGenArray = nil;
 
 @interface OpRowView ()
 - (void) generalInit;
+- (void) _updateStatusFieldWidthConstraint;
+@property (strong,readwrite) NSLayoutConstraint * statusFieldWidthConstraint;
 @end
 
 
@@ -84,59 +86,62 @@ static NSMutableArray		*iconGenArray = nil;
 	return self;
 }
 - (void) generalInit	{
+	self.statusFieldWidthConstraint = nil;
 }
 - (void) awakeFromNib	{
 	
-    CGFloat padding = 4.0;
-    CGFloat twoPadding = padding * 2.0;
-    
+	[preview setWantsLayer:YES];
+	preview.layer.cornerRadius = 2.0;
+	preview.layer.backgroundColor = [NSColor blackColor].CGColor;
+	
+	[preview setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[nameField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[statusField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[progressIndicator setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[pathField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[showFileButton setTranslatesAutoresizingMaskIntoConstraints:NO];
+	
+	CGFloat		padding = 2.0;
+	
 	//	preview pinned to the left
-    [preview setWantsLayer:YES];
-    preview.layer.cornerRadius = 2.0;
-    preview.layer.backgroundColor = [NSColor  blackColor].CGColor;
-    [preview setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [preview.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:padding].active = true;
-    [preview.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0].active = true;
+	
     [preview.heightAnchor constraintEqualToConstant:36].active = true;
     [preview.widthAnchor constraintEqualToConstant:36].active = true;
-
-	//	progress bar centered vertically
-    [progressIndicator setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [progressIndicator setControlTint:NSGraphiteControlTint];
-
-    [progressIndicator.leadingAnchor constraintEqualToAnchor:preview.trailingAnchor constant:twoPadding].active = true;
-	[progressIndicator.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
-	[progressIndicator.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-twoPadding].active = true;
-	
-	//	name field sprouts off the progress bar, limited to the width of the status field - add 2 point optical alignment factor
-    [nameField setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[nameField.leadingAnchor constraintEqualToAnchor:progressIndicator.leadingAnchor constant:2.0].active = true;
-	[nameField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:0.0].active = true;
-	[nameField.trailingAnchor constraintEqualToAnchor:progressIndicator.trailingAnchor constant:0].active = true;
-	
-	//	status field sprouts off the progress bar, is limited to width of superview - add 2 point optical alignment factor
-    [statusField setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[statusField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:0.0].active = true;
-	[statusField.trailingAnchor constraintEqualToAnchor:progressIndicator.trailingAnchor constant:-2.0].active = true;
-	
-	//	time remaining field sprouts off the progress bar
-//    [timeRemainingField setTranslatesAutoresizingMaskIntoConstraints:NO];
-//	[timeRemainingField.trailingAnchor constraintEqualToAnchor:progressIndicator.trailingAnchor constant:0].active = true;
-//	[timeRemainingField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:0.0].active = true;
-	
-	//	path field sprouts off the progress bar
-    [pathField setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[pathField.leadingAnchor constraintEqualToAnchor:nameField.leadingAnchor constant:0.0].active = true;
-	[pathField.topAnchor constraintEqualToAnchor:progressIndicator.bottomAnchor constant:0.0].active = true;
-	
-	//	show file button sprouts off the path field
-    [showFileButton setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[showFileButton.leadingAnchor constraintEqualToAnchor:pathField.trailingAnchor constant:twoPadding].active = true;
-	[showFileButton.centerYAnchor constraintEqualToAnchor:pathField.centerYAnchor constant:0.0].active = true;
-	[showFileButton.trailingAnchor constraintLessThanOrEqualToAnchor:self.trailingAnchor constant:twoPadding].active = true;
     
-	[showFileButton.widthAnchor constraintEqualToConstant:11].active = true;
-	[showFileButton.heightAnchor constraintEqualToConstant:11].active = true;
+	//[preview.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:padding].active = true;
+	[preview.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:(self.frame.size.height-preview.frame.size.height)/2.0].active = true;
+	[preview.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
+	
+	
+	
+	
+	//	show file button down slightly from vertical center, left-aligned
+	[showFileButton.widthAnchor constraintEqualToConstant:20].active = true;
+	[showFileButton.heightAnchor constraintEqualToAnchor:pathField.heightAnchor constant:0.0].active = true;
+	[showFileButton.leadingAnchor constraintEqualToAnchor:preview.trailingAnchor constant:2.0*padding].active = true;
+	//[showFileButton.centerYAnchor constraintEqualToAnchor:pathField.centerYAnchor constant:0.0].active = true;
+	[showFileButton.topAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
+	
+	//	progress bar down slightly from vertical center
+	[progressIndicator.leadingAnchor constraintEqualToAnchor:showFileButton.trailingAnchor constant:2.0*padding].active = true;
+	//[progressIndicator.topAnchor constraintEqualToAnchor:self.centerYAnchor constant:-padding].active = true;
+	[progressIndicator.centerYAnchor constraintEqualToAnchor:showFileButton.centerYAnchor constant:0.0].active = true;
+	[progressIndicator.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-2.0*padding].active = true;
+	
+	//	path field located in the same place as the progress bar (they switch off)
+	[pathField.leadingAnchor constraintEqualToAnchor:showFileButton.trailingAnchor constant:2.0*padding].active = true;
+	//[pathField.topAnchor constraintEqualToAnchor:self.centerYAnchor constant:padding].active = true;
+	[pathField.centerYAnchor constraintEqualToAnchor:showFileButton.centerYAnchor constant:0.0].active = true;
+	[pathField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-2.0*padding].active = true;
+	
+	//	name field slightly up from vertical center
+	[nameField.leadingAnchor constraintEqualToAnchor:preview.trailingAnchor constant:4.0*padding].active = true;
+	[nameField.bottomAnchor constraintEqualToAnchor:self.centerYAnchor constant:-padding].active = true;
+	[nameField.trailingAnchor constraintEqualToAnchor:statusField.leadingAnchor constant:-2.0*padding].active = true;
+	
+	//	status field sprouts off the superview
+	[statusField.bottomAnchor constraintEqualToAnchor:self.centerYAnchor constant:-padding].active = true;
+	[statusField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-2.0*padding].active = true;
 }
 
 
@@ -170,16 +175,59 @@ static NSMutableArray		*iconGenArray = nil;
 		[preview setImage:self.op.thumb];
 	}
 	[nameField setStringValue:self.op.src.lastPathComponent.stringByDeletingPathExtension];
+	[nameField sizeToFit];
+	nameField.toolTip = self.op.src;
 	[pathField setStringValue:self.op.src];
 	[pathField sizeToFit];
+	
+	//	if my session hasn't been cleared to process stuff, hide the progress indicator
+	if (self.op.session == nil)	{
+		[progressIndicator setHidden:YES];
+		[pathField setHidden:NO];
+		[showFileButton setHidden:NO];
+	}
+	else	{
+		BOOL		wantsVisibleProgressBar = NO;
+		BOOL		needsVisibleProgressBar = NO;
+		switch (self.op.status)	{
+		case OpStatus_PreflightErr:
+		case OpStatus_Err:
+		case OpStatus_Complete:
+			break;
+		case OpStatus_Pending:
+			wantsVisibleProgressBar = YES;
+			break;
+		case OpStatus_Preflight:
+		case OpStatus_Analyze:
+		case OpStatus_Cleanup:
+			wantsVisibleProgressBar = YES;
+			needsVisibleProgressBar = YES;
+			break;
+		}
+		
+		if ((self.op.session.state == SessionState_Active && wantsVisibleProgressBar) || needsVisibleProgressBar)	{
+			[progressIndicator setHidden:NO];
+			[pathField setHidden:YES];
+			[showFileButton setHidden:NO];
+		}
+		else	{
+			[progressIndicator setHidden:YES];
+			[pathField setHidden:NO];
+			[showFileButton setHidden:NO];
+		}
+	}
+	
 	//NSLog(@"op is %@",self.op);
 	//NSLog(@"op src is %@",self.op.src);
 	switch (self.op.status)	{
 	case OpStatus_Pending:
+		//[statusField setStringValue:[self.op createStatusString]];
+		//statusField.toolTip = nil;
 		if (self.op.session.state == SessionState_Active)	{
 			[statusField setStringValue:[self.op createStatusString]];
 			//statusField.toolTip = nil;
 			[statusField sizeToFit];
+			[self _updateStatusFieldWidthConstraint];
 			[statusField setHidden:NO];
 		}
 		else
@@ -200,6 +248,7 @@ static NSMutableArray		*iconGenArray = nil;
 		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
 		statusField.toolTip = self.op.errString;
 		[statusField sizeToFit];
+		[self _updateStatusFieldWidthConstraint];
 		[statusField setHidden:NO];
 		[progressIndicator killAnimationSetDoubleValue:0.0];
 		//[timeRemainingField setHidden:YES];
@@ -209,6 +258,7 @@ static NSMutableArray		*iconGenArray = nil;
 		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
 		statusField.toolTip = nil;
 		[statusField sizeToFit];
+		[self _updateStatusFieldWidthConstraint];
 		[statusField setHidden:NO];
 		[progressIndicator killAnimationSetDoubleValue:1.0];
 		//[timeRemainingField setHidden:YES];
@@ -217,6 +267,8 @@ static NSMutableArray		*iconGenArray = nil;
 		//[statusField setStringValue:[self.op createStatusString]];
 		[statusField setAttributedStringValue:[self.op createAttributedStatusString]];
 		statusField.toolTip = self.op.errString;
+		[statusField sizeToFit];
+		[self _updateStatusFieldWidthConstraint];
 		[statusField setHidden:NO];
 		[progressIndicator killAnimationSetDoubleValue:0.0];
 		//[timeRemainingField setHidden:YES];
@@ -244,6 +296,7 @@ static NSMutableArray		*iconGenArray = nil;
 		else
 			[statusField setStringValue:[NSString stringWithFormat:@":%0.2ld Remaining",secondsRemaining]];
 		[statusField sizeToFit];
+		[self _updateStatusFieldWidthConstraint];
 		[statusField setHidden:NO];
 		
 		/*
@@ -262,6 +315,13 @@ static NSMutableArray		*iconGenArray = nil;
 		break;
 	}
 }
+- (void) _updateStatusFieldWidthConstraint	{
+	if (self.statusFieldWidthConstraint != nil)
+		[statusField removeConstraint:self.statusFieldWidthConstraint];
+	self.statusFieldWidthConstraint = [statusField.widthAnchor constraintEqualToConstant:statusField.frame.size.width];
+	self.statusFieldWidthConstraint.active = true;
+}
+
 
 - (IBAction) showFileClicked:(id)sender	{
 	//NSLog(@"%s",__func__);

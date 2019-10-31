@@ -24,7 +24,7 @@
 	
 	IBOutlet NSTextField	*pathField;
 	IBOutlet NSButton		*showFileButton;
-	IBOutlet NSTextField	*timeRemainingField;
+	//IBOutlet NSTextField	*timeRemainingField;
 }
 
 - (void) refreshWithOp:(SynOp *)n;
