@@ -193,8 +193,10 @@ static NSImage				*genericMovieImage = nil;
 			self.type = OpType_Other;
 		}
 		else	{
+			NSArray			*vidTracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+			BOOL			hasVidTracks = (vidTracks!=nil && vidTracks.count>0) ? YES : NO;
 			//	if it's a simple AVF asset...
-			if ([asset isPlayable])	{
+			if ([asset isPlayable] && hasVidTracks)	{
 				self.type = OpType_AVFFile;
 				//	if we haven't created the generic movie thumb yet, do so now
 				if (genericMovieImage == nil)	{
@@ -275,9 +277,10 @@ static NSImage				*genericMovieImage = nil;
 				//CMTime				time = CMTimeMake(1,60);
 				CGImageRef			imgRef = [gen copyCGImageAtTime:CMTimeMake(1,60) actualTime:NULL error:&nsErr];
 				//NSImage				*img = (imgRef==NULL) ? nil : [[NSImage alloc] initWithCGImage:imgRef size:NSMakeSize(CGImageGetWidth(imgRef),CGImageGetHeight(imgRef))];
-				NSBitmapImageRep	*imgRep = [[NSBitmapImageRep alloc] initWithCGImage:imgRef];
-				NSImage				*img = [[NSImage alloc] initWithSize:[imgRep size]];
-				[img addRepresentation:imgRep];
+				NSBitmapImageRep	*imgRep = (imgRef==NULL) ? nil : [[NSBitmapImageRep alloc] initWithCGImage:imgRef];
+				NSImage				*img = (imgRep==nil) ? nil : [[NSImage alloc] initWithSize:[imgRep size]];
+				if (img != nil)
+					[img addRepresentation:imgRep];
 				self.thumb = img;
 			}
 			else	{

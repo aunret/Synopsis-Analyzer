@@ -1513,6 +1513,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 					
 					[outlineView expandItem:targetSession expandChildren:NO];
 					
+					//	reload the row of the item we just dropped stuff into
+					[self reloadRowForItem:targetSession];
+					
 					//	reload the outline view!
 					//[self reloadData];
 					//	re-evaluate the selection...
@@ -1630,6 +1633,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 					
 					[outlineView expandItem:newSession expandChildren:NO];
 					
+					//	reload the op we dragged stuff from
+					[self reloadRowForItem:dragItemParent];
+					
 					//	reload the outline view...
 					//[self reloadData];
 					//	re-evaluate the selection...
@@ -1687,6 +1693,11 @@ static NSString						*localFileDragType = @"localFileDragType";
 					}
 					
 					[outlineView endUpdates];
+					
+					//	reload the op we dragged stuff from and the row we drpoped stuff into
+					[self reloadRowForItem:dragItemParent];
+					[self reloadRowForItem:dropItem];
+					
 					//	reload the outline view
 					//[self reloadData];
 					//	re-evaluate the selection...

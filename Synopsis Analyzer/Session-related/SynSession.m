@@ -473,6 +473,7 @@
 		myWatchFolder = n;
 		if (changed)	{
 			if (n)	{
+				[self.ops removeAllObjects];
 				[self createDirectoryWatcher];
 			}
 			else	{

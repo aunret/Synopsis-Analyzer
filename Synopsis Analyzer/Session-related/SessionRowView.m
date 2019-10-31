@@ -51,10 +51,9 @@
 
 - (void) awakeFromNib	{
 	
-    CGFloat padding = 4.0;
-    CGFloat twoPadding = padding * 2.0;
-
-
+    CGFloat		padding = 2.0;
+    
+	
     //    icon pinned to the left
     [iconView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [iconView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:padding].active = true;
@@ -64,19 +63,19 @@
 
     //    progress bar centered vertically
     [progressIndicator setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [progressIndicator.leadingAnchor constraintEqualToAnchor:iconView.trailingAnchor constant:twoPadding].active = true;
-    [progressIndicator.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
-    [progressIndicator.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-twoPadding].active = true;
+    [progressIndicator.leadingAnchor constraintEqualToAnchor:iconView.trailingAnchor constant:2.0*padding].active = true;
+    [progressIndicator.topAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
+    [progressIndicator.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-2.0*padding].active = true;
 
     //    name field sprouts off the progress bar, limited by width of description field - add 2 point optical alignment factor
     [nameField setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [nameField.leadingAnchor constraintEqualToAnchor:progressIndicator.leadingAnchor constant:2].active = true;
-    [nameField.bottomAnchor constraintEqualToAnchor:progressIndicator.topAnchor constant:0].active = true;
-    [nameField.trailingAnchor constraintEqualToAnchor:descriptionField.leadingAnchor constant:-twoPadding].active = true;
+    [nameField.leadingAnchor constraintEqualToAnchor:progressIndicator.leadingAnchor constant:padding].active = true;
+    [nameField.bottomAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
+    [nameField.trailingAnchor constraintEqualToAnchor:descriptionField.leadingAnchor constant:-2.0*padding].active = true;
     
 	//	button pinned to the right
     [progressButton setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [progressButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-twoPadding].active = true;
+    [progressButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-2.0*padding].active = true;
 	[progressButton.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
     [progressButton.heightAnchor constraintEqualToConstant:48].active = true;
     [progressButton.widthAnchor constraintEqualToConstant:48].active = true;
@@ -84,7 +83,7 @@
 	//	description field sprouts off the progress bar - add 2 point optical alignment factor
     [descriptionField setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[descriptionField.firstBaselineAnchor constraintEqualToAnchor:nameField.firstBaselineAnchor constant:0.0].active = true;
-	[descriptionField.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-(twoPadding + 2.0)].active = true;
+	[descriptionField.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-(2.0*padding + 2.0)].active = true;
 	
 }
 
@@ -117,13 +116,13 @@
 			[iconView setImage:[NSImage imageNamed:@"WatchFolder"]];
 		}
 		else	{
-			[iconView setImage:[NSImage imageNamed:@"ic_folder_white"]];
+			[iconView setImage:[NSImage imageNamed:@"ic_folder_template"]];
 		}
 	}
 	//	else it's a list-type session
 	else	{
 		[nameField setEditable:YES];
-		[iconView setImage:[NSImage imageNamed:@"ic_insert_drive_file_white"]];
+		[iconView setImage:[NSImage imageNamed:@"ic_insert_drive_file_template"]];
 	}
 	
 	//	populate the description field
@@ -155,8 +154,8 @@
 		if (tmpProgress == 0.0 || tmpProgress == 1.0)
 			[progressIndicator killAnimationSetDoubleValue:tmpProgress];
 		else
-			//[progressIndicator animateToValue:tmpProgress];
-			[progressIndicator killAnimationSetDoubleValue:tmpProgress];
+			[progressIndicator animateToValue:tmpProgress];
+			//[progressIndicator killAnimationSetDoubleValue:tmpProgress];
 			//[progressIndicator setDoubleValue:tmpProgress];
 	}
 }
