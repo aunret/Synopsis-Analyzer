@@ -36,11 +36,11 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </progressIndicator>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vMV-7z-YUd">
-                    <rect key="frame" x="261" y="33" width="160" height="11"/>
+                    <rect key="frame" x="250" y="33" width="171" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="right" title="(XXX files, XXX files to analyze)" id="yXQ-fB-1M3">
-                        <font key="font" metaFont="label" size="9"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="(XXX files, XXX files to analyze)" id="yXQ-fB-1M3">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>

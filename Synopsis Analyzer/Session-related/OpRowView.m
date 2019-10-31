@@ -126,13 +126,13 @@ static NSMutableArray		*iconGenArray = nil;
 	[progressIndicator.leadingAnchor constraintEqualToAnchor:showFileButton.trailingAnchor constant:2.0*padding].active = true;
 	//[progressIndicator.topAnchor constraintEqualToAnchor:self.centerYAnchor constant:-padding].active = true;
 	[progressIndicator.centerYAnchor constraintEqualToAnchor:showFileButton.centerYAnchor constant:0.0].active = true;
-	[progressIndicator.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-2.0*padding].active = true;
+	[progressIndicator.trailingAnchor constraintEqualToAnchor:statusField.trailingAnchor constant:-2.0*padding].active = true;
 	
 	//	path field located in the same place as the progress bar (they switch off)
 	[pathField.leadingAnchor constraintEqualToAnchor:showFileButton.trailingAnchor constant:2.0*padding].active = true;
 	//[pathField.topAnchor constraintEqualToAnchor:self.centerYAnchor constant:padding].active = true;
 	[pathField.centerYAnchor constraintEqualToAnchor:showFileButton.centerYAnchor constant:0.0].active = true;
-	[pathField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-2.0*padding].active = true;
+	[pathField.trailingAnchor constraintEqualToAnchor:statusField.trailingAnchor constant:-2.0*padding].active = true;
 	
 	//	name field slightly up from vertical center
 	[nameField.leadingAnchor constraintEqualToAnchor:preview.trailingAnchor constant:4.0*padding].active = true;
@@ -141,7 +141,7 @@ static NSMutableArray		*iconGenArray = nil;
 	
 	//	status field sprouts off the superview
 	[statusField.bottomAnchor constraintEqualToAnchor:self.centerYAnchor constant:-padding].active = true;
-	[statusField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-2.0*padding].active = true;
+	[statusField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-12.0*padding].active = true;
 }
 
 

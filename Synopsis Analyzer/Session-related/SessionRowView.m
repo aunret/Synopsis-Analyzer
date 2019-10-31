@@ -69,21 +69,23 @@
 
     //    name field sprouts off the progress bar, limited by width of description field - add 2 point optical alignment factor
     [nameField setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [nameField.leadingAnchor constraintEqualToAnchor:progressIndicator.leadingAnchor constant:padding].active = true;
+    [nameField.leadingAnchor constraintEqualToAnchor:iconView.trailingAnchor constant:2.0*padding].active = true;
     [nameField.bottomAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
-    [nameField.trailingAnchor constraintEqualToAnchor:descriptionField.leadingAnchor constant:-2.0*padding].active = true;
+    [nameField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-2.0*padding].active = true;
     
 	//	button pinned to the right
     [progressButton setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [progressButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-2.0*padding].active = true;
+    [progressButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:padding].active = true;
 	[progressButton.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
     [progressButton.heightAnchor constraintEqualToConstant:48].active = true;
     [progressButton.widthAnchor constraintEqualToConstant:48].active = true;
 
 	//	description field sprouts off the progress bar - add 2 point optical alignment factor
     [descriptionField setTranslatesAutoresizingMaskIntoConstraints:NO];
-	[descriptionField.firstBaselineAnchor constraintEqualToAnchor:nameField.firstBaselineAnchor constant:0.0].active = true;
-	[descriptionField.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-(2.0*padding + 2.0)].active = true;
+	[descriptionField.topAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
+	[descriptionField.leadingAnchor constraintEqualToAnchor:iconView.trailingAnchor constant:2.0*padding].active = true;
+	//[descriptionField.firstBaselineAnchor constraintEqualToAnchor:nameField.firstBaselineAnchor constant:0.0].active = true;
+	//[descriptionField.trailingAnchor constraintEqualToAnchor:progressButton.leadingAnchor constant:-(2.0*padding + 2.0)].active = true;
 	
 }
 
@@ -125,9 +127,6 @@
 		[iconView setImage:[NSImage imageNamed:@"ic_insert_drive_file_template"]];
 	}
 	
-	//	populate the description field
-	[descriptionField setStringValue:[self.session createDescriptionString]];
-	
 	//	populate the progress button
 	if (self.session.watchFolder)	{
 		[progressButton setState:SSBState_Spinning];
@@ -145,18 +144,36 @@
 		}
 	}
 	
-	//	populate the progress indicator
+	//	populate the progress indicator & description field
+	[descriptionField setStringValue:[self.session createDescriptionString]];
+	[descriptionField sizeToFit];
 	if ([self.session processedAllOps])	{
+		[progressIndicator setHidden:YES];
 		[progressIndicator killAnimationSetDoubleValue:0.0];
+		[descriptionField setHidden:NO];
 	}
 	else	{
-		double			tmpProgress = [self.session calculateProgress];
-		if (tmpProgress == 0.0 || tmpProgress == 1.0)
-			[progressIndicator killAnimationSetDoubleValue:tmpProgress];
-		else
-			[progressIndicator animateToValue:tmpProgress];
-			//[progressIndicator killAnimationSetDoubleValue:tmpProgress];
-			//[progressIndicator setDoubleValue:tmpProgress];
+		switch (self.session.state)	{
+		case SessionState_Active:
+			{
+				double			tmpProgress = [self.session calculateProgress];
+				if (tmpProgress == 0.0 || tmpProgress == 1.0)	{
+					[progressIndicator killAnimationSetDoubleValue:tmpProgress];
+				}
+				else	{
+					[progressIndicator animateToValue:tmpProgress];
+					//[progressIndicator killAnimationSetDoubleValue:tmpProgress];
+					//[progressIndicator setDoubleValue:tmpProgress];
+				}
+				[descriptionField setHidden:YES];
+				[progressIndicator setHidden:NO];
+			}
+			break;
+		case SessionState_Inactive:
+			[descriptionField setHidden:NO];
+			[progressIndicator setHidden:YES];
+			break;
+		}
 	}
 }
 
