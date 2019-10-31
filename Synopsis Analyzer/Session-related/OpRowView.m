@@ -109,7 +109,7 @@ static NSMutableArray		*iconGenArray = nil;
     [preview.widthAnchor constraintEqualToConstant:36].active = true;
     
 	//[preview.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:padding].active = true;
-	[preview.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:(self.frame.size.height-preview.frame.size.height)/2.0].active = true;
+	[preview.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:0.0].active = true;
 	[preview.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
 	
 	
