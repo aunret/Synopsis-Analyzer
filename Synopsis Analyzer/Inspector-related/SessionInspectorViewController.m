@@ -53,6 +53,10 @@
 	
 	//	configure the output folder path UI items to update the selected object
 	[outputFolderPathAbs setUserDefaultsKey:kSynopsisAnalyzerOutputFolderURLKey];
+	[outputFolderPathAbs setDisabledLabelString:@"Same as source location"];
+	[outputFolderPathAbs setCustomPathLabelString:@"Custom output folder..."];
+	[outputFolderPathAbs setRecentPathLabelString:@"Recent output folders"];
+	[outputFolderPathAbs updateUI];
 	[outputFolderPathAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = YES;
@@ -92,6 +96,10 @@
 	
 	//	configure the temp folder path UI items to update the selected object
 	[tempFolderPathAbs setUserDefaultsKey:kSynopsisAnalyzerTempFolderURLKey];
+	[tempFolderPathAbs setDisabledLabelString:@"Same as source location"];
+	[tempFolderPathAbs setCustomPathLabelString:@"Custom output folder..."];
+	[tempFolderPathAbs setRecentPathLabelString:@"Recent output folders"];
+	[tempFolderPathAbs updateUI];
 	[tempFolderPathAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = YES;
@@ -131,6 +139,10 @@
 	
 	//	configure the file script folder path UI items to update the selected object
 	[opScriptPathAbs setUserDefaultsKey:kSynopsisAnalyzerOperationScriptKey];
+	[opScriptPathAbs setDisabledLabelString:@"No script selected"];
+	[opScriptPathAbs setCustomPathLabelString:@"Custom script..."];
+	[opScriptPathAbs setRecentPathLabelString:@"Recent scripts"];
+	[opScriptPathAbs updateUI];
 	[opScriptPathAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = NO;
@@ -171,6 +183,10 @@
 	
 	//	configure the session script folder path UI items to update the selected object
 	[sessionScriptPathAbs setUserDefaultsKey:kSynopsisAnalyzerSessionScriptKey];
+	[sessionScriptPathAbs setDisabledLabelString:@"No script selected"];
+	[sessionScriptPathAbs setCustomPathLabelString:@"Custom script..."];
+	[sessionScriptPathAbs setRecentPathLabelString:@"Recent scripts"];
+	[sessionScriptPathAbs updateUI];
 	[sessionScriptPathAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = NO;
@@ -243,43 +259,43 @@
 	//	populate the output folder path UI items
 	NSString		*tmpString = self.inspectedObject.outputDir;
 	if (tmpString == nil)	{
-		outputFolderPathAbs.enabled = NSControlStateValueOff;
+		outputFolderPathAbs.enabled = NO;
 		outputFolderPathAbs.path = [[PrefsController global] outputFolder];
 	}
 	else	{
-		outputFolderPathAbs.enabled = NSControlStateValueOn;
+		outputFolderPathAbs.enabled = YES;
 		outputFolderPathAbs.path = tmpString;
 	}
 	
 	//	populate the temp dir UI items
 	tmpString = self.inspectedObject.tempDir;
 	if (tmpString == nil)	{
-		tempFolderPathAbs.enabled = NSControlStateValueOff;
+		tempFolderPathAbs.enabled = NO;
 		tempFolderPathAbs.path = [[PrefsController global] tempFolder];
 	}
 	else	{
-		tempFolderPathAbs.enabled = NSControlStateValueOn;
+		tempFolderPathAbs.enabled = YES;
 		tempFolderPathAbs.path = tmpString;
 	}
 	
 	//	update the script UI items
 	tmpString = self.inspectedObject.sessionScript;
 	if (tmpString == nil)	{
-		sessionScriptPathAbs.enabled = NSControlStateValueOff;
+		sessionScriptPathAbs.enabled = NO;
 		sessionScriptPathAbs.path = [[PrefsController global] sessionScript];
 	}
 	else	{
-		sessionScriptPathAbs.enabled = NSControlStateValueOn;
+		sessionScriptPathAbs.enabled = YES;
 		sessionScriptPathAbs.path = tmpString;
 	}
 	
 	tmpString = self.inspectedObject.opScript;
 	if (tmpString == nil)	{
-		opScriptPathAbs.enabled = NSControlStateValueOff;
+		opScriptPathAbs.enabled = NO;
 		opScriptPathAbs.path = [[PrefsController global] opScript];
 	}
 	else	{
-		opScriptPathAbs.enabled = NSControlStateValueOn;
+		opScriptPathAbs.enabled = YES;
 		opScriptPathAbs.path = tmpString;
 	}
 	

@@ -43,6 +43,10 @@
 	//NSLog(@"%s",__func__);
 	__weak PreferencesFileViewController		*bss = self;
 	[outputFolderAbs setUserDefaultsKey:kSynopsisAnalyzerOutputFolderURLKey];
+	[outputFolderAbs setDisabledLabelString:@"Same as source location"];
+	[outputFolderAbs setCustomPathLabelString:@"Custom output folder..."];
+	[outputFolderAbs setRecentPathLabelString:@"Recent output folders"];
+	[outputFolderAbs updateUI];
 	[outputFolderAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = YES;
@@ -86,6 +90,10 @@
 	}];
 	*/
 	[tempFolderAbs setUserDefaultsKey:kSynopsisAnalyzerTempFolderURLKey];
+	[tempFolderAbs setDisabledLabelString:@"Same as source location"];
+	[tempFolderAbs setCustomPathLabelString:@"Custom output folder..."];
+	[tempFolderAbs setRecentPathLabelString:@"Recent output folders"];
+	[tempFolderAbs updateUI];
 	[tempFolderAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = YES;

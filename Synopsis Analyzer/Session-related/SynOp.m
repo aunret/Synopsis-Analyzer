@@ -897,9 +897,9 @@ static NSImage				*genericMovieImage = nil;
 				}
 			}
 			
-			//	if there's a script, run it on the dst file
+			//	if there's a per-op script, run it on the dst file
 			if (self.session.opScript != nil)	{
-				NSLog(@"SHOULD BE RUNNING PYTHON SCRIPT HERE");
+				NSLog(@"SHOULD BE RUNNING A SCRIPT HERE, %s",__func__);
 			}
 			
 		}

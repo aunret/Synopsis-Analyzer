@@ -725,6 +725,11 @@
 		
 			self.firedNotification = YES;
 		}
+		
+		//	if there's a per-session script, run it now
+		if (self.sessionScript != nil)	{
+			NSLog(@"SHOULD BE RUNNING A SCRIPT HERE, %s",__func__);
+		}
 	}
 }
 - (void) destroyDirectoryWatcher	{

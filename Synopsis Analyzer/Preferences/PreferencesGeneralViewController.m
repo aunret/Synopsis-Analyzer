@@ -32,6 +32,10 @@
 	__weak PreferencesGeneralViewController		*bss = self;
 	
 	[scriptAbs setUserDefaultsKey:kSynopsisAnalyzerOperationScriptKey];
+	[scriptAbs setDisabledLabelString:@"No script selected"];
+	[scriptAbs setCustomPathLabelString:@"Custom script..."];
+	[scriptAbs setRecentPathLabelString:@"Recent scripts"];
+	[scriptAbs updateUI];
 	[scriptAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = NO;
@@ -49,6 +53,10 @@
 	}];
 	
 	[sessionScriptAbs setUserDefaultsKey:kSynopsisAnalyzerSessionScriptKey];
+	[sessionScriptAbs setDisabledLabelString:@"No script selected"];
+	[sessionScriptAbs setCustomPathLabelString:@"Custom script..."];
+	[sessionScriptAbs setRecentPathLabelString:@"Recent scripts"];
+	[sessionScriptAbs updateUI];
 	[sessionScriptAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 		openPanel.canChooseDirectories = NO;

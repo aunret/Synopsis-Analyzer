@@ -20,6 +20,11 @@ NSString * const kPrefsPathPickerReloadNotificationName = @"kPrefsPathPickerRelo
 
 //	this property stores the key at which the path is saved in NSUserDefaults
 @property (atomic,strong,nullable) NSString * internalUserDefaultsKey;
+//	these properties store the user-provided strings used to populate the text of the various menu items
+@property (atomic,strong,nullable) NSString * internalDisabledLabel;
+@property (atomic,strong,nullable) NSString * internalCustomPathLabel;
+@property (atomic,strong,nullable) NSString * internalRecentPathLabel;
+@property (atomic,strong,nullable) NSString * internalPrefsValLabel;
 //	if YES, this instance will save its current value in the user defaults (YES by default in this class, NO by default in a subclass)
 //	if NO, vals will instead be stored in "nonDefaultsEnabled" and "nonDefaultsPath"
 @property (atomic,readwrite) BOOL saveToUserDefaults;
@@ -171,7 +176,15 @@ NSString * const kPrefsPathPickerReloadNotificationName = @"kPrefsPathPickerRelo
 
 - (void) setUserDefaultsKey:(nonnull NSString *)n	{
 	self.internalUserDefaultsKey = n;
-	[self _updateUI];
+}
+- (void) setDisabledLabelString:(NSString *)n	{
+	self.internalDisabledLabel = n;
+}
+- (void) setCustomPathLabelString:(NSString *)n	{
+	self.internalCustomPathLabel = n;
+}
+- (void) setRecentPathLabelString:(NSString *)n	{
+	self.internalRecentPathLabel = n;
 }
 
 
@@ -192,7 +205,7 @@ NSString * const kPrefsPathPickerReloadNotificationName = @"kPrefsPathPickerRelo
 			[def setObject:p forKey:self.internalUserDefaultsKey];
 	}
 	else	{
-		self.nonDefaultsEnabled = YES;
+		//self.nonDefaultsEnabled = YES;
 		self.nonDefaultsPath = p;
 	}
 	
@@ -258,6 +271,9 @@ NSString * const kPrefsPathPickerReloadNotificationName = @"kPrefsPathPickerRelo
 }
 
 
+- (void) updateUI	{
+	[self _updateUI];
+}
 - (void) _updateUI	{
 	//NSLog(@"%s",__func__);
 	[self _updateStatusUI];
@@ -265,13 +281,15 @@ NSString * const kPrefsPathPickerReloadNotificationName = @"kPrefsPathPickerRelo
 	[self _updatePickerPUBUI];
 }
 - (void) _updateStatusUI	{
-	//NSLog(@"%s",__func__);
 	BOOL			isEnabled = [self enabled];
 	NSString		*currentPath = [self path];
 	[statusTextField setStringValue:(currentPath==nil) ? @"" : currentPath];
 	//	if the enable toggle is disabled, the status button is disabled
 	if (!isEnabled)	{
-		[statusTextField setStringValue:@"(Same as source file)"];
+		NSString		*tmpString = (self.internalDisabledLabel==nil)
+			? @"(disabled)"
+			: [NSString stringWithFormat:@"(%@)",self.internalDisabledLabel];
+		[statusTextField setStringValue:tmpString];
 		
 		[statusButton setImage:[NSImage imageNamed:NSImageNameStatusNone]];
 	}
@@ -299,7 +317,10 @@ NSString * const kPrefsPathPickerReloadNotificationName = @"kPrefsPathPickerRelo
 	menu.autoenablesItems = NO;
 	NSMenuItem		*item = nil;
 	
-	item = [[NSMenuItem alloc] initWithTitle:@"Same as source location" action:@selector(sameAsSourceItemUsed:) keyEquivalent:@""];
+	item = [[NSMenuItem alloc]
+		initWithTitle:(self.internalDisabledLabel==nil) ? @"(disabled)" : self.internalDisabledLabel
+		action:@selector(sameAsSourceItemUsed:)
+		keyEquivalent:@""];
 	item.target = self;
 	[menu addItem:item];
 	
@@ -308,19 +329,28 @@ NSString * const kPrefsPathPickerReloadNotificationName = @"kPrefsPathPickerRelo
 	
 	//	only add this item in the subclass which isn't setting the val for the prefs!
 	if (!self.saveToUserDefaults)	{
-		item = [[NSMenuItem alloc] initWithTitle:@"Preferences output folder" action:@selector(defaultFolderItemUsed:) keyEquivalent:@""];
+		item = [[NSMenuItem alloc]
+			initWithTitle:(self.internalPrefsValLabel==nil) ? @"Path from prefs" : self.internalPrefsValLabel
+			action:@selector(defaultFolderItemUsed:)
+			keyEquivalent:@""];
 		item.target = self;
 		[menu addItem:item];
 	}
 	
-	item = [[NSMenuItem alloc] initWithTitle:@"Custom output folder..." action:@selector(customFolderItemUsed:) keyEquivalent:@""];
+	item = [[NSMenuItem alloc]
+		initWithTitle:(self.internalCustomPathLabel==nil) ? @"Custom path" : self.internalCustomPathLabel
+		action:@selector(customFolderItemUsed:)
+		keyEquivalent:@""];
 	item.target = self;
 	[menu addItem:item];
 	
 	item = [NSMenuItem separatorItem];
 	[menu addItem:item];
 	
-	item = [[NSMenuItem alloc] initWithTitle:@"Recent output folders" action:nil keyEquivalent:@""];
+	item = [[NSMenuItem alloc]
+		initWithTitle:(self.internalRecentPathLabel==nil) ? @"Recent paths" : self.internalRecentPathLabel
+		action:nil
+		keyEquivalent:@""];
 	[menu addItem:item];
 	
 	//	populate the submenu
@@ -344,7 +374,7 @@ NSString * const kPrefsPathPickerReloadNotificationName = @"kPrefsPathPickerRelo
 	}
 	//	if there are no items in the menu, add a fallback item
 	if (submenu.itemArray.count < 1)	{
-		NSMenuItem		*subitem = [[NSMenuItem alloc] initWithTitle:@"No recent folders yet!" action:nil keyEquivalent:@""];
+		NSMenuItem		*subitem = [[NSMenuItem alloc] initWithTitle:@"No recent items yet!" action:nil keyEquivalent:@""];
 		subitem.enabled = NO;
 		[submenu addItem:subitem];
 	}
@@ -403,7 +433,11 @@ NSString * const kPrefsPathPickerReloadNotificationName = @"kPrefsPathPickerRelo
 
 - (void) setEnabled:(BOOL)n	{
 	self.nonDefaultsEnabled = n;
-	[self _updateUI];
+	//[self _updateUI];
+}
+
+- (void) setPrefsValueLabelString:(NSString *)n	{
+	self.internalPrefsValLabel = n;
 }
 
 @end

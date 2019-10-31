@@ -55,7 +55,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (IBAction) revealButtonUsed:(id)sender;
 
+//	you must specify a user defaults key (even if you're using PathPickerAbstraction, as it needs to load the recently used paths from the defaults)
 - (void) setUserDefaultsKey:(nonnull NSString *)n;
+
+//	this string will be displayed in the menu (and status text field) if no path is selected ("same as source location", or "no script selected")
+- (void) setDisabledLabelString:(NSString *)n;
+//	this string will be displayed in the menu as the option for selecting a custom path ("custom output folder", or "select a script")
+- (void) setCustomPathLabelString:(NSString *)n;
+//	this string will be displayed in the menu as the option for selecting a recently-used path ("recent output folders", or "recent scripts")
+- (void) setRecentPathLabelString:(NSString *)n;
 
 //	provide a block that opens a customized NSOpenPanel for picking the destination folder
 @property (copy,nonnull) void (^openPanelBlock)(PrefsPathPickerAbstraction *);
@@ -64,6 +72,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 //	only call this method from inside the 'openPanelBlock' (after the open panel has selected a path to use)
 - (void) setPath:(NSString *)p;
+
+//	causes the UI to be refreshed (call after populating initial values)
+- (void) updateUI;
 
 //	returns the path selected
 - (nullable NSString *) path;
@@ -84,7 +95,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface PathPickerAbstraction : PrefsPathPickerAbstraction
+//	sets the initial enabled state (setPath: is used to set the initial path value for this subclass)
 - (void) setEnabled:(BOOL)n;
+//	this string will be displayed in the menu as the option for selecting the default value stored in the prefs ("preferences output folder", or "preferences script")
+- (void) setPrefsValueLabelString:(NSString *)n;
 @end
 
 
