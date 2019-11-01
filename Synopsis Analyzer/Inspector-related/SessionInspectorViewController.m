@@ -56,6 +56,7 @@
 	[outputFolderPathAbs setDisabledLabelString:@"Same as source location"];
 	[outputFolderPathAbs setCustomPathLabelString:@"Custom output folder..."];
 	[outputFolderPathAbs setRecentPathLabelString:@"Recent output folders"];
+	[outputFolderPathAbs setPrefsValueLabelString:@"Output folder from prefs"];
 	[outputFolderPathAbs updateUI];
 	[outputFolderPathAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
@@ -99,6 +100,7 @@
 	[tempFolderPathAbs setDisabledLabelString:@"Same as source location"];
 	[tempFolderPathAbs setCustomPathLabelString:@"Custom output folder..."];
 	[tempFolderPathAbs setRecentPathLabelString:@"Recent output folders"];
+	[tempFolderPathAbs setPrefsValueLabelString:@"Output folder from prefs"];
 	[tempFolderPathAbs updateUI];
 	[tempFolderPathAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
@@ -142,6 +144,7 @@
 	[opScriptPathAbs setDisabledLabelString:@"No script selected"];
 	[opScriptPathAbs setCustomPathLabelString:@"Custom script..."];
 	[opScriptPathAbs setRecentPathLabelString:@"Recent scripts"];
+	[opScriptPathAbs setPrefsValueLabelString:@"Use script from prefs"];
 	[opScriptPathAbs updateUI];
 	[opScriptPathAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];
@@ -186,6 +189,7 @@
 	[sessionScriptPathAbs setDisabledLabelString:@"No script selected"];
 	[sessionScriptPathAbs setCustomPathLabelString:@"Custom script..."];
 	[sessionScriptPathAbs setRecentPathLabelString:@"Recent scripts"];
+	[sessionScriptPathAbs setPrefsValueLabelString:@"Use script from prefs"];
 	[sessionScriptPathAbs updateUI];
 	[sessionScriptPathAbs setOpenPanelBlock:^(PrefsPathPickerAbstraction *inAbs)	{
 		NSOpenPanel* openPanel = [NSOpenPanel openPanel];

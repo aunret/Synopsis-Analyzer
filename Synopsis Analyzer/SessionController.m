@@ -160,6 +160,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 				[self reloadData];
 			}
 		}
+		
+		//	enable/disable the run-pause button based on the number of active ops
+		[runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
 	}
 }
 - (void) applicationWillTerminate:(NSNotification *)note	{
@@ -222,6 +225,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 		[LogController appendVerboseLog:@"Starting analysis globally..."];
 		
 		//	update the relevant toolbar items
+		[runPauseButton setEnabled:YES];
 		[runPauseButton setLabel:@"Pause"];
 		[runPauseButton setImage:[NSImage imageNamed:@"ic_pause_circle_filled"]];
 		[stopButton setEnabled:YES];
@@ -276,6 +280,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 		[LogController appendVerboseLog:@"Starting analysis globally..."];
 		
 		//	update the relevant toolbar items
+		[runPauseButton setEnabled:YES];
 		[runPauseButton setLabel:@"Pause"];
 		[runPauseButton setImage:[NSImage imageNamed:@"ic_pause_circle_filled"]];
 		[stopButton setEnabled:YES];
@@ -393,6 +398,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 		//	update the relevant toolbar items
 		[runPauseButton setLabel:@"Start"];
 		[runPauseButton setImage:[NSImage imageNamed:@"ic_play_circle_filled"]];
+		if ([self numberOfFilesToProcess] < 1)
+			[runPauseButton setEnabled:NO];
 		[stopButton setEnabled:NO];
 		[addItem setEnabled:YES];
 		[removeItem setEnabled:YES];
@@ -465,6 +472,27 @@ static NSString						*localFileDragType = @"localFileDragType";
 			[[InspectorViewController global] reloadInspectorIfInspected:session];
 		}
 	}
+}
+- (NSUInteger) numberOfFilesToProcess	{
+	NSUInteger		returnMe = 0;
+	@synchronized (self)	{
+		for (SynSession *session in self.sessions)	{
+			for (SynOp *op in session.ops)	{
+				switch (op.status)	{
+				case OpStatus_Pending:
+					++returnMe;
+					break;
+				case OpStatus_PreflightErr:
+				case OpStatus_Analyze:
+				case OpStatus_Cleanup:
+				case OpStatus_Complete:
+				case OpStatus_Err:
+					break;
+				}
+			}
+		}
+	}
+	return returnMe;
 }
 
 
@@ -655,7 +683,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 	[openPanel beginSheetModalForWindow:window completionHandler:^(NSInteger result)	{
 		if (result == NSModalResponseOK)	{
 			[self analysisSessionForFiles:openPanel.URLs sessionCompletionBlock:^{
-				 
+				//	enable/disable the run-pause button based on the number of active ops
+				[runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
 			}];
 		}
 	}];
@@ -714,12 +743,17 @@ static NSString						*localFileDragType = @"localFileDragType";
 			//[self reloadData];
 			[self outlineViewSelectionDidChange:nil];
 		}
+		
+		//	enable/disable the run-pause button based on the number of active ops
+		[runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
 	}
 }
 - (IBAction) clearClicked:(id)sender	{
 	@synchronized (self)	{
 		[self.sessions removeAllObjects];
 		[self reloadData];
+		//	enable/disable the run-pause button based on the number of active ops
+		[runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
 	}
 }
 
@@ -795,6 +829,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 	
 	//	reload the table view
 	//[self reloadData];
+	
+	//	enable/disable the run-pause button based on the number of active ops
+	[runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
 }
 - (void) appendWatchFolderSessions:(NSArray<SynSession*> *)n	{
 	if (n == nil || [n count]<1)
@@ -1404,6 +1441,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 							[outlineView expandItem:newSession expandChildren:NO];
 					}
 					
+					//	enable/disable the run-pause button based on the number of active ops
+					[runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
+					
 					return YES;
 				}
 				//	...if we're here, we're inserting a drop into our list of sessions (not dropping inside a session, but into the list of sessions)
@@ -1431,6 +1471,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 				//[self reloadData];
 				//	re-evaluate the selection...
 				[self outlineViewSelectionDidChange:nil];
+				
+				//	enable/disable the run-pause button based on the number of active ops
+				[runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
 				return YES;
 			}
 			//	else if we're dropping into an existing session (dropping inside a session)
@@ -1476,6 +1519,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 					//[self reloadData];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
+					
+					//	enable/disable the run-pause button based on the number of active ops
+					[runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
 					return YES;
 				}
 				//	else the session we're dropping into isn't processing any ops- we're clear to add to it
@@ -1520,6 +1566,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 					//[self reloadData];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
+					
+					//	enable/disable the run-pause button based on the number of active ops
+					[runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
 					return YES;
 				}
 			}
