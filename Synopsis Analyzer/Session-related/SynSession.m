@@ -341,73 +341,78 @@
 	return returnMe;
 }
 - (NSString *) createDescriptionString	{
-	int			toBeAnalyzedCount = 0;
-	int			doneAnalyzingCount = 0;
+	int			total = 0;
+	int			pending = 0;
+	int			completed = 0;
+	
+	int			successful = 0;
+	int			errored = 0;
+	
+	BOOL		processedAllOps = YES;
 	
 	@synchronized (self)	{
 		for (SynOp *op in self.ops)	{
 			if (op.type == OpType_AVFFile)	{
-				++toBeAnalyzedCount;
+				++total;
+				
 				switch (op.status)	{
 				case OpStatus_Preflight:
 				case OpStatus_Pending:
 				case OpStatus_Cleanup:
 				case OpStatus_Analyze:
+					processedAllOps = NO;
+					++pending;
+					break;
+				case OpStatus_Complete:
+					++successful;
+					++completed;
 					break;
 				case OpStatus_PreflightErr:
-				case OpStatus_Complete:
 				case OpStatus_Err:
-					++doneAnalyzingCount;
+					++errored;
+					++completed;
 					break;
 				}
+				
 			}
 		}
 	}
-	int			analyzeCount = toBeAnalyzedCount - doneAnalyzingCount;
-	if (toBeAnalyzedCount == 0)
-		return [NSString stringWithFormat:@"(No files)"];
-	if (toBeAnalyzedCount == 1)	{
-		if (analyzeCount == 0)
-			return @"(1 file, 0 files to analyze)";
+	
+	//	if the session has processed all of its ops...
+	if (processedAllOps)	{
+		if (errored == 0)
+			return @"Finished";
+		else if (errored == 1)
+			return @"Finished- 1 error";
 		else
-			return @"(1 file, 1 files to analyze)";
+			return [NSString stringWithFormat:@"Finished- %d errors",errored];
 	}
+	//	else the session hasn't finished processing all of its ops...
 	else	{
-		if (analyzeCount == 0)
-			return [NSString stringWithFormat:@"(%d files, 0 files to analyze)",toBeAnalyzedCount];
-		else if (analyzeCount == 1)
-			return [NSString stringWithFormat:@"(%d files, 1 file to analyze)",toBeAnalyzedCount];
+		if (pending == 0)
+			return @"No files to analyze";
+		else if (pending == 1)
+			return @"1 file to analyze";
 		else
-			return [NSString stringWithFormat:@"(%d files, %d files to analyze)",toBeAnalyzedCount,analyzeCount];
+			return [NSString stringWithFormat:@"%d files to analyze",total];
 	}
-	
-	
 	
 	/*
-	int				totalCount = 0;
-	int				analyzeCount = 0;
-	@synchronized (self)	{
-		for (SynOp *op in self.ops)	{
-			if (op.type == OpType_AVFFile)
-				++analyzeCount;
-			++totalCount;
-		}
-	}
-	if (totalCount == 0)
+	if (total == 0)
 		return [NSString stringWithFormat:@"(No files)"];
-	if (totalCount == 1)	{
-		if (analyzeCount == 0)
+	if (total == 1)	{
+		if (pending == 0)
 			return @"(1 file, 0 files to analyze)";
 		else
 			return @"(1 file, 1 files to analyze)";
 	}
 	else	{
-		if (analyzeCount == 0)
-			return [NSString stringWithFormat:@"(%d files, 0 files to analyze)",totalCount];
-		else if (analyzeCount == 1)
-			return [NSString stringWithFormat:@"(%d files, 1 file to analyze)",totalCount];
+		if (pending == 0)
+			return [NSString stringWithFormat:@"(%d files, 0 files to analyze)",total];
+		else if (pending == 1)
+			return [NSString stringWithFormat:@"(%d files, 1 file to analyze)",total];
 		else
-			return [NSString stringWithFormat:@"(%d files, %d files to analyze)",totalCount,analyzeCount];
+			return [NSString stringWithFormat:@"(%d files, %d files to analyze)",total,pending];
 	}
 	*/
 }

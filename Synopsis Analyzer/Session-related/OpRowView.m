@@ -178,6 +178,7 @@ static NSMutableArray		*iconGenArray = nil;
 	[nameField sizeToFit];
 	nameField.toolTip = self.op.src;
 	[pathField setStringValue:self.op.src];
+	[pathField setToolTip:self.op.src];
 	[pathField sizeToFit];
 	
 	//	if my session hasn't been cleared to process stuff, hide the progress indicator
@@ -281,20 +282,25 @@ static NSMutableArray		*iconGenArray = nil;
 		else
 			[progressIndicator animateToValue:[self.op.job jobProgress]];
 		double			rawSecondsRemaining = self.op.job.jobTimeRemaining;
-		long			secondsRemaining = rawSecondsRemaining;
+		if (isnan(rawSecondsRemaining) || isinf(rawSecondsRemaining))	{
+			[statusField setStringValue:@"Calculating..."];
+		}
+		else	{
+			long			secondsRemaining = rawSecondsRemaining;
 		
-		long			minutesRemaining = secondsRemaining/60;
-		secondsRemaining -= (minutesRemaining * 60);
+			long			minutesRemaining = secondsRemaining/60;
+			secondsRemaining -= (minutesRemaining * 60);
 		
-		long			hoursRemaining = minutesRemaining/60;
-		minutesRemaining -= (hoursRemaining * 60);
+			long			hoursRemaining = minutesRemaining/60;
+			minutesRemaining -= (hoursRemaining * 60);
 		
-		if (hoursRemaining > 0)
-			[statusField setStringValue:[NSString stringWithFormat:@"%ld:%0.2ld:%0.2ld Remaining",hoursRemaining,minutesRemaining,secondsRemaining]];
-		else if (minutesRemaining > 0)
-			[statusField setStringValue:[NSString stringWithFormat:@"%0.2ld:%0.2ld Remaining",minutesRemaining,secondsRemaining]];
-		else
-			[statusField setStringValue:[NSString stringWithFormat:@":%0.2ld Remaining",secondsRemaining]];
+			if (hoursRemaining > 0)
+				[statusField setStringValue:[NSString stringWithFormat:@"%ld:%0.2ld:%0.2ld Remaining",hoursRemaining,minutesRemaining,secondsRemaining]];
+			else if (minutesRemaining > 0)
+				[statusField setStringValue:[NSString stringWithFormat:@"%0.2ld:%0.2ld Remaining",minutesRemaining,secondsRemaining]];
+			else
+				[statusField setStringValue:[NSString stringWithFormat:@":%0.2ld Remaining",secondsRemaining]];
+		}
 		[statusField sizeToFit];
 		[self _updateStatusFieldWidthConstraint];
 		[statusField setHidden:NO];

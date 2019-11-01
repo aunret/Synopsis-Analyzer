@@ -398,8 +398,6 @@ static NSString						*localFileDragType = @"localFileDragType";
 		//	update the relevant toolbar items
 		[runPauseButton setLabel:@"Start"];
 		[runPauseButton setImage:[NSImage imageNamed:@"ic_play_circle_filled"]];
-		if ([self numberOfFilesToProcess] < 1)
-			[runPauseButton setEnabled:NO];
 		[stopButton setEnabled:NO];
 		[addItem setEnabled:YES];
 		[removeItem setEnabled:YES];
@@ -423,6 +421,9 @@ static NSString						*localFileDragType = @"localFileDragType";
 		for (SynOp *op in self.opsInProgress)	{
 			[op stop];
 		}
+		
+		if ([self numberOfFilesToProcess] < 1)
+			[runPauseButton setEnabled:NO];
 		
 		//	do stuff with the timer
 		if (self.progressRefreshTimer != nil)	{
@@ -678,7 +679,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 	[openPanel setAllowsMultipleSelection:YES];
 	[openPanel setCanChooseDirectories:YES];
 	[openPanel setAllowedFileTypes:SynopsisSupportedFileTypes()];
-	[openPanel setMessage:@"Select one or more files to import"];
+	[openPanel setMessage:@"Select one or more movie files (.mov, .mp4, .m4v, .3gp, .mxf) to import"];
 	
 	[openPanel beginSheetModalForWindow:window completionHandler:^(NSInteger result)	{
 		if (result == NSModalResponseOK)	{
