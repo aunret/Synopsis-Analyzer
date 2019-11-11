@@ -1,9 +1,9 @@
 //
-//  PrefsController.m
-//  Synopsis Analyzer
+//	PrefsController.m
+//	Synopsis Analyzer
 //
-//  Created by testAdmin on 9/17/19.
-//  Copyright © 2019 yourcompany. All rights reserved.
+//	Created by testAdmin on 9/17/19.
+//	Copyright © 2019 yourcompany. All rights reserved.
 //
 
 #import "PrefsController.h"
@@ -52,9 +52,9 @@ PrefsController			*globalPrefsController = nil;
 }
 - (void)windowDidLoad {
 	//NSLog(@"%s",__func__);
-    [super windowDidLoad];
-    
-    // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
+	[super windowDidLoad];
+	
+	// Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 - (void) awakeFromNib	{
 	//NSLog(@"%s",__func__);

@@ -409,7 +409,7 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 }
 - (void)viewDidLoad {
 	//NSLog(@"%s",__func__);
-    [super viewDidLoad];
+	[super viewDidLoad];
 }
 - (void) awakeFromNib	{
 	//NSLog(@"%s",__func__);

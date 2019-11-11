@@ -1,9 +1,9 @@
 //
-//  InspectorViewController.m
-//  Synopsis Analyzer
+//	InspectorViewController.m
+//	Synopsis Analyzer
 //
-//  Created by testAdmin on 9/25/19.
-//  Copyright © 2019 yourcompany. All rights reserved.
+//	Created by testAdmin on 9/25/19.
+//	Copyright © 2019 yourcompany. All rights reserved.
 //
 
 #import "InspectorViewController.h"
@@ -59,23 +59,23 @@ static InspectorViewController		*globalInspectorViewController = nil;
 
 - (void)viewDidLoad {
 	//NSLog(@"%s",__func__);
-    [super viewDidLoad];
-    
-    [self addChildViewController:self.emptyInspectorViewController];
-    
-    [self.view addSubview:self.emptyInspectorViewController.view];
-    [self.emptyInspectorViewController.view setFrame:self.view.bounds];
-    
-    self.currentViewController = self.emptyInspectorViewController;
-    
- 	//	force my view controllers to load/awake from nibs...
-    NSViewController			*tmpVC = nil;
-    tmpVC = self.opInspectorViewController;
-    [tmpVC view];
-    tmpVC = self.sessionInspectorViewController;
-    [tmpVC view];
-    tmpVC = self.emptyInspectorViewController;
-    [tmpVC view];
+	[super viewDidLoad];
+	
+	[self addChildViewController:self.emptyInspectorViewController];
+	
+	[self.view addSubview:self.emptyInspectorViewController.view];
+	[self.emptyInspectorViewController.view setFrame:self.view.bounds];
+	
+	self.currentViewController = self.emptyInspectorViewController;
+	
+	//	force my view controllers to load/awake from nibs...
+	NSViewController			*tmpVC = nil;
+	tmpVC = self.opInspectorViewController;
+	[tmpVC view];
+	tmpVC = self.sessionInspectorViewController;
+	[tmpVC view];
+	tmpVC = self.emptyInspectorViewController;
+	[tmpVC view];
 }
 - (void) awakeFromNib	{
 	//NSLog(@"%s",__func__);

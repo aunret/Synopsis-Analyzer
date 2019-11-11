@@ -1,9 +1,9 @@
 //
-//  SynopsisJobObject.m
-//  SynopsisCleanRoom
+//	SynopsisJobObject.m
+//	SynopsisCleanRoom
 //
-//  Created by testAdmin on 8/26/19.
-//  Copyright © 2019 yourcompany. All rights reserved.
+//	Created by testAdmin on 8/26/19.
+//	Copyright © 2019 yourcompany. All rights reserved.
 //
 
 #import "SynopsisJobObject.h"
@@ -47,27 +47,27 @@ static const CGRect mediumQuality = (CGRect) { 0, 0, 320, 240 };
 static const CGRect highQuality = (CGRect) { 0, 0, 640, 480 };
 static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHint inQuality)
 {
-    switch (inQuality)
-    {
-        case SynopsisAnalysisQualityHintLow:
-        {
-            return CGRectStandardize(AVMakeRectWithAspectRatioInsideRect(inRect.size, lowQuality));
-            break;
-        }
-        case SynopsisAnalysisQualityHintMedium:
-        {
-            return CGRectStandardize(AVMakeRectWithAspectRatioInsideRect(inRect.size, mediumQuality));
-            break;
-        }
-        case SynopsisAnalysisQualityHintHigh:
-        {
-            return CGRectStandardize(AVMakeRectWithAspectRatioInsideRect(inRect.size, highQuality));
-            break;
-        }
-        case SynopsisAnalysisQualityHintOriginal:
-            return CGRectStandardize(inRect);
-            break;
-    }
+	switch (inQuality)
+	{
+		case SynopsisAnalysisQualityHintLow:
+		{
+			return CGRectStandardize(AVMakeRectWithAspectRatioInsideRect(inRect.size, lowQuality));
+			break;
+		}
+		case SynopsisAnalysisQualityHintMedium:
+		{
+			return CGRectStandardize(AVMakeRectWithAspectRatioInsideRect(inRect.size, mediumQuality));
+			break;
+		}
+		case SynopsisAnalysisQualityHintHigh:
+		{
+			return CGRectStandardize(AVMakeRectWithAspectRatioInsideRect(inRect.size, highQuality));
+			break;
+		}
+		case SynopsisAnalysisQualityHintOriginal:
+			return CGRectStandardize(inRect);
+			break;
+	}
 
 }
 
@@ -212,7 +212,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		videoTransOpts:tmpVideoDict
 		audioTransOpts:tmpAudioDict
 		synopsisOpts:tmpSynopsisDict
-        device:device
+		device:device
 		completionBlock:inCompletionBlock];
 }
 - (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts device:(id<MTLDevice>)device completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock	{
@@ -228,8 +228,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		self.jobStatus = JOStatus_NotStarted;
 		self.jobErr = JOErr_NoErr;
 		self.jobErrString = @"";
-        
-        self.device = device;
+		
+		self.device = device;
 		
 		self.jobProgress = 0.0;
 		self.jobStartDate = [NSDate date];
@@ -461,8 +461,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			self.videoTransOpts = nil;
 	}
 	
-    
-    
+	
+	
 	SynopsisAnalysisQualityHint		analysisQualityHint = (self.synopsisOpts == nil) ? SynopsisAnalysisQualityHintOriginal : [self.synopsisOpts[kSynopsisAnalysisSettingsQualityHintKey] unsignedIntegerValue];
 	NSArray							*requestedAnalyzers = (self.synopsisOpts == nil) ? nil : self.synopsisOpts[kSynopsisAnalysisSettingsEnabledPluginsKey];
 	self.availableAnalyzers = [[NSMutableArray alloc] init];
@@ -512,34 +512,32 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//	first, some basic vars: tracks, dicts that describe normalized audio/video output settings, synopsis-related vars
 	NSArray<AVAssetTrack*>		*tracks = [asset tracks];
 	//	these dicts describe the standard reader output format if i need to transcode (or analyze!) video or audio
-    NSMutableDictionary			*videoReadNormalizedOutputSettings = nil;
-    
-    if ( @available(macOS 10.15, *) ) {
-        videoReadNormalizedOutputSettings = [@{
-                  (NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32BGRA ),    //    BGRA/RGBA stops working sometime at or before 8k resolution!
-                  //(NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32ARGB ),
-                  (NSString *)kCVPixelBufferMetalCompatibilityKey: @YES,
-                  (NSString *)kCVPixelBufferOpenGLCompatibilityKey: @YES,
-                  (NSString *)kCVPixelBufferIOSurfacePropertiesKey: @{},
-                  AVVideoDecompressionPropertiesKey: @{
-                          
-                          (NSString *)kVTVideoDecoderSpecification_PreferredDecoderGPURegistryID: @(self.device.registryID),
-                  },
-                  
-              } mutableCopy];
-    }
-    else {
-        videoReadNormalizedOutputSettings =  [@{
-                  (NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32BGRA ),    //    BGRA/RGBA stops working sometime at or before 8k resolution!
-                  //(NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32ARGB ),
-                  (NSString *)kCVPixelBufferMetalCompatibilityKey: @YES,
-                  (NSString *)kCVPixelBufferOpenGLCompatibilityKey: @YES,
-                  (NSString *)kCVPixelBufferIOSurfacePropertiesKey: @{}
-              } mutableCopy];
-    }
+	NSMutableDictionary			*videoReadNormalizedOutputSettings = nil;
+	
+	if ( @available(macOS 10.15, *) ) {
+		videoReadNormalizedOutputSettings = [@{
+			(NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32BGRA ),	//	 BGRA/RGBA stops working sometime at or before 8k resolution!
+			//(NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32ARGB ),
+			(NSString *)kCVPixelBufferMetalCompatibilityKey: @YES,
+			(NSString *)kCVPixelBufferOpenGLCompatibilityKey: @YES,
+			(NSString *)kCVPixelBufferIOSurfacePropertiesKey: @{},
+			AVVideoDecompressionPropertiesKey: @{
+				(NSString *)kVTVideoDecoderSpecification_PreferredDecoderGPURegistryID: @(self.device.registryID),
+				},
+			} mutableCopy];
+	}
+	else {
+		videoReadNormalizedOutputSettings =	 [@{
+			(NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32BGRA ),	//	 BGRA/RGBA stops working sometime at or before 8k resolution!
+			//(NSString *)kCVPixelBufferPixelFormatTypeKey: @( kCVPixelFormatType_32ARGB ),
+			(NSString *)kCVPixelBufferMetalCompatibilityKey: @YES,
+			(NSString *)kCVPixelBufferOpenGLCompatibilityKey: @YES,
+			(NSString *)kCVPixelBufferIOSurfacePropertiesKey: @{}
+			} mutableCopy];
+	}
   
-    
-    
+	
+	
 	NSMutableDictionary			*audioReadNormalizedOutputSettings = [@{
 		AVFormatIDKey: [NSNumber numberWithInteger:kAudioFormatLinearPCM],
 		AVLinearPCMBitDepthKey: @32,
@@ -638,10 +636,10 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 						localTransOpts[AVVideoWidthKey] = [NSNumber numberWithInteger:exportSize.width];
 						localTransOpts[AVVideoHeightKey] = [NSNumber numberWithInteger:exportSize.height];
 					}
-                    
-                    if (@available(macOS 10.15, *)) {
-                        localTransOpts[AVVideoEncoderSpecificationKey] = @{ (NSString *) kVTVideoEncoderSpecification_PreferredEncoderGPURegistryID : @(self.device.registryID) };
-                    }
+					
+					if (@available(macOS 10.15, *)) {
+						localTransOpts[AVVideoEncoderSpecificationKey] = @{ (NSString *) kVTVideoEncoderSpecification_PreferredEncoderGPURegistryID : @(self.device.registryID) };
+					}
 					
 					//	wrap the input-/output-creation stuff in an exception handler so we can recover gracefully with an error message
 					@try	{
@@ -1818,8 +1816,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	
 	self.availableAnalyzers = nil;
 	
-    self.device = nil;
-    
+	self.device = nil;
+	
 	if (self.completionBlock != nil)
 		self.completionBlock(self);
 	

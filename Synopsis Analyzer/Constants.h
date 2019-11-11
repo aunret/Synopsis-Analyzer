@@ -1,9 +1,9 @@
 //
-//  Constants.h
-//  Synopsis
+//	Constants.h
+//	Synopsis
 //
-//  Created by vade on 7/19/17.
-//  Copyright © 2017 metavisual. All rights reserved.
+//	Created by vade on 7/19/17.
+//	Copyright © 2017 metavisual. All rights reserved.
 //
 
 #ifndef Constants_h
@@ -24,41 +24,41 @@
 // This might seem verbose, but its helpful for edge cases...
 // TODO: Move to flags ?
 typedef enum : NSUInteger {
-    // Bail case
-    OperationTypeUnknown = 0,
-    
-    // temp file and output file adjacent to input file
-    OperationTypeFileInPlace,
-    // temp file and output file within output folder
-    OperationTypeFileToOutput,
-    // temp file in temp folder, output file adjacent to input file
-    OperationTypeFileToTempToInPlace,
-    // temp file in temp folder, output file in output folder
-    OperationTypeFileToTempToOutput,
-    
-    // temp file and output file adjacent to input file, in any subfolder of source URL
-    OperationTypeFolderInPlace,
-    // temp file flat within temp folder, output file adjacent to input file, in any subfolder of source URL
-    OperationTypeFolderToTempToInPlace,
-    OperationTypeFolderToTempToOutput,
-    
+	// Bail case
+	OperationTypeUnknown = 0,
+	
+	// temp file and output file adjacent to input file
+	OperationTypeFileInPlace,
+	// temp file and output file within output folder
+	OperationTypeFileToOutput,
+	// temp file in temp folder, output file adjacent to input file
+	OperationTypeFileToTempToInPlace,
+	// temp file in temp folder, output file in output folder
+	OperationTypeFileToTempToOutput,
+	
+	// temp file and output file adjacent to input file, in any subfolder of source URL
+	OperationTypeFolderInPlace,
+	// temp file flat within temp folder, output file adjacent to input file, in any subfolder of source URL
+	OperationTypeFolderToTempToInPlace,
+	OperationTypeFolderToTempToOutput,
+	
 } OperationType;
 */
 
 
 typedef enum : NSUInteger {
-    OperationStateUnknown = 0,
-    OperationStatePending,
-    OperationStateRunning,
-    OperationStateCancelled,
-    OperationStateFailed,
-    OperationStateSuccess,
+	OperationStateUnknown = 0,
+	OperationStatePending,
+	OperationStateRunning,
+	OperationStateCancelled,
+	OperationStateFailed,
+	OperationStateSuccess,
 } OperationState;
 
 
 //typedef enum : NSUInteger {
-//    OperationPassAnalysis,
-//    OperationPassFinal,
+//	  OperationPassAnalysis,
+//	  OperationPassFinal,
 //} OperationPass;
 
 

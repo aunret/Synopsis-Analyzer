@@ -215,7 +215,7 @@ typedef enum : NSUInteger {
 	// Always Log Errors
 	NSLog(@" [ERROR] %@", log);
 	NSAttributedString* logString = [[NSAttributedString alloc] initWithString:[gl appendLine:log] attributes:gl.logStyle];
-   
+	
 	NSMutableAttributedString* errorString = [gl errorString];
 	[errorString appendAttributedString:logString];
 

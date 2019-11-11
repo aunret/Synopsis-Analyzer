@@ -266,7 +266,7 @@
 	}
 }
 - (NSMutableArray *) opsToSave;	{
-	NSMutableArray		   *returnMe = [NSMutableArray arrayWithCapacity:0];
+	NSMutableArray		*returnMe = [NSMutableArray arrayWithCapacity:0];
 	
 	for (SynOp *op in self.ops)	{
 		if (op.status == OpStatus_Pending || op.status == OpStatus_PreflightErr || op.status == OpStatus_Err)

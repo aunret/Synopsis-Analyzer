@@ -1,9 +1,9 @@
 //
-//  OpRowView.m
-//  Synopsis Analyzer
+//	OpRowView.m
+//	Synopsis Analyzer
 //
-//  Created by testAdmin on 9/16/19.
-//  Copyright © 2019 yourcompany. All rights reserved.
+//	Created by testAdmin on 9/16/19.
+//	Copyright © 2019 yourcompany. All rights reserved.
 //
 
 #import "OpRowView.h"
@@ -105,9 +105,9 @@ static NSMutableArray		*iconGenArray = nil;
 	
 	//	preview pinned to the left
 	
-    [preview.heightAnchor constraintEqualToConstant:36].active = true;
-    [preview.widthAnchor constraintEqualToConstant:36].active = true;
-    
+	[preview.heightAnchor constraintEqualToConstant:36].active = true;
+	[preview.widthAnchor constraintEqualToConstant:36].active = true;
+	
 	//[preview.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:padding].active = true;
 	[preview.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:0.0].active = true;
 	[preview.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0.0].active = true;
