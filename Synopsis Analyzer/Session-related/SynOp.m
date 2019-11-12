@@ -694,7 +694,7 @@ static NSImage				*genericMovieImage = nil;
 		NSDictionary			*synopsisOpts = (!sessionPreset.useAnalysis) ? nil : @{
 			kSynopsisAnalysisSettingsQualityHintKey : @( SynopsisAnalysisQualityHintMedium ),
 			kSynopsisAnalysisSettingsEnabledPluginsKey : @[ @"StandardAnalyzerPlugin" ],
-			kSynopsisAnalysisSettingsEnableConcurrencyKey : @YES,
+			//kSynopsisAnalysisSettingsEnableConcurrencyKey : @YES,
 			kSynopsisAnalyzedMetadataExportOptionKey: @( sessionPreset.metadataExportOption )
 		};
 		NSMutableDictionary		*videoOpts = (sessionPreset.videoSettings.settingsDictionary==nil) ? [NSMutableDictionary new] : [sessionPreset.videoSettings.settingsDictionary mutableCopy];

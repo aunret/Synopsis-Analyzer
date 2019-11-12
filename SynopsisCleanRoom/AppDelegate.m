@@ -57,8 +57,9 @@
 	NSDictionary		*synopsisSettings = @{
 		kSynopsisAnalysisSettingsQualityHintKey : @( SynopsisAnalysisQualityHintMedium ),
 		kSynopsisAnalysisSettingsEnabledPluginsKey : @[ @"StandardAnalyzerPlugin" ],
-		kSynopsisAnalysisSettingsEnableConcurrencyKey : @YES,
-		//kSynopsisAnalyzedMetadataExportOptionKey: @YES
+		//kSynopsisAnalysisSettingsEnableConcurrencyKey : @YES,
+		//kSynopsisAnalyzedMetadataExportOptionKey: @YES,
+		//kSynopsisStrictFrameDecodeKey: @NO
 	};
 	
 	
@@ -66,8 +67,9 @@
 	//NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/hap testing/720/jpeg/Blue-720-jpeg.mov" isDirectory:NO];
 	//NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/whoa.mov" isDirectory:NO];
 	//NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/sample movies/PRIMER(2004)- A Movie Youll Have To Watch Twice!!-720p.mp4" isDirectory:NO];
-	NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/sample movies/Primer_FirstTwoMinutes_NonRef.mov" isDirectory:NO];
+	//NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/sample movies/Primer_FirstTwoMinutes_NonRef.mov" isDirectory:NO];
 	//NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/sample movies/Primer_FirstTenMinutes_NonRef.mov" isDirectory:NO];
+	NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/sample movies/Serenity - HD DVD Trailer.mp4" isDirectory:NO];
 	
 	
 	//	"dest file" URL- replace with something local to your machine

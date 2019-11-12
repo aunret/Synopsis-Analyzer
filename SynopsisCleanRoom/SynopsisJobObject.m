@@ -21,23 +21,25 @@
 
 
 
-NSString * const kSynopsisSrcFileKey = @"kSynopsisSrcFileKey";
-NSString * const kSynopsisDstFileKey = @"kSynopsisDstFileKey";
-NSString * const kSynopsisTmpDirKey = @"kSynopsisTmpDirKey";
-NSString * const kSynopsisTranscodeVideoSettingsKey = @"kSynopsisTranscodeVideoSettingsKey";
-NSString * const kSynopsisTranscodeAudioSettingsKey = @"kSynopsisTranscodeAudioSettingsKey";
+NSString * const kSynopsisSrcFileKey = @"SrcFile";
+NSString * const kSynopsisDstFileKey = @"DstFile";
+NSString * const kSynopsisTmpDirKey = @"TmpDir";
+NSString * const kSynopsisTranscodeVideoSettingsKey = @"VideoSettings";
+NSString * const kSynopsisTranscodeAudioSettingsKey = @"AudioSettings";
 
 
-NSString * const kSynopsisAnalysisSettingsKey = @"kSynopsisAnalysisSettingsKey";
-NSString * const kSynopsisAnalysisSettingsQualityHintKey = @"kSynopsisAnalysisSettingsQualityHintKey";
-NSString * const kSynopsisAnalysisSettingsEnableConcurrencyKey = @"kSynopsisAnalysisSettingsEnableConcurrencyKey";
-NSString * const kSynopsisAnalysisSettingsEnabledPluginsKey = @"kSynopsisAnalysisSettingsEnabledPluginsKey";
-NSString * const kSynopsisAnalysisSettingsEnabledPluginModulesKey = @"kSynopsisAnalysisSettingsEnabledPluginModulesKey";
-NSString * const kSynopsisAnalyzedMetadataExportOptionKey = @"kSynopsisAnalyzedMetadataExportOptionKey";
+NSString * const kSynopsisAnalysisSettingsKey = @"SynopsisSettings";
+NSString * const kSynopsisAnalysisSettingsQualityHintKey = @"AnalysisQuality";
+//NSString * const kSynopsisAnalysisSettingsEnableConcurrencyKey = @"EnableConcurrency";
+NSString * const kSynopsisAnalysisSettingsEnabledPluginsKey = @"EnabledPlugins";
+NSString * const kSynopsisAnalysisSettingsEnabledPluginModulesKey = @"EnabledPluginModules";
+NSString * const kSynopsisAnalyzedMetadataExportOptionKey = @"ExportMetadata";
+NSString * const kSynopsisDeviceRegistryIDKey = @"DeviceRegistry";
+NSString * const kSynopsisStrictFrameDecodeKey = @"StrictFrameDecode";
 
 
-NSString * const VVAVVideoMultiPassEncodeKey = @"VVAVVideoMultiPassEncodeKey";
-NSString * const kSynopsisStripTrackKey = @"kSynopsisStripTrackKey";
+NSString * const VVAVVideoMultiPassEncodeKey = @"MultiPassEncode";
+NSString * const kSynopsisStripTrackKey = @"StripTrack";
 
 
 
@@ -176,7 +178,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 }
 
 
-+ (instancetype) createWithJobJSONString:(NSString *)inJSONStr device:(id<MTLDevice>)device completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock	{
++ (instancetype) createWithJobJSONString:(NSString *)inJSONStr completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock	{
 	//NSLog(@"%s",__func__);
 	//	if we were passed a nil JSON object, bail and return nil
 	if (inJSONStr == nil)	{
@@ -194,6 +196,17 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	NSDictionary	*tmpVideoDict = tmpJSONObj[kSynopsisTranscodeVideoSettingsKey];
 	NSDictionary	*tmpAudioDict = tmpJSONObj[kSynopsisTranscodeAudioSettingsKey];
 	NSDictionary	*tmpSynopsisDict = tmpJSONObj[kSynopsisAnalysisSettingsKey];
+	NSNumber		*tmpMTLRegistryIDNum = (tmpSynopsisDict==nil) ? nil : tmpSynopsisDict[kSynopsisDeviceRegistryIDKey];
+	id<MTLDevice>	tmpMetalDevice = nil;
+	if (tmpMTLRegistryIDNum != nil)	{
+		NSArray			*allDevices = MTLCopyAllDevices();
+		for (id<MTLDevice> tmpDevice in allDevices)	{
+			if (tmpDevice.registryID == tmpMTLRegistryIDNum.unsignedLongLongValue)	{
+				tmpMetalDevice = tmpDevice;
+				break;
+			}
+		}
+	}
 	
 	//	if the src file, dst file, or synopsis settings dict were nil, bail and return nil
 	if (tmpSrc==nil || tmpDst==nil)	{
@@ -212,7 +225,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		videoTransOpts:tmpVideoDict
 		audioTransOpts:tmpAudioDict
 		synopsisOpts:tmpSynopsisDict
-		device:device
+		device:tmpMetalDevice
 		completionBlock:inCompletionBlock];
 }
 - (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts device:(id<MTLDevice>)device completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock	{
@@ -230,6 +243,25 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		self.jobErrString = @"";
 		
 		self.device = device;
+		if (self.device == nil)	{
+			self.device = MTLCreateSystemDefaultDevice();
+			if (self.device.lowPower)
+				self.device = nil;
+			
+			if (self.device == nil)	{
+				NSArray			*allDevices = MTLCopyAllDevices();
+				if (allDevices != nil && allDevices.count > 0)	{
+					for (id<MTLDevice> tmpDevice in allDevices)	{
+						if (!tmpDevice.lowPower)	{
+							self.device = tmpDevice;
+							break;
+						}
+					}
+					if (self.device == nil)
+						self.device = allDevices[0];
+				}
+			}
+		}
 		
 		self.jobProgress = 0.0;
 		self.jobStartDate = [NSDate date];
@@ -1478,15 +1510,26 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 								if (skippedBufferCount >4)	{
 									[localInput markCurrentPassAsFinished];
 									//	if this was a video track, and it didn't render any video frames, something went wrong
-									if ((isVideoWriter && retrievedSampleBufferCount==0)	||
-									(analyzedSampleBufferCount >= 0 && retrievedSampleBufferCount != analyzedSampleBufferCount))	{
+									if (isVideoWriter && retrievedSampleBufferCount == 0)	{
 										//NSLog(@"\t\tretrieved vs analyzed count is %ld - %ld for job %@",retrievedSampleBufferCount,analyzedSampleBufferCount,self);
 										//unexpectedErr = YES;
 										bss.jobStatus = JOStatus_Err;
 										bss.jobErr = JOErr_AVFErr;
-										bss.jobErrString = @"Problem retrieving image buffer from AVFoundation";
+										bss.jobErrString = @"Could not retrieve any image buffers from AVFoundation";
 										[self _cancelAndCleanUp];
 										return;
+									}
+									else if (analyzedSampleBufferCount >= 0 && retrievedSampleBufferCount != analyzedSampleBufferCount)	{
+										NSNumber		*tmpNum = self.synopsisOpts[kSynopsisStrictFrameDecodeKey];
+										if (tmpNum == nil || ![tmpNum isKindOfClass:[NSNumber class]] || [tmpNum boolValue])	{
+											//NSLog(@"\t\tretrieved vs analyzed count is %ld - %ld for job %@",retrievedSampleBufferCount,analyzedSampleBufferCount,self);
+											//unexpectedErr = YES;
+											bss.jobStatus = JOStatus_Err;
+											bss.jobErr = JOErr_AVFErr;
+											bss.jobErrString = @"Problem retrieving image buffer from AVFoundation";
+											[self _cancelAndCleanUp];
+											return;
+										}
 									}
 								}
 								break;

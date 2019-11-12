@@ -54,6 +54,9 @@ extern NSString * const kSynopsisSrcFileKey;
 //	required to be non-nil.  associated val is an NSString describing the path to the dst file.  if kSynopsisTmpDirKey is non-nil, file will be copied here when done, else file will be written here during processing.
 extern NSString * const kSynopsisDstFileKey;
 
+//	optional.  associated val is an NSString describing the path to the temp directory.
+extern NSString * const kSynopsisTmpDirKey;
+
 //	associated val is dict that gets passed to AVAssetWriterInput describing video transcode settings.  if nil or NSNull, don't transcode video (passthrough)
 extern NSString * const kSynopsisTranscodeVideoSettingsKey;
 
@@ -68,7 +71,7 @@ extern NSString * const kSynopsisAnalysisSettingsKey;
 	extern NSString * const kSynopsisAnalysisSettingsQualityHintKey;
 
 	// Key whose value is an NSNumber/bool to enable threaded / concurrent analysis for modules and plugins.
-	extern NSString * const kSynopsisAnalysisSettingsEnableConcurrencyKey;
+	//extern NSString * const kSynopsisAnalysisSettingsEnableConcurrencyKey;
 
 	// Key whose value is an NSArray of NSStrings which are classnames of enabled pluggins used for the analysis session
 	extern NSString * const kSynopsisAnalysisSettingsEnabledPluginsKey;
@@ -78,6 +81,12 @@ extern NSString * const kSynopsisAnalysisSettingsKey;
 
 	//	optional- val is unsigned integer value describing how the JSON sidecar export option should be handled (SynopsisMetadataEncoderExportOption)
 	extern NSString * const kSynopsisAnalyzedMetadataExportOptionKey;
+	
+	//	optional- val is 64-bit unsigned integer corresponding to the registryID property of the MTLDevice you want synopsis to use for analysis
+	extern NSString * const kSynopsisDeviceRegistryIDKey;
+	
+	//	optional- val is an NSNumber/bool indicating whether the job should allow AVFoundation to skip frames it could not decode.  if not provided, the inability to decode a frame will cause an error, cancelling the job.
+	extern NSString * const kSynopsisStrictFrameDecodeKey;
 
 
 //	key whose value is a NSNumber/bool indicating whether or not the encode should be multi-pass.  only relevant in video transcode options dict (val associated with kSynopsisTranscodeVideoSettingsKey)
@@ -107,7 +116,7 @@ extern NSString * const kSynopsisStripTrackKey;
 + (NSString *) stringForStatus:(JOStatus)inStatus;
 + (NSString *) stringForErrorType:(JOErr)inErr;
 
-+ (instancetype) createWithJobJSONString:(NSString *)inJSONStr device:(id<MTLDevice>)device completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock;
++ (instancetype) createWithJobJSONString:(NSString *)inJSONStr completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock;
 - (instancetype) initWithSrcFile:(NSURL *)inSrcFile dstFile:(NSURL *)inDstFile videoTransOpts:(NSDictionary *)inVidTransOpts audioTransOpts:(NSDictionary *)inAudioTransOpts synopsisOpts:(NSDictionary *)inSynopsisOpts device:(id<MTLDevice>)device completionBlock:(void (^)(SynopsisJobObject *theJob))inCompletionBlock;
 
 @property (atomic, readwrite, weak, nullable) id<BaseJobObjectDelegate> delegate;
