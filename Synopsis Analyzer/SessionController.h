@@ -32,6 +32,10 @@
 	IBOutlet NSToolbarItem		*addItem;
 	IBOutlet NSToolbarItem		*removeItem;
 	IBOutlet NSToolbarItem		*clearItem;
+	
+	IBOutlet NSTabView			*dropViewTabView;
+	
+	IBOutlet DropFilesView		*dropView;
 }
 
 + (SessionController *) global;
@@ -52,6 +56,7 @@
 - (void) appendWatchFolderSessions:(NSArray<SynSession*> *)n;
 
 - (void) reloadData;
+- (void) reloadDropViewTabView;
 - (void) reloadRowForItem:(id)n;
 
 - (void) start;

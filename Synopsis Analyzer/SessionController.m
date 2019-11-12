@@ -106,7 +106,6 @@ static NSString						*localFileDragType = @"localFileDragType";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(concurrencyChanged:) name:kSynopsisAnalyzerConcurrentJobAnalysisDidChangeNotification object:nil];
 }
 - (void) awakeFromNib	{
-	//NSLog(@"%s",__func__);
 	if (!self.wokeUpOnce)	{
 		//[dropView setDragDelegate:self];
 		outlineView.outlineTableColumn = theColumn;
@@ -114,6 +113,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 		[outlineView registerNib:[[NSNib alloc] initWithNibNamed:@"SessionRowView" bundle:[NSBundle mainBundle]] forIdentifier:@"SessionRowView"];
 		[outlineView registerNib:[[NSNib alloc] initWithNibNamed:@"OpRowView" bundle:[NSBundle mainBundle]] forIdentifier:@"OpRowView"];
 		[outlineView setRowHeight:64.0];
+		
+		[dropView setDragDelegate:self];
 		
 		[stopButton setEnabled:NO];
 	
@@ -127,7 +128,6 @@ static NSString						*localFileDragType = @"localFileDragType";
 
 
 - (void) applicationDidFinishLaunching:(NSNotification *)note	{
-	//NSLog(@"%s",__func__);
 	@synchronized (self)	{
 		NSUserDefaults		*def = [NSUserDefaults standardUserDefaults];
 		NSData				*tmpData = nil;
@@ -142,7 +142,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 						//self.expandStateDict[tmpSession.dragUUID.UUIDString] = @YES;
 					}
 				}
-				[self reloadData];
+				//[self reloadData];
 			}
 		}
 		
@@ -157,9 +157,11 @@ static NSString						*localFileDragType = @"localFileDragType";
 						//	self.expandStateDict[tmpSession.dragUUID.UUIDString] = @YES;
 					}
 				}
-				[self reloadData];
+				//[self reloadData];
 			}
 		}
+		
+		[self reloadData];
 		
 		//	enable/disable the run-pause button based on the number of active ops
 		[runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
@@ -715,6 +717,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 			}
 			
 			//[self reloadData];
+			[self reloadDropViewTabView];
 			[self outlineViewSelectionDidChange:nil];
 		}
 		else if ([selItem isKindOfClass:[SynOp class]])	{
@@ -742,6 +745,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 			[outlineView endUpdates];
 			
 			//[self reloadData];
+			[self reloadDropViewTabView];
 			[self outlineViewSelectionDidChange:nil];
 		}
 		
@@ -830,6 +834,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 	
 	//	reload the table view
 	//[self reloadData];
+	[self reloadDropViewTabView];
 	
 	//	enable/disable the run-pause button based on the number of active ops
 	[runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
@@ -841,6 +846,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 	
 	//	reload the table view
 	[self reloadData];
+	[self reloadDropViewTabView];
 }
 
 
@@ -851,6 +857,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 	[outlineView reloadData];
 	[self restoreExpandStates];
 	
+	[self reloadDropViewTabView];
+	
 	if (tmpObj != nil)	{
 		NSInteger		newSelectedRow = [outlineView rowForItem:tmpObj];
 		if (newSelectedRow != NSNotFound && newSelectedRow >= 0)
@@ -858,6 +866,19 @@ static NSString						*localFileDragType = @"localFileDragType";
 	}
 	
 	[self outlineViewSelectionDidChange:nil];
+}
+- (void) reloadDropViewTabView	{
+	NSInteger			newIndex = 0;
+	if ([outlineView numberOfRows] < 1)
+		newIndex = 1;
+	
+	//	if there's no change, bail immediately...
+	if ([dropViewTabView indexOfTabViewItem:[dropViewTabView selectedTabViewItem]] == newIndex)	{
+		return;
+	}
+	[dropViewTabView selectTabViewItemAtIndex:newIndex];
+	[outlineView reloadData];
+	[self restoreExpandStates];
 }
 - (void) reloadRowForItem:(id)n	{
 	if (n == nil)
@@ -983,6 +1004,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 	//NSLog(@"%s ... %@",__func__,fileURLArray);
 	[self createAndAppendSessionsWithFiles:fileURLArray];
 	completionBlock();
+	
+	[self reloadDropViewTabView];
 }
 
 
@@ -999,7 +1022,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 
 - (NSInteger) outlineView:(NSOutlineView *)ov numberOfChildrenOfItem:(id)item	{
 	if (item == nil)	{
-		return TOTAL_SESSIONS_COUNT;
+		NSInteger		returnMe = TOTAL_SESSIONS_COUNT;
+		return returnMe;
 	}
 	
 	if ([item isKindOfClass:[SynSession class]])	{
@@ -1470,6 +1494,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 				
 				//	reload the outline view!
 				//[self reloadData];
+				[self reloadDropViewTabView];
 				//	re-evaluate the selection...
 				[self outlineViewSelectionDidChange:nil];
 				
@@ -1518,6 +1543,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 					
 					//	reload the outline view!
 					//[self reloadData];
+					[self reloadDropViewTabView];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
 					
@@ -1565,6 +1591,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 					
 					//	reload the outline view!
 					//[self reloadData];
+					[self reloadDropViewTabView];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
 					
@@ -1607,6 +1634,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 					[outlineView endUpdates];
 					//	reload the outline view
 					//[self reloadData];
+					[self reloadDropViewTabView];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
 					return YES;
@@ -1635,6 +1663,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 					[outlineView endUpdates];
 					//	reload the outline view
 					//[self reloadData];
+					[self reloadDropViewTabView];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
 					return YES;
@@ -1688,6 +1717,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 					
 					//	reload the outline view...
 					//[self reloadData];
+					[self reloadDropViewTabView];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
 					return YES;
@@ -1750,6 +1780,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 					
 					//	reload the outline view
 					//[self reloadData];
+					[self reloadDropViewTabView];
 					//	re-evaluate the selection...
 					[self outlineViewSelectionDidChange:nil];
 					return YES;
