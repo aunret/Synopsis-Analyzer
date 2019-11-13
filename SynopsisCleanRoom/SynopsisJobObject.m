@@ -7,17 +7,8 @@
 //
 
 #import "SynopsisJobObject.h"
-#ifdef STATIC_LIB
-#import "Synopsis.h"
-//#import "SynopsisMetadataEncoder.h"
-//#import "SynopsisConstants.h"
-#import "HapInAVFoundation.h"
-//#import "SynopsisVideoFrameConformSession.h"
-//#import "AnalyzerPluginProtocol.h"
-#else
 #import <Synopsis/Synopsis.h>
 #import <HapInAVFoundation/HapInAVFoundation.h>
-#endif
 #import <Metal/Metal.h>
 #import <pthread.h>
 #include <sys/xattr.h>
@@ -32,7 +23,7 @@
 
 NSString * const kSynopsisSrcFileKey = @"SrcFile";
 NSString * const kSynopsisDstFileKey = @"DstFile";
-NSString * const kSynopsisTmpDirKey = @"TmpDir";
+//NSString * const kSynopsisTmpDirKey = @"TmpDir";
 NSString * const kSynopsisTranscodeVideoSettingsKey = @"VideoSettings";
 NSString * const kSynopsisTranscodeAudioSettingsKey = @"AudioSettings";
 
@@ -251,7 +242,22 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		self.jobErr = JOErr_NoErr;
 		self.jobErrString = @"";
 		
+		//	set the device from the passed device var.  this always takes precedence.
 		self.device = device;
+		//	if the user didn't supply a metal device, try to parse one from the synopsis settings
+		if (self.device == nil)	{
+			NSNumber		*tmpMTLRegistryIDNum = (inSynopsisOpts==nil) ? nil : inSynopsisOpts[kSynopsisDeviceRegistryIDKey];
+			if (tmpMTLRegistryIDNum != nil)	{
+				NSArray			*allDevices = MTLCopyAllDevices();
+				for (id<MTLDevice> tmpDevice in allDevices)	{
+					if (tmpDevice.registryID == tmpMTLRegistryIDNum.unsignedLongLongValue)	{
+						self.device = tmpDevice;
+						break;
+					}
+				}
+			}
+		}
+		//	if the user still hasn't supplied a metal device, pick one automatically
 		if (self.device == nil)	{
 			self.device = MTLCreateSystemDefaultDevice();
 			if (self.device.lowPower)

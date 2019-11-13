@@ -55,7 +55,7 @@ extern NSString * const kSynopsisSrcFileKey;
 extern NSString * const kSynopsisDstFileKey;
 
 //	optional.  associated val is an NSString describing the path to the temp directory.
-extern NSString * const kSynopsisTmpDirKey;
+//extern NSString * const kSynopsisTmpDirKey;
 
 //	associated val is dict that gets passed to AVAssetWriterInput describing video transcode settings.  if nil or NSNull, don't transcode video (passthrough)
 extern NSString * const kSynopsisTranscodeVideoSettingsKey;

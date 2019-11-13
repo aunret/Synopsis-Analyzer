@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SynopsisJobObject.h"
+#import <Synopsis/Synopsis.h>
 
 
 
@@ -35,36 +36,325 @@ void usage()	{
 
 int main(int argc, const char * argv[]) {
 	@autoreleasepool {
-		//	make sure the # of args is correct
+		//	
+		//	these are the vals that we're going to populate from the args
+		NSString			*srcPath = nil;
+		NSString			*dstPath = nil;
+		//NSString			*tmpDir = nil;
+		NSMutableDictionary		*videoSettings = nil;
+		NSMutableDictionary		*audioSettings = nil;
+		NSMutableDictionary		*synopsisSettings = nil;
+		//	run through the args passed in, parsing them and populating the vars we need
 		NSArray				*args = [[NSProcessInfo processInfo] arguments];
-		//NSLog(@"args are %@",args);
-		if ([args count] != 2)	{
-			fprintf(stdout,"ERR: must have exactly one arg\n");
-			//NSString			*tmpString = [args description];
-			//fprintf(stdout,"args were %s\n",[tmpString UTF8String]);
-			usage();
-			return 1;
+		NSEnumerator		*argIt = [args objectEnumerator];
+		id					arg = [argIt nextObject];
+		arg = [argIt nextObject];	//	we have to skip the first arg (path to binary)
+		while (arg != nil)	{
+			NSString			*argType = arg;
+			arg = [argIt nextObject];
+			if (arg == nil)	{
+				fprintf(stdout, "ERR: missing value for %s argument\n",[argType UTF8String]);
+				return 1;
+			}
+			
+			//	if the user passed a json string describing the job
+			if ([argType caseInsensitiveCompare:@"--json"]==NSOrderedSame || [argType caseInsensitiveCompare:@"-j"]==NSOrderedSame)	{
+				NSError				*nsErr = nil;
+				NSDictionary		*tmpDict = [NSJSONSerialization JSONObjectWithData:[arg dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&nsErr];
+				//	if the JSON string couldn't be parsed- bail, something's wrong
+				if (tmpDict == nil || nsErr != nil)	{
+					fprintf(stdout, "ERR: couldn't parse JSON string");
+					if (nsErr != nil)
+						fprintf(stdout, ": %s", [[nsErr localizedDescription] UTF8String]);
+					fprintf(stdout,"\n");
+					return 2;
+				}
+				//	else the JSON string was parsed- populate the vars from above and then break out of the loop
+				else	{
+					srcPath = tmpDict[kSynopsisSrcFileKey];
+					dstPath = tmpDict[kSynopsisDstFileKey];
+					//tmpDir = tmpDict[kSynopsisTmpDirKey];
+					videoSettings = tmpDict[kSynopsisTranscodeVideoSettingsKey];
+					audioSettings = tmpDict[kSynopsisTranscodeAudioSettingsKey];
+					synopsisSettings = tmpDict[kSynopsisAnalysisSettingsKey];
+					break;
+				}
+			}
+			//	path settings
+			else if ([argType caseInsensitiveCompare:@"--src"]==NSOrderedSame || [argType caseInsensitiveCompare:@"-s"]==NSOrderedSame)	{
+				srcPath = arg;
+			}
+			else if ([argType caseInsensitiveCompare:@"--dst"]==NSOrderedSame || [argType caseInsensitiveCompare:@"-d"]==NSOrderedSame)	{
+				dstPath = arg;
+			}
+			//else if ([argType caseInsensitiveCompare:@"--tmp"]==NSOrderedSame || [argType caseInsensitiveCompare:@"-t"]==NSOrderedSame)	{
+			//	tmpDir = arg;
+			//}
+			//	synopsis settings
+			else if ([argType caseInsensitiveCompare:@"--SynopsisQuality"]==NSOrderedSame)	{
+				if (synopsisSettings == nil) synopsisSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				synopsisSettings[kSynopsisAnalysisSettingsQualityHintKey] = [NSNumber numberWithInteger:[arg integerValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--SynopsisPlugin"]==NSOrderedSame)	{
+				if (synopsisSettings == nil) synopsisSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				if (synopsisSettings[kSynopsisAnalysisSettingsEnabledPluginsKey] == nil) synopsisSettings[kSynopsisAnalysisSettingsEnabledPluginsKey] = [NSMutableArray arrayWithCapacity:0];
+				[synopsisSettings[kSynopsisAnalysisSettingsEnabledPluginsKey] addObject:arg];
+			}
+			else if ([argType caseInsensitiveCompare:@"--SynopsisMetadataExport"]==NSOrderedSame)	{
+				if (synopsisSettings == nil) synopsisSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				synopsisSettings[kSynopsisAnalyzedMetadataExportOptionKey] = [NSNumber numberWithInteger:[arg integerValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--SynopsisGPURegistryID"]==NSOrderedSame)	{
+				if (synopsisSettings == nil) synopsisSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				synopsisSettings[kSynopsisDeviceRegistryIDKey] = [NSNumber numberWithLongLong:[arg longLongValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--SynopsisStrictFrameDecode"]==NSOrderedSame)	{
+				if (synopsisSettings == nil) synopsisSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber			*tmpNum = nil;
+				if ([arg caseInsensitiveCompare:@"true"]==NSOrderedSame || [arg caseInsensitiveCompare:@"yes"]==NSOrderedSame)
+					tmpNum = [NSNumber numberWithBool:YES];
+				else if ([arg caseInsensitiveCompare:@"false"]==NSOrderedSame || [arg caseInsensitiveCompare:@"no"]==NSOrderedSame)
+					tmpNum = [NSNumber numberWithBool:NO];
+				else
+					tmpNum = [NSNumber numberWithBool:NO];
+				synopsisSettings[kSynopsisStrictFrameDecodeKey] = tmpNum;
+			}
+			//	video encoder settings
+			else if ([argType caseInsensitiveCompare:@"--AVVideoCodecKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				videoSettings[AVVideoCodecKey] = arg;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoWidthKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				videoSettings[AVVideoWidthKey] = arg;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoHeightKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				videoSettings[AVVideoHeightKey] = arg;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoPixelAspectRatioHorizontalSpacingKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = nil;
+				if ((double)[arg integerValue] == [arg doubleValue])
+					tmpNum = [NSNumber numberWithInteger:[arg integerValue]];
+				else
+					tmpNum = [NSNumber numberWithDouble:[arg doubleValue]];
+				videoSettings[AVVideoPixelAspectRatioHorizontalSpacingKey] = tmpNum;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoPixelAspectRatioVerticalSpacingKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = nil;
+				if ((double)[arg integerValue] == [arg doubleValue])
+					tmpNum = [NSNumber numberWithInteger:[arg integerValue]];
+				else
+					tmpNum = [NSNumber numberWithDouble:[arg doubleValue]];
+				videoSettings[AVVideoPixelAspectRatioVerticalSpacingKey] = tmpNum;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoScalingModeKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				videoSettings[AVVideoScalingModeKey] = arg;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoAllowWideColorKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = nil;
+				if ([arg caseInsensitiveCompare:@"true"]==NSOrderedSame || [arg caseInsensitiveCompare:@"yes"]==NSOrderedSame)
+					tmpNum = [NSNumber numberWithBool:YES];
+				else if ([arg caseInsensitiveCompare:@"false"]==NSOrderedSame || [arg caseInsensitiveCompare:@"no"]==NSOrderedSame)
+					tmpNum = [NSNumber numberWithBool:NO];
+				else
+					tmpNum = [NSNumber numberWithInteger:[arg integerValue]];
+				videoSettings[AVVideoAllowWideColorKey] = tmpNum;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoColorPrimariesKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				if (videoSettings[AVVideoColorPropertiesKey] == nil) videoSettings[AVVideoColorPropertiesKey] = [NSMutableDictionary dictionaryWithCapacity:0];
+				[videoSettings[AVVideoColorPropertiesKey] setObject:arg forKey:AVVideoColorPrimariesKey];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoTransferFunctionKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				if (videoSettings[AVVideoColorPropertiesKey] == nil) videoSettings[AVVideoColorPropertiesKey] = [NSMutableDictionary dictionaryWithCapacity:0];
+				[videoSettings[AVVideoColorPropertiesKey] setObject:arg forKey:AVVideoTransferFunctionKey];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoYCbCrMatrixKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				if (videoSettings[AVVideoColorPropertiesKey] == nil) videoSettings[AVVideoColorPropertiesKey] = [NSMutableDictionary dictionaryWithCapacity:0];
+				[videoSettings[AVVideoColorPropertiesKey] setObject:arg forKey:AVVideoYCbCrMatrixKey];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoAverageBitRateKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				if (videoSettings[AVVideoCompressionPropertiesKey] == nil) videoSettings[AVVideoCompressionPropertiesKey] = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = nil;
+				if ((double)[arg integerValue] == [arg doubleValue])
+					tmpNum = [NSNumber numberWithInteger:[arg integerValue]];
+				else
+					tmpNum = [NSNumber numberWithDouble:[arg doubleValue]];
+				[videoSettings[AVVideoCompressionPropertiesKey] setObject:arg forKey:AVVideoAverageBitRateKey];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoQualityKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				if (videoSettings[AVVideoCompressionPropertiesKey] == nil) videoSettings[AVVideoCompressionPropertiesKey] = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = [NSNumber numberWithDouble:[arg doubleValue]];
+				[videoSettings[AVVideoCompressionPropertiesKey] setObject:tmpNum forKey:AVVideoQualityKey];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoMaxKeyFrameIntervalKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				if (videoSettings[AVVideoCompressionPropertiesKey] == nil) videoSettings[AVVideoCompressionPropertiesKey] = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = [NSNumber numberWithInteger:[arg integerValue]];
+				[videoSettings[AVVideoCompressionPropertiesKey] setObject:tmpNum forKey:AVVideoMaxKeyFrameIntervalKey];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoMaxKeyFrameIntervalDurationKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				if (videoSettings[AVVideoCompressionPropertiesKey] == nil) videoSettings[AVVideoCompressionPropertiesKey] = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = nil;
+				if ((double)[arg integerValue] == [arg doubleValue])
+					tmpNum = [NSNumber numberWithInteger:[arg integerValue]];
+				else
+					tmpNum = [NSNumber numberWithDouble:[arg doubleValue]];
+				[videoSettings[AVVideoCompressionPropertiesKey] setObject:tmpNum forKey:AVVideoMaxKeyFrameIntervalDurationKey];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoAllowFrameReorderingKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = nil;
+				if ([arg caseInsensitiveCompare:@"true"]==NSOrderedSame || [arg caseInsensitiveCompare:@"yes"]==NSOrderedSame)
+					tmpNum = [NSNumber numberWithBool:YES];
+				else if ([arg caseInsensitiveCompare:@"false"]==NSOrderedSame || [arg caseInsensitiveCompare:@"no"]==NSOrderedSame)
+					tmpNum = [NSNumber numberWithBool:NO];
+				else
+					tmpNum = [NSNumber numberWithInteger:[arg integerValue]];
+				videoSettings[AVVideoAllowFrameReorderingKey] = tmpNum;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoProfileLevelKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				videoSettings[AVVideoProfileLevelKey] = arg;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoH264EntropyModeKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				videoSettings[AVVideoH264EntropyModeKey] = arg;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoExpectedSourceFrameRateKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = [NSNumber numberWithDouble:[arg doubleValue]];
+				videoSettings[AVVideoExpectedSourceFrameRateKey] = tmpNum;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVVideoAverageNonDroppableFrameRateKey"]==NSOrderedSame)	{
+				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = [NSNumber numberWithInteger:[arg integerValue]];
+				videoSettings[AVVideoAverageNonDroppableFrameRateKey] = tmpNum;
+			}
+			//	audio encoder settings
+			else if ([argType caseInsensitiveCompare:@"--AVFormatIDKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVFormatIDKey] = [NSNumber numberWithInteger:[arg integerValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVSampleRateKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVSampleRateKey] = [NSNumber numberWithDouble:[arg doubleValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVNumberOfChannelsKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVNumberOfChannelsKey] = [NSNumber numberWithInteger:[arg integerValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVLinearPCMBitDepthKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVLinearPCMBitDepthKey] = [NSNumber numberWithInteger:[arg integerValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVLinearPCMIsBigEndianKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = nil;
+				if ([arg caseInsensitiveCompare:@"true"]==NSOrderedSame || [arg caseInsensitiveCompare:@"yes"]==NSOrderedSame)
+					tmpNum = [NSNumber numberWithBool:YES];
+				else if ([arg caseInsensitiveCompare:@"false"]==NSOrderedSame || [arg caseInsensitiveCompare:@"no"]==NSOrderedSame)
+					tmpNum = [NSNumber numberWithBool:NO];
+				else
+					tmpNum = [NSNumber numberWithBool:NO];
+				audioSettings[AVLinearPCMIsBigEndianKey] = tmpNum;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVLinearPCMIsFloatKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = nil;
+				if ([arg caseInsensitiveCompare:@"true"]==NSOrderedSame || [arg caseInsensitiveCompare:@"yes"]==NSOrderedSame)
+					tmpNum = [NSNumber numberWithBool:YES];
+				else if ([arg caseInsensitiveCompare:@"false"]==NSOrderedSame || [arg caseInsensitiveCompare:@"no"]==NSOrderedSame)
+					tmpNum = [NSNumber numberWithBool:NO];
+				else
+					tmpNum = [NSNumber numberWithBool:NO];
+				audioSettings[AVLinearPCMIsFloatKey] = tmpNum;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVLinearPCMIsNonInterleaved"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				NSNumber		*tmpNum = nil;
+				if ([arg caseInsensitiveCompare:@"true"]==NSOrderedSame || [arg caseInsensitiveCompare:@"yes"]==NSOrderedSame)
+					tmpNum = [NSNumber numberWithBool:YES];
+				else if ([arg caseInsensitiveCompare:@"false"]==NSOrderedSame || [arg caseInsensitiveCompare:@"no"]==NSOrderedSame)
+					tmpNum = [NSNumber numberWithBool:NO];
+				else
+					tmpNum = [NSNumber numberWithBool:NO];
+				audioSettings[AVLinearPCMIsNonInterleaved] = tmpNum;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVAudioFileTypeKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVAudioFileTypeKey] = [NSNumber numberWithInteger:[arg integerValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVEncoderAudioQualityKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVEncoderAudioQualityKey] = [NSNumber numberWithInteger:[arg integerValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVEncoderAudioQualityForVBRKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVEncoderAudioQualityForVBRKey] = [NSNumber numberWithInteger:[arg integerValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVEncoderBitRateKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVEncoderBitRateKey] = [NSNumber numberWithInteger:[arg integerValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVEncoderBitRatePerChannelKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVEncoderBitRatePerChannelKey] = [NSNumber numberWithInteger:[arg integerValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVEncoderBitRateStrategyKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVEncoderBitRateStrategyKey] = arg;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVEncoderBitDepthHintKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVEncoderBitDepthHintKey] = [NSNumber numberWithInteger:[arg integerValue]];
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVSampleRateConverterAlgorithmKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVSampleRateConverterAlgorithmKey] = arg;
+			}
+			else if ([argType caseInsensitiveCompare:@"--AVSampleRateConverterAudioQualityKey"]==NSOrderedSame)	{
+				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				audioSettings[AVSampleRateConverterAudioQualityKey] = [NSNumber numberWithInteger:[arg integerValue]];
+			}
+			else	{
+				fprintf(stdout,"ERR: unrecognized argument, \'%s\'\n",[argType UTF8String]);
+				return 3;
+			}
+			
+			//	get the next arg...
+			arg = [argIt nextObject];
 		}
-		else if (args.count == 2
-		&& ([args[1] caseInsensitiveCompare:@"-h"]==NSOrderedSame
-			|| [args[1] caseInsensitiveCompare:@"--help"]==NSOrderedSame))	{
-			usage();
-			return 0;
+		
+		//NSLog(@"videoSettings: %@",videoSettings);
+		//NSLog(@"audioSettings: %@",audioSettings);
+		
+		//	if we're missing any vital pieces of information, bail with an informative error message
+		if (srcPath == nil)	{
+			fprintf(stdout,"ERR: no input file specified\n");
+			return 4;
 		}
-		//	make sure the passed arg is a valid JSON object
-		NSError				*nsErr = nil;
-		NSDictionary		*tmpDict = [NSJSONSerialization JSONObjectWithData:[args[1] dataUsingEncoding:NSUTF8StringEncoding] options:nil error:&nsErr];
-		if (tmpDict == nil || nsErr != nil)	{
-			fprintf(stdout, "ERR: couldn't parse JSON string");
-			if (nsErr != nil)
-				fprintf(stdout, ": %s", [[nsErr localizedDescription] UTF8String]);
-			fprintf(stdout,"\n");
-			return 2;
+		else if (dstPath == nil)	{
+			fprintf(stdout,"ERR: no output file specified\n");
+			return 5;
 		}
-		//	make sure that the JSON object is of the correct type
-		if (![tmpDict isKindOfClass:[NSDictionary class]])	{
-			fprintf(stdout, "ERR: JSON string must describe a JSON object\n");
-			return 3;
+		
+		//	if there isn't a synopsis settings dict, make one
+		if (synopsisSettings == nil)	{
+			synopsisSettings = [@{
+				kSynopsisAnalysisSettingsQualityHintKey : @( SynopsisAnalysisQualityHintMedium ),
+				kSynopsisAnalysisSettingsEnabledPluginsKey : @[ @"StandardAnalyzerPlugin" ],
+			} mutableCopy];
 		}
 		
 		
@@ -76,8 +366,13 @@ int main(int argc, const char * argv[]) {
 		dispatch_group_enter(completionGroup);
 		
 		//	make the job object
-		SynopsisJobObject			*job = [SynopsisJobObject
-			createWithJobJSONString:args[1]
+		SynopsisJobObject			*job = [[SynopsisJobObject alloc]
+			initWithSrcFile:[NSURL fileURLWithPath:srcPath isDirectory:NO]
+			dstFile:[NSURL fileURLWithPath:dstPath isDirectory:NO]
+			videoTransOpts:videoSettings
+			audioTransOpts:audioSettings
+			synopsisOpts:synopsisSettings
+			device:nil
 			completionBlock:^(SynopsisJobObject *theJob)	{
 				dispatch_group_leave(completionGroup);
 			}];
@@ -102,7 +397,8 @@ int main(int argc, const char * argv[]) {
 			fprintf(stderr, "err type is %s\n",[errTypeString UTF8String]);
 			fprintf(stderr, "err detail is %s\n",[errString UTF8String]);
 		}
-		return 4;
+		return 6;
+		
 	}
 	return 0;
 }
