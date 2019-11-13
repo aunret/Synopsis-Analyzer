@@ -69,11 +69,11 @@
 	//NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/sample movies/PRIMER(2004)- A Movie Youll Have To Watch Twice!!-720p.mp4" isDirectory:NO];
 	//NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/sample movies/Primer_FirstTwoMinutes_NonRef.mov" isDirectory:NO];
 	//NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/sample movies/Primer_FirstTenMinutes_NonRef.mov" isDirectory:NO];
-	NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/sample movies/Serenity - HD DVD Trailer.mp4" isDirectory:NO];
-	
+	//NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/sample movies/Serenity - HD DVD Trailer.mp4" isDirectory:NO];
+	NSURL			*srcURL = [NSURL fileURLWithPath:@"/Volumes/scratch/hap testing/720/h264/Blue-720.mov" isDirectory:NO];
 	
 	//	"dest file" URL- replace with something local to your machine
-	NSURL			*dstURL = [NSURL fileURLWithPath:@"/Volumes/scratch/hap testing/720/h264/Blue-720-h264.mov" isDirectory:NO];
+	NSURL			*dstURL = [NSURL fileURLWithPath:@"/Volumes/scratch/hap testing/720/h264/Blue-720-analyzed.mov" isDirectory:NO];
 	
 	
 	//	tmp dir URL- you don't have to use this, but if you want to test it...this is how

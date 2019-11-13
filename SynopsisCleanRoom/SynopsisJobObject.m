@@ -7,9 +7,18 @@
 //
 
 #import "SynopsisJobObject.h"
+#ifdef STATIC_LIB
+#import "Synopsis.h"
+//#import "SynopsisMetadataEncoder.h"
+//#import "SynopsisConstants.h"
+#import "HapInAVFoundation.h"
+//#import "SynopsisVideoFrameConformSession.h"
+//#import "AnalyzerPluginProtocol.h"
+#else
 #import <Synopsis/Synopsis.h>
-#import <Metal/Metal.h>
 #import <HapInAVFoundation/HapInAVFoundation.h>
+#endif
+#import <Metal/Metal.h>
 #import <pthread.h>
 #include <sys/xattr.h>
 #include <VideoToolbox/VideoToolbox.h>
