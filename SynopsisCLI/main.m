@@ -14,13 +14,17 @@
 
 
 void usage()	{
+	fprintf(stdout,"\n");
+	fprintf(stdout, "\tsynopsis-enc--  Analyze (and optionally transcode) a media file using Synopsis to generate global and per-frame metadata describing the media file's contents.\n");
+	fprintf(stdout,"\n");
+	
 	fprintf(stdout, "USAGE:\n");
 	//fprintf(stdout, "\tsynopsis_cli <json string describing the analysis details>\n");
-	fprintf(stdout, "\tsynopsis_cli [options]\n");
+	fprintf(stdout, "\tsynopsis-enc [options]\n");
 	fprintf(stdout,"\n");
 	
 	
-	fprintf(stdout, "RECOGNIZED OPTIONS: consult <AVFoundation/AVVideoSettings.h> or <AVFoundation/AVAudioSettings.h> for more information about the details of these options and how they work with AVFoundation.\n");
+	fprintf(stdout, "REQUIRED OPTIONS:\n");
 	fprintf(stdout,"\n");
 	fprintf(stdout, "\t--help\n");
 	fprintf(stdout,"\t\tprints information describing how to use this utility\n");
@@ -54,7 +58,7 @@ void usage()	{
 	fprintf(stdout,"\n");
 	
 	
-	fprintf(stdout, "VIDEO OPTIONS\n");
+	fprintf(stdout, "VIDEO OPTIONS- consult <AVFoundation/AVVideoSettings.h> or <AVFoundation/AVAudioSettings.h> for more information about the details of some of these options and how they work with AVFoundation, which is used for transcoding.\n");
 	fprintf(stdout,"\n");
 	fprintf(stdout,"\t--AVVideoCodecKey\n");
 	fprintf(stdout,"\t\tOptional- only used if the video is being transcoded.  Specifies the codec that the source file will be transcoded into.  If not provided, the source file will be analyzed, but not transcoded (the output file will have the same codec).  Accepted values are listed in <AVFoundation/AVVideoSettings.h>.\n");
@@ -116,7 +120,7 @@ void usage()	{
 	fprintf(stdout,"\n");
 	
 	
-	fprintf(stdout, "AUDIO OPTIONS\n");
+	fprintf(stdout, "AUDIO OPTIONS- consult <AVFoundation/AVVideoSettings.h> or <AVFoundation/AVAudioSettings.h> for more information about the details of some of these options and how they work with AVFoundation, which is used for transcoding.\n");
 	fprintf(stdout,"\n");
 	fprintf(stdout, "\t--AVFormatIDKey\n");
 	fprintf(stdout,"\t\tOptional- only used if the audio is being transcoded.  An integer value describing the audio format to be used- more info can be found in CoreAudioTypes.h\n");
