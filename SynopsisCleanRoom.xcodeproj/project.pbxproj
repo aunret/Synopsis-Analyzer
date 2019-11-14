@@ -28,6 +28,7 @@
 		1A1093782330205100791BDA /* SessionRowView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A1093762330205100791BDA /* SessionRowView.xib */; };
 		1A10937C2330205800791BDA /* OpRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A10937A2330205800791BDA /* OpRowView.m */; };
 		1A10937D2330205800791BDA /* OpRowView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A10937B2330205800791BDA /* OpRowView.xib */; };
+		1A1E31AA237DD19F009DE35C /* synopsis-enc.app in Resources */ = {isa = PBXBuildFile; fileRef = 1AF5FD9F237C7FE60078F807 /* synopsis-enc.app */; };
 		1A2B9FC62368BF8E008D4F6A /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A2B9FBF2368BF8E008D4F6A /* UserNotifications.framework */; };
 		1A2BA002236A3AE7008D4F6A /* PrefsPathPickerAbstraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A2BA001236A3AE7008D4F6A /* PrefsPathPickerAbstraction.m */; };
 		1A3EBFAB235F8E03007AB5B1 /* SessionStateButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3EBFAA235F8E03007AB5B1 /* SessionStateButton.m */; };
@@ -64,8 +65,8 @@
 		1AEC510F2335556C0053C1B0 /* NSMenuAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC510E2335556C0053C1B0 /* NSMenuAdditions.m */; };
 		1AEE2F792333C917009193CD /* PresetSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F782333C917009193CD /* PresetSettings.m */; };
 		1AF5FDAB237C7FE70078F807 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AF5FDAA237C7FE70078F807 /* main.m */; };
-		1AF5FDB5237C80800078F807 /* Synopsis.framework in Embed frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		1AF5FDB6237C808B0078F807 /* HapInAVFoundation.framework in Embed frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1AF5FDB5237C80800078F807 /* Synopsis.framework in Embed frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1AF5FDB6237C808B0078F807 /* HapInAVFoundation.framework in Embed frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1AF5FDB8237C80E20078F807 /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
 		1AF5FDB9237C811F0078F807 /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
 		1AF5FDBA237C81230078F807 /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
@@ -74,6 +75,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1A1E31A8237DC075009DE35C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A626130231476CF00DC2B06 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1AF5FD9E237C7FE60078F807;
+			remoteInfo = SynopsisCLI;
+		};
 		1A626152231476DD00DC2B06 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */;
@@ -290,7 +298,7 @@
 		1AEC510E2335556C0053C1B0 /* NSMenuAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSMenuAdditions.m; sourceTree = "<group>"; };
 		1AEE2F772333C917009193CD /* PresetSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetSettings.h; sourceTree = "<group>"; };
 		1AEE2F782333C917009193CD /* PresetSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetSettings.m; sourceTree = "<group>"; };
-		1AF5FD9F237C7FE60078F807 /* synopsis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = synopsis.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AF5FD9F237C7FE60078F807 /* synopsis-enc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "synopsis-enc.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AF5FDA9237C7FE70078F807 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AF5FDAA237C7FE70078F807 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1AFDD45D2316F3C400D7862F /* SynopsisJobObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynopsisJobObject.h; sourceTree = "<group>"; };
@@ -428,7 +436,7 @@
 			isa = PBXGroup;
 			children = (
 				1AD8459A232C1E3900416F5C /* Synopsis Analyzer.app */,
-				1AF5FD9F237C7FE60078F807 /* synopsis.app */,
+				1AF5FD9F237C7FE60078F807 /* synopsis-enc.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -551,6 +559,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				1A1E31A9237DC075009DE35C /* PBXTargetDependency */,
 				1A9B1EC82331504B007D414A /* PBXTargetDependency */,
 				1A9B1ECA2331504B007D414A /* PBXTargetDependency */,
 			);
@@ -577,7 +586,7 @@
 			);
 			name = SynopsisCLI;
 			productName = SynopsisCLI;
-			productReference = 1AF5FD9F237C7FE60078F807 /* synopsis.app */;
+			productReference = 1AF5FD9F237C7FE60078F807 /* synopsis-enc.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -708,6 +717,7 @@
 				1AD845A3232C1E3900416F5C /* MainMenu.xib in Resources */,
 				1A10935F2330025E00791BDA /* PreferencesPresetViewController.xib in Resources */,
 				1A1093642330026800791BDA /* PreferencesAdvancedViewController.xib in Resources */,
+				1A1E31AA237DD19F009DE35C /* synopsis-enc.app in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -737,7 +747,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\nrsync --archive --links --whole-file --no-owner --no-group --checksum \"${PROJECT_DIR}/Synopsis-Framework/Synopsis/Synopsis/OpenCV/opencv2.framework/\" \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/\"\nif [ \"$?\" -ne 0 ]; then echo \"error: rsync failed; couldn't embed opencv2.framework\"; exit 1; fi\nlipo \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\" -remove armv7 -output \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\"\nlipo \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\" -remove armv7s -output \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\"\nlipo \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\" -remove i386 -output \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\"\nlipo \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\" -remove arm64 -output \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\"\n";
+			shellScript = "#mkdir -p \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\n#rsync --archive --links --whole-file --no-owner --no-group --checksum \"${PROJECT_DIR}/Synopsis-Framework/Synopsis/Synopsis/OpenCV/opencv2.framework/\" \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/\"\n#if [ \"$?\" -ne 0 ]; then echo \"error: rsync failed; couldn't embed opencv2.framework\"; exit 1; fi\n#lipo \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\" -remove armv7 -output \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\"\n#lipo \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\" -remove armv7s -output \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\"\n#lipo \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\" -remove i386 -output \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\"\n#lipo \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\" -remove arm64 -output \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework/Versions/A/opencv2\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -800,6 +810,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1A1E31A9237DC075009DE35C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1AF5FD9E237C7FE60078F807 /* SynopsisCLI */;
+			targetProxy = 1A1E31A8237DC075009DE35C /* PBXContainerItemProxy */;
+		};
 		1A9B1EC82331504B007D414A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Synopsis-macOS";
@@ -888,6 +903,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_VERSION = 0.7.0;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -939,6 +955,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_VERSION = 0.7.0;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -993,7 +1010,7 @@
 					"@loader_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = info.v002.SynopsisCLI;
-				PRODUCT_NAME = synopsis;
+				PRODUCT_NAME = "synopsis-enc";
 			};
 			name = Debug;
 		};
@@ -1011,7 +1028,7 @@
 					"@loader_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = info.v002.SynopsisCLI;
-				PRODUCT_NAME = synopsis;
+				PRODUCT_NAME = "synopsis-enc";
 			};
 			name = Release;
 		};
