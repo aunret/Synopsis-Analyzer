@@ -15,7 +15,65 @@
 
 void usage()	{
 	fprintf(stdout, "USAGE:\n");
-	fprintf(stdout, "\tsynopsis_cli <json string describing the analysis details>\n");
+	//fprintf(stdout, "\tsynopsis_cli <json string describing the analysis details>\n");
+	fprintf(stdout, "\tsynopsis_cli [options]\n");
+	fprintf(stdout,"\n");
+	
+	fprintf(stdout, "RECOGNIZED OPTIONS: consult <AVFoundation/AVVideoSettings.h> or <AVFoundation/AVAudioSettings.h> for more information about the details of these options and how they work with AVFoundation.\n");
+	fprintf(stdout, "\t--help: prints information describing how to use this utility\n");
+	fprintf(stdout, "\t--src: Mandatory- the path to the input source file (file to be analyzed/transcoded)\n");
+	fprintf(stdout, "\t--dst: Mandatory- the path to the output file\n");
+	fprintf(stdout,"\n");
+	
+	fprintf(stdout, "SYNOPSIS OPTIONS\n");
+	fprintf(stdout, "\t--SynopsisQuality: Optional- the quality at which Synopsis will perform analysis.  Accepted values are \"Low\", \"Medium\", \"High\", and \"Original\".  If no quality is specified, \"Medium\" will be used.\n");
+	fprintf(stdout, "\t--SynopsisPlugin: Optional- the plugin to be used to analyze the source file.  Multiple plugins may be specified by using this switch multiple times.  The standard analysis plugin is \"StandardAnalyzerPlugin\".\n");
+	fprintf(stdout, "\t--SynopsisMetadataExport: Optional- What kind of additional metadata export will be performed (a metadata track will be created regardless, this switch allows you to export the metadata as an additional file).  Accepted values are \"None\", \"JSONContiguous\", \"JSONGlobal\", \"JSONSequence\", or \"ZSTDTraining\".  The default value is \"None\" (if unspecified, no additional metadata file will be created).\n");
+	fprintf(stdout, "\t--SynopsisGPURegistryID: Optional- an unsigned 64-bit integer describing the GPU Synopsis will use to perform analysis.  If not provided, Synopsis will automatically use the system-default Metal device.\n");
+	fprintf(stdout,"\t--SynopsisStrictFrameDecode: Optional, expects a boolean value indicating whether or not Synopsis will be strict about requiring frame decodes.  If a true value is provided, the inability to decode a frame from the source file will cause an error, cancelling the job.\n");
+	fprintf(stdout,"\n");
+	
+	fprintf(stdout, "VIDEO OPTIONS\n");
+	fprintf(stdout,"\t--AVVideoCodecKey: Optional- only used if the video is being transcoded.  Specifies the codec that the source file will be transcoded into.  If not provided, the source file will be analyzed, but not transcoded (the output file will have the same codec).  Accepted values are listed in <AVFoundation/AVVideoSettings.h>.\n");
+	fprintf(stdout,"\t--AVVideoWidthKey: Optional- only used if the video is being transcoded.  Expects an integer value describing the width of the output video.\n");
+	fprintf(stdout,"\t--AVVideoHeightKey: Optional- only used if the video is being transcoded.  Expects an integer value describing the height of the output video.\n");
+	fprintf(stdout,"\t--AVVideoPixelAspectRatioHorizontalSpacingKey: Optional- only used if the video is being transcoded.  If you provide a value for this key, you are also expected to provide a value for AVVideoPixelAspectRatioVerticalSpacingKey.  Expected Value is a number describing the aspect ratio of the pixels in the output movie.\n");
+	fprintf(stdout,"\t--AVVideoPixelAspectRatioVerticalSpacingKey: Optional- only used if the video is being transcoded.  If you provide a value for this key, you are also expected to provide a value for AVVideoPixelAspectRatioHorizontalSpacingKey.  Expected Value is a number describing the aspect ratio of the pixels in the output movie.\n");
+	fprintf(stdout, "\t--AVVideoScalingModeKey: Optional- only used if the video is being transcoded.  Describes how the video will be scaled up/down if it's being resized.  Accepted values are \"Fit\", \"Resize\", \"ResizeAspect\", or \"ResizeAspectFill\".\n");
+	fprintf(stdout, "\t--AVVideoAllowWideColorKey: Optional- only used if the video is being transcoded.  Expects a boolean value describing whether the utility will process wide color.\n");
+	fprintf(stdout, "\t--AVVideoColorPrimariesKey: Optonal- only used if the video is being transcoded.  Accepted values are listed in <AVFoundation/AVVideoSettings.h>.  If you provide a value for this switch, you should also provide values for \"AVVideoTransferFunctionKey\" and \"AVVideoYCbCrMatrixKey\".\n");
+	fprintf(stdout, "\t--AVVideoTransferFunctionKey: Optonal- only used if the video is being transcoded.  Accepted values are listed in <AVFoundation/AVVideoSettings.h>.  If you provide a value for this switch, you should also provide values for \"AVVideoColorPrimariesKey\" and \"AVVideoYCbCrMatrixKey\".\n");
+	fprintf(stdout, "\t--AVVideoYCbCrMatrixKey: Optonal- only used if the video is being transcoded.  Accepted values are listed in <AVFoundation/AVVideoSettings.h>.  If you provide a value for this switch, you should also provide values for \"AVVideoTransferFunctionKey\" and \"AVVideoColorPrimariesKey\".\n");
+	fprintf(stdout, "\t--AVVideoAverageBitRateKey: Optional- only used if the video is being transcoded, and if the H.264 codec is being used.  Expects a number describing the number of bits per second.\n");
+	fprintf(stdout, "\t--AVVideoQualityKey: Optional- only used if the video is being transcoded, and if the JPEG or HEIC codec is being used.  Expects a number value ranged 0.-1. describing the subjective quality of the video encoding (1.0 indicates lossless or as close to lossless as possible).\n");
+	fprintf(stdout, "\t--AVVideoMaxKeyFrameIntervalKey: Optional- only used if the video is being transcoded, and if the H.264 codec is being used.  Expects a number- 1 means keyframes only.\n");
+	fprintf(stdout, "\t--AVVideoMaxKeyFrameIntervalDurationKey: Optional- only used if the video is being transcoded, and if the H.264 codec is being used.  Expects a number describing the number of seconds- 0.0 means no limit.\n");
+	fprintf(stdout, "\t--AVVideoAllowFrameReorderingKey: Optional- only used if the video is being transcoded.  Expects a boolean value indicating whether or not the frames can be reordered during encoding.  The default value is yes, which means the encoder decides whether to implement frame reordering.\n");
+	fprintf(stdout, "\t--AVVideoProfileLevelKey: Optional- only used if the video is being transcoded and H.264 or HEVC are being used.  Acceptable values are listed in <AVFoundation/AVVideoSettings.h>.\n");
+	fprintf(stdout, "\t--AVVideoH264EntropyModeKey: Optional- only used if the video is being transcoded and H.264 is being used.  The entropy encoding mode for H.264 compression.  Accepted values are \"CAVLC\" or \"CABAC\".\n");
+	fprintf(stdout, "\t--AVVideoExpectedSourceFrameRateKey: Optional- only used if the video is being transcoded.  Indicates the expected source framerate, if known, in frames per second.  This should be set if an AutoLevel AVVideoProfileLevelKey is used, or if the source content has a high frame rate (higher than 30 fps). The encoder might have to drop frames to satisfy bit stream requirements if this key is not specified.\n");
+	fprintf(stdout, "\t--AVVideoAverageNonDroppableFrameRateKey: Optional- only used if the video is being transcoded.  The desired average number of non-droppable frames to be encoded for each second of video.\n");
+	fprintf(stdout,"\n");
+	
+	fprintf(stdout, "AUDIO OPTIONS\n");
+	fprintf(stdout, "\t--AVFormatIDKey: Optional- only used if the audio is being transcoded.  An integer value describing the audio format to be used- more info can be found in CoreAudioTypes.h\n");
+	fprintf(stdout, "\t--AVSampleRateKey: Optional- only used if the audio is being transcoded- expects a floating point value in Hertz.\n");
+	fprintf(stdout, "\t--AVNumberOfChannelsKey: Optional- only used if the audio is being transcoded- expects an integer describiing the number of channels.\n");
+	fprintf(stdout, "\t--AVLinearPCMBitDepthKey: Optional- only used if the audio is being transcoded and the output format is Linear PCM.  Expected value is an integer- one of 8, 16, 24, or 32.\n");
+	fprintf(stdout, "\t--AVLinearPCMIsBigEndianKey: Optional- only used if the audio is being transcoded and the output format is Linear PCM.  Expects a boolean value indicating whether the Linear PCM is big-endian.\n");
+	fprintf(stdout, "\t--AVLinearPCMIsFloatKey: Optional- only used if the audio is being transcoded and the output format is Linear PCM.  Expects a boolean value indicating whether the Linear PCM is floating-point.\n");
+	fprintf(stdout, "\t--AVLinearPCMIsNonInterleaved: Optional- only used if the audio is being transcoded and the output format is Linear PCM.  Expects a boolean value indicating whether the Linear PCM is interleaved.\n");
+	fprintf(stdout, "\t--AVAudioFileTypeKey: Optional- only used if the audio is being transcoded.  Expected value is an integer describing the audio file type- acceptable values are listed in AudioFile.h\n");
+	fprintf(stdout, "\t--AVEncoderAudioQualityKey: Optional- only used if the audio is being transcoded.  Acceptable values are \"min\", \"low\", \"medium\", \"high\", or \"max\".\n");
+	fprintf(stdout, "\t--AVEncoderAudioQualityForVBRKey: Optional- only used if the audio is being transcoded and if \"AVEncoderBitRateStrategyKey\" is \"variable\".  Acceptable values are \"min\", \"low\", \"medium\", \"high\", or \"max\".\n");
+	fprintf(stdout, "\t--AVEncoderBitRateKey: Optional- only used if the audio is being transcoded.  Expected value is an integer describing the bitrate of the output file.  Only use one of this or AVEncoderBitRatePerChannelKey.\n");
+	fprintf(stdout, "\t--AVEncoderBitRatePerChannelKey: Optional- only used if the audio is being transcoded.  Expected value is an integer describing the per-channel bitrate of the output file.  Only use one of this or AVEncoderBitRateKey.\n");
+	fprintf(stdout, "\t--AVEncoderBitRateStrategyKey: Optional- only used if the audio is being transcoded.  Acceptable values are \"constant\", \"longTermAverage\", \"variableConstrained\", or \"variable\".\n");
+	fprintf(stdout, "\t--AVEncoderBitDepthHintKey: Optional- only used if the audio is being transcoded.  Expected value is an integer between 8 and 32.\n");
+	fprintf(stdout, "\t--AVSampleRateConverterAlgorithmKey: Optional- only used if the audio is being transcoded.  Acceptable values are \"normal\", \"mastering\", or \"minimumPhase\".\n");
+	fprintf(stdout, "\t--AVSampleRateConverterAudioQualityKey: Optional- only used if the audio is being transcoded.  Acceptable values are \"min\", \"low\", \"medium\", \"high\", or \"max\"\n");
+	
+	/*
 	fprintf(stdout, "\n");
 	fprintf(stdout, "RECOGNIZED KEYS:\n");
 	fprintf(stdout, "- \"SrcFile\": Mandatory- a string describing the path to the source file.\n");
@@ -32,6 +90,7 @@ void usage()	{
 	fprintf(stdout, "\t- \"ExportMetadata\": Only used in \"SynopsisSettings\" object.  Optional.  Associated value is a number corresponding to the SynopsisMetadataEncoderExportOption enum value.  If not provided, metadata will still be embedded in the output file as a metadata track, but it will not be exported as an additional file.\n");
 	fprintf(stdout, "\t- \"DeviceRegistry\": Only used in \"SynopsisSettings\" object.  Optional.  Associated value is a 64-bit unsigned integer describing the \"registryID\" property of the MTLDevice you want Synopsis to use for analysis- if not provided, Synopsis will use the system default Metal device for analysis.\n");
 	fprintf(stdout, "\t- \"StrictFrameDecode\": Only used in \"SynopsisSettings\" object.  Optional.  Associated value is a boolean indicating whether frames that could not be decoded will cause the job to error.  If not provided, defaults to \"true\" (the job will fail/error out if AVFoundation is unable to decode any frames from the source movie.)\n");
+	*/
 }
 
 int main(int argc, const char * argv[]) {
@@ -51,11 +110,18 @@ int main(int argc, const char * argv[]) {
 		arg = [argIt nextObject];	//	we have to skip the first arg (path to binary)
 		while (arg != nil)	{
 			NSString			*argType = arg;
+			
+			if ([argType caseInsensitiveCompare:@"--help"]==NSOrderedSame || [argType caseInsensitiveCompare:@"-h"]==NSOrderedSame)	{
+				usage();
+				return 0;
+			}
+			
 			arg = [argIt nextObject];
 			if (arg == nil)	{
 				fprintf(stdout, "ERR: missing value for %s argument\n",[argType UTF8String]);
 				return 1;
 			}
+			
 			
 			//	if the user passed a json string describing the job
 			if ([argType caseInsensitiveCompare:@"--json"]==NSOrderedSame || [argType caseInsensitiveCompare:@"-j"]==NSOrderedSame)	{
@@ -87,13 +153,23 @@ int main(int argc, const char * argv[]) {
 			else if ([argType caseInsensitiveCompare:@"--dst"]==NSOrderedSame || [argType caseInsensitiveCompare:@"-d"]==NSOrderedSame)	{
 				dstPath = arg;
 			}
-			//else if ([argType caseInsensitiveCompare:@"--tmp"]==NSOrderedSame || [argType caseInsensitiveCompare:@"-t"]==NSOrderedSame)	{
-			//	tmpDir = arg;
-			//}
 			//	synopsis settings
 			else if ([argType caseInsensitiveCompare:@"--SynopsisQuality"]==NSOrderedSame)	{
 				if (synopsisSettings == nil) synopsisSettings = [NSMutableDictionary dictionaryWithCapacity:0];
-				synopsisSettings[kSynopsisAnalysisSettingsQualityHintKey] = [NSNumber numberWithInteger:[arg integerValue]];
+				NSNumber			*tmpNum = nil;
+				if ([arg caseInsensitiveCompare:@"Low"] == NSOrderedSame)
+					tmpNum = @( SynopsisAnalysisQualityHintLow );
+				else if ([arg caseInsensitiveCompare:@"Medium"] == NSOrderedSame)
+					tmpNum = @( SynopsisAnalysisQualityHintMedium );
+				else if ([arg caseInsensitiveCompare:@"High"] == NSOrderedSame)
+					tmpNum = @( SynopsisAnalysisQualityHintHigh );
+				else if ([arg caseInsensitiveCompare:@"Original"] == NSOrderedSame)
+					tmpNum = @( SynopsisAnalysisQualityHintOriginal );
+				else	{
+					fprintf(stdout,"ERR: unrecognized value (%s) for switch %s\n",[arg UTF8String],[argType UTF8String]);
+					return 2;
+				}
+				synopsisSettings[kSynopsisAnalysisSettingsQualityHintKey] = tmpNum;
 			}
 			else if ([argType caseInsensitiveCompare:@"--SynopsisPlugin"]==NSOrderedSame)	{
 				if (synopsisSettings == nil) synopsisSettings = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -102,7 +178,22 @@ int main(int argc, const char * argv[]) {
 			}
 			else if ([argType caseInsensitiveCompare:@"--SynopsisMetadataExport"]==NSOrderedSame)	{
 				if (synopsisSettings == nil) synopsisSettings = [NSMutableDictionary dictionaryWithCapacity:0];
-				synopsisSettings[kSynopsisAnalyzedMetadataExportOptionKey] = [NSNumber numberWithInteger:[arg integerValue]];
+				NSNumber			*tmpNum = nil;
+				if ([arg caseInsensitiveCompare:@"None"] == NSOrderedSame)
+					tmpNum = @( SynopsisMetadataEncoderExportOptionNone );
+				else if ([arg caseInsensitiveCompare:@"JSONContiguous"] == NSOrderedSame)
+					tmpNum = @( SynopsisMetadataEncoderExportOptionJSONContiguous );
+				else if ([arg caseInsensitiveCompare:@"JSONGlobal"] == NSOrderedSame)
+					tmpNum = @( SynopsisMetadataEncoderExportOptionJSONGlobalOnly );
+				else if ([arg caseInsensitiveCompare:@"JSONSequence"] == NSOrderedSame)
+					tmpNum = @( SynopsisMetadataEncoderExportOptionJSONSequence );
+				else if ([arg caseInsensitiveCompare:@"ZSTDTraining"] == NSOrderedSame)
+					tmpNum = @( SynopsisMetadataEncoderExportOptionZSTDTraining );
+				else	{
+					fprintf(stdout,"ERR: unrecognized value (%s) for switch %s\n",[arg UTF8String],[argType UTF8String]);
+					return 2;
+				}
+				synopsisSettings[kSynopsisAnalyzedMetadataExportOptionKey] = tmpNum;
 			}
 			else if ([argType caseInsensitiveCompare:@"--SynopsisGPURegistryID"]==NSOrderedSame)	{
 				if (synopsisSettings == nil) synopsisSettings = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -134,25 +225,40 @@ int main(int argc, const char * argv[]) {
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVVideoPixelAspectRatioHorizontalSpacingKey"]==NSOrderedSame)	{
 				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				if (videoSettings[AVVideoPixelAspectRatioKey] == nil) videoSettings[AVVideoPixelAspectRatioKey] = [NSMutableDictionary dictionaryWithCapacity:0];
 				NSNumber		*tmpNum = nil;
 				if ((double)[arg integerValue] == [arg doubleValue])
 					tmpNum = [NSNumber numberWithInteger:[arg integerValue]];
 				else
 					tmpNum = [NSNumber numberWithDouble:[arg doubleValue]];
-				videoSettings[AVVideoPixelAspectRatioHorizontalSpacingKey] = tmpNum;
+				[videoSettings[AVVideoPixelAspectRatioKey] setObject:tmpNum forKey:AVVideoPixelAspectRatioHorizontalSpacingKey];
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVVideoPixelAspectRatioVerticalSpacingKey"]==NSOrderedSame)	{
 				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
+				if (videoSettings[AVVideoPixelAspectRatioKey] == nil) videoSettings[AVVideoPixelAspectRatioKey] = [NSMutableDictionary dictionaryWithCapacity:0];
 				NSNumber		*tmpNum = nil;
 				if ((double)[arg integerValue] == [arg doubleValue])
 					tmpNum = [NSNumber numberWithInteger:[arg integerValue]];
 				else
 					tmpNum = [NSNumber numberWithDouble:[arg doubleValue]];
-				videoSettings[AVVideoPixelAspectRatioVerticalSpacingKey] = tmpNum;
+				[videoSettings[AVVideoPixelAspectRatioKey] setObject:tmpNum forKey:AVVideoPixelAspectRatioVerticalSpacingKey];
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVVideoScalingModeKey"]==NSOrderedSame)	{
 				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
-				videoSettings[AVVideoScalingModeKey] = arg;
+				NSString			*tmpVal = nil;
+				if ([arg caseInsensitiveCompare:@"Fit"] == NSOrderedSame)
+					tmpVal = AVVideoScalingModeFit;
+				else if ([arg caseInsensitiveCompare:@"Resize"] == NSOrderedSame)
+					tmpVal = AVVideoScalingModeResize;
+				else if ([arg caseInsensitiveCompare:@"ResizeAspect"] == NSOrderedSame)
+					tmpVal = AVVideoScalingModeResizeAspect;
+				else if ([arg caseInsensitiveCompare:@"ResizeAspectFill"] == NSOrderedSame)
+					tmpVal = AVVideoScalingModeResizeAspectFill;
+				else	{
+					fprintf(stdout,"ERR: unrecognized value (%s) for switch %s\n",[arg UTF8String],[argType UTF8String]);
+					return 2;
+				}
+				videoSettings[AVVideoScalingModeKey] = tmpVal;
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVVideoAllowWideColorKey"]==NSOrderedSame)	{
 				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -229,7 +335,16 @@ int main(int argc, const char * argv[]) {
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVVideoH264EntropyModeKey"]==NSOrderedSame)	{
 				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
-				videoSettings[AVVideoH264EntropyModeKey] = arg;
+				NSString			*tmpVal = nil;
+				if ([arg caseInsensitiveCompare:@"CAVLC"] == NSOrderedSame)
+					tmpVal = AVVideoH264EntropyModeCAVLC;
+				else if ([arg caseInsensitiveCompare:@"CABAC"] == NSOrderedSame)
+					tmpVal = AVVideoH264EntropyModeCABAC;
+				else	{
+					fprintf(stdout,"ERR: unrecognized value (%s) for switch %s\n",[arg UTF8String],[argType UTF8String]);
+					return 2;
+				}
+				videoSettings[AVVideoH264EntropyModeKey] = tmpVal;
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVVideoExpectedSourceFrameRateKey"]==NSOrderedSame)	{
 				if (videoSettings == nil) videoSettings = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -297,11 +412,41 @@ int main(int argc, const char * argv[]) {
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVEncoderAudioQualityKey"]==NSOrderedSame)	{
 				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
-				audioSettings[AVEncoderAudioQualityKey] = [NSNumber numberWithInteger:[arg integerValue]];
+				NSNumber			*tmpNum = nil;
+				if ([arg caseInsensitiveCompare:@"min"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityMin );
+				else if ([arg caseInsensitiveCompare:@"low"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityLow );
+				else if ([arg caseInsensitiveCompare:@"medium"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityMedium );
+				else if ([arg caseInsensitiveCompare:@"high"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityHigh );
+				else if ([arg caseInsensitiveCompare:@"max"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityMax );
+				else	{
+					fprintf(stdout,"ERR: unrecognized value (%s) for switch %s\n",[arg UTF8String],[argType UTF8String]);
+					return 2;
+				}
+				audioSettings[AVEncoderAudioQualityKey] = tmpNum;
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVEncoderAudioQualityForVBRKey"]==NSOrderedSame)	{
 				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
-				audioSettings[AVEncoderAudioQualityForVBRKey] = [NSNumber numberWithInteger:[arg integerValue]];
+				NSNumber			*tmpNum = nil;
+				if ([arg caseInsensitiveCompare:@"min"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityMin );
+				else if ([arg caseInsensitiveCompare:@"low"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityLow );
+				else if ([arg caseInsensitiveCompare:@"medium"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityMedium );
+				else if ([arg caseInsensitiveCompare:@"high"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityHigh );
+				else if ([arg caseInsensitiveCompare:@"max"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityMax );
+				else	{
+					fprintf(stdout,"ERR: unrecognized value (%s) for switch %s\n",[arg UTF8String],[argType UTF8String]);
+					return 2;
+				}
+				audioSettings[AVEncoderAudioQualityForVBRKey] = tmpNum;
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVEncoderBitRateKey"]==NSOrderedSame)	{
 				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -313,7 +458,20 @@ int main(int argc, const char * argv[]) {
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVEncoderBitRateStrategyKey"]==NSOrderedSame)	{
 				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
-				audioSettings[AVEncoderBitRateStrategyKey] = arg;
+				NSString			*tmpVal = nil;
+				if ([arg caseInsensitiveCompare:@"constant"] == NSOrderedSame)
+					tmpVal = AVAudioBitRateStrategy_Constant;
+				else if ([arg caseInsensitiveCompare:@"longTermAverage"] == NSOrderedSame)
+					tmpVal = AVAudioBitRateStrategy_LongTermAverage;
+				else if ([arg caseInsensitiveCompare:@"variableConstrained"] == NSOrderedSame)
+					tmpVal = AVAudioBitRateStrategy_VariableConstrained;
+				else if ([arg caseInsensitiveCompare:@"variable"] == NSOrderedSame)
+					tmpVal = AVAudioBitRateStrategy_Variable;
+				else	{
+					fprintf(stdout,"ERR: unrecognized value (%s) for switch %s\n",[arg UTF8String],[argType UTF8String]);
+					return 2;
+				}
+				audioSettings[AVEncoderBitRateStrategyKey] = tmpVal;
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVEncoderBitDepthHintKey"]==NSOrderedSame)	{
 				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -321,11 +479,37 @@ int main(int argc, const char * argv[]) {
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVSampleRateConverterAlgorithmKey"]==NSOrderedSame)	{
 				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
-				audioSettings[AVSampleRateConverterAlgorithmKey] = arg;
+				NSString			*tmpVal = nil;
+				if ([arg caseInsensitiveCompare:@"normal"] == NSOrderedSame)
+					tmpVal = AVSampleRateConverterAlgorithm_Normal;
+				else if ([arg caseInsensitiveCompare:@"mastering"] == NSOrderedSame)
+					tmpVal = AVSampleRateConverterAlgorithm_Mastering;
+				else if ([arg caseInsensitiveCompare:@"minimumPhase"] == NSOrderedSame)
+					tmpVal = AVSampleRateConverterAlgorithm_MinimumPhase;
+				else	{
+					fprintf(stdout,"ERR: unrecognized value (%s) for switch %s\n",[arg UTF8String],[argType UTF8String]);
+					return 2;
+				}
+				audioSettings[AVSampleRateConverterAlgorithmKey] = tmpVal;
 			}
 			else if ([argType caseInsensitiveCompare:@"--AVSampleRateConverterAudioQualityKey"]==NSOrderedSame)	{
 				if (audioSettings == nil) audioSettings = [NSMutableDictionary dictionaryWithCapacity:0];
-				audioSettings[AVSampleRateConverterAudioQualityKey] = [NSNumber numberWithInteger:[arg integerValue]];
+				NSNumber			*tmpNum = nil;
+				if ([arg caseInsensitiveCompare:@"min"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityMin );
+				else if ([arg caseInsensitiveCompare:@"low"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityLow );
+				else if ([arg caseInsensitiveCompare:@"medium"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityMedium );
+				else if ([arg caseInsensitiveCompare:@"high"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityHigh );
+				else if ([arg caseInsensitiveCompare:@"max"] == NSOrderedSame)
+					tmpNum = @( AVAudioQualityMax );
+				else	{
+					fprintf(stdout,"ERR: unrecognized value (%s) for switch %s\n",[arg UTF8String],[argType UTF8String]);
+					return 2;
+				}
+				audioSettings[AVSampleRateConverterAudioQualityKey] = tmpNum;
 			}
 			else	{
 				fprintf(stdout,"ERR: unrecognized argument, \'%s\'\n",[argType UTF8String]);
@@ -356,6 +540,10 @@ int main(int argc, const char * argv[]) {
 				kSynopsisAnalysisSettingsEnabledPluginsKey : @[ @"StandardAnalyzerPlugin" ],
 			} mutableCopy];
 		}
+		if (synopsisSettings[kSynopsisAnalysisSettingsQualityHintKey] == nil)
+			synopsisSettings[kSynopsisAnalysisSettingsQualityHintKey] = @( SynopsisAnalysisQualityHintMedium );
+		if (synopsisSettings[kSynopsisAnalysisSettingsEnabledPluginsKey] == nil || [synopsisSettings[kSynopsisAnalysisSettingsEnabledPluginsKey] count] < 1)
+			synopsisSettings[kSynopsisAnalysisSettingsEnabledPluginsKey] = @[ @"StandardAnalyzerPlugin" ];
 		
 		
 		fprintf(stdout,"Beginning Synopsis analysis/transcode...\n");
