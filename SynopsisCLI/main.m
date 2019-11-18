@@ -192,7 +192,7 @@ void usage()	{
 
 int main(int argc, const char * argv[]) {
 	@autoreleasepool {
-		//	
+		//
 		//	these are the vals that we're going to populate from the args
 		NSString			*srcPath = nil;
 		NSString			*dstPath = nil;
@@ -617,8 +617,10 @@ int main(int argc, const char * argv[]) {
 			arg = [argIt nextObject];
 		}
 		
-		//NSLog(@"videoSettings: %@",videoSettings);
-		//NSLog(@"audioSettings: %@",audioSettings);
+		NSLog(@"**************");
+		NSLog(@"videoSettings: %@",videoSettings);
+		NSLog(@"audioSettings: %@",audioSettings);
+		NSLog(@"**************");
 		
 		//	if we're missing any vital pieces of information, bail with an informative error message
 		if (srcPath == nil)	{

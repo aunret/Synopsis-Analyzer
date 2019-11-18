@@ -186,72 +186,29 @@
 }
 - (void) installCLI	{
 	NSLog(@"%s",__func__);
-	//	check to see if the command-line tools have been installed, and are up-to-date
+	
+	NSError				*nsErr = nil;
 	NSFileManager		*fm = [NSFileManager defaultManager];
-	NSString			*cliWrapperSrcPath = [[NSBundle mainBundle] pathForResource:@"synopsis-enc" ofType:@"app"];
-	NSString			*cliWrapperDstPath = @"/usr/local/bin/synopsis-enc.app";
-	NSString			*cliSymlinkSrcPath = @"/usr/local/bin/synopsis-enc.app/Contents/MacOS/synopsis-enc";
+	NSString			*cliSymlinkSrcPath = [[NSBundle mainBundle] pathForAuxiliaryExecutable:@"synopsis-enc"];
 	NSString			*cliSymlinkDstPath = @"/usr/local/bin/synopsis-enc";
-	BOOL				needToInstall = NO;
-	BOOL				bailOnInstall = NO;
-	if (![fm fileExistsAtPath:cliWrapperDstPath isDirectory:nil])
-		needToInstall = YES;
-	else	{
-		NSBundle			*cliBundle = [NSBundle bundleWithPath:cliWrapperDstPath];
-		NSDictionary		*cliInfoDict = (cliBundle==nil) ? nil : [cliBundle infoDictionary];
-		NSDictionary		*myInfoDict = [NSBundle bundleWithPath:cliWrapperSrcPath];
-		if (cliInfoDict == nil)
-			needToInstall = YES;
-		else if (cliInfoDict != nil && myInfoDict != nil)	{
-			NSString			*cliVsnString = cliInfoDict[(NSString *)kCFBundleVersionKey];
-			NSString			*myVsnString = myInfoDict[(NSString *)kCFBundleVersionKey];
-			if (cliVsnString == nil)
-				needToInstall = YES;
-			else if (cliVsnString != nil && myVsnString != nil)	{
-				NSArray				*cliVsnArray = [cliVsnString componentsSeparatedByString:@"."];
-				NSArray				*myVsnArray = [myVsnString componentsSeparatedByString:@"."];
-				NSEnumerator		*cliVsnIt = [cliVsnArray objectEnumerator];
-				NSString			*tmpCliVsn = [cliVsnIt nextObject];
-				NSEnumerator		*myVsnIt = [myVsnArray objectEnumerator];
-				NSString			*tmpMyVsn = [myVsnIt nextObject];
-				//	if we couldn't get an initial val, bail and flag as needing install
-				if (tmpCliVsn == nil || tmpMyVsn == nil)
-					needToInstall = YES;
-				else	{
-					while (tmpCliVsn != nil && tmpMyVsn != nil)	{
-						//	compare these version strings, flag as needing install if my vsn is > cli vsn & bail
-						if ([tmpMyVsn integerValue] > [tmpCliVsn integerValue])	{
-							needToInstall = YES;
-							break;
-						}
-						//	increment the iterators
-						tmpCliVsn = [cliVsnIt nextObject];
-						tmpMyVsn = [myVsnIt nextObject];
-					}
-					//	if i'm here but my vsn is non-nil (different # of vsn number groups), flag as needing install
-					if (tmpMyVsn != nil)
-						needToInstall = YES;
-				}
-			}
-		}
-	}
-	//	if we need to install, do so now...
-	if (needToInstall)	{
-		//	show an alert asking the user if they'd like to install the command-line tools
+	//	if the symlink doesn't exist at all...
+	if (![fm fileExistsAtPath:cliSymlinkDstPath isDirectory:nil])	{
+		//	show an alert asking the user if they'd like to install the command-line tools, bail if they say 'no'
 		NSAlert			*installRequest = [[NSAlert alloc] init];
-		installRequest.messageText = @"Would you like to install the latest version of the command-line synopsis encoder?";
+		installRequest.messageText = @"Would you like to install the command-line synopsis encoder?";
 		[installRequest addButtonWithTitle:@"Yes"];
 		[installRequest addButtonWithTitle:@"No"];
 		NSModalResponse		response = [installRequest runModal];
 		if (response != NSAlertFirstButtonReturn)
 			return;
-		
-		//	if there's an existing wrapper...
-		if ([fm fileExistsAtPath:cliWrapperDstPath])	{
-			NSError			*nsErr = nil;
-			//	try to move the wrapper to the trash, alert if there's an error
-			if (![fm removeItemAtPath:cliWrapperDstPath error:&nsErr])	{
-				bailOnInstall = YES;
+	}
+	//	else the symlink exists...
+	else	{
+		NSString			*existingSrcPath = [fm destinationOfSymbolicLinkAtPath:cliSymlinkDstPath error:&nsErr];
+		//	if the symlink's path is wrong or can't be retrieved...
+		if (existingSrcPath==nil || nsErr != nil || ![existingSrcPath isEqualToString:cliSymlinkSrcPath])	{
+			//	delete the existing symlink, bail with an alert if we can't
+			if (![fm removeItemAtPath:cliSymlinkDstPath error:&nsErr])	{
 				NSAlert			*installErr = [[NSAlert alloc] init];
 				if (nsErr != nil)
 					installErr.messageText = [NSString stringWithFormat:@"There was a problem installing the CLI (couldn't remove old CLI- %@)",nsErr.localizedDescription];
@@ -259,63 +216,34 @@
 					installErr.messageText = @"There was a problem installing the CLI (couldn't remove old CLI)";
 				installErr.alertStyle = NSAlertStyleCritical;
 				[installErr addButtonWithTitle:@"Cancel install"];
-				[installRequest runModal];
-			}
-		}
-		//	try to remove the symlink (if it exists)
-		if (!bailOnInstall && [fm fileExistsAtPath:cliSymlinkDstPath])	{
-			NSError			*nsErr = nil;
-			//	try to move the wrapper to the trash, alert if there's an error
-			if (![fm removeItemAtPath:cliSymlinkDstPath error:&nsErr])	{
-				bailOnInstall = YES;
-				NSAlert			*installErr = [[NSAlert alloc] init];
-				if (nsErr != nil)
-					installErr.messageText = [NSString stringWithFormat:@"There was a problem installing the CLI (couldn't remove old symlink- %@)",nsErr.localizedDescription];
-				else
-					installErr.messageText = @"There was a problem installing the CLI (couldn't remove old symlink)";
-				installErr.alertStyle = NSAlertStyleCritical;
-				[installErr addButtonWithTitle:@"Cancel install"];
-				[installRequest runModal];
-			}
-		}
-		//	copy the wrapper app
-		if (!bailOnInstall)	{
-			NSError			*nsErr = nil;
-			if (![fm copyItemAtPath:cliWrapperSrcPath toPath:cliWrapperDstPath error:&nsErr])	{
-				bailOnInstall = YES;
-				NSAlert			*installErr = [[NSAlert alloc] init];
-				if (nsErr != nil)
-					installErr.messageText = [NSString stringWithFormat:@"There was a problem installing the CLI (couldn't copy the new CLI- %@)",nsErr.localizedDescription];
-				else
-					installErr.messageText = @"There was a problem installing the CLI (couldn't copy the new CLI)";
-				installErr.alertStyle = NSAlertStyleCritical;
-				[installErr addButtonWithTitle:@"Cancel install"];
 				[installErr runModal];
+				return;
 			}
 		}
-		//	make a symlink
-		if (!bailOnInstall)	{
-			NSError			*nsErr = nil;
-			if (![fm createSymbolicLinkAtPath:cliSymlinkDstPath withDestinationPath:cliSymlinkSrcPath error:&nsErr])	{
-				bailOnInstall = YES;
-				NSAlert			*installErr = [[NSAlert alloc] init];
-				if (nsErr != nil)
-					installErr.messageText = [NSString stringWithFormat:@"There was a problem installing the CLI (couldn't make the new symlink- %@)",nsErr.localizedDescription];
-				else
-					installErr.messageText = @"There was a problem installing the CLI (couldn't make the new symlink)";
-				installErr.alertStyle = NSAlertStyleCritical;
-				[installErr addButtonWithTitle:@"Cancel install"];
-				[installErr runModal];
-			}
-		}
-		//	show an alert informing the user that the command-line tool has been installed...
-		if (!bailOnInstall)	{
-			NSAlert		*successAlert = [[NSAlert alloc] init];
-			successAlert.messageText = @"The command-line tool \"synopsis-enc\" has been successfully installed.\n\rsee \"synopsis-enc --help\" for more information.";
-			[successAlert addButtonWithTitle:@"OK"];
-			[successAlert runModal];
+		//	else the symlink exists and its path is okay- bail, we're done here
+		else	{
+			return;
 		}
 	}
+	
+	//	make the symbolic link to the binary, bail with an alert if we can't
+	if (![fm createSymbolicLinkAtPath:cliSymlinkDstPath withDestinationPath:cliSymlinkSrcPath error:&nsErr])	{
+		NSAlert			*installErr = [[NSAlert alloc] init];
+		if (nsErr != nil)
+			installErr.messageText = [NSString stringWithFormat:@"There was a problem installing the CLI (couldn't make the new symlink- %@)",nsErr.localizedDescription];
+		else
+			installErr.messageText = @"There was a problem installing the CLI (couldn't make the new symlink)";
+		installErr.alertStyle = NSAlertStyleCritical;
+		[installErr addButtonWithTitle:@"Cancel install"];
+		[installErr runModal];
+		return;
+	}
+	//	show an alert informing the user that the command-line tool has been installed...
+	NSAlert		*successAlert = [[NSAlert alloc] init];
+	successAlert.messageText = @"The command-line tool \"synopsis-enc\" has been successfully installed.\n\rsee \"synopsis-enc --help\" for more information.";
+	[successAlert addButtonWithTitle:@"OK"];
+	[successAlert runModal];
+	
 }
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender	{
 	//NSLog(@"%s",__func__);
