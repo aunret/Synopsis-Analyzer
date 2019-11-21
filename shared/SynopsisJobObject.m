@@ -767,7 +767,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 							NSString			*codecString = (localTransOpts==nil) ? nil : [localTransOpts objectForKey:AVVideoCodecKey];
 							//	we need to make a custom writer input if we're exporting to a hap codec
 							if (codecString!=nil && ([codecString isEqualToString:AVVideoCodecHap] || [codecString isEqualToString:AVVideoCodecHapAlpha] || [codecString isEqualToString:AVVideoCodecHapQ] || [codecString isEqualToString:AVVideoCodecHapQAlpha] || [codecString isEqualToString:AVVideoCodecHapAlphaOnly]))	{
-								AVAssetWriterHapInput		*tmpInput = [[AVAssetWriterHapInput alloc] initWithMediaType:AVMediaTypeVideo outputSettings:localTransOpts];
+								AVAssetWriterHapInput		*tmpInput = [[AVAssetWriterHapInput alloc] initWithOutputSettings:localTransOpts];
 								[tmpInput setExpectsMediaDataInRealTime:NO];
 								[tmpInput setTransform:transform];
 								[writerVideoInputs addObject:tmpInput];
