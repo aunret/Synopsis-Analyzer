@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class SynOp;
+@class PlayerView;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,8 +18,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OpInspectorViewController : NSViewController	{
 	IBOutlet NSClipView				*clipView;
-	IBOutlet NSStackView			*stackView;
 	
+	IBOutlet NSBox				*previewBox;
+	IBOutlet NSBox				*fileBox;
+	IBOutlet NSBox				*videoBox;
+	IBOutlet NSBox				*audioBox;
+	//IBOutlet NSView				*spacerView;
+	
+	IBOutlet NSView				*containerView;
+	
+	IBOutlet PlayerView				*previewView;
 	IBOutlet NSTextField			*fileField;
 	IBOutlet NSTextField			*videoField;
 	IBOutlet NSTextField			*audioField;

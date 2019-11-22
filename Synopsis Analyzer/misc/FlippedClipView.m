@@ -13,5 +13,10 @@
 - (BOOL) isFlipped	{
 	return YES;
 }
-
+/*
+- (void) drawRect:(NSRect)r	{
+	[[NSColor blueColor] set];
+	NSRectFill(r);
+}
+*/
 @end

@@ -68,6 +68,7 @@
 		1AEDE35A2381D6AF00B6E5E8 /* synopsis-enc in Embed CLI */ = {isa = PBXBuildFile; fileRef = 1AEDE34A2381D64400B6E5E8 /* synopsis-enc */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		1AEDE35B2381D6F900B6E5E8 /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
 		1AEE2F792333C917009193CD /* PresetSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F782333C917009193CD /* PresetSettings.m */; };
+		1AF4C3D523885DD8005C938A /* PlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AF4C3CB23885DD8005C938A /* PlayerView.m */; };
 		1B1FF1482363681400D281FB /* NSColor+SynopsisStatusColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B1FF1472363681400D281FB /* NSColor+SynopsisStatusColors.m */; };
 		1B454BF523567D1600F3D4A8 /* GPULoadBalancer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B454BF423567D1600F3D4A8 /* GPULoadBalancer.m */; };
 /* End PBXBuildFile section */
@@ -156,6 +157,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 1AEDE3492381D64400B6E5E8;
 			remoteInfo = SynopsisCLI;
+		};
+		1AF4C3D223885DD8005C938A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1BFB13381F2135BF002C4651;
+			remoteInfo = "Synopsis-Decoder-macOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -299,6 +307,8 @@
 		1AEDE34C2381D64400B6E5E8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1AEE2F772333C917009193CD /* PresetSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetSettings.h; sourceTree = "<group>"; };
 		1AEE2F782333C917009193CD /* PresetSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetSettings.m; sourceTree = "<group>"; };
+		1AF4C3CB23885DD8005C938A /* PlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerView.m; path = "Synopsis Analyzer/PlayerView.m"; sourceTree = SOURCE_ROOT; };
+		1AF4C3D423885DD8005C938A /* PlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerView.h; path = "Synopsis Analyzer/PlayerView.h"; sourceTree = SOURCE_ROOT; };
 		1AFDD45D2316F3C400D7862F /* SynopsisJobObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynopsisJobObject.h; sourceTree = "<group>"; };
 		1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SynopsisJobObject.m; sourceTree = "<group>"; };
 		1B1FF1462363681400D281FB /* NSColor+SynopsisStatusColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSColor+SynopsisStatusColors.h"; sourceTree = "<group>"; };
@@ -443,6 +453,7 @@
 			isa = PBXGroup;
 			children = (
 				1A626153231476DD00DC2B06 /* Synopsis.framework */,
+				1AF4C3D323885DD8005C938A /* Synopsis.framework */,
 				1A626157231476DD00DC2B06 /* Synopsis.framework */,
 			);
 			name = Products;
@@ -482,6 +493,8 @@
 				1AA3C04C233C1425009F6821 /* SessionInspectorViewController.h */,
 				1AA3C04D233C1425009F6821 /* SessionInspectorViewController.m */,
 				1AA3C04E233C1425009F6821 /* SessionInspectorViewController.xib */,
+				1AF4C3D423885DD8005C938A /* PlayerView.h */,
+				1AF4C3CB23885DD8005C938A /* PlayerView.m */,
 				1AA3C051233C1432009F6821 /* OpInspectorViewController.h */,
 				1AA3C052233C1432009F6821 /* OpInspectorViewController.m */,
 				1AA3C053233C1432009F6821 /* OpInspectorViewController.xib */,
@@ -685,6 +698,13 @@
 			remoteRef = 1AC1ED452318144500AAD380 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		1AF4C3D323885DD8005C938A /* Synopsis.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Synopsis.framework;
+			remoteRef = 1AF4C3D223885DD8005C938A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -754,6 +774,7 @@
 				1AA3C05A233C1E58009F6821 /* EmptyInspectorViewController.m in Sources */,
 				1AB8E31123678C610056122B /* NSProgressIndicatorAnimated.m in Sources */,
 				1A10934D233001AE00791BDA /* CustomBackgroundView.m in Sources */,
+				1AF4C3D523885DD8005C938A /* PlayerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

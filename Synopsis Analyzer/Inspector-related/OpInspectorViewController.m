@@ -9,6 +9,7 @@
 #import "OpInspectorViewController.h"
 
 #import "SynOp.h"
+#import "PlayerView.h"
 
 #import "NSStringAdditions.h"
 
@@ -413,6 +414,68 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 }
 - (void) awakeFromNib	{
 	//NSLog(@"%s",__func__);
+	//[[NSUserDefaults standardUserDefaults] setObject:@YES forKey:@"NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints"];
+	
+	//[self.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[clipView setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[containerView setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[previewBox setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[previewView setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[fileBox setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[fileField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[videoBox setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[videoField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[audioBox setTranslatesAutoresizingMaskIntoConstraints:NO];
+	[audioField setTranslatesAutoresizingMaskIntoConstraints:NO];
+	
+	
+	[containerView.leadingAnchor constraintEqualToAnchor:clipView.leadingAnchor constant:0].active = true;
+	[containerView.trailingAnchor constraintEqualToAnchor:clipView.trailingAnchor constant:0].active = true;
+	[containerView.topAnchor constraintEqualToAnchor:clipView.topAnchor constant:0].active = true;
+	[containerView.bottomAnchor constraintEqualToAnchor:audioBox.bottomAnchor constant:20].active = true;
+	
+	[clipView.leadingAnchor constraintEqualToAnchor:clipView.superview.leadingAnchor constant:0].active = true;
+	[clipView.topAnchor constraintEqualToAnchor:clipView.superview.topAnchor constant:0].active = true;
+	[clipView.trailingAnchor constraintEqualToAnchor:clipView.superview.trailingAnchor constant:-15].active = true;
+	
+	[previewBox.leadingAnchor constraintEqualToAnchor:previewBox.superview.leadingAnchor constant:8].active = true;
+	[previewBox.trailingAnchor constraintEqualToAnchor:previewBox.superview.trailingAnchor constant:-8].active = true;
+	[previewBox.topAnchor constraintEqualToAnchor:previewBox.superview.topAnchor constant:8].active = true;
+	[previewBox.heightAnchor constraintGreaterThanOrEqualToConstant:100].active = true;
+	
+	[fileBox.leadingAnchor constraintEqualToAnchor:fileBox.superview.leadingAnchor constant:8].active = true;
+	[fileBox.trailingAnchor constraintEqualToAnchor:fileBox.superview.trailingAnchor constant:-8].active = true;
+	[fileBox.topAnchor constraintEqualToAnchor:previewBox.bottomAnchor constant:8].active = true;
+	
+	[videoBox.leadingAnchor constraintEqualToAnchor:videoBox.superview.leadingAnchor constant:8].active = true;
+	[videoBox.trailingAnchor constraintEqualToAnchor:videoBox.superview.trailingAnchor constant:-8].active = true;
+	[videoBox.topAnchor constraintEqualToAnchor:fileBox.bottomAnchor constant:8].active = true;
+	
+	[audioBox.leadingAnchor constraintEqualToAnchor:audioBox.superview.leadingAnchor constant:8].active = true;
+	[audioBox.trailingAnchor constraintEqualToAnchor:audioBox.superview.trailingAnchor constant:-8].active = true;
+	[audioBox.topAnchor constraintEqualToAnchor:videoBox.bottomAnchor constant:8].active = true;
+	
+	
+	[previewBox.bottomAnchor constraintEqualToAnchor:previewView.bottomAnchor constant:20].active = true;
+	[previewView.leadingAnchor constraintEqualToAnchor:previewView.superview.leadingAnchor constant:40].active = true;
+	[previewView.trailingAnchor constraintEqualToAnchor:previewView.superview.trailingAnchor constant:-40].active = true;
+	[previewView.topAnchor constraintEqualToAnchor:previewView.superview.topAnchor constant:20].active = true;
+	[previewView.heightAnchor constraintEqualToAnchor:previewView.widthAnchor constant:0].active = true;
+	
+	[fileBox.bottomAnchor constraintEqualToAnchor:fileField.bottomAnchor constant:20].active = true;
+	[fileField.leadingAnchor constraintEqualToAnchor:fileField.superview.leadingAnchor constant:20].active = true;
+	[fileField.trailingAnchor constraintEqualToAnchor:fileField.superview.trailingAnchor constant:-20].active = true;
+	[fileField.topAnchor constraintEqualToAnchor:fileField.superview.topAnchor constant:20].active = true;
+	
+	[videoBox.bottomAnchor constraintEqualToAnchor:videoField.bottomAnchor constant:20].active = true;
+	[videoField.leadingAnchor constraintEqualToAnchor:videoField.superview.leadingAnchor constant:20].active = true;
+	[videoField.trailingAnchor constraintEqualToAnchor:videoField.superview.trailingAnchor constant:-20].active = true;
+	[videoField.topAnchor constraintEqualToAnchor:videoField.superview.topAnchor constant:20].active = true;
+	
+	[audioBox.bottomAnchor constraintEqualToAnchor:audioField.bottomAnchor constant:20].active = true;
+	[audioField.leadingAnchor constraintEqualToAnchor:audioField.superview.leadingAnchor constant:20].active = true;
+	[audioField.trailingAnchor constraintEqualToAnchor:audioField.superview.trailingAnchor constant:-20].active = true;
+	[audioField.topAnchor constraintEqualToAnchor:audioField.superview.topAnchor constant:20].active = true;
 }
 - (void) inspectOp:(SynOp *)n	{
 	//NSLog(@"%s ... %@",__func__,n);
