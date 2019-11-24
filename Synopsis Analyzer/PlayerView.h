@@ -12,6 +12,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PlayerView : NSView
+
+- (void) loadAsset:(AVAsset *)n;
 @property (readonly) AVPlayerHapLayer* playerLayer;
 - (void) seekToTime:(CMTime)seekTime;
 

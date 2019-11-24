@@ -393,6 +393,7 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 
 
 @interface OpInspectorViewController ()
+@property (strong) NSLayoutConstraint * previewViewHeightConstraint;
 @end
 
 
@@ -441,7 +442,7 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 	[previewBox.leadingAnchor constraintEqualToAnchor:previewBox.superview.leadingAnchor constant:8].active = true;
 	[previewBox.trailingAnchor constraintEqualToAnchor:previewBox.superview.trailingAnchor constant:-8].active = true;
 	[previewBox.topAnchor constraintEqualToAnchor:previewBox.superview.topAnchor constant:8].active = true;
-	[previewBox.heightAnchor constraintGreaterThanOrEqualToConstant:100].active = true;
+	[previewBox.heightAnchor constraintGreaterThanOrEqualToConstant:75].active = true;
 	
 	[fileBox.leadingAnchor constraintEqualToAnchor:fileBox.superview.leadingAnchor constant:8].active = true;
 	[fileBox.trailingAnchor constraintEqualToAnchor:fileBox.superview.trailingAnchor constant:-8].active = true;
@@ -457,10 +458,13 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 	
 	
 	[previewBox.bottomAnchor constraintEqualToAnchor:previewView.bottomAnchor constant:20].active = true;
-	[previewView.leadingAnchor constraintEqualToAnchor:previewView.superview.leadingAnchor constant:40].active = true;
-	[previewView.trailingAnchor constraintEqualToAnchor:previewView.superview.trailingAnchor constant:-40].active = true;
+	[previewView.leadingAnchor constraintEqualToAnchor:previewView.superview.leadingAnchor constant:20].active = true;
+	[previewView.trailingAnchor constraintEqualToAnchor:previewView.superview.trailingAnchor constant:-20].active = true;
 	[previewView.topAnchor constraintEqualToAnchor:previewView.superview.topAnchor constant:20].active = true;
-	[previewView.heightAnchor constraintEqualToAnchor:previewView.widthAnchor constant:0].active = true;
+	//[previewView.heightAnchor constraintEqualToAnchor:previewView.widthAnchor constant:0].active = true;
+	//[previewView.heightAnchor constraintGreaterThanOrEqualToConstant:50].active = true;
+	self.previewViewHeightConstraint = [previewView.heightAnchor constraintEqualToAnchor:previewView.widthAnchor multiplier:1.0 constant:0];
+	self.previewViewHeightConstraint.active = true;
 	
 	[fileBox.bottomAnchor constraintEqualToAnchor:fileField.bottomAnchor constant:20].active = true;
 	[fileField.leadingAnchor constraintEqualToAnchor:fileField.superview.leadingAnchor constant:20].active = true;
@@ -496,6 +500,14 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 	}
 	//NSLog(@"%s",__func__);
 	
+	//self.previewViewHeightConstraint.multiplier = 1.0;
+	if (self.previewViewHeightConstraint != nil)	{
+		[previewView removeConstraint:self.previewViewHeightConstraint];
+		self.previewViewHeightConstraint = nil;
+		self.previewViewHeightConstraint = [previewView.heightAnchor constraintEqualToAnchor:previewView.widthAnchor multiplier:1.0 constant:0];
+		self.previewViewHeightConstraint.active = true;
+	}
+	
 	
 	if (self.inspectedObject.type == OpType_Other)	{
 		//	populate the field field
@@ -512,7 +524,10 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 		NSMutableAttributedString		*fileString = [[NSMutableAttributedString alloc] initWithString:@""];
 		NSMutableAttributedString		*videoString = [[NSMutableAttributedString alloc] initWithString:@""];
 		NSMutableAttributedString		*audioString = [[NSMutableAttributedString alloc] initWithString:@""];
-	
+		
+		//	populate the preview
+		[previewView loadAsset:asset];
+		
 		//	populate the file string
 		{
 			//	filename
@@ -687,6 +702,15 @@ static NSString * VideoFourCCStringToHumanReadableCodec(NSString *subtype)	{
 					//	get the resolution
 					CGSize				tmpSize = [track naturalSize];
 					tmpString = [tmpString stringByAppendingFormat:@", %d x %d",(int)tmpSize.width,(int)tmpSize.height];
+					
+					//	set the preview view's height constraint to the aspect ratio of the track
+					//self.previewViewHeightConstraint.multiplier = tmpSize.height/tmpSize.width;
+					if (self.previewViewHeightConstraint != nil)	{
+						[previewView removeConstraint:self.previewViewHeightConstraint];
+						self.previewViewHeightConstraint = nil;
+						self.previewViewHeightConstraint = [previewView.heightAnchor constraintEqualToAnchor:previewView.widthAnchor multiplier:tmpSize.height/tmpSize.width constant:0];
+						self.previewViewHeightConstraint.active = true;
+					}
 				
 					//	get the framerate
 					double				tmpDouble = [track nominalFrameRate];

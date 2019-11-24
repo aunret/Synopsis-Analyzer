@@ -14,7 +14,7 @@
                 <outlet property="fileBox" destination="nQI-Xf-W7a" id="BH1-U2-NCS"/>
                 <outlet property="fileField" destination="Hyf-KX-uEe" id="ybC-Ex-lFg"/>
                 <outlet property="previewBox" destination="ekg-Dz-JeZ" id="SWq-nf-EW7"/>
-                <outlet property="previewView" destination="kFJ-wx-1PX" id="AMd-uB-hKu"/>
+                <outlet property="previewView" destination="UIN-gZ-GPm" id="tTr-jv-szI"/>
                 <outlet property="videoBox" destination="7b2-G0-PXk" id="YSr-mq-82H"/>
                 <outlet property="videoField" destination="Zbw-vK-KLX" id="oMT-Kt-RIo"/>
                 <outlet property="view" destination="SXD-7o-lAo" id="I4M-o4-GYs"/>
@@ -40,9 +40,33 @@
                                     <rect key="frame" x="3" y="3" width="287" height="86"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kFJ-wx-1PX" customClass="PlayerView">
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UIN-gZ-GPm" customClass="PlayerView">
                                             <rect key="frame" x="20" y="20" width="247" height="46"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <subviews>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QeW-JE-xII">
+                                                    <rect key="frame" x="-2" y="0.0" width="128" height="11"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <textFieldCell key="cell" controlSize="mini" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="Label" id="EwH-Nt-uM7">
+                                                        <font key="font" size="9" name="Monaco"/>
+                                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4l1-rK-Fwr">
+                                                    <rect key="frame" x="-2" y="15" width="124" height="11"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                    <textFieldCell key="cell" controlSize="mini" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Label" id="iac-f3-oDv">
+                                                        <font key="font" size="9" name="Monaco"/>
+                                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                            </subviews>
+                                            <connections>
+                                                <outlet property="currentTimeFromStart" destination="QeW-JE-xII" id="iWq-In-f7P"/>
+                                                <outlet property="currentTimeToEnd" destination="4l1-rK-Fwr" id="iE8-cc-sEN"/>
+                                            </connections>
                                         </customView>
                                     </subviews>
                                 </view>
