@@ -50,7 +50,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 @property (atomic,readwrite) BOOL wokeUpOnce;	//	'awakeFromNib' is called every time we pull a view out of the table- we only want to call its contents once...
 
 //- (void) startAnOp;
-- (NSArray<SynOp*> *) getOpsToStart:(NSUInteger)numOpsToGet;
+- (NSArray<SynOp*> *) getOpsToStart:(NSInteger)numOpsToGet;
 - (int) maxOpCount;
 - (id) objectForUUID:(NSUUID *)n;
 - (void) restoreExpandStates;
@@ -499,7 +499,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 }
 
 
-- (NSArray<SynOp*> *) getOpsToStart:(NSUInteger)numOpsToGet	{
+- (NSArray<SynOp*> *) getOpsToStart:(NSInteger)numOpsToGet	{
 	if (numOpsToGet <= 0)
 		return @[];
 	
