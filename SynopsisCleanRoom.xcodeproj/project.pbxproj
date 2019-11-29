@@ -70,7 +70,7 @@
 		1B1FF1482363681400D281FB /* NSColor+SynopsisStatusColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B1FF1472363681400D281FB /* NSColor+SynopsisStatusColors.m */; };
 		1B454BF523567D1600F3D4A8 /* GPULoadBalancer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B454BF423567D1600F3D4A8 /* GPULoadBalancer.m */; };
 		1B6EE1602391B8D3005D0C01 /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
-		1B6EE1612391B8D3005D0C01 /* Synopsis.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1B6EE1612391B8D3005D0C01 /* Synopsis.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -550,6 +550,7 @@
 				1AD84598232C1E3900416F5C /* Resources */,
 				1A9B1ECD23315055007D414A /* Embed Frameworks */,
 				1AEDE3592381D69300B6E5E8 /* Embed CLI */,
+				1ADB5AD82391CFA0008E9F90 /* Sign opencv framework */,
 			);
 			buildRules = (
 			);
@@ -706,6 +707,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1ADB5AD82391CFA0008E9F90 /* Sign opencv framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Sign opencv framework";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$CONFIGURATION\" = \"Release\" ]\nthen\n    codesign -f --deep -s \"${EXPANDED_CODE_SIGN_IDENTITY_NAME}\" \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Synopsis.framework/Versions/A/Frameworks/opencv2.framework\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1AD84596232C1E3900416F5C /* Sources */ = {
@@ -916,19 +938,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = SHG3AW6YV7;
+				DEVELOPMENT_TEAM = KH97KZU7A7;
 				INFOPLIST_FILE = "Synopsis Analyzer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				OTHER_CODE_SIGN_FLAGS = "-o runtime";
+				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = "info.v002.Synopsis.Synopsis-Analyzer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				REMOVE_HEADERS_FROM_EMBEDDED_BUNDLES = NO;
 			};
 			name = Debug;
 		};
@@ -936,18 +959,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = SHG3AW6YV7;
+				DEVELOPMENT_TEAM = KH97KZU7A7;
 				INFOPLIST_FILE = "Synopsis Analyzer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				OTHER_CODE_SIGN_FLAGS = "-o runtime";
+				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = "info.v002.Synopsis.Synopsis-Analyzer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				REMOVE_HEADERS_FROM_EMBEDDED_BUNDLES = NO;
 			};
 			name = Release;
 		};
