@@ -43,10 +43,10 @@ NSString * const kSynopsisStripTrackKey = @"StripTrack";
 
 
 
+static const CGRect lowQuality = (CGRect) { 0, 0, 224, 224 };
+static const CGRect mediumQuality = (CGRect) { 0, 0, 224, 224 };
+static const CGRect highQuality = (CGRect) { 0, 0, 224, 224 };
 
-static const CGRect lowQuality = (CGRect) { 0, 0, 160, 120 };
-static const CGRect mediumQuality = (CGRect) { 0, 0, 320, 240 };
-static const CGRect highQuality = (CGRect) { 0, 0, 640, 480 };
 static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHint inQuality)
 {
 	switch (inQuality)
@@ -1913,38 +1913,3 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
