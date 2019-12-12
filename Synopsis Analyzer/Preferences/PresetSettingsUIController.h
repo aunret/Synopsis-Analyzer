@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 	IBOutlet NSPopUpButton		*jsonOptionsButton;
 }
 
-@property (strong,atomic,readwrite) PresetObject * selectedPreset;
+@property (strong,atomic,readwrite,nullable) PresetObject * selectedPreset;
 @property (readwrite, assign) BOOL presetChanged;
 
 - (void) savePreset;

@@ -54,15 +54,18 @@ typedef enum : NSUInteger {
 
 
 + (LogController*) global	{
-	if (globalLogController == nil)
-		[[LogController alloc] init];
+	if (globalLogController == nil)	{
+		static dispatch_once_t		onceToken;
+		dispatch_once(&onceToken, ^{
+			globalLogController = [[LogController alloc] init];
+		});
+	}
 	return globalLogController;
 }
 
 - (id) init	{
 	self = [super initWithWindowNibName:[NSString stringWithFormat:@"%@",[[self class] className]]];
 	if (self != nil)	{
-		globalLogController = self;
 		[self generalInit];
 
 	}

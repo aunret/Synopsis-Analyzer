@@ -385,7 +385,7 @@ NSString * const kPrefsPathPickerReloadNotificationName = @"kPrefsPathPickerRelo
 - (void) _updatePickerPUBUI	{
 	//NSLog(@"%s",__func__);
 	BOOL			enabled = [self enabled];
-	NSString		*currentPath = [self path];
+	//NSString		*currentPath = [self path];
 	if (!enabled)
 		[pickerPUB selectItemAtIndex:0];
 	else	{
