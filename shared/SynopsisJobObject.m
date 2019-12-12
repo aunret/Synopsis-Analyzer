@@ -821,7 +821,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 					}
 					@catch (NSException *err)	{
 						NSString		*errString = [NSString stringWithFormat:@"ERR creating asset IO, %@",[err reason]];
-						NSLog(errString);
+						NSLog(@"%@", errString);
 						self.jobStatus = JOStatus_Err;
 						self.jobErr = JOErr_AVFErr;
 						self.jobErrString = errString;
@@ -941,7 +941,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 					}
 					@catch (NSException *err)	{
 						NSString		*errString = [NSString stringWithFormat:@"ERR creating asset IO, %@",[err reason]];
-						NSLog(errString);
+						NSLog(@"%@", errString);
 						self.jobStatus = JOStatus_Err;
 						self.jobErr = JOErr_AVFErr;
 						self.jobErrString = errString;
@@ -1244,27 +1244,27 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 				//NSLog(@"\t\tno pass description, marking input type (%@) as finished",[localInput mediaType]);
 				//	mark the input as finished
 				[localInput markAsFinished];
-				pthread_mutex_lock(&theLock);
+				pthread_mutex_lock(&self->theLock);
 				{
 					//	figure out the index of the writer that's finished
 					NSUInteger		targetIndex;
 					if (isVideoWriter)	{
-						targetIndex = [writerVideoInputs indexOfObjectIdenticalTo:localInput];
+						targetIndex = [self->writerVideoInputs indexOfObjectIdenticalTo:localInput];
 						//	if this was a video input, we need to mark the metadata input as finished, too!
-						AVAssetWriterInput		*synopsisInput = (targetIndex<0 || targetIndex>=writerMetadataInputs.count) ? nil : [writerMetadataInputs objectAtIndex:targetIndex];
+						AVAssetWriterInput		*synopsisInput = (targetIndex<0 || targetIndex>=self->writerMetadataInputs.count) ? nil : [self->writerMetadataInputs objectAtIndex:targetIndex];
 						if (synopsisInput != nil && synopsisInput != (AVAssetWriterInput*)[NSNull null])
 							[synopsisInput markAsFinished];
 					}
 					else if (isAudioWriter)
-						targetIndex = [writerAudioInputs indexOfObjectIdenticalTo:localInput];
+						targetIndex = [self->writerAudioInputs indexOfObjectIdenticalTo:localInput];
 					else if (isMiscWriter)
-						targetIndex = [writerMiscInputs indexOfObjectIdenticalTo:localInput];
+						targetIndex = [self->writerMiscInputs indexOfObjectIdenticalTo:localInput];
 					else if (isMetadataWriter)
-						targetIndex = [writerMetadataInputs indexOfObjectIdenticalTo:localInput];
+						targetIndex = [self->writerMetadataInputs indexOfObjectIdenticalTo:localInput];
 					//	delete the writer from the array of writer inputs, and also the corresponding 
 					//	reader from the array of reader outputs.  remember, you have to delete the 
 					//	same (corresponding) input/output from every array of inputs/outputs!
-					NSArray			*tmpArray = @[ readerVideoPassthruOutputs, readerVideoAnalysisOutputs, readerAudioPassthruOutputs, readerAudioAnalysisOutputs, readerMiscPassthruOutputs, writerVideoInputs, writerAudioInputs, writerMiscInputs, writerMetadataInputs ];
+					NSArray			*tmpArray = @[ self->readerVideoPassthruOutputs, self->readerVideoAnalysisOutputs, self->readerAudioPassthruOutputs, self->readerAudioAnalysisOutputs, self->readerMiscPassthruOutputs, self->writerVideoInputs, self->writerAudioInputs, self->writerMiscInputs, self->writerMetadataInputs ];
 					//NSUInteger		maxSubArrayCount = 0;
 					for (NSMutableArray *subArray in tmpArray)	{
 						if (targetIndex>=0 && targetIndex<subArray.count)
@@ -1304,7 +1304,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 						}];
 					}
 				}
-				pthread_mutex_unlock(&theLock);
+				pthread_mutex_unlock(&self->theLock);
 				
 			}
 			//	else there's a pass description, which means i need to do reading/writing/probably encoding
@@ -1359,7 +1359,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 						//NSLog(@"requestMediaDataWhenReadyOnQueue:usingBlock:, input is %@",localInput);
 						//	if we don't limit the # of frame we write, this loop will write every frame, preventing pause/cancel from working...
 						NSUInteger			runCount = 0;
-						while ([localInput isReadyForMoreMediaData] && [writer status]==AVAssetWriterStatusWriting && runCount<5)	{
+						while ([localInput isReadyForMoreMediaData] && [self->writer status]==AVAssetWriterStatusWriting && runCount<5)	{
 							//	no matter what kind of input it is, we need a sample buffer from the local output to apply to this input.
 							CMSampleBufferRef		localSB = [localOutput copyNextSampleBuffer];
 							CMSampleBufferRef		analysisSB = NULL;	//	we may need a sample buffer to be analyzed!
@@ -1395,7 +1395,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 										if (isVideoWriter)
 											self.dateOfLastCopiedNormalizedVideoBuffer = [NSDate date];
 										//	(...the sample buffer from the local output is usable for analysis)
-										analysisSB = CFRetain(localSB);
+										analysisSB = (CMSampleBufferRef)CFRetain(localSB);
 										if (isVideoWriter)
 											analyzedSampleBufferCount += CMSampleBufferGetNumSamples(analysisSB);
 									}
@@ -1404,12 +1404,12 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 									if (analysisSB != NULL && videoConformSession != nil && performSynopsisAnalysis)	{
 										
 										//	enter the analysis group once before we start the conform session
-										dispatch_group_enter(analysisGroup);
+										dispatch_group_enter(self->analysisGroup);
 										//	populate the time vars we'll need for metadata
 										analysisPTS = CMSampleBufferGetOutputPresentationTimeStamp(analysisSB);
 										analysisTR = CMTimeRangeMake(analysisPTS, CMSampleBufferGetOutputDuration(analysisSB));
 										//	pass the analysis sample buffer to the conform session on the analysis queue
-										dispatch_async(analysisQueue, ^{
+										dispatch_async(self->analysisQueue, ^{
 											//	pass the analysis sample buffer to the conform session
 											CVPixelBufferRef		analysisPB = CMSampleBufferGetImageBuffer(analysisSB);
 											CGRect					analysisPBRect = CGRectMake(0,0,CVPixelBufferGetWidth(analysisPB),CVPixelBufferGetHeight(analysisPB));
@@ -1424,7 +1424,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 													//	as soon as the conform session is done, start running the analysis plugins (still on the analysis queue)
 													for (id<AnalyzerPluginProtocol> analyzer in bss.availableAnalyzers)	{
 														//	enter the analysis group again before we tell each analyzer to start analyzing
-														dispatch_group_enter(analysisGroup);
+														dispatch_group_enter(self->analysisGroup);
 														//	tell the analyzer to analyze the frame cache
 														NSString		*metadataKey = [analyzer pluginIdentifier];
 														[analyzer
@@ -1446,14 +1446,14 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 																}
 																
 																//	leave the analysis group as soon as the analyzer's completion block has finished
-																dispatch_group_leave(analysisGroup);
+																dispatch_group_leave(self->analysisGroup);
 															}];
 											
 													}
 													
 													
 													//	leave the analysis group as soon as the conform session's completion block has finished executing
-													dispatch_group_leave(analysisGroup);
+													dispatch_group_leave(self->analysisGroup);
 												}];	//	end videoConformSession completionBlock
 												
 										});	//	end dispatch_async
@@ -1465,7 +1465,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 								
 								//	update the progress ivar
 								if (isVideoWriter || isMetadataWriter)	{
-									pthread_mutex_lock(&theLock);
+									pthread_mutex_lock(&self->theLock);
 									CMTime			tmpTime = CMSampleBufferGetOutputPresentationTimeStamp(localSB);
 									double			tmpProgress = 0.0;
 									if (CMTIME_IS_VALID(tmpTime))
@@ -1476,7 +1476,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 									bss.jobProgress = tmpProgress;
 									//NSLog(@"\t\tjobProgress is %0.2f",bss.jobProgress);
 									//NSLog(@"\t\testimated time remaining is %0.2f",bss.jobTimeRemaining);
-									pthread_mutex_unlock(&theLock);
+									pthread_mutex_unlock(&self->theLock);
 									//	append the sample buffer from the local output to the local input
 								}
 								skippedBufferCount = 0;
@@ -1490,13 +1490,13 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 								if (analysisSB != NULL)	{
 									
 									//	...wait here for analysis to finish up...
-									dispatch_group_wait(analysisGroup, DISPATCH_TIME_FOREVER);
+									dispatch_group_wait(self->analysisGroup, DISPATCH_TIME_FOREVER);
 									
 									//	if there's aggregated metadata, write it to the metadata input
 									if (aggregatedMetadata!=nil && [aggregatedMetadata count]>0)	{
 										//NSLog(@"aggregatedMetadata is %@",aggregatedMetadata);
 										
-										AVTimedMetadataGroup		*mdg = [synopsisEncoder encodeSynopsisMetadataToTimesMetadataGroup:aggregatedMetadata timeRange:analysisTR];
+										AVTimedMetadataGroup		*mdg = [self->synopsisEncoder encodeSynopsisMetadataToTimesMetadataGroup:aggregatedMetadata timeRange:analysisTR];
 										if (mdg != nil)	{
 											if ([metadataWriteIn isReadyForMoreMediaData])	{
 												if (![metadataWriteInAdapt appendTimedMetadataGroup:mdg])	{
@@ -1676,7 +1676,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		NSDictionary		*finalizedMD = [analyzer finalizeMetadataAnalysisSessionWithError:&nsErr];
 		if (finalizedMD == nil || nsErr != nil)	{
 			NSString			*finalizedErrString = [NSString stringWithFormat:@"Error finalizing analysis: %@",[nsErr localizedDescription]];
-			NSLog(finalizedErrString);
+			NSLog(@"%@", finalizedErrString);
 			self.jobStatus = JOStatus_Err;
 			self.jobErr = JOErr_Analysis;
 			self.jobErrString = finalizedErrString;
@@ -1756,7 +1756,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			NSString		*errString = @"Err: couldnt write movie header to file";
 			if (nsErr != nil)
 				errString = [errString stringByAppendingFormat:@" %@",[nsErr localizedDescription]];
-			NSLog(errString);
+			NSLog(@"%@", errString);
 			self.jobStatus = JOStatus_Err;
 			self.jobErr = JOErr_AVFErr;
 			self.jobErrString = errString;

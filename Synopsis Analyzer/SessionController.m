@@ -476,8 +476,8 @@ static NSString						*localFileDragType = @"localFileDragType";
 		}
 	}
 }
-- (NSUInteger) numberOfFilesToProcess	{
-	NSUInteger		returnMe = 0;
+- (int) numberOfFilesToProcess	{
+	int		returnMe = 0;
 	@synchronized (self)	{
 		for (SynSession *session in self.sessions)	{
 			for (SynOp *op in session.ops)	{
@@ -485,6 +485,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 				case OpStatus_Pending:
 					++returnMe;
 					break;
+				case OpStatus_Preflight:
 				case OpStatus_PreflightErr:
 				case OpStatus_Analyze:
 				case OpStatus_Cleanup:
@@ -687,7 +688,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 		if (result == NSModalResponseOK)	{
 			[self analysisSessionForFiles:openPanel.URLs sessionCompletionBlock:^{
 				//	enable/disable the run-pause button based on the number of active ops
-				[runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
+				[self->runPauseButton setEnabled:([self numberOfFilesToProcess]<1) ? NO : YES];
 			}];
 		}
 	}];
@@ -1055,7 +1056,7 @@ static NSString						*localFileDragType = @"localFileDragType";
 	if (item == nil)
 		return YES;
 	if ([item isKindOfClass:[SynSession class]])	{
-		SynSession		*recast = (SynSession *)item;
+		//SynSession		*recast = (SynSession *)item;
 		//if (recast.type == SessionType_Dir)
 		//	return NO;
 		//else

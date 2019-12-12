@@ -173,8 +173,8 @@
 				if (granted)	{
 					UNNotificationCategory		*cat = [UNNotificationCategory
 						categoryWithIdentifier:@"SessionComplete"
-						actions:nil
-						intentIdentifiers:nil
+						actions:@[]
+						intentIdentifiers:@[]
 						options:UNNotificationCategoryOptionNone];
 					[[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[NSSet setWithObjects:cat,nil]];
 				}

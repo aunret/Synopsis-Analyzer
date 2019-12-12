@@ -10,7 +10,7 @@
 
 
 
-
+/*
 //	used to simplify debug logging
 static uint32_t myEventFlags[] = {
 	kFSEventStreamEventFlagNone,
@@ -65,7 +65,7 @@ static NSString  * myEventNames[] = {
 	@"ItemIsLastHardlink",
 	@"ItemCloned"
 };
-
+*/
 
 
 

@@ -33,8 +33,10 @@ PrefsController			*globalPrefsController = nil;
 
 
 + (PrefsController *) global	{
-	if (globalPrefsController == nil)
-		[[PrefsController alloc] init];
+	if (globalPrefsController == nil)	{
+		PrefsController		*asdf = [[PrefsController alloc] init];
+		asdf = nil;
+	}
 	return globalPrefsController;
 }
 
@@ -42,13 +44,19 @@ PrefsController			*globalPrefsController = nil;
 - (id) init	{
 	self = [super initWithWindowNibName:[NSString stringWithFormat:@"%@",[[self class] className]]];
 	if (self != nil)	{
-		globalPrefsController = self;
+		static dispatch_once_t		onceToken;
+		dispatch_once(&onceToken, ^{
+			globalPrefsController = self;
+		});
 		[self generalInit];
 	}
 	return self;
 }
 - (void) generalInit	{
 	[self window];
+}
+- (void) dealloc	{
+	NSLog(@"%s",__func__);
 }
 - (void)windowDidLoad {
 	//NSLog(@"%s",__func__);
