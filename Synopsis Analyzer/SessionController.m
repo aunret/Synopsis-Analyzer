@@ -123,6 +123,12 @@ static NSString						*localFileDragType = @"localFileDragType";
 		[outlineView setDraggingSourceOperationMask:NSDragOperationGeneric forLocal:YES];
 		
 		self.wokeUpOnce = YES;
+		
+		//	if we're not running at least 10.14, disable tab view background drawing
+		NSOperatingSystemVersion		vers = {.majorVersion = 10, .minorVersion = 14, .patchVersion = 0};
+		if (![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:vers])	{
+			[dropViewTabView setDrawsBackground:NO];
+		}
 	}
 }
 

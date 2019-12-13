@@ -60,6 +60,8 @@
 		1ADA766123426A9A0072EB10 /* FSDirectoryWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ADA766023426A9A0072EB10 /* FSDirectoryWatcher.m */; };
 		1AEC50FE233553840053C1B0 /* NSPopUpButtonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */; };
 		1AEC510F2335556C0053C1B0 /* NSMenuAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC510E2335556C0053C1B0 /* NSMenuAdditions.m */; };
+		1AECC3CB23A41E4E0078C274 /* CustomImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AECC3CA23A41E4E0078C274 /* CustomImageView.m */; };
+		1AECC3D323A4328F0078C274 /* NSImageAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AECC3D223A4328F0078C274 /* NSImageAdditions.m */; };
 		1AEDE34D2381D64400B6E5E8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDE34C2381D64400B6E5E8 /* main.m */; };
 		1AEDE3552381D67700B6E5E8 /* HapInAVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC1ED3E2318144500AAD380 /* HapInAVFoundation.framework */; };
 		1AEDE3562381D67700B6E5E8 /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
@@ -289,6 +291,10 @@
 		1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSPopUpButtonAdditions.m; sourceTree = "<group>"; };
 		1AEC510D2335556C0053C1B0 /* NSMenuAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSMenuAdditions.h; sourceTree = "<group>"; };
 		1AEC510E2335556C0053C1B0 /* NSMenuAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSMenuAdditions.m; sourceTree = "<group>"; };
+		1AECC3C923A41E4E0078C274 /* CustomImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomImageView.h; sourceTree = "<group>"; };
+		1AECC3CA23A41E4E0078C274 /* CustomImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomImageView.m; sourceTree = "<group>"; };
+		1AECC3D123A4328F0078C274 /* NSImageAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSImageAdditions.h; sourceTree = "<group>"; };
+		1AECC3D223A4328F0078C274 /* NSImageAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSImageAdditions.m; sourceTree = "<group>"; };
 		1AEDE34A2381D64400B6E5E8 /* synopsis-enc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "synopsis-enc"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AEDE34C2381D64400B6E5E8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1AEE2F772333C917009193CD /* PresetSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetSettings.h; sourceTree = "<group>"; };
@@ -385,6 +391,8 @@
 				1A109349233001A300791BDA /* CustomVisualEffectView.m */,
 				1A10934B233001AE00791BDA /* CustomBackgroundView.h */,
 				1A10934C233001AE00791BDA /* CustomBackgroundView.m */,
+				1AECC3C923A41E4E0078C274 /* CustomImageView.h */,
+				1AECC3CA23A41E4E0078C274 /* CustomImageView.m */,
 				1AEC50FC233553840053C1B0 /* NSPopUpButtonAdditions.h */,
 				1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */,
 				1AEC510D2335556C0053C1B0 /* NSMenuAdditions.h */,
@@ -409,6 +417,8 @@
 				1AB8E31023678C610056122B /* NSProgressIndicatorAnimated.m */,
 				1A2BA000236A3AE7008D4F6A /* PrefsPathPickerAbstraction.h */,
 				1A2BA001236A3AE7008D4F6A /* PrefsPathPickerAbstraction.m */,
+				1AECC3D123A4328F0078C274 /* NSImageAdditions.h */,
+				1AECC3D223A4328F0078C274 /* NSImageAdditions.m */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -754,7 +764,9 @@
 				1A1093472330016D00791BDA /* DropFilesView.m in Sources */,
 				1A1093772330205100791BDA /* SessionRowView.m in Sources */,
 				1A58E28E235E1255003B6A6F /* VVLogger.mm in Sources */,
+				1AECC3D323A4328F0078C274 /* NSImageAdditions.m in Sources */,
 				1A2BA002236A3AE7008D4F6A /* PrefsPathPickerAbstraction.m in Sources */,
+				1AECC3CB23A41E4E0078C274 /* CustomImageView.m in Sources */,
 				1A9B1EBE23314B73007D414A /* PrefsController.m in Sources */,
 				1AD845A6232C1E3900416F5C /* main.m in Sources */,
 				1B454BF523567D1600F3D4A8 /* GPULoadBalancer.m in Sources */,

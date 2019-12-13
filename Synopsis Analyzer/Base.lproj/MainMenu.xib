@@ -690,7 +690,7 @@
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="870" height="482"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="3840" height="2137"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
             <value key="minSize" type="size" width="870" height="482"/>
             <view key="contentView" id="noG-i8-QPA">
                 <rect key="frame" x="0.0" y="0.0" width="870" height="482"/>
@@ -714,7 +714,7 @@
                                         <font key="font" metaFont="system"/>
                                         <tabViewItems>
                                             <tabViewItem label="Tab" identifier="1" id="CSU-f7-7K2">
-                                                <view key="view" ambiguous="YES" id="dQD-hH-h0M">
+                                                <view key="view" id="dQD-hH-h0M">
                                                     <rect key="frame" x="0.0" y="0.0" width="485" height="482"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
@@ -754,11 +754,11 @@
                                                                     </outlineView>
                                                                 </subviews>
                                                             </clipView>
-                                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="B58-e3-9Bz">
+                                                            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="B58-e3-9Bz">
                                                                 <rect key="frame" x="1" y="465" width="475" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
-                                                            <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="0YX-bF-J90">
+                                                            <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="0YX-bF-J90">
                                                                 <rect key="frame" x="224" y="17" width="15" height="102"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
@@ -767,11 +767,11 @@
                                                 </view>
                                             </tabViewItem>
                                             <tabViewItem label="View" identifier="2" id="fBS-zF-2Jz">
-                                                <view key="view" id="6Fw-mC-ZBx">
+                                                <view key="view" ambiguous="YES" id="6Fw-mC-ZBx">
                                                     <rect key="frame" x="0.0" y="0.0" width="485" height="482"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1PU-xT-iCb">
+                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1PU-xT-iCb" customClass="CustomImageView">
                                                             <rect key="frame" x="0.0" y="0.0" width="485" height="482"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="DragFileGraphic" id="79H-lC-FYM"/>
