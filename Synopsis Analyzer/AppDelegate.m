@@ -191,8 +191,9 @@
 	NSFileManager		*fm = [NSFileManager defaultManager];
 	NSString			*cliSymlinkSrcPath = [[NSBundle mainBundle] pathForAuxiliaryExecutable:@"synopsis-enc"];
 	NSString			*cliSymlinkDstPath = @"/usr/local/bin/synopsis-enc";
+	
 	//	if the symlink doesn't exist at all...
-	if (![fm fileExistsAtPath:cliSymlinkDstPath isDirectory:nil])	{
+	if ([fm attributesOfItemAtPath:cliSymlinkDstPath error:&nsErr] == nil)	{
 		//	show an alert asking the user if they'd like to install the command-line tools, bail if they say 'no'
 		NSAlert			*installRequest = [[NSAlert alloc] init];
 		installRequest.messageText = @"Would you like to install the command-line synopsis encoder?";
@@ -211,9 +212,9 @@
 			if (![fm removeItemAtPath:cliSymlinkDstPath error:&nsErr])	{
 				NSAlert			*installErr = [[NSAlert alloc] init];
 				if (nsErr != nil)
-					installErr.messageText = [NSString stringWithFormat:@"There was a problem installing the CLI (couldn't remove old CLI- %@)",nsErr.localizedDescription];
+					installErr.messageText = [NSString stringWithFormat:@"There was a problem updating the CLI (couldn't remove old symlink- %@)",nsErr.localizedDescription];
 				else
-					installErr.messageText = @"There was a problem installing the CLI (couldn't remove old CLI)";
+					installErr.messageText = @"There was a problem updating the CLI (couldn't remove old CLI)";
 				installErr.alertStyle = NSAlertStyleCritical;
 				[installErr addButtonWithTitle:@"Cancel install"];
 				[installErr runModal];
