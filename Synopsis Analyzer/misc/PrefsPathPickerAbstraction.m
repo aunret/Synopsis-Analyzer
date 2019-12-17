@@ -344,23 +344,34 @@ NSString * const kPrefsPathPickerReloadNotificationName = @"kPrefsPathPickerRelo
 	item.target = self;
 	[menu addItem:item];
 	
-	item = [NSMenuItem separatorItem];
-	[menu addItem:item];
+	//item = [NSMenuItem separatorItem];
+	//[menu addItem:item];
 	
-	item = [[NSMenuItem alloc]
-		initWithTitle:(self.internalRecentPathLabel==nil) ? @"Recent paths" : self.internalRecentPathLabel
-		action:nil
-		keyEquivalent:@""];
-	[menu addItem:item];
+	//item = [[NSMenuItem alloc]
+	//	initWithTitle:(self.internalRecentPathLabel==nil) ? @"Recent paths" : self.internalRecentPathLabel
+	//	action:nil
+	//	keyEquivalent:@""];
+	//[menu addItem:item];
 	
 	//	populate the submenu
-	NSMenu			*submenu = [[NSMenu alloc] init];
-	submenu.autoenablesItems = NO;
-	item.submenu = submenu;
+	//NSMenu			*submenu = [[NSMenu alloc] init];
+	//submenu.autoenablesItems = NO;
+	//item.submenu = submenu;
 	
 	NSString		*recentFoldersKey = [self _deriveRecentFoldersKey];
 	NSArray			*recentFoldersArray = (recentFoldersKey==nil) ? nil : [def objectForKey:recentFoldersKey];
-	if (recentFoldersArray!=nil && [recentFoldersArray isKindOfClass:[NSArray class]])	{
+	if (recentFoldersArray!=nil && [recentFoldersArray isKindOfClass:[NSArray class]] && recentFoldersArray.count > 0)	{
+		//	add a separator
+		item = [NSMenuItem separatorItem];
+		[menu addItem:item];
+		//	add a disabled "Recent Paths" menu item
+		item = [[NSMenuItem alloc]
+			initWithTitle:@"Recent Paths:"
+			action:nil
+			keyEquivalent:@""];
+		[item setEnabled:NO];
+		[menu addItem:item];
+		
 		for (NSString *recentFolder in recentFoldersArray)	{
 			if (![recentFolder isKindOfClass:[NSString class]])
 				continue;
@@ -369,15 +380,16 @@ NSString * const kPrefsPathPickerReloadNotificationName = @"kPrefsPathPickerRelo
 			subitem.target = self;
 			subitem.representedObject = recentFolder;
 			subitem.toolTip = recentFolder;
-			[submenu addItem:subitem];
+			//[submenu addItem:subitem];
+			[menu addItem:subitem];
 		}
 	}
 	//	if there are no items in the menu, add a fallback item
-	if (submenu.itemArray.count < 1)	{
-		NSMenuItem		*subitem = [[NSMenuItem alloc] initWithTitle:@"No recent items yet!" action:nil keyEquivalent:@""];
-		subitem.enabled = NO;
-		[submenu addItem:subitem];
-	}
+	//if (submenu.itemArray.count < 1)	{
+	//	NSMenuItem		*subitem = [[NSMenuItem alloc] initWithTitle:@"No recent items yet!" action:nil keyEquivalent:@""];
+	//	subitem.enabled = NO;
+	//	[submenu addItem:subitem];
+	//}
 	
 	//	apply the menu to the PUB
 	[pickerPUB setMenu:menu];
