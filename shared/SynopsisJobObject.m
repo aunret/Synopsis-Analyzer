@@ -1739,7 +1739,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		[newMDItem setStartDate:nil];
 		[newMDItem setExtraAttributes:@{
 			@"dataType": @0,
-			@"dataTypeNamespace": @"com.apple.quicktime.mdta"
+			@"dataTypeNamespace": @"com.apple.quicktime.mdta",
+            kSynopsisMetadataVersionKey : @(kSynopsisMetadataVersionValue),
 		}];
 		
 		NSData				*mdValData = [synopsisEncoder encodeSynopsisMetadataToData:self.globalMetadata];
