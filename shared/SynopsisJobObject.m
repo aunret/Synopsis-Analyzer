@@ -954,8 +954,10 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 						NSArray				*identifiers = (NSArray *)CMMetadataFormatDescriptionGetIdentifiers(desc);
 						if (identifiers!=nil && identifiers.count>0)	{
 							NSString			*identifier = identifiers[0];
-							if ( [identifier isKindOfClass:[NSString class]] && [identifier isEqualToString:kSynopsisMetadataIdentifier])
-                            {
+                            // Ensure we destroy old legacy synopsis metadata tracks
+                            // This is hard coded but no one should see that old stuff anyway
+                            if ( ([identifier isKindOfClass:[NSString class]] && [identifier isEqualToString:kSynopsisMetadataIdentifier])
+                            || ([identifier isKindOfClass:[NSString class]] && [identifier isEqualToString:@"mdta/info.synopsis.metadata"]) )                            {
 								isSynopsisTrack = YES;
 								break;
 							}
