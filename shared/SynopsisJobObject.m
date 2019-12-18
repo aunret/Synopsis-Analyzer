@@ -959,7 +959,9 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 						NSArray				*identifiers = (NSArray *)CMMetadataFormatDescriptionGetIdentifiers(desc);
 						if (identifiers!=nil && identifiers.count>0)	{
 							NSString			*identifier = identifiers[0];
-							if ([identifier isKindOfClass:[NSString class]] && [identifier isEqualToString:kSynopsisMetadataIdentifier])	{
+							if ( ([identifier isKindOfClass:[NSString class]] && [identifier isEqualToString:kSynopsisMetadataIdentifier])
+                                || ([identifier isKindOfClass:[NSString class]] && [identifier isEqualToString:kSynopsisMetadataIdentifierLegacy]) )
+                            {
 								isSynopsisTrack = YES;
 								break;
 							}
