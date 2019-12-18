@@ -126,7 +126,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 @property (atomic, strong) NSMutableDictionary * synopsisOpts;
 
 @property (atomic, strong) NSMutableArray * availableAnalyzers;
-@property (atomic, strong) NSMutableDictionary * globalMetadata;
+@property (atomic, strong) NSDictionary * globalMetadata;
 
 //	sometimes, under some specific circumstances, calling -[AVAssetReaderTrackOutput copyNextSampleBuffer] will hang, 
 //	and just...not return.  we store the date of the last successfully-retrieved normalized video buffer here, and if 
@@ -322,7 +322,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		self.audioTransOpts = (inAudioTransOpts==nil || inAudioTransOpts.count<1) ? nil : [inAudioTransOpts mutableCopy];
 		self.synopsisOpts = (inSynopsisOpts==nil) ? nil : [inSynopsisOpts mutableCopy];
 		self.availableAnalyzers = [[NSMutableArray alloc] init];
-		self.globalMetadata = (inSynopsisOpts==nil) ? nil : [[NSMutableDictionary alloc] init];
+//		self.globalMetadata = (inSynopsisOpts==nil) ? nil : [[NSMutableDictionary alloc] init];
 		self.dateOfLastCopiedNormalizedVideoBuffer = nil;
 	}
 	return self;
@@ -404,7 +404,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	
 	self.dateOfLastCopiedNormalizedVideoBuffer = [NSDate date];
 	
-	self.globalMetadata = [NSMutableDictionary new];
+//	self.globalMetadata = [NSMutableDictionary new];
 	
 	//	make sure we know where to read from and where to write to, bail if we don't
 	if (self.srcFile == nil || (self.dstFile==nil /*&& self.tmpFile==nil*/))	{
@@ -831,14 +831,6 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 						[self _cleanUp];
 						return;
 					}
-					
-					//	the global metadata stores some of the values we just computed in it
-					NSMutableDictionary		*containerFormatMetadata = [NSMutableDictionary new];
-					containerFormatMetadata[@"Duration"] = @( durationInSeconds * 1000.0 );
-					containerFormatMetadata[@"Width"] = @( trackSize.width );
-					containerFormatMetadata[@"Height"] = @( trackSize.height );
-					containerFormatMetadata[@"FPS"] = @( [track nominalFrameRate] );
-					self.globalMetadata[@"ContainerFormatMetadata"] = containerFormatMetadata;
 				}
 				//	else if it's an audio track
 				else if (trackMediaType!=nil && [trackMediaType isEqualToString:AVMediaTypeAudio])	{
@@ -1433,7 +1425,6 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
                                                         
                                                         // All per sample metadata goes in a SynopsisMetadataTypeSample parent dict
                                                         // TODO: Should this 'wrapping' just happen in the fucking SynopsisMetadataEncoder so no 3rd party can fuck it up?
-                                                        NSString		*metadataKey = SynopsisKeyForMetadataTypeVersion(SynopsisMetadataTypeSample, kSynopsisMetadataVersionCurrent);
 														[analyzer
 															analyzeFrameCache:conformedFrameCache
 															commandBuffer:commandBuffer
@@ -1448,7 +1439,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 													
 																if (metadataValue != nil)	{
 																	@synchronized(aggregatedMetadata)	{
-																		[aggregatedMetadata setObject:metadataValue forKey:metadataKey];
+																		[aggregatedMetadata addEntriesFromDictionary:metadataValue];
 																	}
 																}
 																
@@ -1503,7 +1494,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 									if (aggregatedMetadata!=nil && [aggregatedMetadata count]>0)	{
 										//NSLog(@"aggregatedMetadata is %@",aggregatedMetadata);
 										
-										AVTimedMetadataGroup		*mdg = [self->synopsisEncoder encodeSynopsisMetadataToTimesMetadataGroup:aggregatedMetadata timeRange:analysisTR];
+										AVTimedMetadataGroup		*mdg = [self->synopsisEncoder encodeSynopsisSampleMetadataToTimedMetadataGroup:aggregatedMetadata timeRange:analysisTR];
 										if (mdg != nil)	{
 											if ([metadataWriteIn isReadyForMoreMediaData])	{
 												if (![metadataWriteInAdapt appendTimedMetadataGroup:mdg])	{
@@ -1680,8 +1671,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//	finalize the metadata dict
 	for (id<AnalyzerPluginProtocol> analyzer in self.availableAnalyzers)	{
 		NSError				*nsErr = nil;
-		NSDictionary		*finalizedMD = [analyzer finalizeMetadataAnalysisSessionWithError:&nsErr];
-		if (finalizedMD == nil || nsErr != nil)	{
+		self.globalMetadata = [analyzer finalizeMetadataAnalysisSessionWithError:&nsErr];
+		if (self.globalMetadata == nil || nsErr != nil)	{
 			NSString			*finalizedErrString = [NSString stringWithFormat:@"Error finalizing analysis: %@",[nsErr localizedDescription]];
 			NSLog(@"%@", finalizedErrString);
 			self.jobStatus = JOStatus_Err;
@@ -1691,18 +1682,12 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			return;
 		}
 		
-        NSString* globalKey = SynopsisKeyForMetadataTypeVersion(SynopsisMetadataTypeGlobal, kSynopsisMetadataVersionCurrent);
-		if (globalKey != nil)	{
-			self.globalMetadata[globalKey] = finalizedMD;
-            self.globalMetadata[kSynopsisMetadataVersionKey] = @(kSynopsisMetadataVersionCurrent);
-		}
+       
 	}
-	self.globalMetadata[kSynopsisMetadataVersionKey] = @( kSynopsisMetadataVersionCurrent );
 	
 	//	we need to pass this global metadata to the SynopsisMetadataEncoder (if we don't, it'll err when we try to export the JSON sidecar data)
-	[synopsisEncoder
-		encodeSynopsisMetadataToMetadataItem:self.globalMetadata
-		timeRange:CMTimeRangeMake(kCMTimeZero, asset.duration)];
+	AVMetadataItem* synopsisMetadataItem = [synopsisEncoder
+		encodeSynopsisGlobalMetadataToMetadataItem:self.globalMetadata timeRange:CMTimeRangeMake(kCMTimeZero, asset.duration)];
 	
 	//	write the finalized metadata to the appropriate file
 	if (self.synopsisOpts != nil)	{
@@ -1725,30 +1710,31 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			return;
 		}
 	
-		AVMutableMetadataItem		*newMDItem = [AVMutableMetadataItem metadataItem];
-		//if (exportFileType == AVFileTypeMPEG4)	{
-		//	[newMDItem setKeySpace:AVMetadataKeySpaceISOUserData];
-		//	[newMDItem setKey:@"snpX"];
-		//}
-		//else	{
-			[newMDItem setKeySpace:AVMetadataKeySpaceQuickTimeMetadata];
-			[newMDItem setKey:kSynopsisMetadataDomain]; // domain becasuse this method prepends mdta/ to the string
-		//}
-		[newMDItem setIdentifier:[AVMetadataItem identifierForKey:[newMDItem key] keySpace:[newMDItem keySpace]]];
-		[newMDItem setDataType:(NSString*)kCMMetadataBaseDataType_RawData];
-		[newMDItem setTime:kCMTimeInvalid];
-		[newMDItem setDuration:kCMTimeInvalid];
-		[newMDItem setStartDate:nil];
-		[newMDItem setExtraAttributes:@{
-			@"dataType": @0,
-			@"dataTypeNamespace": @"com.apple.quicktime.mdta",
-            kSynopsisMetadataVersionKey : @(kSynopsisMetadataVersionCurrent),
-		}];
+// Not sure why we needed to manually do this when the encoder splits it out..
+        //		AVMutableMetadataItem		*newMDItem = [AVMutableMetadataItem metadataItem];
+//		//if (exportFileType == AVFileTypeMPEG4)	{
+//		//	[newMDItem setKeySpace:AVMetadataKeySpaceISOUserData];
+//		//	[newMDItem setKey:@"snpX"];
+//		//}
+//		//else	{
+//			[newMDItem setKeySpace:AVMetadataKeySpaceQuickTimeMetadata];
+//			[newMDItem setKey:kSynopsisMetadataDomain]; // domain becasuse this method prepends mdta/ to the string
+//		//}
+//		[newMDItem setIdentifier:[AVMetadataItem identifierForKey:[newMDItem key] keySpace:[newMDItem keySpace]]];
+//		[newMDItem setDataType:(NSString*)kCMMetadataBaseDataType_RawData];
+//		[newMDItem setTime:kCMTimeInvalid];
+//		[newMDItem setDuration:kCMTimeInvalid];
+//		[newMDItem setStartDate:nil];
+//		[newMDItem setExtraAttributes:@{
+//			@"dataType": @0,
+//			@"dataTypeNamespace": @"com.apple.quicktime.mdta",
+//            kSynopsisMetadataVersionKey : @(kSynopsisMetadataVersionCurrent),
+//		}];
+//
+//		NSData				*mdValData = [synopsisEncoder encodeSynopsisMetadataToData: withType:(SynopsisMetadataType)type:self.globalMetadata];
+//		[newMDItem setValue:mdValData];
 		
-		NSData				*mdValData = [synopsisEncoder encodeSynopsisMetadataToData:self.globalMetadata];
-		[newMDItem setValue:mdValData];
-		
-		NSArray				*mdItems = @[ newMDItem ];
+		NSArray				*mdItems = @[ synopsisMetadataItem ];
 		[mov setMetadata:mdItems];
 	
 		//	export the sidecare file (if appropriate)
@@ -1774,12 +1760,10 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		}
 		
 		//	update the xattrs so spotlight has an easier time finding this file...
-        NSString* globalKey = SynopsisKeyForMetadataTypeVersion(SynopsisMetadataTypeGlobal, kSynopsisMetadataVersionCurrent);
 
         NSString* descriptionIDKey = SynopsisKeyForMetadataIdentifierVersion(SynopsisMetadataIdentifierGlobalVisualDescription, kSynopsisMetadataVersionCurrent);
 
-		NSDictionary		*global = self.globalMetadata[globalKey];
-		NSArray				*descriptionTags = global[descriptionIDKey];
+		NSArray				*descriptionTags = self.globalMetadata[descriptionIDKey];
 		if (![self file:targetURL xattrSetPlist:descriptionTags forKey:kSynopsisMetadataHFSAttributeDescriptorKey])	{
 			self.jobStatus = JOStatus_Err;
 			self.jobErr = JOErr_File;
@@ -1787,8 +1771,9 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			[self _cleanUp];
 			return;
 		}
-		NSNumber			*mdVersion = @( synopsisEncoder.version );
-		if (![self file:targetURL xattrSetPlist:mdVersion forKey:kSynopsisMetadataHFSAttributeVersionKey])	{
+        NSNumber            *mdVersion = @( synopsisEncoder.version );
+
+        if (![self file:targetURL xattrSetPlist:mdVersion forKey:kSynopsisMetadataHFSAttributeVersionKey])	{
 			self.jobStatus = JOStatus_Err;
 			self.jobErr = JOErr_File;
 			self.jobErrString = @"Error updating xattr metadata for file";
