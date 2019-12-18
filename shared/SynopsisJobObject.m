@@ -466,7 +466,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	if (self.synopsisOpts != nil && self.synopsisOpts[kSynopsisAnalyzedMetadataExportOptionKey] != nil)
 		exportOption = [self.synopsisOpts[kSynopsisAnalyzedMetadataExportOptionKey] unsignedIntegerValue];
 	//NSLog(@"exportOption is %d",exportOption);
-	synopsisEncoder = (self.synopsisOpts==nil) ? nil : [[SynopsisMetadataEncoder alloc] initWithVersion:kSynopsisMetadataVersionValue exportOption:exportOption];
+	synopsisEncoder = (self.synopsisOpts==nil) ? nil : [[SynopsisMetadataEncoder alloc] initWithVersion:kSynopsisMetadataVersionCurrent exportOption:exportOption];
 	if (synopsisEncoder == nil && self.synopsisOpts != nil)	{
 		self.jobStatus = JOStatus_Err;
 		self.jobErr = JOErr_Analysis;
@@ -962,8 +962,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 						NSArray				*identifiers = (NSArray *)CMMetadataFormatDescriptionGetIdentifiers(desc);
 						if (identifiers!=nil && identifiers.count>0)	{
 							NSString			*identifier = identifiers[0];
-							if ( ([identifier isKindOfClass:[NSString class]] && [identifier isEqualToString:kSynopsisMetadataIdentifier])
-                                || ([identifier isKindOfClass:[NSString class]] && [identifier isEqualToString:kSynopsisMetadataIdentifierLegacy]) )
+							if ( [identifier isKindOfClass:[NSString class]] && [identifier isEqualToString:kSynopsisMetadataIdentifier])
                             {
 								isSynopsisTrack = YES;
 								break;
@@ -1434,7 +1433,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
                                                         
                                                         // All per sample metadata goes in a SynopsisMetadataTypeSample parent dict
                                                         // TODO: Should this 'wrapping' just happen in the fucking SynopsisMetadataEncoder so no 3rd party can fuck it up?
-                                                        NSString		*metadataKey = SynopsisKeyForMetadataTypeVersion(SynopsisMetadataTypeSample, kSynopsisMetadataVersionValue);
+                                                        NSString		*metadataKey = SynopsisKeyForMetadataTypeVersion(SynopsisMetadataTypeSample, kSynopsisMetadataVersionCurrent);
 														[analyzer
 															analyzeFrameCache:conformedFrameCache
 															commandBuffer:commandBuffer
@@ -1692,13 +1691,13 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			return;
 		}
 		
-        NSString* globalKey = SynopsisKeyForMetadataTypeVersion(SynopsisMetadataTypeGlobal, kSynopsisMetadataVersionValue);
+        NSString* globalKey = SynopsisKeyForMetadataTypeVersion(SynopsisMetadataTypeGlobal, kSynopsisMetadataVersionCurrent);
 		if (globalKey != nil)	{
 			self.globalMetadata[globalKey] = finalizedMD;
-            self.globalMetadata[kSynopsisMetadataVersionKey] = @(kSynopsisMetadataVersionValue);
+            self.globalMetadata[kSynopsisMetadataVersionKey] = @(kSynopsisMetadataVersionCurrent);
 		}
 	}
-	self.globalMetadata[kSynopsisMetadataVersionKey] = @( kSynopsisMetadataVersionValue );
+	self.globalMetadata[kSynopsisMetadataVersionKey] = @( kSynopsisMetadataVersionCurrent );
 	
 	//	we need to pass this global metadata to the SynopsisMetadataEncoder (if we don't, it'll err when we try to export the JSON sidecar data)
 	[synopsisEncoder
@@ -1743,7 +1742,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		[newMDItem setExtraAttributes:@{
 			@"dataType": @0,
 			@"dataTypeNamespace": @"com.apple.quicktime.mdta",
-            kSynopsisMetadataVersionKey : @(kSynopsisMetadataVersionValue),
+            kSynopsisMetadataVersionKey : @(kSynopsisMetadataVersionCurrent),
 		}];
 		
 		NSData				*mdValData = [synopsisEncoder encodeSynopsisMetadataToData:self.globalMetadata];
@@ -1775,9 +1774,9 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		}
 		
 		//	update the xattrs so spotlight has an easier time finding this file...
-        NSString* globalKey = SynopsisKeyForMetadataTypeVersion(SynopsisMetadataTypeGlobal, kSynopsisMetadataVersionValue);
+        NSString* globalKey = SynopsisKeyForMetadataTypeVersion(SynopsisMetadataTypeGlobal, kSynopsisMetadataVersionCurrent);
 
-        NSString* descriptionIDKey = SynopsisKeyForMetadataIdentifierVersion(SynopsisMetadataIdentifierGlobalVisualDescription, kSynopsisMetadataVersionValue);
+        NSString* descriptionIDKey = SynopsisKeyForMetadataIdentifierVersion(SynopsisMetadataIdentifierGlobalVisualDescription, kSynopsisMetadataVersionCurrent);
 
 		NSDictionary		*global = self.globalMetadata[globalKey];
 		NSArray				*descriptionTags = global[descriptionIDKey];
