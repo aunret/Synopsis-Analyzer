@@ -1428,7 +1428,10 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 														//	enter the analysis group again before we tell each analyzer to start analyzing
 														dispatch_group_enter(self->analysisGroup);
 														//	tell the analyzer to analyze the frame cache
-														NSString		*metadataKey = [analyzer pluginIdentifier];
+                                                        
+                                                        // All per sample metadata goes in a SynopsisMetadataTypeSample parent dict
+                                                        // TODO: Should this 'wrapping' just happen in the fucking SynopsisMetadataEncoder so no 3rd party can fuck it up?
+                                                        NSString		*metadataKey = SynopsisKeyForMetadataTypeVersion(SynopsisMetadataTypeSample, kSynopsisMetadataVersionValue);
 														[analyzer
 															analyzeFrameCache:conformedFrameCache
 															commandBuffer:commandBuffer
@@ -1686,9 +1689,10 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			return;
 		}
 		
-		NSString			*pluginID = [analyzer pluginIdentifier];
-		if (pluginID != nil)	{
-			self.globalMetadata[pluginID] = finalizedMD;
+        NSString* globalKey = SynopsisKeyForMetadataTypeVersion(SynopsisMetadataTypeGlobal, kSynopsisMetadataVersionValue);
+		if (globalKey != nil)	{
+			self.globalMetadata[globalKey] = finalizedMD;
+            self.globalMetadata[kSynopsisMetadataVersionKey] = @(kSynopsisMetadataVersionValue);
 		}
 	}
 	self.globalMetadata[kSynopsisMetadataVersionKey] = @( kSynopsisMetadataVersionValue );
@@ -1726,7 +1730,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		//}
 		//else	{
 			[newMDItem setKeySpace:AVMetadataKeySpaceQuickTimeMetadata];
-			[newMDItem setKey:@"info.synopsis.metadata"];
+			[newMDItem setKey:kSynopsisMetadataDomain]; // domain becasuse this method prepends mdta/ to the string
 		//}
 		[newMDItem setIdentifier:[AVMetadataItem identifierForKey:[newMDItem key] keySpace:[newMDItem keySpace]]];
 		[newMDItem setDataType:(NSString*)kCMMetadataBaseDataType_RawData];
@@ -1767,9 +1771,12 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		}
 		
 		//	update the xattrs so spotlight has an easier time finding this file...
-		
-		NSDictionary		*standardOutputs = self.globalMetadata[kSynopsisStandardMetadataDictKey];
-		NSArray				*descriptionTags = standardOutputs[kSynopsisStandardMetadataDescriptionDictKey];
+        NSString* globalKey = SynopsisKeyForMetadataTypeVersion(SynopsisMetadataTypeGlobal, kSynopsisMetadataVersionValue);
+
+        NSString* descriptionIDKey = SynopsisKeyForMetadataIdentifierVersion(SynopsisMetadataIdentifierGlobalVisualDescription, kSynopsisMetadataVersionValue);
+
+		NSDictionary		*global = self.globalMetadata[globalKey];
+		NSArray				*descriptionTags = global[descriptionIDKey];
 		if (![self file:targetURL xattrSetPlist:descriptionTags forKey:kSynopsisMetadataHFSAttributeDescriptorKey])	{
 			self.jobStatus = JOStatus_Err;
 			self.jobErr = JOErr_File;
