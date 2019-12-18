@@ -53,17 +53,20 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	{
 		case SynopsisAnalysisQualityHintLow:
 		{
-			return CGRectStandardize(AVMakeRectWithAspectRatioInsideRect(inRect.size, lowQuality));
+            return lowQuality;
+//			return CGRectStandardize(AVMakeRectWithAspectRatioInsideRect(inRect.size, lowQuality));
 			break;
 		}
 		case SynopsisAnalysisQualityHintMedium:
 		{
-			return CGRectStandardize(AVMakeRectWithAspectRatioInsideRect(inRect.size, mediumQuality));
+            return mediumQuality;
+//			return CGRectStandardize(AVMakeRectWithAspectRatioInsideRect(inRect.size, mediumQuality));
 			break;
 		}
 		case SynopsisAnalysisQualityHintHigh:
 		{
-			return CGRectStandardize(AVMakeRectWithAspectRatioInsideRect(inRect.size, highQuality));
+            return highQuality;
+//			return CGRectStandardize(AVMakeRectWithAspectRatioInsideRect(inRect.size, highQuality));
 			break;
 		}
 		case SynopsisAnalysisQualityHintOriginal:
