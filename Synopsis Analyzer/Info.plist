@@ -46,5 +46,7 @@
 	<string>NSApplication</string>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
 	<false/>
+	<key>SUFeedURL</key>
+	<string>https://www.someserver.somedomain/version/SynopsisAnalyzer.xml</string>
 </dict>
 </plist>

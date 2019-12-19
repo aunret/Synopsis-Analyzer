@@ -62,6 +62,8 @@
 		1AD845A3232C1E3900416F5C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AD845A1232C1E3900416F5C /* MainMenu.xib */; };
 		1AD845A6232C1E3900416F5C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AD845A5232C1E3900416F5C /* main.m */; };
 		1ADA766123426A9A0072EB10 /* FSDirectoryWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ADA766023426A9A0072EB10 /* FSDirectoryWatcher.m */; };
+		1ADC949B23AA71A700FAA622 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ADC949A23AA71A700FAA622 /* Sparkle.framework */; };
+		1ADC949E23AA71DF00FAA622 /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1ADC949A23AA71A700FAA622 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1AEC50FE233553840053C1B0 /* NSPopUpButtonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */; };
 		1AEC510F2335556C0053C1B0 /* NSMenuAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC510E2335556C0053C1B0 /* NSMenuAdditions.m */; };
 		1AECC3CB23A41E4E0078C274 /* CustomImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AECC3CA23A41E4E0078C274 /* CustomImageView.m */; };
@@ -176,6 +178,7 @@
 			files = (
 				1B6EE1612391B8D3005D0C01 /* Synopsis.framework in Embed Frameworks */,
 				1A9B1ED223315076007D414A /* HapInAVFoundation.framework in Embed Frameworks */,
+				1ADC949E23AA71DF00FAA622 /* Sparkle.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -317,6 +320,7 @@
 		1AD845A7232C1E3900416F5C /* Synopsis_Analyzer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Synopsis_Analyzer.entitlements; sourceTree = "<group>"; };
 		1ADA765F23426A9A0072EB10 /* FSDirectoryWatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDirectoryWatcher.h; sourceTree = "<group>"; };
 		1ADA766023426A9A0072EB10 /* FSDirectoryWatcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FSDirectoryWatcher.m; sourceTree = "<group>"; };
+		1ADC949A23AA71A700FAA622 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Sparkle/Sparkle.framework; sourceTree = "<group>"; };
 		1AEC50FC233553840053C1B0 /* NSPopUpButtonAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSPopUpButtonAdditions.h; sourceTree = "<group>"; };
 		1AEC50FD233553840053C1B0 /* NSPopUpButtonAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSPopUpButtonAdditions.m; sourceTree = "<group>"; };
 		1AEC510D2335556C0053C1B0 /* NSMenuAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSMenuAdditions.h; sourceTree = "<group>"; };
@@ -353,6 +357,7 @@
 			files = (
 				1A2B9FC62368BF8E008D4F6A /* UserNotifications.framework in Frameworks */,
 				1A85F56E233ED6FE00541CFB /* CoreMedia.framework in Frameworks */,
+				1ADC949B23AA71A700FAA622 /* Sparkle.framework in Frameworks */,
 				1B6EE1602391B8D3005D0C01 /* Synopsis.framework in Frameworks */,
 				1A9B1ECB23315051007D414A /* HapInAVFoundation.framework in Frameworks */,
 			);
@@ -596,6 +601,7 @@
 				1A1093432330012900791BDA /* LogController.m */,
 				1A9B1EC223314C1C007D414A /* LogController.xib */,
 				1A109370233002FD00791BDA /* misc */,
+				1ADC949A23AA71A700FAA622 /* Sparkle.framework */,
 			);
 			path = "Synopsis Analyzer";
 			sourceTree = "<group>";
@@ -639,6 +645,7 @@
 				1AEDE3592381D69300B6E5E8 /* Embed CLI */,
 				1ADB5AD82391CFA0008E9F90 /* Sign opencv framework */,
 				1AF6592623A9212800A6D174 /* Embed spotlight importer */,
+				1ADC94A023AA728800FAA622 /* Sign Sparkle */,
 			);
 			buildRules = (
 			);
@@ -828,6 +835,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ \"$CONFIGURATION\" = \"Release\" ]\nthen\n    codesign -f --deep -s \"${EXPANDED_CODE_SIGN_IDENTITY_NAME}\" \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Synopsis.framework/Versions/A/Frameworks/opencv2.framework\"\nfi\n";
+		};
+		1ADC94A023AA728800FAA622 /* Sign Sparkle */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Sign Sparkle";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$CONFIGURATION\" = \"Release\" ]\nthen\n    codesign --verbose --force --deep -o runtime -f -s \"${EXPANDED_CODE_SIGN_IDENTITY_NAME}\" \"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/Sparkle.framework/Versions/A/Resources/AutoUpdate.app\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1072,10 +1097,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = KH97KZU7A7;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = SynopsisImporter/Info.plist;
 				INSTALL_PATH = "@executable_path/../Contents/Library/Spotlight";
 				LIBRARY_STYLE = BUNDLE;
@@ -1097,6 +1123,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = KH97KZU7A7;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = SynopsisImporter/Info.plist;
 				INSTALL_PATH = "@executable_path/../Contents/Library/Spotlight";
 				LIBRARY_STYLE = BUNDLE;
@@ -1113,14 +1140,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = KH97KZU7A7;
+				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Synopsis\\ Analyzer/Sparkle",
+				);
 				INFOPLIST_FILE = "Synopsis Analyzer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
 				);
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = "info.v002.Synopsis.Synopsis-Analyzer";
@@ -1139,10 +1172,16 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = KH97KZU7A7;
+				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Synopsis\\ Analyzer/Sparkle",
+				);
 				INFOPLIST_FILE = "Synopsis Analyzer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
 				);
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = "info.v002.Synopsis.Synopsis-Analyzer";
@@ -1155,12 +1194,15 @@
 		1AEDE34F2381D64400B6E5E8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = KH97KZU7A7;
+				ENABLE_HARDENED_RUNTIME = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@loader_path/../Frameworks",
 					"@executable_path/../Frameworks",
 				);
+				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_NAME = "synopsis-enc";
 			};
 			name = Debug;
@@ -1168,12 +1210,16 @@
 		1AEDE3502381D64400B6E5E8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = KH97KZU7A7;
+				ENABLE_HARDENED_RUNTIME = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@loader_path/../Frameworks",
 					"@executable_path/../Frameworks",
 				);
+				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_NAME = "synopsis-enc";
 			};
 			name = Release;
