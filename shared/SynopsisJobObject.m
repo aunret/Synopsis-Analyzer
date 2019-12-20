@@ -126,7 +126,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 @property (atomic, strong) NSMutableDictionary * synopsisOpts;
 
 @property (atomic, strong) NSMutableArray * availableAnalyzers;
-@property (atomic, strong) NSDictionary * globalMetadata;
+@property (atomic, strong) NSMutableDictionary * globalMetadata;
 
 //	sometimes, under some specific circumstances, calling -[AVAssetReaderTrackOutput copyNextSampleBuffer] will hang, 
 //	and just...not return.  we store the date of the last successfully-retrieved normalized video buffer here, and if 
@@ -322,7 +322,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		self.audioTransOpts = (inAudioTransOpts==nil || inAudioTransOpts.count<1) ? nil : [inAudioTransOpts mutableCopy];
 		self.synopsisOpts = (inSynopsisOpts==nil) ? nil : [inSynopsisOpts mutableCopy];
 		self.availableAnalyzers = [[NSMutableArray alloc] init];
-//		self.globalMetadata = (inSynopsisOpts==nil) ? nil : [[NSMutableDictionary alloc] init];
+		self.globalMetadata = (inSynopsisOpts==nil) ? nil : [[NSMutableDictionary alloc] init];
 		self.dateOfLastCopiedNormalizedVideoBuffer = nil;
 	}
 	return self;
@@ -404,7 +404,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	
 	self.dateOfLastCopiedNormalizedVideoBuffer = [NSDate date];
 	
-//	self.globalMetadata = [NSMutableDictionary new];
+	self.globalMetadata = [NSMutableDictionary new];
 	
 	//	make sure we know where to read from and where to write to, bail if we don't
 	if (self.srcFile == nil || (self.dstFile==nil /*&& self.tmpFile==nil*/))	{
@@ -1673,8 +1673,8 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 	//	finalize the metadata dict
 	for (id<AnalyzerPluginProtocol> analyzer in self.availableAnalyzers)	{
 		NSError				*nsErr = nil;
-		self.globalMetadata = [analyzer finalizeMetadataAnalysisSessionWithError:&nsErr];
-		if (self.globalMetadata == nil || nsErr != nil)	{
+        NSDictionary        *finalizedMD = [analyzer finalizeMetadataAnalysisSessionWithError:&nsErr];
+        if (finalizedMD == nil || nsErr != nil)    {
 			NSString			*finalizedErrString = [NSString stringWithFormat:@"Error finalizing analysis: %@",[nsErr localizedDescription]];
 			NSLog(@"%@", finalizedErrString);
 			self.jobStatus = JOStatus_Err;
@@ -1684,6 +1684,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			return;
 		}
 		
+        [self.globalMetadata addEntriesFromDictionary:finalizedMD];
        
 	}
 	
