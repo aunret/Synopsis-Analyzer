@@ -852,23 +852,92 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 					//	determine if the channel count & channel layout match
 					BOOL							exportChannelCountMatches = NO;
 					BOOL							exportChannelLayoutMatches = NO;
-					const AudioChannelLayout		*trackChannelLayout = CMAudioFormatDescriptionGetChannelLayout(trackFmt, &layoutSize);
-					unsigned int					trackChannelCount = 0;
-					if (trackChannelLayout != NULL)
-						trackChannelCount = AudioChannelLayoutTag_GetNumberOfChannels(trackChannelLayout->mChannelLayoutTag);
-					NSData							*trackChannelLayoutData = (trackChannelLayout==NULL) ? nil : [NSData dataWithBytes:trackChannelLayout length:layoutSize];
+					const AudioChannelLayout		*sourceTrackChannelLayout = CMAudioFormatDescriptionGetChannelLayout(trackFmt, &layoutSize);
+					unsigned int					sourceTrackChannelCount = 0;
+					if (sourceTrackChannelLayout != NULL)
+						sourceTrackChannelCount = AudioChannelLayoutTag_GetNumberOfChannels(sourceTrackChannelLayout->mChannelLayoutTag);
+					NSData							*sourceTrackChannelLayoutData = (sourceTrackChannelLayout==NULL) ? nil : [NSData dataWithBytes:sourceTrackChannelLayout length:layoutSize];
 					
+					//	if the user specified transcode options (if it's *not* audio passthru)
 					if (localTransOpts != nil)	{
-						//	if there's no channel layout/# of channels keys, add them to the transcode dict
-						if (localTransOpts[AVNumberOfChannelsKey]==nil || localTransOpts[AVNumberOfChannelsKey]==[NSNull null])
-							localTransOpts[AVNumberOfChannelsKey] = [NSNumber numberWithInteger:trackChannelCount];
-						if (localTransOpts[AVChannelLayoutKey]==nil || localTransOpts[AVChannelLayoutKey]==[NSNull null])
-							localTransOpts[AVChannelLayoutKey] = trackChannelLayoutData;
+						//	we need to specify a target channel layout- if the transcode opts don't specify this...
+						if (localTransOpts[AVChannelLayoutKey]==nil || localTransOpts[AVChannelLayoutKey]==[NSNull null])	{
+							//	make an ASBD, populate it with as much info as we can
+							AudioStreamBasicDescription		outTrackDesc;
+							outTrackDesc.mFormatID = 0;
+							outTrackDesc.mChannelsPerFrame = 0;
+							
+							//	populate the ASBD with the transcode option's audio codec
+							if (localTransOpts[AVFormatIDKey] != nil && localTransOpts[AVFormatIDKey] != [NSNull null])
+								outTrackDesc.mFormatID = [localTransOpts[AVFormatIDKey] intValue];
+							
+							//	if the transcode options include a target # of channels use that
+							if (localTransOpts[AVNumberOfChannelsKey] != nil && localTransOpts[AVNumberOfChannelsKey] != [NSNull null])
+								outTrackDesc.mChannelsPerFrame = [localTransOpts[AVNumberOfChannelsKey] intValue];
+							//	else the transcode options don't include a target # of channels- use the # of channels from the source track
+							else
+								outTrackDesc.mChannelsPerFrame = sourceTrackChannelCount;
+							
+							//	now get all of the possible channel layouts permitted by the target audio codec
+							OSStatus			osErr = noErr;
+							UInt32				outPropertyDataSize = 0;
+							osErr = AudioFormatGetPropertyInfo(
+								kAudioFormatProperty_AvailableEncodeChannelLayoutTags,
+								sizeof(outTrackDesc),
+								&outTrackDesc,
+								&outPropertyDataSize);
+							if (osErr == noErr)	{
+								void				*outPropertyData = malloc(outPropertyDataSize);
+								osErr = AudioFormatGetProperty(
+									kAudioFormatProperty_AvailableEncodeChannelLayoutTags,
+									sizeof(outTrackDesc),
+									&outTrackDesc,
+									&outPropertyDataSize,
+									outPropertyData);
+								if (osErr == noErr)	{
+									AudioChannelLayout			layout;
+									layout.mChannelBitmap = 0;
+									layout.mNumberChannelDescriptions = 0;
+									//	at this point, 'outPropertyData' is an array of permitted AudioChannelLayoutTag values (which is a UInt32, so it's 4 bytes per tag value)
+									//	we need to populate an AudioChannelLayout struct from one of these tags
+									AudioChannelLayoutTag		*tagPtr = (AudioChannelLayoutTag *)outPropertyData;
+									for (int i=0; i<outPropertyDataSize/4; ++i)	{
+										//	we're going to disregard any layout tags that are either "channel bitmap" or "channel descriptions"
+										if (*tagPtr == kAudioChannelLayoutTag_UseChannelBitmap || *tagPtr == kAudioChannelLayoutTag_UseChannelDescriptions)	{
+											++tagPtr;
+											continue;
+										}
+										layout.mChannelLayoutTag = *tagPtr;
+										break;
+									}
+									
+									NSData			*tmpData = [NSData dataWithBytes:&layout length:sizeof(layout)];
+									localTransOpts[AVChannelLayoutKey] = tmpData;
+								}
+								else	{
+									NSLog(@"ERR: %d at AudioFormatGetProperty()",(int)osErr);
+								}
+							
+								free(outPropertyData);
+							}
+							else	{
+								NSLog(@"ERR: %d at AudioFormatGetPropertyInfo()",(int)osErr);
+							}
+						}
+						if (localTransOpts[AVNumberOfChannelsKey]==nil || localTransOpts[AVNumberOfChannelsKey]==[NSNull null])	{
+							NSData			*tmpData = localTransOpts[AVChannelLayoutKey];
+							AudioChannelLayout		*layoutPtr = (tmpData==nil) ? nil : (AudioChannelLayout *)[tmpData bytes];
+							if (layoutPtr != nil)	{
+								UInt32			tmpVal = AudioChannelLayoutTag_GetNumberOfChannels( layoutPtr->mChannelLayoutTag );
+								localTransOpts[AVNumberOfChannelsKey] = @( tmpVal );
+							}
+						}
+						//NSLog(@"\tlocalTransOpts are %@",localTransOpts);
 						
 						//	check to see if the # of channels/channel layout keys in the transcode dicts match the track
 						if (localTransOpts[AVNumberOfChannelsKey]!=nil		&& 
 						localTransOpts[AVNumberOfChannelsKey]!=[NSNull null]		&& 
-						[localTransOpts[AVNumberOfChannelsKey] intValue]==trackChannelCount)	{
+						[localTransOpts[AVNumberOfChannelsKey] intValue]==sourceTrackChannelCount)	{
 							exportChannelCountMatches = YES;
 						}
 						
@@ -877,7 +946,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 						}
 						else	{
 							NSData		*passedChannelLayoutData = localTransOpts[AVChannelLayoutKey];
-							if (passedChannelLayoutData!=nil && trackChannelLayoutData!=nil && [passedChannelLayoutData isEqualToData:trackChannelLayoutData])	{
+							if (passedChannelLayoutData!=nil && sourceTrackChannelLayoutData!=nil && [passedChannelLayoutData isEqualToData:sourceTrackChannelLayoutData])	{
 								exportChannelLayoutMatches = YES;
 							}
 						}

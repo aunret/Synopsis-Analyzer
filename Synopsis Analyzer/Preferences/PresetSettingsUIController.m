@@ -605,6 +605,15 @@ const NSString* value = @"Value";
 			break;
 		}
 		case kAudioFormatAppleLossless:
+		{
+			// audioSettingsDictonary[AVEncoderAudioQualityKey] = self.prefsAudioQuality.selectedItem.representedObject;
+			//audioSettingsDictonary[AVEncoderBitRateKey] = prefsAudioBitrate.selectedItem.representedObject;
+			audioSettingsDictonary[AVSampleRateConverterAlgorithmKey] = AVSampleRateConverterAlgorithm_Normal;
+			//audioSettingsDictonary[AVEncoderBitRateStrategyKey] = AVAudioBitRateStrategy_Constant;
+			audioSettingsDictonary[AVEncoderBitDepthHintKey] = @( 32 );
+			
+			break;
+		}
 		case kAudioFormatMPEG4AAC:
 		{
 			// audioSettingsDictonary[AVEncoderAudioQualityKey] = self.prefsAudioQuality.selectedItem.representedObject;
@@ -612,6 +621,7 @@ const NSString* value = @"Value";
 			audioSettingsDictonary[AVSampleRateConverterAlgorithmKey] = AVSampleRateConverterAlgorithm_Normal;
 			audioSettingsDictonary[AVEncoderBitRateStrategyKey] = AVAudioBitRateStrategy_Constant;
 			
+			break;
 		}
 		default:
 			break;
@@ -779,6 +789,12 @@ const NSString* value = @"Value";
 			prefsAudioBitrate.enabled = NO;
 			prefsAudioQuality.enabled = NO;
 			prefsAudioRate.enabled = YES;
+		}
+		else if ([prefsAudioFormat.selectedItem.representedObject isEqual: @(kAudioFormatAppleLossless)])
+		{
+			prefsAudioBitrate.enabled = NO;
+			prefsAudioQuality.enabled = YES;
+			prefsAudioRate.enabled = NO;
 		}
 		else
 		{

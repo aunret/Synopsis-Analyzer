@@ -616,7 +616,7 @@ PresetGroup			*_customPresets = nil;
 			AVFormatIDKey : @(kAudioFormatMPEG4AAC),
 			AVSampleRateKey : @(48000.0),
 			AVNumberOfChannelsKey : @(2),
-			AVEncoderBitRateKey : @(256),
+			AVEncoderBitRateKey : @(256000),
 		//AVEncoderAudioQualityKey : @(AVAudioQualityHigh),
 		};
 
