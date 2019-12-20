@@ -842,6 +842,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 					BOOL							exportFormatMatches = NO;
 					size_t							layoutSize = 0;
 					AudioStreamBasicDescription		*trackDescription = (AudioStreamBasicDescription*)CMAudioFormatDescriptionGetStreamBasicDescription(trackFmt);
+					//NSLog(@"audio track, format ID is %ld (%@)", trackDescription->mFormatID, UTCreateStringForOSType(trackDescription->mFormatID));
 					if (localTransOpts!=nil		&&
 					localTransOpts[AVFormatIDKey]!=nil		&&
 					localTransOpts[AVFormatIDKey]!=[NSNull null]		&&
@@ -1226,6 +1227,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 			__block NSUInteger			skippedBufferCount = 0;
 			__block NSInteger			retrievedSampleBufferCount = 0;	//	the # of samples retrieved from the reader output corresponding to this writer input
 			__block NSInteger			analyzedSampleBufferCount = 0;	//	the # of samples retrieved from the normalized/analysis output corresponding to this writer input
+			__block BOOL				audioFirstSampleFlag = YES;
 			//	if this is a passthru out and there's no corresponding analysis out, set 'analyzedSampleBufferCount' to -1 b/c we're not using it to verify that every sample has been analyzed
 			if ((vidReadPassthruOut != nil && (id)vidReadPassthruOut != (id)[NSNull null]) && (vidReadAnalysisOut == nil || (id)vidReadAnalysisOut == (id)[NSNull null]))
 				analyzedSampleBufferCount = -1;
@@ -1370,6 +1372,50 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 							//	if we were able to copy a sample buffer from the local output
 							if (localSB != NULL)	{
 								//NSLog(@"\t\tcopied buffer at time %@",(__bridge id)CMTimeCopyDescription(kCFAllocatorDefault,CMSampleBufferGetOutputPresentationTimeStamp(localSB)));
+								
+								//	the AAC codec has an encoder delay- some AAC variants don't explicitly include this, which causes AVF to throw an error.
+								//	to work around this, we have to manually add an attachment to the first sample buffer specifying a trim duration at start
+								//	i'm not sure how to derive the exact value, so this is a kludge that inserts a delay of one AAC packet if the corresponding
+								//	audio track is AAC.  more info:
+								//	https://lists.apple.com/archives/coreaudio-api/2012/Oct/msg00075.html
+								//	https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFAppenG/QTFFAppenG.html
+								if (audioFirstSampleFlag && isAudioWriter)	{
+									NSLog(@"*********************");
+									NSUInteger			targetIndex = [self->writerAudioInputs indexOfObjectIdenticalTo:localInput];
+									if (targetIndex == NSNotFound)	{
+										//NSLog(@"\tERR: targetIndex was NSNotFound in %s",__func__);
+									}
+									else	{
+										AVAssetTrack		*track = [[asset tracks] objectAtIndex:targetIndex];
+										NSArray			*formatDescriptions = [track formatDescriptions];
+										CMFormatDescriptionRef		trackFmt = (__bridge CMFormatDescriptionRef)formatDescriptions[0];
+										AudioStreamBasicDescription		*trackDescription = (AudioStreamBasicDescription*)CMAudioFormatDescriptionGetStreamBasicDescription(trackFmt);
+										if (trackDescription != nil)	{
+											switch (trackDescription->mFormatID)	{
+											case kAudioFormatMPEG4AAC:
+											case kAudioFormatMPEG4AAC_HE:
+											case kAudioFormatMPEG4AAC_LD:
+											case kAudioFormatMPEG4AAC_ELD:
+											case kAudioFormatMPEG4AAC_HE_V2:
+											case kAudioFormatMPEG4AAC_ELD_V2:
+											case kAudioFormatMPEG4AAC_ELD_SBR:
+											case kAudioFormatMPEG4AAC_Spatial:
+												{
+													CFDictionaryRef		trimAtStartDict = CMGetAttachment(localSB, kCMSampleBufferAttachmentKey_TrimDurationAtStart, NULL);
+													if (trimAtStartDict == NULL)	{
+														trimAtStartDict = CMTimeCopyAsDictionary(CMTimeMake(1024, 44100), kCFAllocatorDefault);
+														//trimAtStartDict = CMTimeCopyAsDictionary(CMTimeMake(2112, 44100), kCFAllocatorDefault);
+													}
+													CMSetAttachment(localSB, kCMSampleBufferAttachmentKey_TrimDurationAtStart, trimAtStartDict, kCMAttachmentMode_ShouldNotPropagate);
+													break;
+												}
+											}
+										}
+									}
+									
+									
+									audioFirstSampleFlag = NO;
+								}
 								
 								//	if this is a video writer, we need to get an analysis samplbe buffer
 								if (isVideoWriter || isMetadataWriter)	{
