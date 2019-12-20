@@ -702,7 +702,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="870" height="482"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
-                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FPB-T1-KiW" customClass="CustomBackgroundView">
+                    <customView wantsLayer="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FPB-T1-KiW" customClass="CustomVisualEffectView">
                         <rect key="frame" x="0.0" y="0.0" width="870" height="482"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -710,7 +710,7 @@
                                 <rect key="frame" x="485" y="0.0" width="385" height="482"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                             </customView>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Maz-lY-xhg">
+                            <customView wantsLayer="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Maz-lY-xhg" customClass="CustomBackgroundView">
                                 <rect key="frame" x="0.0" y="0.0" width="485" height="482"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -727,7 +727,7 @@
                                                         <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HGk-2T-NQf">
                                                             <rect key="frame" x="0.0" y="0.0" width="485" height="482"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <clipView key="contentView" ambiguous="YES" id="nZk-qI-CUx">
+                                                            <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="nZk-qI-CUx">
                                                                 <rect key="frame" x="0.0" y="0.0" width="485" height="482"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
@@ -735,7 +735,7 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="485" height="482"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <size key="intercellSpacing" width="3" height="2"/>
-                                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                                                         <color key="gridColor" red="1" green="1" blue="1" alpha="0.036804620615851977" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <tableColumns>
@@ -759,13 +759,14 @@
                                                                         </connections>
                                                                     </outlineView>
                                                                 </subviews>
+                                                                <nil key="backgroundColor"/>
                                                             </clipView>
                                                             <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="B58-e3-9Bz">
-                                                                <rect key="frame" x="1" y="465" width="475" height="16"/>
+                                                                <rect key="frame" x="0.0" y="-16" width="0.0" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                             <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="0YX-bF-J90">
-                                                                <rect key="frame" x="224" y="17" width="15" height="102"/>
+                                                                <rect key="frame" x="-16" y="0.0" width="16" height="0.0"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                         </scrollView>
@@ -781,7 +782,6 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="485" height="482"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="DragFileGraphic" id="79H-lC-FYM"/>
-                                                            <color key="contentTintColor" name="quaternaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                         </imageView>
                                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pBf-6r-8Og" customClass="DropFilesView">
                                                             <rect key="frame" x="0.0" y="0.0" width="485" height="482"/>

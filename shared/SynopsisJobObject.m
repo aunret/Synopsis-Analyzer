@@ -1380,7 +1380,6 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 								//	https://lists.apple.com/archives/coreaudio-api/2012/Oct/msg00075.html
 								//	https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFAppenG/QTFFAppenG.html
 								if (audioFirstSampleFlag && isAudioWriter)	{
-									NSLog(@"*********************");
 									NSUInteger			targetIndex = [self->writerAudioInputs indexOfObjectIdenticalTo:localInput];
 									if (targetIndex == NSNotFound)	{
 										//NSLog(@"\tERR: targetIndex was NSNotFound in %s",__func__);

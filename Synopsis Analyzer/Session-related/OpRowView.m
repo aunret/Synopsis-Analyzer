@@ -87,6 +87,7 @@ static NSMutableArray		*iconGenArray = nil;
 }
 - (void) generalInit	{
 	self.statusFieldWidthConstraint = nil;
+	[self setWantsLayer:YES];
 }
 - (void) awakeFromNib	{
 	

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,26 +23,26 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="SXD-7o-lAo">
+        <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="SXD-7o-lAo">
             <rect key="frame" x="0.0" y="0.0" width="312" height="419"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <clipView key="contentView" drawsBackground="NO" id="JK7-Hn-jc9" customClass="FlippedClipView">
-                <rect key="frame" x="1" y="1" width="310" height="417"/>
+                <rect key="frame" x="0.0" y="0.0" width="312" height="419"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <view fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gMv-jc-XQD">
-                        <rect key="frame" x="0.0" y="20" width="295" height="397"/>
+                        <rect key="frame" x="0.0" y="22" width="295" height="397"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
                             <box fixedFrame="YES" title="Preview" translatesAutoresizingMaskIntoConstraints="NO" id="ekg-Dz-JeZ">
                                 <rect key="frame" x="5" y="285" width="293" height="104"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="3tp-cV-tRO">
-                                    <rect key="frame" x="3" y="3" width="287" height="86"/>
+                                    <rect key="frame" x="2" y="2" width="289" height="87"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UIN-gZ-GPm" customClass="PlayerView">
-                                            <rect key="frame" x="20" y="20" width="247" height="46"/>
+                                            <rect key="frame" x="20" y="21" width="247" height="46"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <subviews>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QeW-JE-xII">
@@ -75,11 +76,11 @@
                                 <rect key="frame" x="5" y="206" width="293" height="75"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="bga-yp-ljP">
-                                    <rect key="frame" x="3" y="3" width="287" height="57"/>
+                                    <rect key="frame" x="2" y="2" width="289" height="58"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hyf-KX-uEe">
-                                            <rect key="frame" x="18" y="20" width="251" height="17"/>
+                                            <rect key="frame" x="18" y="21" width="251" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" selectable="YES" title="Multiline Label" id="28T-jF-Nqt">
                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -94,11 +95,11 @@
                                 <rect key="frame" x="5" y="127" width="293" height="75"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="icU-6A-FFD">
-                                    <rect key="frame" x="3" y="3" width="287" height="57"/>
+                                    <rect key="frame" x="2" y="2" width="289" height="58"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zbw-vK-KLX">
-                                            <rect key="frame" x="18" y="20" width="251" height="17"/>
+                                            <rect key="frame" x="18" y="21" width="251" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" selectable="YES" title="Multiline Label" id="ZNe-2I-byf">
                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -113,11 +114,11 @@
                                 <rect key="frame" x="5" y="48" width="293" height="75"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="HOJ-Xp-g1d">
-                                    <rect key="frame" x="3" y="3" width="287" height="57"/>
+                                    <rect key="frame" x="2" y="2" width="289" height="58"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ij7-fI-dlL">
-                                            <rect key="frame" x="18" y="20" width="251" height="17"/>
+                                            <rect key="frame" x="18" y="21" width="251" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" selectable="YES" title="Multiline Label" id="R6S-d4-bZh">
                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -132,12 +133,12 @@
                     </view>
                 </subviews>
             </clipView>
-            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Jkp-x2-3WT">
+            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="Jkp-x2-3WT">
                 <rect key="frame" x="-100" y="-100" width="412" height="15"/>
                 <autoresizingMask key="autoresizingMask"/>
             </scroller>
-            <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Ndz-Ec-ckB">
-                <rect key="frame" x="295" y="1" width="16" height="417"/>
+            <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Ndz-Ec-ckB">
+                <rect key="frame" x="296" y="0.0" width="16" height="419"/>
                 <autoresizingMask key="autoresizingMask"/>
             </scroller>
             <point key="canvasLocation" x="92" y="437.5"/>
