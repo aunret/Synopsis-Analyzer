@@ -681,6 +681,25 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
                         <items>
+                            <menuItem title="Slack Channel" id="arH-Wq-6k6">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="helpSlackChannel:" target="Voe-Tx-rLC" id="agI-z8-pxe"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Report a Bug" id="evf-Tg-jX1">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="helpReportABug:" target="Voe-Tx-rLC" id="wBP-F8-ssO"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="FAQ" id="jJW-iZ-aps">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="helpFAQ:" target="Voe-Tx-rLC" id="WLa-tW-TOm"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="7je-Ey-BDZ"/>
                             <menuItem title="Synopsis Analyzer Help" keyEquivalent="?" id="FKE-Sm-Kum">
                                 <connections>
                                     <action selector="showHelp:" target="-1" id="y7X-2Q-9no"/>

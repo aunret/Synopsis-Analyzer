@@ -373,6 +373,20 @@
 }
 
 
+- (IBAction) helpSlackChannel:(id)sender	{
+	NSURL			*tmpURL = [NSURL URLWithString:@"https://synopsis-discuss.slack.com/"];
+	[[NSWorkspace sharedWorkspace] openURL:tmpURL];
+}
+- (IBAction) helpReportABug:(id)sender	{
+	NSURL			*tmpURL = [NSURL URLWithString:@"https://github.com/Synopsis/SynopsisCleanRoom/issues/new"];
+	[[NSWorkspace sharedWorkspace] openURL:tmpURL];
+}
+- (IBAction) helpFAQ:(id)sender	{
+	NSURL			*tmpURL = [NSURL URLWithString:@"https://synopsis.video/analyzer/FAQ"];
+	[[NSWorkspace sharedWorkspace] openURL:tmpURL];
+}
+
+
 #pragma mark - NSFileManager Delegate -
 
 - (BOOL)fileManager:(NSFileManager *)fileManager shouldCopyItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL

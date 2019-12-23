@@ -30,6 +30,10 @@
 
 - (IBAction) addWatchFolder:(id)sender;
 
+- (IBAction) helpSlackChannel:(id)sender;
+- (IBAction) helpReportABug:(id)sender;
+- (IBAction) helpFAQ:(id)sender;
+
 @end
 
 
