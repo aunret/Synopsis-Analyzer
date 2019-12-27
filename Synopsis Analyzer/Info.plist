@@ -31,15 +31,15 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(PRODUCT_VERSION)</string>
+	<string>Beta 1</string>
 	<key>CFBundleVersion</key>
-	<string>$(PRODUCT_VERSION)</string>
+	<string>0.8.0</string>
 	<key>GPUEjectPolicy</key>
 	<string>wait</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2019 yourcompany. All rights reserved.</string>
+	<string>Copyright © 2016 Anton Marini. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -47,6 +47,6 @@
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
 	<false/>
 	<key>SUFeedURL</key>
-	<string>https://www.someserver.somedomain/version/SynopsisAnalyzer.xml</string>
+	<string>https://synopsis.github.io/SynopsisAnalyzer.xml</string>
 </dict>
 </plist>
