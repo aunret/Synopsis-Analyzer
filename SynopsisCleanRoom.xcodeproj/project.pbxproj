@@ -31,8 +31,6 @@
 		1A2B9FC62368BF8E008D4F6A /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A2B9FBF2368BF8E008D4F6A /* UserNotifications.framework */; };
 		1A2BA002236A3AE7008D4F6A /* PrefsPathPickerAbstraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A2BA001236A3AE7008D4F6A /* PrefsPathPickerAbstraction.m */; };
 		1A3EBFAB235F8E03007AB5B1 /* SessionStateButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3EBFAA235F8E03007AB5B1 /* SessionStateButton.m */; };
-		1A412FC223A91B0D00E06B28 /* schema.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1A412FBE23A91B0D00E06B28 /* schema.strings */; };
-		1A412FC323A91B0D00E06B28 /* schema.xml in Resources */ = {isa = PBXBuildFile; fileRef = 1A412FC023A91B0D00E06B28 /* schema.xml */; };
 		1A55FD7F2343F78E007CA355 /* PresetSettingsUIController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A55FD7E2343F78E007CA355 /* PresetSettingsUIController.m */; };
 		1A58E28E235E1255003B6A6F /* VVLogger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1A58E28D235E1254003B6A6F /* VVLogger.mm */; };
 		1A58E2C0235F4021003B6A6F /* CustomOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A58E2BF235F4021003B6A6F /* CustomOutlineView.m */; };
@@ -54,8 +52,7 @@
 		1AA77B0D233FC5400049DEC4 /* FlippedClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AA77B0C233FC5400049DEC4 /* FlippedClipView.m */; };
 		1AB8E31123678C610056122B /* NSProgressIndicatorAnimated.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8E31023678C610056122B /* NSProgressIndicatorAnimated.m */; };
 		1AC1029423328DB300510548 /* SynSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AC1029323328DB300510548 /* SynSession.m */; };
-		1AC680DC23A846D2001AD139 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 1AC680DB23A846D2001AD139 /* main.c */; };
-		1AC680DE23A846D2001AD139 /* GetMetadataForFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AC680DD23A846D2001AD139 /* GetMetadataForFile.m */; };
+		1ACD634423BA494000591229 /* SynopsisImporter.mdimporter in Embed spotlight importer */ = {isa = PBXBuildFile; fileRef = 1ACD634123BA492700591229 /* SynopsisImporter.mdimporter */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1AD6237123395C4B0025703E /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
 		1AD8459E232C1E3900416F5C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AD8459D232C1E3900416F5C /* AppDelegate.m */; };
 		1AD845A0232C1E3900416F5C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AD8459F232C1E3900416F5C /* Images.xcassets */; };
@@ -75,7 +72,6 @@
 		1AEDE35B2381D6F900B6E5E8 /* SynopsisJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AFDD45E2316F3C400D7862F /* SynopsisJobObject.m */; };
 		1AEE2F792333C917009193CD /* PresetSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEE2F782333C917009193CD /* PresetSettings.m */; };
 		1AF4C3D523885DD8005C938A /* PlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AF4C3CB23885DD8005C938A /* PlayerView.m */; };
-		1AF6592C23A9213C00A6D174 /* SynopsisImporter.mdimporter in Embed spotlight importer */ = {isa = PBXBuildFile; fileRef = 1AC680D823A846D1001AD139 /* SynopsisImporter.mdimporter */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1B1FF1482363681400D281FB /* NSColor+SynopsisStatusColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B1FF1472363681400D281FB /* NSColor+SynopsisStatusColors.m */; };
 		1B454BF523567D1600F3D4A8 /* GPULoadBalancer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B454BF423567D1600F3D4A8 /* GPULoadBalancer.m */; };
 		1B6EE1602391B8D3005D0C01 /* Synopsis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A626153231476DD00DC2B06 /* Synopsis.framework */; };
@@ -139,9 +135,16 @@
 			remoteGlobalIDString = 1AABDE8A207E544000D8F504;
 			remoteInfo = AVFtoHap;
 		};
-		1AC680E423A846D2001AD139 /* PBXContainerItemProxy */ = {
+		1ACD634023BA492700591229 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 1A626130231476CF00DC2B06 /* Project object */;
+			containerPortal = 1ACD633B23BA492700591229 /* Synopsis-SpotlightImporter.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1AC680D823A846D1001AD139;
+			remoteInfo = SynopsisImporter;
+		};
+		1ACD634223BA493700591229 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1ACD633B23BA492700591229 /* Synopsis-SpotlightImporter.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 1AC680D723A846D1001AD139;
 			remoteInfo = SynopsisImporter;
@@ -209,7 +212,7 @@
 			dstPath = ../Library/Spotlight;
 			dstSubfolderSpec = 7;
 			files = (
-				1AF6592C23A9213C00A6D174 /* SynopsisImporter.mdimporter in Embed spotlight importer */,
+				1ACD634423BA494000591229 /* SynopsisImporter.mdimporter in Embed spotlight importer */,
 			);
 			name = "Embed spotlight importer";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,8 +261,6 @@
 		1A2BA001236A3AE7008D4F6A /* PrefsPathPickerAbstraction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrefsPathPickerAbstraction.m; sourceTree = "<group>"; };
 		1A3EBFA3235F8E03007AB5B1 /* SessionStateButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionStateButton.h; sourceTree = "<group>"; };
 		1A3EBFAA235F8E03007AB5B1 /* SessionStateButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionStateButton.m; sourceTree = "<group>"; };
-		1A412FBF23A91B0D00E06B28 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/schema.strings; sourceTree = "<group>"; };
-		1A412FC123A91B0D00E06B28 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = en; path = en.lproj/schema.xml; sourceTree = "<group>"; };
 		1A55FD7D2343F78E007CA355 /* PresetSettingsUIController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetSettingsUIController.h; sourceTree = "<group>"; };
 		1A55FD7E2343F78E007CA355 /* PresetSettingsUIController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetSettingsUIController.m; sourceTree = "<group>"; };
 		1A58E286235E1254003B6A6F /* VVLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VVLogger.h; path = "Synopsis Analyzer/VVLogger.h"; sourceTree = SOURCE_ROOT; };
@@ -305,11 +306,7 @@
 		1AC1029223328DB300510548 /* SynSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SynSession.h; sourceTree = "<group>"; };
 		1AC1029323328DB300510548 /* SynSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SynSession.m; sourceTree = "<group>"; };
 		1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HapInAVFoundation.xcodeproj; path = ./HapInAVFoundation/HapInAVFoundation.xcodeproj; sourceTree = "<group>"; };
-		1AC680D823A846D1001AD139 /* SynopsisImporter.mdimporter */ = {isa = PBXFileReference; explicitFileType = "wrapper.spotlight-importer"; includeInIndex = 0; path = SynopsisImporter.mdimporter; sourceTree = BUILT_PRODUCTS_DIR; };
-		1AC680DB23A846D2001AD139 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		1AC680DD23A846D2001AD139 /* GetMetadataForFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetMetadataForFile.m; sourceTree = "<group>"; };
-		1AC680E223A846D2001AD139 /* Importer Read Me.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Importer Read Me.txt"; sourceTree = "<group>"; };
-		1AC680E323A846D2001AD139 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1ACD633B23BA492700591229 /* Synopsis-SpotlightImporter.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Synopsis-SpotlightImporter.xcodeproj"; path = "Synopsis-SpotlightImporter/Synopsis-SpotlightImporter.xcodeproj"; sourceTree = "<group>"; };
 		1AD8459A232C1E3900416F5C /* Synopsis Analyzer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Synopsis Analyzer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AD8459C232C1E3900416F5C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1AD8459D232C1E3900416F5C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -344,13 +341,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		1AC680D523A846D1001AD139 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		1AD84597232C1E3900416F5C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -471,10 +461,10 @@
 				1A679E1B237DB96700F07FF0 /* shared */,
 				1AD8459B232C1E3900416F5C /* Synopsis Analyzer */,
 				1AEDE34B2381D64400B6E5E8 /* SynopsisCLI */,
-				1AC680D923A846D2001AD139 /* SynopsisImporter */,
 				1A626139231476CF00DC2B06 /* Products */,
 				1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */,
 				1AC1ED332318144500AAD380 /* HapInAVFoundation.xcodeproj */,
+				1ACD633B23BA492700591229 /* Synopsis-SpotlightImporter.xcodeproj */,
 				1A62615A231476F000DC2B06 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -484,7 +474,6 @@
 			children = (
 				1AD8459A232C1E3900416F5C /* Synopsis Analyzer.app */,
 				1AEDE34A2381D64400B6E5E8 /* synopsis-enc */,
-				1AC680D823A846D1001AD139 /* SynopsisImporter.mdimporter */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -556,25 +545,12 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1AC680D923A846D2001AD139 /* SynopsisImporter */ = {
+		1ACD633C23BA492700591229 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1AC680DD23A846D2001AD139 /* GetMetadataForFile.m */,
-				1AC680E223A846D2001AD139 /* Importer Read Me.txt */,
-				1AC680E323A846D2001AD139 /* Info.plist */,
-				1AC680DA23A846D2001AD139 /* Supporting Files */,
+				1ACD634123BA492700591229 /* SynopsisImporter.mdimporter */,
 			);
-			path = SynopsisImporter;
-			sourceTree = "<group>";
-		};
-		1AC680DA23A846D2001AD139 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				1A412FBE23A91B0D00E06B28 /* schema.strings */,
-				1A412FC023A91B0D00E06B28 /* schema.xml */,
-				1AC680DB23A846D2001AD139 /* main.c */,
-			);
-			name = "Supporting Files";
+			name = Products;
 			sourceTree = "<group>";
 		};
 		1AD8459B232C1E3900416F5C /* Synopsis Analyzer */ = {
@@ -617,23 +593,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1AC680D723A846D1001AD139 /* SynopsisImporter */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1AC680EE23A846D2001AD139 /* Build configuration list for PBXNativeTarget "SynopsisImporter" */;
-			buildPhases = (
-				1AC680D423A846D1001AD139 /* Sources */,
-				1AC680D523A846D1001AD139 /* Frameworks */,
-				1AC680D623A846D1001AD139 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = SynopsisImporter;
-			productName = SynopsisImporter;
-			productReference = 1AC680D823A846D1001AD139 /* SynopsisImporter.mdimporter */;
-			productType = "com.apple.product-type.spotlight-importer";
-		};
 		1AD84599232C1E3900416F5C /* Synopsis Analyzer */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1AD845B0232C1E3900416F5C /* Build configuration list for PBXNativeTarget "Synopsis Analyzer" */;
@@ -650,9 +609,9 @@
 			buildRules = (
 			);
 			dependencies = (
+				1ACD634323BA493700591229 /* PBXTargetDependency */,
 				1AEDE3582381D69100B6E5E8 /* PBXTargetDependency */,
 				1A9B1ECA2331504B007D414A /* PBXTargetDependency */,
-				1AC680E523A846D2001AD139 /* PBXTargetDependency */,
 			);
 			name = "Synopsis Analyzer";
 			productName = "Synopsis Analyzer";
@@ -687,9 +646,6 @@
 				LastUpgradeCheck = 1030;
 				ORGANIZATIONNAME = yourcompany;
 				TargetAttributes = {
-					1AC680D723A846D1001AD139 = {
-						CreatedOnToolsVersion = 10.3;
-					};
 					1AD84599232C1E3900416F5C = {
 						CreatedOnToolsVersion = 10.3;
 						SystemCapabilities = {
@@ -723,12 +679,15 @@
 					ProductGroup = 1A62614D231476DC00DC2B06 /* Products */;
 					ProjectRef = 1A62614C231476DC00DC2B06 /* Synopsis-Framework.xcodeproj */;
 				},
+				{
+					ProductGroup = 1ACD633C23BA492700591229 /* Products */;
+					ProjectRef = 1ACD633B23BA492700591229 /* Synopsis-SpotlightImporter.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
 				1AD84599232C1E3900416F5C /* Synopsis Analyzer */,
 				1AEDE3492381D64400B6E5E8 /* SynopsisCLI */,
-				1AC680D723A846D1001AD139 /* SynopsisImporter */,
 			);
 		};
 /* End PBXProject section */
@@ -783,18 +742,16 @@
 			remoteRef = 1AC1ED452318144500AAD380 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		1ACD634123BA492700591229 /* SynopsisImporter.mdimporter */ = {
+			isa = PBXReferenceProxy;
+			fileType = "wrapper.spotlight-importer";
+			path = SynopsisImporter.mdimporter;
+			remoteRef = 1ACD634023BA492700591229 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
-		1AC680D623A846D1001AD139 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1A412FC323A91B0D00E06B28 /* schema.xml in Resources */,
-				1A412FC223A91B0D00E06B28 /* schema.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		1AD84598232C1E3900416F5C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -857,15 +814,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		1AC680D423A846D1001AD139 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1AC680DC23A846D2001AD139 /* main.c in Sources */,
-				1AC680DE23A846D2001AD139 /* GetMetadataForFile.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		1AD84596232C1E3900416F5C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -932,10 +880,10 @@
 			name = HapInAVFoundation;
 			targetProxy = 1A9B1EC92331504B007D414A /* PBXContainerItemProxy */;
 		};
-		1AC680E523A846D2001AD139 /* PBXTargetDependency */ = {
+		1ACD634323BA493700591229 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1AC680D723A846D1001AD139 /* SynopsisImporter */;
-			targetProxy = 1AC680E423A846D2001AD139 /* PBXContainerItemProxy */;
+			name = SynopsisImporter;
+			targetProxy = 1ACD634223BA493700591229 /* PBXContainerItemProxy */;
 		};
 		1AEDE3522381D66F00B6E5E8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -955,22 +903,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		1A412FBE23A91B0D00E06B28 /* schema.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1A412FBF23A91B0D00E06B28 /* en */,
-			);
-			name = schema.strings;
-			sourceTree = "<group>";
-		};
-		1A412FC023A91B0D00E06B28 /* schema.xml */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1A412FC123A91B0D00E06B28 /* en */,
-			);
-			name = schema.xml;
-			sourceTree = "<group>";
-		};
 		1AD845A1232C1E3900416F5C /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1091,49 +1023,6 @@
 			};
 			name = Release;
 		};
-		1AC680E723A846D2001AD139 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Manual;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = KH97KZU7A7;
-				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = SynopsisImporter/Info.plist;
-				INSTALL_PATH = "@executable_path/../Contents/Library/Spotlight";
-				LIBRARY_STYLE = BUNDLE;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				OTHER_CODE_SIGN_FLAGS = "--deep";
-				PRODUCT_BUNDLE_IDENTIFIER = info.Synopsis.SynopsisImporter;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				WRAPPER_EXTENSION = mdimporter;
-			};
-			name = Debug;
-		};
-		1AC680E823A846D2001AD139 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
-				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
-				CODE_SIGN_STYLE = Manual;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = KH97KZU7A7;
-				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = SynopsisImporter/Info.plist;
-				INSTALL_PATH = "@executable_path/../Contents/Library/Spotlight";
-				LIBRARY_STYLE = BUNDLE;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				OTHER_CODE_SIGN_FLAGS = "--deep";
-				PRODUCT_BUNDLE_IDENTIFIER = info.Synopsis.SynopsisImporter;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				WRAPPER_EXTENSION = mdimporter;
-			};
-			name = Release;
-		};
 		1AD845A8232C1E3900416F5C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1230,15 +1119,6 @@
 			buildConfigurations = (
 				1A626147231476D000DC2B06 /* Debug */,
 				1A626148231476D000DC2B06 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		1AC680EE23A846D2001AD139 /* Build configuration list for PBXNativeTarget "SynopsisImporter" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1AC680E723A846D2001AD139 /* Debug */,
-				1AC680E823A846D2001AD139 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

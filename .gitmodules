@@ -4,3 +4,6 @@
 [submodule "HapInAVFoundation"]
 	path = HapInAVFoundation
 	url = https://github.com/Synopsis/hap-in-avfoundation
+[submodule "Synopsis-SpotlightImporter"]
+	path = Synopsis-SpotlightImporter
+	url = https://github.com/Synopsis/Synopsis-SpotlightImporter.git
