@@ -38,6 +38,8 @@
 
 @property (strong,readwrite,nullable) NSTimer * fileOpenTimer;
 @property (strong,readwrite) NSMutableArray * URLsToOpen;
+//- (NSString *) getSpotlightPKGReceiptVsn;
+//- (NSString *) getIncludedSpotlightPKGVsn;
 
 @end
 
@@ -290,6 +292,171 @@
 - (void) actuallyOpenURLs:(NSArray<NSURL*> *)n	{
 	[[SessionController global] createAndAppendSessionsWithFiles:n];
 }
+/*
+- (NSString *) getSpotlightPKGReceiptVsn	{
+	//	first of all, big problem: if the user runs the installer, but manually deletes the file,
+	//	the system will still have a receipt for the installer- even though the file no longer exists
+	//	so to begin, check for the presence of the plugin and return nil if it cannot be found
+	NSFileManager		*fm = [NSFileManager defaultManager];
+	if (![fm fileExistsAtPath:@"/Library/Spotlight/SynopsisImporter.mdimporter"])	{
+		if (![fm fileExistsAtPath:[@"~/Library/Spotlight/SynopsisImporter.mdimporter" stringByExpandingTildeInPath]])	{
+			return nil;
+		}
+	}
+	
+	//	...if i'm here then the spotlight plugin (some version of it) exists on disk...
+	
+	NSTask		*taskA = nil;
+	NSTask		*taskB = nil;
+	NSTask		*taskC = nil;
+	NSPipe		*tmpPipe = nil;
+	NSPipe		*outPipe = [NSPipe pipe];
+	NSError		*nsErr = nil;
+	
+	taskA = [[NSTask alloc] init];
+	taskA.executableURL = [NSURL fileURLWithPath:@"/usr/sbin/pkgutil" isDirectory:NO];
+	taskA.arguments = @[
+		@"--pkg-info",
+		@"info.v002.Synopsis.SpotlightImporter.pkg.Installer"
+	];
+	
+	taskB = [[NSTask alloc] init];
+	taskB.executableURL = [NSURL fileURLWithPath:@"/usr/bin/grep" isDirectory:NO];
+	taskB.arguments = @[
+		@"-Ei",
+		@"version:"
+	];
+	
+	taskC = [[NSTask alloc] init];
+	taskC.executableURL = [NSURL fileURLWithPath:@"/usr/bin/grep" isDirectory:NO];
+	taskC.arguments = @[
+		@"-oEi",
+		@"[0-9\\.]+"
+	];
+	
+	tmpPipe = [NSPipe pipe];
+	taskA.standardOutput = tmpPipe;
+	taskB.standardInput = tmpPipe;
+	
+	tmpPipe = [NSPipe pipe];
+	taskB.standardOutput = tmpPipe;
+	taskC.standardInput = tmpPipe;
+	
+	taskC.standardOutput = outPipe;
+	
+	
+	if (![taskA launchAndReturnError:&nsErr])	{
+		NSLog(@"ERR: step A couldnt complete in %s",__func__);
+		return nil;
+	}
+	[taskA waitUntilExit];
+	if (![taskB launchAndReturnError:&nsErr])	{
+		NSLog(@"ERR: step B couldnt complete in %s",__func__);
+		return nil;
+	}
+	[taskB waitUntilExit];
+	if (![taskC launchAndReturnError:&nsErr])	{
+		NSLog(@"ERR: step C couldnt complete in %s",__func__);
+		return nil;
+	}
+	[taskC waitUntilExit];
+	
+	NSFileHandle		*tmpFH = [outPipe fileHandleForReading];
+	NSData				*tmpData = [tmpFH readDataToEndOfFile];
+	NSString			*vsnString = [[NSString alloc] initWithData:tmpData encoding:NSUTF8StringEncoding];
+	
+	return vsnString;
+}
+- (NSString *) getIncludedSpotlightPKGVsn	{
+	NSString	*pkgPath = [[NSBundle mainBundle] pathForResource:@"Synopsis Spotlight Plugin" ofType:@"pkg"];
+	if (pkgPath == nil)	{
+		NSLog(@"ERR: couldnt find embedded pkg, %s",__func__);
+		return nil;
+	}
+	
+	NSTask		*taskA = nil;
+	NSTask		*taskB = nil;
+	NSTask		*taskC = nil;
+	NSPipe		*tmpPipe = nil;
+	NSPipe		*outPipe = [NSPipe pipe];
+	NSError		*nsErr = nil;
+	
+	taskA = [[NSTask alloc] init];
+	taskA.executableURL = [NSURL fileURLWithPath:@"/usr/sbin/pkgutil" isDirectory:NO];
+	taskA.arguments = @[
+		@"--expand",
+		pkgPath,
+		@"/tmp/pkg"
+	];
+	if (![taskA launchAndReturnError:&nsErr])	{
+		NSLog(@"ERR: couldnt execute pkgutil in %s",__func__);
+		return nil;
+	}
+	[taskA waitUntilExit];
+	
+	
+	
+	taskA = [[NSTask alloc] init];
+	taskA.executableURL = [NSURL fileURLWithPath:@"/bin/cat" isDirectory:NO];
+	taskA.arguments = @[ @"/tmp/pkg/Distribution" ];
+	
+	taskB = [[NSTask alloc] init];
+	taskB.executableURL = [NSURL fileURLWithPath:@"/usr/bin/grep" isDirectory:NO];
+	taskB.arguments = @[ @"<pkg-ref id=\"info.v002.Synopsis.SpotlightImporter.pkg.Installer\" " ];
+	
+	taskC = [[NSTask alloc] init];
+	taskC.executableURL = [NSURL fileURLWithPath:@"/usr/bin/sed" isDirectory:NO];
+	taskC.arguments = @[ @"s#.* version=\\\"\\([0-9\\.]*\\)\\\".*#\\1#" ];
+	
+	tmpPipe = [NSPipe pipe];
+	taskA.standardOutput = tmpPipe;
+	taskB.standardInput = tmpPipe;
+	
+	tmpPipe = [NSPipe pipe];
+	taskB.standardOutput = tmpPipe;
+	taskC.standardInput = tmpPipe;
+	
+	taskC.standardOutput = outPipe;
+	
+	
+	if (![taskA launchAndReturnError:&nsErr])	{
+		NSLog(@"ERR: step A couldnt complete in %s",__func__);
+		return nil;
+	}
+	[taskA waitUntilExit];
+	if (![taskB launchAndReturnError:&nsErr])	{
+		NSLog(@"ERR: step B couldnt complete in %s",__func__);
+		return nil;
+	}
+	[taskB waitUntilExit];
+	if (![taskC launchAndReturnError:&nsErr])	{
+		NSLog(@"ERR: step C couldnt complete in %s",__func__);
+		return nil;
+	}
+	[taskC waitUntilExit];
+	
+	
+	
+	NSFileHandle		*tmpFH = [outPipe fileHandleForReading];
+	NSData				*tmpData = [tmpFH readDataToEndOfFile];
+	NSString			*vsnString = [[NSString alloc] initWithData:tmpData encoding:NSUTF8StringEncoding];
+	//NSLog(@"vsnString is %@", vsnString);
+	
+	
+	taskA = [[NSTask alloc] init];
+	taskA.executableURL = [NSURL fileURLWithPath:@"/bin/rm" isDirectory:NO];
+	taskA.arguments = @[
+		@"-rf",
+		@"/tmp/pkg"
+	];
+	if (![taskA launchAndReturnError:&nsErr])	{
+		NSLog(@"ERR: cleanup couldnt complete in %s",__func__);
+		return nil;
+	}
+	
+	return vsnString;
+}
+*/
 
 
 #pragma mark - Prefs
