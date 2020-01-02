@@ -1881,19 +1881,49 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
         NSString* descriptionIDKey = SynopsisKeyForMetadataIdentifierVersion(SynopsisMetadataIdentifierGlobalVisualDescription, kSynopsisMetadataVersionCurrent);
 
 		NSArray				*descriptionTags = self.globalMetadata[descriptionIDKey];
-		if (![self file:targetURL xattrSetPlist:descriptionTags forKey:kSynopsisMetadataHFSAttributeDescriptorKey])	{
+		NSString			*tmpKey = nil;
+		
+		tmpKey = [NSString stringWithFormat:@"com.apple.metadata:%@",kSynopsisMetadataHFSAttributeDescriptorKey];
+		if (![self file:targetURL xattrSetPlist:descriptionTags forKey:tmpKey])	{
 			self.jobStatus = JOStatus_Err;
 			self.jobErr = JOErr_File;
 			self.jobErrString = @"Error updating xattr metadata for file";
 			[self _cleanUp];
 			return;
 		}
-        NSNumber            *mdVersion = @( synopsisEncoder.version );
-
-        if (![self file:targetURL xattrSetPlist:mdVersion forKey:kSynopsisMetadataHFSAttributeVersionKey])	{
+		
+		
+		NSMutableArray		*tmpArray = nil;
+		tmpArray = [[NSMutableArray alloc] init];
+		for (NSString *descriptionTag in descriptionTags)	{
+			CinemaNetClassLabel		tmpLabel = CinemanetClassLabelForLabelKey(descriptionTag);
+			if (tmpLabel == CinemaNetClassLabelUnknown)	{
+				NSLog(@"ERR: label is unknown for key %@",descriptionTag);
+				continue;
+			}
+			NSString			*humanReadableLabel = CinemaNetLabelDescriptorForClassLabel(tmpLabel);
+			if (humanReadableLabel == nil)	{
+				NSLog(@"ERR: human readable label is unknown for label %ld",tmpLabel);
+				continue;
+			}
+			[tmpArray addObject:humanReadableLabel];
+		}
+		tmpKey = [NSString stringWithFormat:@"com.apple.metadata:%@",kMDItemKeywords];
+		if (![self file:targetURL xattrSetPlist:tmpArray forKey:tmpKey])	{
 			self.jobStatus = JOStatus_Err;
 			self.jobErr = JOErr_File;
-			self.jobErrString = @"Error updating xattr metadata for file";
+			self.jobErrString = @"Error updating xattr metadata labels for file";
+			[self _cleanUp];
+			return;
+		}
+		
+		
+        NSNumber            *mdVersion = @( synopsisEncoder.version );
+		tmpKey = [NSString stringWithFormat:@"com.apple.metadata:%@",kSynopsisMetadataHFSAttributeVersionKey];
+		if (![self file:targetURL xattrSetPlist:mdVersion forKey:tmpKey])	{
+			self.jobStatus = JOStatus_Err;
+			self.jobErr = JOErr_File;
+			self.jobErrString = @"Error updating xattr metadata version for file";
 			[self _cleanUp];
 			return;
 		}
@@ -1998,7 +2028,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		[localDelegate finishedJob:self];
 }
 - (BOOL) file:(NSURL *)fileURL xattrSetPlist:(id)plist forKey:(NSString *)key	{
-	//NSLog(@"%s ... %@: %@",__func__,plist,key);
+	NSLog(@"%s ... %@: %@",__func__,plist,key);
 	if (plist==nil || key==nil || fileURL==nil)
 		return NO;
 	if ([NSPropertyListSerialization propertyList:plist isValidForFormat:NSPropertyListBinaryFormat_v1_0])	{
@@ -2011,7 +2041,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 		if (plistData != nil)	{
 			int					tmpErr = setxattr(
 				[fileURL fileSystemRepresentation],
-				[[@"com.apple.metadata:" stringByAppendingString:key] UTF8String],
+				[key UTF8String],
 				plistData.bytes,
 				plistData.length,
 				0,
