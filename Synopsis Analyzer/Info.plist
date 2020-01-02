@@ -31,9 +31,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>Beta 1</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>0.8.0</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>GPUEjectPolicy</key>
 	<string>wait</string>
 	<key>LSMinimumSystemVersion</key>
