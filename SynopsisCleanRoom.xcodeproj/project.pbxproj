@@ -1030,7 +1030,8 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = KH97KZU7A7;
+				CURRENT_PROJECT_VERSION = 0.9.1;
+				DEVELOPMENT_TEAM = SHG3AW6YV7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1042,8 +1043,9 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				MARKETING_VERSION = "Public Beta 1";
 				OTHER_CODE_SIGN_FLAGS = "--deep";
-				PRODUCT_BUNDLE_IDENTIFIER = "info.v002.Synopsis.Synopsis-Analyzer";
+				PRODUCT_BUNDLE_IDENTIFIER = video.Synopsis.Analyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REMOVE_HEADERS_FROM_EMBEDDED_BUNDLES = NO;
@@ -1058,7 +1060,8 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = KH97KZU7A7;
+				CURRENT_PROJECT_VERSION = 0.9.1;
+				DEVELOPMENT_TEAM = SHG3AW6YV7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1070,8 +1073,9 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				MARKETING_VERSION = "Public Beta 1";
 				OTHER_CODE_SIGN_FLAGS = "--deep";
-				PRODUCT_BUNDLE_IDENTIFIER = "info.v002.Synopsis.Synopsis-Analyzer";
+				PRODUCT_BUNDLE_IDENTIFIER = video.Synopsis.Analyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REMOVE_HEADERS_FROM_EMBEDDED_BUNDLES = NO;
@@ -1083,7 +1087,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = KH97KZU7A7;
+				DEVELOPMENT_TEAM = SHG3AW6YV7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@loader_path/../Frameworks",
@@ -1100,7 +1104,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = KH97KZU7A7;
+				DEVELOPMENT_TEAM = SHG3AW6YV7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@loader_path/../Frameworks",
