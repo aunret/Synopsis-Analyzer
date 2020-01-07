@@ -1471,7 +1471,7 @@ static inline CGRect RectForQualityHint(CGRect inRect, SynopsisAnalysisQualityHi
 												{
 													CFDictionaryRef		trimAtStartDict = CMGetAttachment(localSB, kCMSampleBufferAttachmentKey_TrimDurationAtStart, NULL);
 													if (trimAtStartDict == NULL)	{
-														trimAtStartDict = CMTimeCopyAsDictionary(CMTimeMake(1024, 44100), kCFAllocatorDefault);
+														trimAtStartDict = CMTimeCopyAsDictionary(CMTimeMake( MIN(1024, trackDescription->mFramesPerPacket), trackDescription->mSampleRate), kCFAllocatorDefault);
 														//trimAtStartDict = CMTimeCopyAsDictionary(CMTimeMake(2112, 44100), kCFAllocatorDefault);
 													}
 													CMSetAttachment(localSB, kCMSampleBufferAttachmentKey_TrimDurationAtStart, trimAtStartDict, kCMAttachmentMode_ShouldNotPropagate);
