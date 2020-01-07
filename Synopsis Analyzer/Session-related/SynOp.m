@@ -302,6 +302,19 @@ static NSImage				*genericMovieImage = nil;
 		});
 	}
 }
+- (BOOL) isAlreadyAnalyzed	{
+	BOOL			returnMe = NO;
+	AVAsset			*tmpAsset = [AVAsset assetWithURL:[NSURL fileURLWithPath:self.src]];
+	if (tmpAsset != nil)	{
+		AVAssetTrack	*synopsisTrack = [tmpAsset synopsisMetadataTrack];
+		if (synopsisTrack != nil)	{
+			if ([tmpAsset synopsisMetadataVersion] >= kSynopsisMetadataVersionCurrent)	{
+				returnMe = YES;
+			}
+		}
+	}
+	return returnMe;
+}
 
 
 - (NSString *) createStatusString	{
@@ -447,6 +460,29 @@ static NSImage				*genericMovieImage = nil;
 		if (self.session == nil)	{
 			self.status = OpStatus_PreflightErr;
 			self.errString = @"Session not found!";
+			dispatch_async(dispatch_get_main_queue(), ^{
+				NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
+				if (tmpDelegate != nil)
+					[tmpDelegate synOpStatusFinished:bss];
+			});
+			return;
+		}
+		
+		//	if my source file has already been analyzed 
+		//	AND my session is processing audio tracks
+		//	AND my session is doing passthru audio 
+		//	AND my session is processing video track
+		//	AND my session is doing passthru video 
+		//	AND my session wants me to skip already-analyzed files
+		if ([self isAlreadyAnalyzed]
+		&& self.session.preset.useAudio 
+		&& self.session.preset.audioSettings.settingsDictionary==nil
+		&& self.session.preset.useVideo 
+		&& self.session.preset.videoSettings.settingsDictionary==nil
+		&& self.session.skipPendingAlreadyAnalyzedFiles)	{
+			//	flag me as being complete
+			self.status = OpStatus_Complete;
+			//	inform the delegate that this op is finished
 			dispatch_async(dispatch_get_main_queue(), ^{
 				NSObject<SynOpDelegate>		*tmpDelegate = [bss delegate];
 				if (tmpDelegate != nil)

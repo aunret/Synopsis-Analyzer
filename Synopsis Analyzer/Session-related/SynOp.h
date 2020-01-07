@@ -84,6 +84,7 @@ case OpStatus_Err:
 - (NSString *) createStatusString;
 - (NSAttributedString *) createAttributedStatusString;
 - (void) populateThumb;
+- (BOOL) isAlreadyAnalyzed;
 
 - (void) start;
 - (void) pause;

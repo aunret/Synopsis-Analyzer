@@ -46,6 +46,7 @@ typedef NS_ENUM(NSUInteger, SessionState)	{
 @property (atomic,readwrite,strong,nullable) PresetObject * preset;
 @property (atomic,readwrite) BOOL copyNonMediaFiles;
 @property (atomic,readwrite) BOOL watchFolder;
+@property (atomic,readwrite) BOOL skipPendingAlreadyAnalyzedFiles;
 
 @property (atomic,readwrite) SessionType type;
 @property (atomic,readwrite) SessionState state;
@@ -61,6 +62,8 @@ typedef NS_ENUM(NSUInteger, SessionState)	{
 - (BOOL) processedAllOpsSuccessfully;
 //	fires a notification center notification if it has finished all its ops (and hasn't yet fired its notification)
 - (void) fireNotificationIfAppropriate;
+//	returns a YES only if one or more ops have a file that has already been analyzed (and contain a synopsis metadata version >= this app's synopsis metadata version)
+- (BOOL) hasPendingAlreadyAnalyzedFiles;
 
 - (SynOp *) getOpWithSrcFile:(NSString *)n;
 //	returns an array of the ops that should be saved/encoded (only ops that are pending or have errored out)

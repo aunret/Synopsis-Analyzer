@@ -253,10 +253,33 @@ static NSString						*localFileDragType = @"localFileDragType";
 		self.paused = NO;
 		
 		//	run through my sessions, change their states to 'active'
+		BOOL			hasPendingAlreadyAnalyzedFiles = NO;
 		for (SynSession *session in self.sessions)	{
 			session.state = SessionState_Active;
 			//	we don't want to reloadData right now (would change scroll pos) so just update the relevant rows...
 			[self reloadRowForItem:session];
+			
+			//	if this session is processing audio tracks
+			//	AND this session is doing passthru audio 
+			//	AND this session is processing video tracks
+			//	AND this session is doing passthru video 
+			//	AND this session has pending already-analyzed files
+			if (session.preset.useAudio
+			&& session.preset.audioSettings.settingsDictionary==nil
+			&& session.preset.useVideo
+			&& session.preset.videoSettings.settingsDictionary==nil
+			&& [session hasPendingAlreadyAnalyzedFiles])	{
+				hasPendingAlreadyAnalyzedFiles = YES;
+			}
+		}
+		
+		//	if any of the sessions contain pending files that have already been analyzed...
+		if (hasPendingAlreadyAnalyzedFiles)	{
+			//	figure out if we should be skipping analyzed files, flag the sessions appropriately
+			BOOL		shouldSkipAnalyzedFiles = [self shouldSkipAnalyzedFiles];
+			for (SynSession *session in self.sessions)	{
+				session.skipPendingAlreadyAnalyzedFiles = shouldSkipAnalyzedFiles;
+			}
 		}
 		
 		//	do stuff with ops
@@ -502,6 +525,35 @@ static NSString						*localFileDragType = @"localFileDragType";
 			}
 		}
 	}
+	return returnMe;
+}
+- (BOOL) shouldSkipAnalyzedFiles	{
+	//NSLog(@"%s",__func__);
+	NSUserDefaults		*def = [NSUserDefaults standardUserDefaults];
+	BOOL				returnMe = ([def objectForKey:@"skipAnalyzedFiles"] == nil) ? NO : [def boolForKey:@"skipAnalyzedFiles"];
+	if ([def objectForKey:@"showSkipAnalyzedAlert"] != nil && ![def boolForKey:@"showSkipAnalyzedAlert"])	{
+		return returnMe;
+	}
+	
+	NSAlert			*tmpAlert = [[NSAlert alloc] init];
+	tmpAlert.messageText = @"Some of these files have already been analyzed, would you like to analyze them again?";
+	[tmpAlert addButtonWithTitle:@"No"];
+	[tmpAlert addButtonWithTitle:@"Yes"];
+	tmpAlert.showsSuppressionButton = YES;
+	
+	NSModalResponse		response = [tmpAlert runModal];
+	if (response == NSAlertFirstButtonReturn)
+		returnMe = YES;
+	else
+		returnMe = NO;
+	[def setBool:returnMe forKey:@"skipAnalyzedFiles"];
+	[def synchronize];
+	
+	BOOL			suppressSkipAnalyzedAlert = NO;
+	suppressSkipAnalyzedAlert = ([[tmpAlert suppressionButton] intValue] == NSOnState) ? NO : YES;
+	[def setBool:suppressSkipAnalyzedAlert forKey:@"showSkipAnalyzedAlert"];
+	[def synchronize];
+	
 	return returnMe;
 }
 

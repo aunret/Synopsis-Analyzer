@@ -69,6 +69,7 @@
 		
 		self.copyNonMediaFiles = NO;
 		self.watchFolder = NO;
+		self.skipPendingAlreadyAnalyzedFiles = NO;
 		self.watcher = nil;
 		self.dragUUID = [NSUUID UUID];
 		self.firedNotification = NO;
@@ -116,6 +117,7 @@
 		
 		self.copyNonMediaFiles = NO;
 		self.watchFolder = NO;
+		self.skipPendingAlreadyAnalyzedFiles = NO;
 		self.watcher = nil;
 		self.dragUUID = [NSUUID UUID];
 		self.firedNotification = NO;
@@ -736,6 +738,19 @@
 			NSLog(@"SHOULD BE RUNNING A SCRIPT HERE, %s",__func__);
 		}
 	}
+}
+- (BOOL) hasPendingAlreadyAnalyzedFiles	{
+	//NSLog(@"%s",__func__);
+	BOOL			returnMe = NO;
+	@synchronized (self)	{
+		for (SynOp * op in self.ops)	{
+			if (op.status == OpStatus_Pending && [op isAlreadyAnalyzed])	{
+				returnMe = YES;
+				break;
+			}
+		}
+	}
+	return returnMe;
 }
 - (void) destroyDirectoryWatcher	{
 	@synchronized (self)	{

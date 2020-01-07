@@ -191,9 +191,24 @@
 		break;
 	case SSBState_Active:
 		{
+			SessionController		*sc = [SessionController global];
+			
+			//	if this session is processing audio tracks
+			//	AND this session is doing passthru audio 
+			//	AND this session is processing video tracks
+			//	AND this session is doing passthru video 
+			//	AND this session has pending already-analyzed files
+			if (self.session.preset.useAudio
+			&& self.session.preset.audioSettings.settingsDictionary==nil
+			&& self.session.preset.useVideo
+			&& self.session.preset.videoSettings.settingsDictionary==nil
+			&& [self.session hasPendingAlreadyAnalyzedFiles])	{
+				//	figure out if we should be skipping analyzed files, flag my session appropriately
+				self.session.skipPendingAlreadyAnalyzedFiles = [sc shouldSkipAnalyzedFiles];
+			}
+			
 			//	make the session active, start the session controller if it isn't running
 			self.session.state = SessionState_Active;
-			SessionController		*sc = [SessionController global];
 			if (![sc processingFiles])	{
 				[sc startButDontChangeSessionStates];
 			}

@@ -346,7 +346,14 @@ static NSMutableArray		*iconGenArray = nil;
 		tmpURL = [NSURL fileURLWithPath:self.op.src isDirectory:NO];
 		break;
 	case OpStatus_Complete:
-		tmpURL = [NSURL fileURLWithPath:self.op.dst isDirectory:NO];
+		{
+			//	if the dst file doesn't exist for any reason, show the src file
+			NSFileManager		*fm = [NSFileManager defaultManager];
+			if ([fm fileExistsAtPath:self.op.dst])
+				tmpURL = [NSURL fileURLWithPath:self.op.dst isDirectory:NO];
+			else
+				tmpURL = [NSURL fileURLWithPath:self.op.src isDirectory:NO];
+		}
 		break;
 	}
 	

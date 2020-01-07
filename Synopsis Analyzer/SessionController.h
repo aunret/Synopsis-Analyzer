@@ -69,6 +69,8 @@
 - (BOOL) processingFilesFromSession:(SynSession *)n;
 - (void) makeSureRunningMaxPossibleOps;
 - (int) numberOfFilesToProcess;
+//	opens a modal sheet asking the user if they would like to skip already-analyzed files.  returns YES if the user indiicated that they want to skip them, or a NO otherwise (or if the user suppressed the modal sheet)
+- (BOOL) shouldSkipAnalyzedFiles;
 
 //	jobs are created & started on this queue
 @property (strong) dispatch_queue_t sessionQueue;
